@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>ament_cmake_environment</name>
+  <version>0.0.0</version>
+  <description>The ability to setup environment variables in the ament buildsystem in CMake.</description>
+  <maintainer email="dthomas@osrfoundation.org">Dirk Thomas</maintainer>
+  <license>Apache License 2.0</license>
+
+  <buildtool_depend>ament_cmake_core</buildtool_depend>
+  <buildtool_depend>ament_cmake_index</buildtool_depend>
+
+  <buildtool_export_depend>ament_cmake_core</buildtool_export_depend>
+  <buildtool_export_depend>ament_cmake_index</buildtool_export_depend>
+</package>
