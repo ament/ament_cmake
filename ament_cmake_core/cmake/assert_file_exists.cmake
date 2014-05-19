@@ -1,0 +1,8 @@
+function(assert_file_exists filename error_message)
+  if(NOT IS_ABSOLUTE "${filename}")
+    set(filename "${CMAKE_CURRENT_LIST_DIR}/${filename}")
+  endif()
+  if(NOT EXISTS "${filename}")
+    message(FATAL_ERROR "${error_message}")
+  endif()
+endfunction()
