@@ -1,0 +1,20 @@
+# generated from ament_cmake_export_dependencies/cmake/ament_cmake_export_dependencies-extras.cmake.in
+
+set(_exported_dependencies "@_AMENT_CMAKE_EXPORT_DEPENDENCIES@")
+
+# find_package() all dependencies
+# and append their INCLUDE_DIRS and LIBRARIES variables
+# to @PROJECT_NAME@_INCLUDE_DIRS and @PROJECT_NAME@_LIBRARIES
+if(NOT "${_exported_dependencies}" STREQUAL "")
+  foreach(_dep ${_exported_dependencies})
+    if(NOT ${_dep}_FOUND)
+      find_package("${_dep}" REQUIRED)
+    endif()
+    if(${_dep}_INCLUDE_DIRS)
+      list(APPEND @PROJECT_NAME@_INCLUDE_DIRS "${${_dep}_INCLUDE_DIRS}")
+    endif()
+    if(${_dep}_LIBRARIES)
+      list(APPEND PROJECT_NAME@_LIBRARIES "${${_dep}_LIBRARIES}")
+    endif()
+  endforeach()
+endif()
