@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>ament_cmake</name>
+  <version>0.0.0</version>
+  <description>The CMake config file for the ament buildsystem.</description>
+  <maintainer email="dthomas@osrfoundation.org">Dirk Thomas</maintainer>
+  <license>Apache License 2.0</license>
+
+  <buildtool_depend>cmake</buildtool_depend>
+
+  <buildtool_export_depend>cmake</buildtool_export_depend>
+
+  <build_depend>ament_cmake_symlink_install</build_depend>
+
+  <build_export_depend>ament_cmake_core</build_export_depend>
+  <build_export_depend>ament_cmake_environment</build_export_depend>
+  <build_export_depend>ament_cmake_export_dependencies</build_export_depend>
+  <build_export_depend>ament_cmake_export_include_directories</build_export_depend>
+  <build_export_depend>ament_cmake_export_libraries</build_export_depend>
+  <build_export_depend>ament_cmake_index</build_export_depend>
+  <build_export_depend>ament_cmake_python_install</build_export_depend>
+  <build_export_depend>ament_cmake_symlink_install</build_export_depend>
+</package>
