@@ -1,4 +1,4 @@
-# copied from ament_export/ament_export-extras.cmake
+# copied from ament_cmake_export_dependencies/ament_cmake_export_dependencies-extras.cmake
 
 # register ament_package() hook for dependencies once
 macro(_ament_cmake_export_dependencies_register_package_hook)
