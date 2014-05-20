@@ -1,0 +1,10 @@
+# generated from ament_cmake_export_interfaces/cmake/ament_cmake_export_interfaces-extras.cmake.in
+
+set(_exported_interfaces "@_AMENT_CMAKE_EXPORT_INTERFACES@")
+
+# include all exported interfaces
+if(NOT "${_exported_interfaces}" STREQUAL "")
+  foreach(_interface ${_exported_interfaces})
+    include("${@PROJECT_NAME@_DIR}/${_interface}Export.cmake")
+  endforeach()
+endif()
