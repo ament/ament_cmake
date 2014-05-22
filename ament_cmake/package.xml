@@ -17,7 +17,10 @@
   <build_export_depend>ament_cmake_export_dependencies</build_export_depend>
   <build_export_depend>ament_cmake_export_include_directories</build_export_depend>
   <build_export_depend>ament_cmake_export_libraries</build_export_depend>
+  <build_export_depend>ament_cmake_gtest</build_export_depend>
   <build_export_depend>ament_cmake_index</build_export_depend>
+  <build_export_depend>ament_cmake_nose</build_export_depend>
   <build_export_depend>ament_cmake_python</build_export_depend>
   <build_export_depend>ament_cmake_symlink_install</build_export_depend>
+  <build_export_depend>ament_cmake_test</build_export_depend>
 </package>
