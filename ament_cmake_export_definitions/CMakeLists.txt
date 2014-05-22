@@ -6,7 +6,7 @@ find_package(ament_cmake_core REQUIRED)
 find_package(ament_cmake_index REQUIRED)
 
 ament_package(
-  CONFIG_EXTRAS "ament_cmake_export_definitions-extras.cmake.in"
+  CONFIG_EXTRAS "ament_cmake_export_definitions-extras.cmake"
 )
 
 install(
