@@ -37,11 +37,14 @@ function(ament_cmake_symlink_install_directory)
       # append folder name to destination
       set(destination "${ARG_DESTINATION}")
       string(LENGTH "${dir}" length)
-      math(EXPR offset "${length} - 2")
+      math(EXPR offset "${length} - 1")
       string(SUBSTRING "${dir}" ${offset} 1 dir_last_char)
       if(NOT "${dir_last_char}" STREQUAL "/")
         get_filename_component(destination_name "${dir}" NAME)
         set(destination "${destination}/${destination_name}")
+      else()
+        # remove trailing slash
+        string(SUBSTRING "${dir}" 0 ${offset} dir)
       endif()
       #message(" - ament_cmake_symlink_install_directory() create symlinks '${destination}/*' pointing to '${dir}/*'")
 
@@ -67,10 +70,7 @@ function(ament_cmake_symlink_install_directory)
         endif()
 
         #message(" - ament_cmake_symlink_install_directory() create symlink '${symlink}' pointing to '${absolute_file}'")
-        message(STATUS "Symlinking: ${symlink}")
-        execute_process(
-          COMMAND "@CMAKE_COMMAND@" "-E" "create_symlink" "${absolute_file}" "${symlink}"
-        )
+        _ament_cmake_symlink_create_symlink("${absolute_file}" "${symlink}")
       endforeach()
     else()
       if(NOT ARG_OPTIONAL)
@@ -114,10 +114,7 @@ function(ament_cmake_symlink_install_files)
       get_filename_component(filename "${file}" NAME)
       set(symlink "${ARG_DESTINATION}/${filename}")
       #message(" - ament_cmake_symlink_install_files() create symlink '${symlink}' pointing to '${file}'")
-      message(STATUS "Symlinking: ${symlink}")
-      execute_process(
-        COMMAND "@CMAKE_COMMAND@" "-E" "create_symlink" "${file}" "${symlink}"
-      )
+      _ament_cmake_symlink_create_symlink("${file}" "${symlink}")
     else()
       if(NOT ARG_OPTIONAL)
         message(FATAL_ERROR "ament_cmake_symlink_install_files() can't find '${file}'")
@@ -161,16 +158,38 @@ function(ament_cmake_symlink_install_targets)
       get_filename_component(filename "${file}" NAME)
       set(symlink "${ARG_DESTINATION}/${filename}")
       #message(" - ament_cmake_symlink_install_targets() create symlink '${symlink}' pointing to '${file}'")
-      message(STATUS "Symlinking: ${symlink}")
-      execute_process(
-        COMMAND "@CMAKE_COMMAND@" "-E" "create_symlink" "${file}" "${symlink}"
-      )
+      _ament_cmake_symlink_create_symlink("${file}" "${symlink}")
     else()
       if(NOT ARG_OPTIONAL)
         message(FATAL_ERROR "ament_cmake_symlink_install_targets() can't find '${file}'")
       endif()
     endif()
   endforeach()
+endfunction()
+
+function(_ament_cmake_symlink_create_symlink absolute_file symlink)
+  # avoid any work if correct symlink is already in place
+  if(EXISTS "${symlink}" AND IS_SYMLINK "${symlink}")
+    get_filename_component(destination "${symlink}" REALPATH)
+    if("${destination}" STREQUAL "${absolute_file}")
+      message(STATUS "Up-to-date symlink: ${symlink}")
+      return()
+    endif()
+  endif()
+
+  message(STATUS "Symlinking: ${symlink}")
+  if(EXISTS "${symlink}")
+    file(REMOVE "${symlink}")
+  endif()
+
+  execute_process(
+    COMMAND "@CMAKE_COMMAND@" "-E" "create_symlink" "${absolute_file}" "${symlink}"
+  )
+  # the CMake command does not provide a return code so check manually
+  if(NOT EXISTS "${symlink}" OR NOT IS_SYMLINK "${symlink}")
+    get_filename_component(destination "${symlink}" REALPATH)
+    message(FATAL_ERROR "Could not create symlink '${symlink}' pointing to '${absolute_file}'")
+  endif()
 endfunction()
 
 # end of template
