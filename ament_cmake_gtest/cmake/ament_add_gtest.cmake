@@ -4,8 +4,8 @@ include(CMakeParseArguments)
 #
 # Add a gtest.
 #
-# Call add_executable(target EXCLUDE_FROM_ALL ARGN), link it against
-# the gtest library and register the executable as a test.
+# Call add_executable(target ARGN), link it against the gtest library
+# and register the executable as a test.
 #
 # :param target: the target name which will also be used as the test name
 # :type target: string
@@ -32,7 +32,8 @@ function(_ament_add_gtest target)
     message(FATAL_ERROR "ament_add_gtest() must be invoked with at least one source file")
   endif()
 
-  add_executable("${target}" EXCLUDE_FROM_ALL ${ARG_UNPARSED_ARGUMENTS})
+  # should be EXCLUDE_FROM_ALL if it would be possible to add this target as a dependency to the "test" target
+  add_executable("${target}" ${ARG_UNPARSED_ARGUMENTS})
   target_link_libraries("${target}" gtest)
 
   get_target_property(target_path "${target}" RUNTIME_OUTPUT_DIRECTORY)
@@ -52,5 +53,9 @@ function(_ament_add_gtest target)
     COMMAND ${cmd}
     ${ARG_TIMEOUT}
     ${ARG_WORKING_DIRECTORY}
+  )
+  set_tests_properties(
+    "${target}"
+    PROPERTIES REQUIRED_FILES "${target_path}/${target}"
   )
 endfunction()
