@@ -49,10 +49,10 @@ function(ament_environment_hooks)
         # expand template
         configure_file(
           "${hook}"
-          "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_environment/${hook_filename}"
+          "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_environment_hooks/${hook_filename}"
           @ONLY
         )
-        set(hook "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_environment/${hook_filename}")
+        set(hook "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_environment_hooks/${hook_filename}")
       endif()
 
       # install hook file
@@ -62,8 +62,8 @@ function(ament_environment_hooks)
       )
 
       # remember all environment hooks for generating the package environment files
-      list(APPEND _AMENT_CMAKE_ENVIRONMENT_PACKAGE_HOOKS_${hook_extension} "share/${PROJECT_NAME}/environment/${hook_filename}")
-      set(_AMENT_CMAKE_ENVIRONMENT_PACKAGE_HOOKS_${hook_extension} "${_AMENT_CMAKE_ENVIRONMENT_PACKAGE_HOOKS_${hook_extension}}" PARENT_SCOPE)
+      list(APPEND _AMENT_CMAKE_ENVIRONMENT_HOOKS_${hook_extension} "share/${PROJECT_NAME}/environment/${hook_filename}")
+      set(_AMENT_CMAKE_ENVIRONMENT_HOOKS_${hook_extension} "${_AMENT_CMAKE_ENVIRONMENT_HOOKS_${hook_extension}}" PARENT_SCOPE)
     endif()
   endforeach()
 endfunction()

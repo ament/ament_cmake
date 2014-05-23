@@ -1,4 +1,4 @@
-# generated from ament_cmake_environment/cmake/environment/package/local_setup.bash.in
+# generated from ament_cmake_environment_hooks/cmake/environment/local_setup.bash.in
 
 # source local_setup.sh from same directory as this file
 . "$(builtin cd "`dirname "${BASH_SOURCE[0]}"`" && pwd)/local_setup.sh"

@@ -10,5 +10,4 @@
   <buildtool_depend>ament_cmake_index</buildtool_depend>
 
   <buildtool_export_depend>ament_cmake_core</buildtool_export_depend>
-  <buildtool_export_depend>ament_cmake_index</buildtool_export_depend>
 </package>

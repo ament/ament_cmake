@@ -1,3 +1,0 @@
-# generated from ament_cmake_environment/cmake/environment/package/ament_prefix_path.sh.in
-
-ament_cmake_environment_prepend_unique_value AMENT_PREFIX_PATH "$AMENT_CURRENT_PREFIX"

@@ -3,7 +3,7 @@ set(ament_cmake_FOUND)
 
 # define set of default components if not specified
 if(NOT ament_cmake_FIND_COMPONENTS)
-  set(ament_cmake_FIND_COMPONENTS "core" "environment" "export_dependencies" "export_include_directories" "export_libraries" "gtest" "index" "nose" "python" "symlink_install" "test")
+  set(ament_cmake_FIND_COMPONENTS "core" "environment" "environment_hooks" "export_definitions" "export_dependencies" "export_include_directories" "export_interfaces" "export_libraries" "gtest" "index" "nose" "python" "symlink_install" "test")
 endif()
 
 # find_package each component
