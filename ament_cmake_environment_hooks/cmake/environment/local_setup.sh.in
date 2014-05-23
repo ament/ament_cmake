@@ -1,4 +1,4 @@
-# generated from ament_cmake_environment/cmake/environment/package/local_setup.sh.in
+# generated from ament_cmake_environment_hooks/cmake/environment/local_setup.sh.in
 
 # since this file is sourced either use the provided AMENT_CURRENT_PREFIX
 # or fall back to the destination set at configure time
