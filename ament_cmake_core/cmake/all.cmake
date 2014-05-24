@@ -32,6 +32,12 @@ _set_cmake_policy_to_new_if_available(CMP0014)
 _set_cmake_policy_to_new_if_available(CMP0015)
 _set_cmake_policy_to_new_if_available(CMP0016)
 _set_cmake_policy_to_new_if_available(CMP0017)
+_set_cmake_policy_to_new_if_available(CMP0018)
+_set_cmake_policy_to_new_if_available(CMP0019)
+_set_cmake_policy_to_new_if_available(CMP0020)
+_set_cmake_policy_to_new_if_available(CMP0021)
+_set_cmake_policy_to_new_if_available(CMP0022)
+_set_cmake_policy_to_new_if_available(CMP0023)
 
 # the following operations must be performed inside a project context
 if(NOT PROJECT_NAME)
