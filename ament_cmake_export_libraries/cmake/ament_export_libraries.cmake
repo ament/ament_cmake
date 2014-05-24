@@ -22,9 +22,10 @@ macro(ament_export_libraries)
 
     # loop over libraries
     # but remember related build configuration keyword if available
+    set(_argn ${ARGN})
     set(_i 0)
     while(_i LESS ${ARGC})
-      list(GET ARGN ${_i} _arg)
+      list(GET _argn ${_i} _arg)
       if("${_arg}" MATCHES "^debug|optimized|general$")
         # remember build configuration keyword
         # and get following library
@@ -33,7 +34,7 @@ macro(ament_export_libraries)
         if(_i EQUAL ${ARGC})
           message(FATAL_ERROR "ament_export_libraries() package '${PROJECT_NAME}' passes the build configuration keyword '${_cfg}' as the last exported library")
         endif()
-        list(GET ARGN ${_i} _lib)
+        list(GET _argn ${_i} _lib)
       else()
         # the value is a library without a build configuration keyword
         set(_cfg "")

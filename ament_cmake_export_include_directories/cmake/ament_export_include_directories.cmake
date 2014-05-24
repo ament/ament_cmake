@@ -11,7 +11,7 @@
 #
 # @public
 #
-macro(ament_cmake_export_include_directories)
+macro(ament_export_include_directories)
   if(_${PROJECT_NAME}_AMENT_PACKAGE)
     message(FATAL_ERROR "ament_export_include_directories() must be called before ament_package()")
   endif()
