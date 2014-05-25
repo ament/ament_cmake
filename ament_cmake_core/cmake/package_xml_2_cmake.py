@@ -11,16 +11,21 @@ import sys
 try:
     from ament_package import parse_package_string
 except ImportError as e:
-    sys.exit("ImportError: 'from ament_package import parse_package_string' failed: %s\nMake sure that you have installed 'ament_package', it is up to date and on the PYTHONPATH." % e)
+    sys.exit("ImportError: 'from ament_package import parse_package_string' "
+             "failed: %s\nMake sure that you have installed 'ament_package', "
+             "it is up to date and on the PYTHONPATH." % e)
 
 
 def main(argv=sys.argv[1:]):
     """
-    Parses the given package.xml file and
-    prints CMake code defining several variables containing the content.
+    Extract the information from package.xml and make them accessible to CMake.
+
+    Parse the given package.xml file and
+    print CMake code defining several variables containing the content.
     """
     parser = argparse.ArgumentParser(
-        description='Parse package.xml file and print CMake code defining several variables',
+        description='Parse package.xml file and print CMake code defining '
+                    'several variables',
     )
     parser.add_argument(
         'package_xml',
@@ -54,18 +59,23 @@ def get_dependency_values(key, depends):
     dependencies = []
     dependencies.append((key, ' '.join(['"%s"' % str(d) for d in depends])))
     for d in depends:
-        comparisons = ['version_lt', 'version_lte', 'version_eq', 'version_gte', 'version_gt']
+        comparisons = [
+            'version_lt',
+            'version_lte',
+            'version_eq',
+            'version_gte',
+            'version_gt']
         for comp in comparisons:
             value = getattr(d, comp, None)
             if value is not None:
-                dependencies.append(('%s_%s_%s' % (key, str(d), comp.upper()), '"%s"' % value))
+                dependencies.append(('%s_%s_%s' % (key, str(d), comp.upper()),
+                                     '"%s"' % value))
     return dependencies
 
 
 def generate_cmake_code(package):
     """
-    Returns a list of CMake commands
-    defining variables containing the content of the passed package.
+    Return a list of CMake set() commands containing the manifest information.
 
     :param package: ament_package.Package
     :returns: list of str
@@ -73,17 +83,29 @@ def generate_cmake_code(package):
     variables = []
     variables.append(('VERSION', '"%s"' % package.version))
 
-    variables.append(('MAINTAINER',  '"%s"' % (', '.join([str(m) for m in package.maintainers]))))
+    variables.append((
+        'MAINTAINER',
+        '"%s"' % (', '.join([str(m) for m in package.maintainers]))))
 
-    variables.extend(get_dependency_values('BUILD_DEPENDS', package.build_depends))
-    variables.extend(get_dependency_values('BUILDTOOL_DEPENDS', package.buildtool_depends))
-    variables.extend(get_dependency_values('BUILD_EXPORT_DEPENDS', package.build_export_depends))
-    variables.extend(get_dependency_values('BUILDTOOL_EXPORT_DEPENDS', package.buildtool_export_depends))
-    variables.extend(get_dependency_values('EXEC_DEPENDS', package.exec_depends))
-    variables.extend(get_dependency_values('TEST_DEPENDS', package.test_depends))
+    variables.extend(get_dependency_values('BUILD_DEPENDS',
+                                           package.build_depends))
+    variables.extend(get_dependency_values('BUILDTOOL_DEPENDS',
+                                           package.buildtool_depends))
+    variables.extend(get_dependency_values('BUILD_EXPORT_DEPENDS',
+                                           package.build_export_depends))
+    variables.extend(get_dependency_values('BUILDTOOL_EXPORT_DEPENDS',
+                                           package.buildtool_export_depends))
+    variables.extend(get_dependency_values('EXEC_DEPENDS',
+                                           package.exec_depends))
+    variables.extend(get_dependency_values('TEST_DEPENDS',
+                                           package.test_depends))
 
-    deprecated = [e.content for e in package.exports if e.tagname == 'deprecated']
-    variables.append(('DEPRECATED', '"%s"' % ((deprecated[0] if deprecated[0] else 'TRUE') if deprecated else '')))
+    deprecated = [e.content for e in package.exports
+                  if e.tagname == 'deprecated']
+    variables.append(('DEPRECATED',
+                      '"%s"' % ((deprecated[0] if deprecated[0] else 'TRUE')
+                                if deprecated
+                                else '')))
 
     lines = []
     lines.append('set(_AMENT_PACKAGE_NAME "%s")' % package.name)
