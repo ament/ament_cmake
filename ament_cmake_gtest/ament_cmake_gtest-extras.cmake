@@ -1,15 +1,20 @@
 # copied from ament_cmake_gtest/ament_cmake_gtest-extras.cmake
 
 # find gtest and create library targets once
-macro(_ament_cmake_nose_find_gtest)
-  if(NOT DEFINED _AMENT_CMAKE_NOSE_FIND_GTEST)
-    set(_AMENT_CMAKE_NOSE_FIND_GTEST TRUE)
+macro(_ament_cmake_gtest_find_gtest)
+  if(NOT DEFINED _AMENT_CMAKE_GTEST_FIND_GTEST)
+    set(_AMENT_CMAKE_GTEST_FIND_GTEST TRUE)
 
     find_package(ament_cmake_test REQUIRED)
 
-    find_package(GTest QUIET)
+    # allow other packages to find gtest instead
+    ament_execute_extensions(ament_cmake_gtest_find_gtest)
+
+    if(NOT GTEST_FOUND)
+      find_package(GTest QUIET)
+    endif()
     if(GTEST_FOUND)
-      message(STATUS "Found gtest: gtests will be built")
+      message(STATUS "Found gtest: C++ tests using 'Google Test' will be built")
       set(GTEST_FOUND ${GTEST_FOUND} CACHE INTERNAL "")
       set(GTEST_INCLUDE_DIRS ${GTEST_INCLUDE_DIRS} CACHE INTERNAL "")
       set(GTEST_LIBRARIES ${GTEST_LIBRARIES} CACHE INTERNAL "")
@@ -20,7 +25,7 @@ macro(_ament_cmake_nose_find_gtest)
       # fall back to system installed path (i.e. on Ubuntu)
       set(_search_path_include "/usr/include/gtest")
       set(_search_path_src "/usr/src/gtest/src")
-      # option() environment variable to find gtest
+      # option() consider environment variable to find gtest
       if(NOT "$ENV{GTEST_DIR}" STREQUAL "")
         list(INSERT _search_path_include 0 "$ENV{GTEST_DIR}/include/gtest")
         list(INSERT _search_path_src 0 "$ENV{GTEST_DIR}/src")
@@ -51,7 +56,7 @@ macro(_ament_cmake_nose_find_gtest)
         set(GTEST_FROM_SOURCE_LIBRARY_DIRS "${_gtest_binary_dir}" CACHE INTERNAL "")
         set(GTEST_FROM_SOURCE_LIBRARIES "gtest" CACHE INTERNAL "")
         set(GTEST_FROM_SOURCE_MAIN_LIBRARIES "gtest_main" CACHE INTERNAL "")
-        message(STATUS "Found gtest sources under '${_gtest_base_dir}': gtests will be built")
+        message(STATUS "Found gtest sources under '${_gtest_base_dir}': C++ tests using 'Google Test' will be built")
       endif()
       if(GTEST_FROM_SOURCE_FOUND)
         # set the same variables as find_package()
@@ -65,7 +70,7 @@ macro(_ament_cmake_nose_find_gtest)
         set(GTEST_BOTH_LIBRARIES ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES})
       endif()
       if(NOT GTEST_FOUND)
-        message(WARNING "'gtest' not found, C++ gtest tests can not be built. Please install the gtest headers globally in your system to enable gtests (e.g. on Ubuntu/Debian install the package 'libgtest-dev')")
+        message(WARNING "'gtest' not found, C++ tests using 'Google Test' can not be built. Please install the 'Google Test' headers globally in your system to enable these tests (e.g. on Ubuntu/Debian install the package 'libgtest-dev')")
       endif()
     endif()
 

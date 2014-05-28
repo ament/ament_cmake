@@ -33,7 +33,7 @@ if(NOT "${_exported_library_targets}" STREQUAL "")
     set(_lib "NOTFOUND")
     find_library(
       _lib NAMES "${_library_target}"
-      PATHS "${@PROJECT_NAME@_DIR}../../.."
+      PATHS "${@PROJECT_NAME@_DIR}/../../../lib"
       NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH
     )
 

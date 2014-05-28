@@ -20,6 +20,7 @@
   <build_export_depend>ament_cmake_export_include_directories</build_export_depend>
   <build_export_depend>ament_cmake_export_interfaces</build_export_depend>
   <build_export_depend>ament_cmake_export_libraries</build_export_depend>
+  <build_export_depend>ament_cmake_gmock</build_export_depend>
   <build_export_depend>ament_cmake_gtest</build_export_depend>
   <build_export_depend>ament_cmake_index</build_export_depend>
   <build_export_depend>ament_cmake_nose</build_export_depend>
