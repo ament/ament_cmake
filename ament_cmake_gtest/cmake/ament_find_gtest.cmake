@@ -1,6 +1,3 @@
-# include CMake functions
-include(CMakeParseArguments)
-
 #
 # Find gtest.
 #
@@ -14,5 +11,5 @@ macro(ament_find_gtest)
   if(ARGN)
     message(FATAL_ERROR "ament_find_gtest() called with unused arguments: ${ARGN}")
   endif()
-  _ament_cmake_nose_find_gtest()
+  _ament_cmake_gtest_find_gtest()
 endmacro()

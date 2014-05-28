@@ -2,9 +2,9 @@
 include(CMakeParseArguments)
 
 #
-# Add a gtest.
+# Add a gmock.
 #
-# Call add_executable(target ARGN), link it against the gtest library
+# Call add_executable(target ARGN), link it against the gmock library
 # and register the executable as a test.
 #
 # :param target: the target name which will also be used as the test name
@@ -19,22 +19,22 @@ include(CMakeParseArguments)
 #
 # @public
 #
-macro(ament_add_gtest target)
-  _ament_cmake_gtest_find_gtest()
-  if(GTEST_FOUND)
-    _ament_add_gtest("${target}" ${ARGN})
+macro(ament_add_gmock target)
+  _ament_cmake_gmock_find_gmock()
+  if(GMOCK_FOUND)
+    _ament_add_gmock("${target}" ${ARGN})
   endif()
 endmacro()
 
-function(_ament_add_gtest target)
+function(_ament_add_gmock target)
   cmake_parse_arguments(ARG "" "TIMEOUT" "" ${ARGN})
   if(NOT ARG_UNPARSED_ARGUMENTS)
-    message(FATAL_ERROR "ament_add_gtest() must be invoked with at least one source file")
+    message(FATAL_ERROR "ament_add_gmock() must be invoked with at least one source file")
   endif()
 
   # should be EXCLUDE_FROM_ALL if it would be possible to add this target as a dependency to the "test" target
   add_executable("${target}" ${ARG_UNPARSED_ARGUMENTS})
-  target_link_libraries("${target}" gtest)
+  target_link_libraries("${target}" gmock)
 
   get_target_property(target_path "${target}" RUNTIME_OUTPUT_DIRECTORY)
   if(NOT target_path)
