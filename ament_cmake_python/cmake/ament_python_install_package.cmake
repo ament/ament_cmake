@@ -21,7 +21,7 @@ function(_ament_cmake_python_install_package package_name)
   if(NOT ARG_PACKAGE_DIR)
     set(ARG_PACKAGE_DIR "${CMAKE_CURRENT_LIST_DIR}/${package_name}")
   endif()
-  if(NOT IS_ABSOLUTE ARG_PACKAGE_DIR)
+  if(NOT IS_ABSOLUTE "${ARG_PACKAGE_DIR}")
     set(ARG_PACKAGE_DIR "${CMAKE_CURRENT_LIST_DIR}/${ARG_PACKAGE_DIR}")
   endif()
 
