@@ -92,8 +92,8 @@ def main(argv=sys.argv[1:]):
         else:
             # set error code when result file contains errors or failures
             root = tree.getroot()
-            num_errors = int(root.attrib['errors'])
-            num_failures = int(root.attrib['failures'])
+            num_errors = int(root.attrib.get('errors', 0))
+            num_failures = int(root.attrib.get('failures', 0))
             if num_errors or num_failures:
                 rc = 1
 

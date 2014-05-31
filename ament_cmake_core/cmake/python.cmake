@@ -1,6 +1,10 @@
 # the CMake variable PYTHON_INSTALL_DIR has the same value as the Python function ament.builder.get_python_install_dir()
 
 set(PYTHON_VERSION "" CACHE STRING "Specify specific Python version to use ('major.minor' or 'major')")
+# if not specified otherwise use Python 3
+if(NOT PYTHON_VERSION)
+  set(PYTHON_VERSION "3")
+endif()
 if(PYTHON_VERSION)
   set(PythonInterp_FIND_VERSION "${PYTHON_VERSION}")
 endif()
@@ -14,6 +18,7 @@ set(enable_setuptools_deb_layout OFF)
 if(EXISTS "/etc/debian_version")
   set(enable_setuptools_deb_layout ON)
 endif()
+# TODO rename option
 option(SETUPTOOLS_DEB_LAYOUT "Enable Debian style Python package layout" ${enable_setuptools_deb_layout})
 
 if(SETUPTOOLS_DEB_LAYOUT)
