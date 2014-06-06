@@ -52,16 +52,19 @@ macro(_ament_cmake_gtest_find_gtest)
         get_filename_component(_gtest_include_dir ${_gtest_include_dir} PATH)
         # set from-source variables
         set(GTEST_FROM_SOURCE_FOUND TRUE CACHE INTERNAL "")
-        set(GTEST_FROM_SOURCE_INCLUDE_DIRS "${_gtest_include_dir}" CACHE INTERNAL "")
-        set(GTEST_FROM_SOURCE_LIBRARY_DIRS "${_gtest_binary_dir}" CACHE INTERNAL "")
+        set(GTEST_FROM_SOURCE_INCLUDE_DIRS "${_gtest_include_dir}"
+          CACHE INTERNAL "")
+        set(GTEST_FROM_SOURCE_LIBRARY_DIRS "${_gtest_binary_dir}"
+          CACHE INTERNAL "")
         set(GTEST_FROM_SOURCE_LIBRARIES "gtest" CACHE INTERNAL "")
         set(GTEST_FROM_SOURCE_MAIN_LIBRARIES "gtest_main" CACHE INTERNAL "")
-        message(STATUS "Found gtest sources under '${_gtest_base_dir}': C++ tests using 'Google Test' will be built")
+        message(STATUS "Found gtest sources under '${_gtest_base_dir}': "
+          "C++ tests using 'Google Test' will be built")
       endif()
       if(GTEST_FROM_SOURCE_FOUND)
         # set the same variables as find_package()
-        # do NOT set GTEST_FOUND in the cache since when using gtest from source
-        # we must always add the subdirectory to have the gtest targets defined
+        # but do NOT set GTEST_FOUND in the cache when using gtest from source
+        # since the subdirectory must always be added to add the gtest targets
         set(GTEST_FOUND ${GTEST_FROM_SOURCE_FOUND})
         set(GTEST_INCLUDE_DIRS ${GTEST_FROM_SOURCE_INCLUDE_DIRS})
         set(GTEST_LIBRARY_DIRS ${GTEST_FROM_SOURCE_LIBRARY_DIRS})
@@ -70,12 +73,16 @@ macro(_ament_cmake_gtest_find_gtest)
         set(GTEST_BOTH_LIBRARIES ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES})
       endif()
       if(NOT GTEST_FOUND)
-        message(WARNING "'gtest' not found, C++ tests using 'Google Test' can not be built. Please install the 'Google Test' headers globally in your system to enable these tests (e.g. on Ubuntu/Debian install the package 'libgtest-dev')")
+        message(WARNING
+          "'gtest' not found, C++ tests using 'Google Test' can not be built. "
+          "Please install the 'Google Test' headers globally in your system "
+          "to enable these tests (e.g. on Ubuntu/Debian install the package "
+          "'libgtest-dev')")
       endif()
     endif()
 
-    # for Visual 2012 we need to increase the fixed variadic template size to build gtest
-    # https://code.google.com/p/googletest/source/detail?r=675
+    # for Visual 2012 we need to increase the fixed variadic template size to
+    # build gtest (https://code.google.com/p/googletest/source/detail?r=675)
     if(GTEST_FOUND AND MSVC AND MSVC_VERSION EQUAL 1700)
       add_definitions(/D _VARIADIC_MAX=10)
     endif()

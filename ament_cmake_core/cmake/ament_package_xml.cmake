@@ -21,26 +21,33 @@
 macro(ament_package_xml)
   # verify that project() has been called before
   if(NOT PROJECT_NAME)
-    message(FATAL_ERROR "ament_package_xml() PROJECT_NAME is not set. You must call project() before you can call ament_package_xml().")
+    message(FATAL_ERROR "ament_package_xml() PROJECT_NAME is not set. "
+      "You must call project() before you can call ament_package_xml().")
   endif()
 
   # ensure that function is not called multiple times per package
   if(DEFINED _AMENT_PACKAGE_NAME)
-    message(FATAL_ERROR "ament_package_xml(): in '${CMAKE_CURRENT_LIST_FILE}', _AMENT_PACKAGE_NAME is already set (to: ${_AMENT_PACKAGE_NAME}).  Did you call ament_package_xml() multiple times?")
+    message(FATAL_ERROR "ament_package_xml(): in '${CMAKE_CURRENT_LIST_FILE}',"
+      " _AMENT_PACKAGE_NAME is already set (to: ${_AMENT_PACKAGE_NAME}). "
+      "Did you call ament_package_xml() multiple times?")
   endif()
 
   _ament_package_xml(${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_core ${ARGN})
 
   # verify that the package name from package.xml equals the project() name
   if(NOT _AMENT_PACKAGE_NAME STREQUAL PROJECT_NAME)
-    message(FATAL_ERROR "ament_package_xml() package name '${_AMENT_PACKAGE_NAME}'  in '${_PACKAGE_XML_DIRECTORY}/package.xml' does not match current PROJECT_NAME '${PROJECT_NAME}'.  You must call project() with the same package name before.")
+    message(FATAL_ERROR "ament_package_xml() package name "
+      "'${_AMENT_PACKAGE_NAME}'  in '${_PACKAGE_XML_DIRECTORY}/package.xml' "
+      "does not match current PROJECT_NAME '${PROJECT_NAME}'. "
+      "You must call project() with the same package name before.")
   endif()
 endmacro()
 
 macro(_ament_package_xml dest_dir)
   cmake_parse_arguments(PACKAGE_XML "" "DIRECTORY" "" ${ARGN})
   if(PACKAGE_XML_UNPARSED_ARGUMENTS)
-    message(FATAL_ERROR "ament_package_xml() called with unused arguments: ${PACKAGE_XML_UNPARSED_ARGUMENTS}")
+    message(FATAL_ERROR "ament_package_xml() called with unused arguments: "
+      "${PACKAGE_XML_UNPARSED_ARGUMENTS}")
   endif()
 
   # set default directory
@@ -55,7 +62,8 @@ macro(_ament_package_xml dest_dir)
   # extract information form package.xml
   file(MAKE_DIRECTORY ${dest_dir})
   if(NOT PYTHON_EXECUTABLE)
-    message(FATAL_ERROR "ament_package_xml() variable 'PYTHON_EXECUTABLE' must not be empty")
+    message(FATAL_ERROR
+      "ament_package_xml() variable 'PYTHON_EXECUTABLE' must not be empty")
   endif()
   set(_cmd
     "${PYTHON_EXECUTABLE}"
@@ -69,7 +77,8 @@ macro(_ament_package_xml dest_dir)
   )
   if(NOT _res EQUAL 0)
     string(REPLACE ";" " " _cmd_str "${_cmd}")
-    message(FATAL_ERROR "execute_process(${_cmd_str}) returned error code ${_res}")
+    message(FATAL_ERROR
+      "execute_process(${_cmd_str}) returned error code ${_res}")
   endif()
 
   # load extracted variables into cmake

@@ -15,7 +15,8 @@ function(ament_cmake_symlink_install_append_install_code)
 
   # append code to install script
   if(ARG_COMMENTS)
-    file(APPEND "${AMENT_CMAKE_SYMLINK_INSTALL_INSTALL_SCRIPT}" "\n# ${ARG_COMMENTS}\n")
+    file(APPEND "${AMENT_CMAKE_SYMLINK_INSTALL_INSTALL_SCRIPT}"
+      "\n# ${ARG_COMMENTS}\n")
   endif()
   foreach(code ${ARG_UNPARSED_ARGUMENTS})
     file(APPEND "${AMENT_CMAKE_SYMLINK_INSTALL_INSTALL_SCRIPT}" "${code}\n")

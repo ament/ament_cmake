@@ -1,12 +1,14 @@
 #
-# Reimplement CMake install(FILES) command to use symlinks instead of copying resources.
+# Reimplement CMake install(FILES) command to use symlinks instead of copying
+# resources.
 #
 # :param ARGN: the same arguments as the CMake install command.
 # :type ARGN: various
 #
 function(ament_cmake_symlink_install_files files_keyword)
   if(NOT "${files_keyword}" STREQUAL "FILES")
-    message(FATAL_ERROR "ament_cmake_symlink_install_files() first argument must be 'FILES', not '${files_keyword}'")
+    message(FATAL_ERROR "ament_cmake_symlink_install_files() first argument "
+      "must be 'FILES', not '${files_keyword}'")
   endif()
 
   set(unsupported_keywords

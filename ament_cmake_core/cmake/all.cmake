@@ -1,6 +1,7 @@
 # prevent multiple inclusion
 if(DEFINED _AMENT_CMAKE_CORE_INCLUDED)
-  message(FATAL_ERROR "ament_cmake_core/cmake/CMakeLists.cmake included multiple times")
+  message(FATAL_ERROR "ament_cmake_core/cmake/CMakeLists.cmake included "
+    "multiple times")
 endif()
 set(_AMENT_CMAKE_CORE_INCLUDED TRUE)
 
@@ -49,16 +50,16 @@ include(CMakeParseArguments)
 
 # various functions / macros
 foreach(filename
-    ament_execute_extensions
-    ament_package
-    ament_package_xml
-    ament_register_extension
-    assert_file_exists
-    list_append_unique
-    python
-    stamp
-    string_ends_with
-  )
+  "ament_execute_extensions"
+  "ament_package"
+  "ament_package_xml"
+  "ament_register_extension"
+  "assert_file_exists"
+  "list_append_unique"
+  "python"
+  "stamp"
+  "string_ends_with"
+)
   include(${ament_cmake_core_DIR}/${filename}.cmake)
 endforeach()
 

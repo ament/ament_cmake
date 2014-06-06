@@ -14,9 +14,10 @@ install(
   DESTINATION share/${PROJECT_NAME}/cmake
 )
 
-# install package marker file into index
-# it is done manually here since this package does not depend on ament_cmake_index
-set(marker_file "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake/packages/${PROJECT_NAME}")
+# install package marker file into index manually
+# since this package does not depend on ament_cmake_index
+set(marker_file
+  "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake/packages/${PROJECT_NAME}")
 file(WRITE "${marker_file}" "")
 install(
   FILES "${marker_file}"

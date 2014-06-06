@@ -12,7 +12,8 @@
 #
 macro(ament_export_libraries)
   if(_${PROJECT_NAME}_AMENT_PACKAGE)
-    message(FATAL_ERROR "ament_export_libraries() must be called before ament_package()")
+    message(FATAL_ERROR
+      "ament_export_libraries() must be called before ament_package()")
   endif()
 
   if(${ARGC} GREATER 0)
@@ -32,7 +33,9 @@ macro(ament_export_libraries)
         set(_cfg "${_arg}")
         math(EXPR _i "${_i} + 1")
         if(_i EQUAL ${ARGC})
-          message(FATAL_ERROR "ament_export_libraries() package '${PROJECT_NAME}' passes the build configuration keyword '${_cfg}' as the last exported library")
+          message(FATAL_ERROR "ament_export_libraries() package "
+            "'${PROJECT_NAME}' passes the build configuration keyword "
+            "'${_cfg}' as the last exported library")
         endif()
         list(GET _argn ${_i} _lib)
       else()
@@ -45,13 +48,15 @@ macro(ament_export_libraries)
       if(IS_ABSOLUTE "${_lib}")
         # keep absolute libraries as-is
         if(NOT EXISTS "${_lib}")
-          message(FATAL_ERROR "ament_export_libraries() package '${PROJECT_NAME}' exports the library '${_lib}' which doesn't exist")
+          message(FATAL_ERROR
+            "ament_export_libraries() package '${PROJECT_NAME}' exports the "
+            "library '${_lib}' which doesn't exist")
         endif()
         list(APPEND _AMENT_EXPORT_ABSOLUTE_LIBRARIES ${_cfg} "${_lib}")
       elseif(TARGET "${_lib}")
         # sometimes cmake dependencies define imported targets
         # in which case the imported library information is not the target name
-        # but the information embedded in properties inside the imported library
+        # but the information is embedded in properties of the imported target
         get_target_property(_is_imported "${_lib}" IMPORTED)
         if(_is_imported)
           set(_imported_libraries "")
@@ -59,9 +64,11 @@ macro(ament_export_libraries)
           if(_imported_location)
             list(APPEND _imported_libraries ${_imported_location})
           else()
-            get_target_property(_imported_configurations "${_lib}" IMPORTED_CONFIGURATIONS)
+            get_target_property(_imported_configurations "${_lib}"
+              IMPORTED_CONFIGURATIONS)
             foreach(_cfg ${_imported_configurations})
-              get_target_property(_imported_location_${_cfg} "${_lib}" IMPORTED_LOCATION_${_cfg})
+              get_target_property(_imported_location_${_cfg} "${_lib}"
+                IMPORTED_LOCATION_${_cfg})
               if(_imported_location_${cfg})
                 list(APPEND _imported_libraries ${_imported_location_${_cfg}})
               endif()
@@ -70,12 +77,17 @@ macro(ament_export_libraries)
           foreach(_imported_library ${_imported_libraries})
             # verify that imported library is an existing absolute path
             if(NOT IS_ABSOLUTE "${_imported_library}")
-              message(FATAL_ERROR "ament_export_libraries() package '${PROJECT_NAME}' exports the imported library '${_imported_library}' which is not an absolute path")
+              message(FATAL_ERROR "ament_export_libraries() package "
+                "'${PROJECT_NAME}' exports the imported library "
+                "'${_imported_library}' which is not an absolute path")
             endif()
             if(NOT EXISTS "${_imported_library}")
-              message(FATAL_ERROR "ament_export_libraries() package '${PROJECT_NAME}' exports the imported library '${_imported_library}' which doesn't exist")
+              message(FATAL_ERROR "ament_export_libraries() package "
+                "'${PROJECT_NAME}' exports the imported library "
+                "'${_imported_library}' which doesn't exist")
             endif()
-            list(APPEND _AMENT_EXPORT_ABSOLUTE_LIBRARIES ${_cfg} "${_imported_library}")
+            list(APPEND _AMENT_EXPORT_ABSOLUTE_LIBRARIES
+              ${_cfg} "${_imported_library}")
           endforeach()
         else()
           # keep plain target names as-is

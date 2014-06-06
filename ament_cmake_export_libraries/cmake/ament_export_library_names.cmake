@@ -12,7 +12,8 @@
 #
 macro(ament_export_library_names)
   if(_${PROJECT_NAME}_AMENT_PACKAGE)
-    message(FATAL_ERROR "ament_export_library_names() must be called before ament_package()")
+    message(FATAL_ERROR
+      "ament_export_library_names() must be called before ament_package()")
   endif()
 
   cmake_parse_arguments(_ARG "" "" "LIBRARY_DIRS" ${ARGN})

@@ -22,16 +22,19 @@ include(CMakeParseArguments)
 #
 function(ament_index_register_resource resource_type)
   if("${resource_type}" STREQUAL "")
-    message(FATAL_ERROR "ament_index_register_resource() called without a 'resource_type'")
+    message(FATAL_ERROR
+      "ament_index_register_resource() called without a 'resource_type'")
   endif()
 
   cmake_parse_arguments(ARG "" "PACKAGE_NAME;CONTENT;CONTENT_FILE" "" ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
-    message(FATAL_ERROR "ament_index_register_resource() called with unused arguments: ${ARG_UNPARSED_ARGUMENTS}")
+    message(FATAL_ERROR "ament_index_register_resource() called with unused "
+      "arguments: ${ARG_UNPARSED_ARGUMENTS}")
   endif()
 
   if(ARG_CONTENT AND ARG_CONTENT_FILE)
-    message(FATAL_ERROR "ament_index_register_resource() called with both 'CONTENT' and 'CONTENT_FILE', only one is allowed")
+    message(FATAL_ERROR "ament_index_register_resource() called with both "
+      "'CONTENT' and 'CONTENT_FILE', only one is allowed")
   endif()
 
   if("${ARG_PACKAGE_NAME}" STREQUAL "")
@@ -43,7 +46,8 @@ function(ament_index_register_resource resource_type)
       set(ARG_CONTENT_FILE "${CMAKE_CURRENT_SOURCE_DIR}/${ARG_CONTENT_FILE}")
     endif()
     if(NOT EXISTS "${ARG_CONTENT_FILE}")
-      message(FATAL_ERROR "ament_index_register_resource() the content file '${ARG_CONTENT_FILE}' does not exist")
+      message(FATAL_ERROR "ament_index_register_resource() the content file "
+        "'${ARG_CONTENT_FILE}' does not exist")
     endif()
 
     string_ends_with("${ARG_CONTENT_FILE}" ".in" is_template)
@@ -54,7 +58,8 @@ function(ament_index_register_resource resource_type)
   endif()
 
   set(destination "share/ament_index/resource_index/${resource_type}")
-  set(marker_file "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_index/${resource_type}/${ARG_PACKAGE_NAME}")
+  set(marker_file
+    "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_index/${resource_type}/${ARG_PACKAGE_NAME}")
 
   if(ARG_CONTENT OR NOT ARG_CONTENT_FILE)
     # use the CONTENT argument to create the marker file

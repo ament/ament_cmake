@@ -25,25 +25,30 @@ include(CMakeParseArguments)
 # @public
 #
 function(ament_add_test testname)
-  cmake_parse_arguments(ARG "GENERATE_RESULT_FOR_RETURN_CODE_ZERO" "TIMEOUT;WORKING_DIRECTORY" "COMMAND" ${ARGN})
+  cmake_parse_arguments(ARG "GENERATE_RESULT_FOR_RETURN_CODE_ZERO"
+    "TIMEOUT;WORKING_DIRECTORY" "COMMAND" ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
-    message(FATAL_ERROR "ament_add_test() called with unused arguments: ${ARG_UNPARSED_ARGUMENTS}")
+    message(FATAL_ERROR "ament_add_test() called with unused arguments: "
+      "${ARG_UNPARSED_ARGUMENTS}")
   endif()
   if(NOT ARG_COMMAND)
-    message(FATAL_ERROR "ament_add_test() must be invoked with the COMMAND argument")
+    message(FATAL_ERROR
+      "ament_add_test() must be invoked with the COMMAND argument")
   endif()
   if(NOT ARG_TIMEOUT)
     set(ARG_TIMEOUT 60)
   endif()
   if(NOT ARG_TIMEOUT GREATER 0)
-    message(FATAL_ERROR "ament_add_test() the TIMEOUT argument must be a valid number and greater than zero")
+    message(FATAL_ERROR "ament_add_test() the TIMEOUT argument must be a "
+      "valid number and greater than zero")
   endif()
   if(NOT ARG_WORKING_DIRECTORY)
     set(WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
   endif()
 
   # wrap command with run_test script to ensure test result generation
-  set(cmd_wrapper ${PYTHON_EXECUTABLE} ${ament_cmake_test_DIR}/run_test.py "${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/${testname}.xml")
+  set(cmd_wrapper ${PYTHON_EXECUTABLE} ${ament_cmake_test_DIR}/run_test.py
+    "${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/${testname}.xml")
   if(ARG_GENERATE_RESULT_FOR_RETURN_CODE_ZERO)
     list(APPEND cmd_wrapper "--generate-result-on-success")
   endif()

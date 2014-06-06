@@ -24,17 +24,20 @@ endmacro()
 function(_ament_add_nose_test testname path)
   cmake_parse_arguments(ARG "" "TIMEOUT" "" ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
-    message(FATAL_ERROR "ament_add_nose_test() called with unused arguments: ${ARG_UNPARSED_ARGUMENTS}")
+    message(FATAL_ERROR "ament_add_nose_test() called with unused arguments: "
+      "${ARG_UNPARSED_ARGUMENTS}")
   endif()
 
   if(NOT IS_ABSOLUTE "${path}")
     set(path "${CMAKE_CURRENT_SOURCE_DIR}/${path}")
   endif()
   if(NOT EXISTS "${path}")
-    message(FATAL_ERROR "ament_add_nose_test() the path '${path}' does not exist")
+    message(FATAL_ERROR
+      "ament_add_nose_test() the path '${path}' does not exist")
   endif()
 
-  set(cmd "${NOSETESTS} \"${path}\" --with-xunit \"--xunit-file=${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/${testname}.xml\"")
+  set(cmd
+    "${NOSETESTS} \"${path}\" --with-xunit \"--xunit-file=${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/${testname}.xml\"")
   if(ARG_TIMEOUT)
     set(ARG_TIMEOUT "TIMEOUT" "${ARG_TIMEOUT}")
   endif()

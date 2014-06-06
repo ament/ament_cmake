@@ -29,10 +29,12 @@ endmacro()
 function(_ament_add_gmock target)
   cmake_parse_arguments(ARG "" "TIMEOUT" "" ${ARGN})
   if(NOT ARG_UNPARSED_ARGUMENTS)
-    message(FATAL_ERROR "ament_add_gmock() must be invoked with at least one source file")
+    message(FATAL_ERROR
+      "ament_add_gmock() must be invoked with at least one source file")
   endif()
 
-  # should be EXCLUDE_FROM_ALL if it would be possible to add this target as a dependency to the "test" target
+  # should be EXCLUDE_FROM_ALL if it would be possible
+  # to add this target as a dependency to the "test" target
   add_executable("${target}" ${ARG_UNPARSED_ARGUMENTS})
   target_link_libraries("${target}" gmock)
 
@@ -40,7 +42,8 @@ function(_ament_add_gmock target)
   if(NOT target_path)
     set(target_path "${CMAKE_CURRENT_BINARY_DIR}")
   endif()
-  set(cmd "\"${target_path}/${target}\" \"--gtest_output=xml:${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/${target}.xml\"")
+  set(cmd
+    "\"${target_path}/${target}\" \"--gtest_output=xml:${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/${target}.xml\"")
   if(ARG_TIMEOUT)
     set(ARG_TIMEOUT "TIMEOUT" ${ARG_TIMEOUT})
   endif()

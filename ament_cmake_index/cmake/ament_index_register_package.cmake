@@ -10,7 +10,8 @@ include(CMakeParseArguments)
 function(ament_index_register_package)
   cmake_parse_arguments(ARG "" "PACKAGE_NAME" "" ${ARGN})
   if(ARGN)
-    message(FATAL_ERROR "ament_index_register_package() called with unused arguments: ${ARGN}")
+    message(FATAL_ERROR
+      "ament_index_register_package() called with unused arguments: ${ARGN}")
   endif()
 
   # register package name with the resource type 'packages'

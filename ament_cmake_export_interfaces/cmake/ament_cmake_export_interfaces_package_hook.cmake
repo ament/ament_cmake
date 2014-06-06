@@ -1,5 +1,6 @@
 # generate and register extra file for interfaces
-set(_generated_extra_file "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_export_interfaces/ament_cmake_export_interfaces-extras.cmake")
+set(_generated_extra_file
+  "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_export_interfaces/ament_cmake_export_interfaces-extras.cmake")
 configure_file(
   "${ament_cmake_export_interfaces_DIR}/ament_cmake_export_interfaces-extras.cmake.in"
   "${_generated_extra_file}"

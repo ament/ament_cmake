@@ -14,7 +14,8 @@
 #
 macro(ament_auto_find_build_dependencies)
   if(ARGN)
-    message(FATAL_ERROR "ament_auto_find_build_dependencies() called with unused arguments: ${ARGN}")
+    message(FATAL_ERROR "ament_auto_find_build_dependencies() called with "
+      "unused arguments: ${ARGN}")
   endif()
 
   if(NOT _AMENT_PACKAGE_NAME)

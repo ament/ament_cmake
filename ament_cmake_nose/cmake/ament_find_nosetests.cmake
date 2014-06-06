@@ -11,7 +11,8 @@ include(CMakeParseArguments)
 #
 macro(ament_find_nose)
   if(ARGN)
-    message(FATAL_ERROR "ament_find_nose() called with unused arguments: ${ARGN}")
+    message(FATAL_ERROR
+      "ament_find_nose() called with unused arguments: ${ARGN}")
   endif()
   _ament_cmake_nose_find_nosetests()
 endmacro()

@@ -14,5 +14,6 @@
 # @public
 #
 macro(ament_register_extension extension_point package_name cmake_filename)
-  list(APPEND AMENT_EXTENSIONS_${extension_point} "${package_name}:${cmake_filename}")
+  list(APPEND AMENT_EXTENSIONS_${extension_point}
+    "${package_name}:${cmake_filename}")
 endmacro()
