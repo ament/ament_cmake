@@ -1,4 +1,5 @@
-# copied from ament_cmake_export_libraries/ament_cmake_export_libraries-extras.cmake
+# copied from
+# ament_cmake_export_libraries/ament_cmake_export_libraries-extras.cmake
 
 # register environment hook for libraries once
 macro(_ament_cmake_export_libraries_register_environment_hook)
@@ -6,7 +7,8 @@ macro(_ament_cmake_export_libraries_register_environment_hook)
     set(_AMENT_CMAKE_EXPORT_LIBRARIES_ENVIRONMENT_HOOK_REGISTERED TRUE)
 
     find_package(ament_cmake_environment_hooks REQUIRED)
-    ament_environment_hooks("${ament_cmake_export_libraries_DIR}/environment/library_path.sh.in")
+    ament_environment_hooks(
+      "${ament_cmake_export_libraries_DIR}/environment/library_path.sh.in")
   endif()
 endmacro()
 
@@ -16,7 +18,8 @@ macro(_ament_cmake_export_libraries_register_package_hook)
     set(_AMENT_CMAKE_EXPORT_LIBRARIES_PACKAGE_HOOK_REGISTERED TRUE)
 
     find_package(ament_cmake_core REQUIRED)
-    ament_register_extension("ament_package" "ament_cmake_export_libraries" "ament_cmake_export_libraries_package_hook.cmake")
+    ament_register_extension("ament_package" "ament_cmake_export_libraries"
+      "ament_cmake_export_libraries_package_hook.cmake")
   endif()
 endmacro()
 

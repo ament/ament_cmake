@@ -22,7 +22,9 @@ macro(_ament_cmake_nose_find_nosetests)
       else()
         set(_python_nosetests_package "python-nose")
       endif()
-      message(WARNING "'nosetests' not found, Python nose tests can not be run (e.g. on Ubuntu/Debian install the package '${_python_nosetests_package}')")
+      message(WARNING
+        "'nosetests' not found, Python nose tests can not be run (e.g. on "
+        "Ubuntu/Debian install the package '${_python_nosetests_package}')")
     endif()
   endif()
 endmacro()

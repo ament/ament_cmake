@@ -22,9 +22,14 @@ include(CMakeParseArguments)
 # @public
 #
 macro(ament_auto_add_executable target)
-  cmake_parse_arguments(ARG "WIN32;MACOSX_BUNDLE;EXCLUDE_FROM_ALL;NO_TARGET_LINK_LIBRARIES" "DIRECTORY" "" ${ARGN})
+  cmake_parse_arguments(ARG
+    "WIN32;MACOSX_BUNDLE;EXCLUDE_FROM_ALL;NO_TARGET_LINK_LIBRARIES"
+    "DIRECTORY"
+    ""
+    ${ARGN})
   if(NOT ARG_DIRECTORY AND NOT ARG_UNPARSED_ARGUMENTS)
-    message(FATAL_ERROR "ament_auto_add_executable() called without any source files and without a DIRECTORY argument")
+    message(FATAL_ERROR "ament_auto_add_executable() called without any "
+      "source files and without a DIRECTORY argument")
   endif()
 
   set(_source_files "")
@@ -40,7 +45,8 @@ macro(ament_auto_add_executable target)
       "${ARG_DIRECTORY}/*.cxx"
     )
     if(NOT _source_files)
-      message(FATAL_ERROR "ament_auto_add_executable() no source files found in directory '${CMAKE_CURRENT_SOURCE_DIR}/${ARG_DIRECTORY}'")
+      message(FATAL_ERROR "ament_auto_add_executable() no source files found "
+        "in directory '${CMAKE_CURRENT_SOURCE_DIR}/${ARG_DIRECTORY}'")
     endif()
   endif()
 
@@ -50,7 +56,8 @@ macro(ament_auto_add_executable target)
 
   # add include directory of this package if it exists
   if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/include")
-    target_include_directories("${target}" PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
+    target_include_directories("${target}" PUBLIC
+      "${CMAKE_CURRENT_SOURCE_DIR}/include")
   endif()
   # link against other libraries of this package
   if(NOT "${${PROJECT_NAME}_LIBRARIES}" STREQUAL "")
@@ -59,12 +66,15 @@ macro(ament_auto_add_executable target)
 
   # add exported information from found build dependencies
   if(NOT "${${PROJECT_NAME}_FOUND_DEFINITIONS}" STREQUAL "")
-    target_compile_definitions("${target}" PUBLIC ${${PROJECT_NAME}_FOUND_DEFINITIONS})
+    target_compile_definitions("${target}" PUBLIC
+      ${${PROJECT_NAME}_FOUND_DEFINITIONS})
   endif()
   if(NOT "${${PROJECT_NAME}_FOUND_INCLUDE_DIRS}" STREQUAL "")
-    target_include_directories("${target}" PUBLIC ${${PROJECT_NAME}_FOUND_INCLUDE_DIRS})
+    target_include_directories("${target}" PUBLIC
+      ${${PROJECT_NAME}_FOUND_INCLUDE_DIRS})
   endif()
-  if(NOT "${${PROJECT_NAME}_FOUND_LIBRARIES}" STREQUAL "" AND NOT ARG_NO_TARGET_LINK_LIBRARIES)
+  if(NOT "${${PROJECT_NAME}_FOUND_LIBRARIES}" STREQUAL "" AND
+      NOT ARG_NO_TARGET_LINK_LIBRARIES)
     target_link_libraries("${target}" ${${PROJECT_NAME}_FOUND_LIBRARIES})
   endif()
 

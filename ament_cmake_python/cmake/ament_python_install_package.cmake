@@ -15,7 +15,8 @@ endmacro()
 function(_ament_cmake_python_install_package package_name)
   cmake_parse_arguments(ARG "" "PACKAGE_DIR" "" ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
-    message(FATAL_ERROR "ament_python_install_package() called with unused arguments: ${ARG_UNPARSED_ARGUMENTS}")
+    message(FATAL_ERROR "ament_python_install_package() called with unused "
+      "arguments: ${ARG_UNPARSED_ARGUMENTS}")
   endif()
 
   if(NOT ARG_PACKAGE_DIR)
@@ -26,13 +27,15 @@ function(_ament_cmake_python_install_package package_name)
   endif()
 
   if(NOT EXISTS "${ARG_PACKAGE_DIR}/__init__.py")
-    message(FATAL_ERROR "ament_python_install_package() the Python package folder '${ARG_PACKAGE_DIR}' doesn't contain an '__init__.py' file")
+    message(FATAL_ERROR "ament_python_install_package() the Python package "
+      "folder '${ARG_PACKAGE_DIR}' doesn't contain an '__init__.py' file")
   endif()
 
   _ament_cmake_python_register_environment_hook()
 
   if(NOT PYTHON_INSTALL_DIR)
-    message(FATAL_ERROR "ament_python_install_package() variable 'PYTHON_INSTALL_DIR' must not be empty")
+    message(FATAL_ERROR "ament_python_install_package() variable "
+      "'PYTHON_INSTALL_DIR' must not be empty")
   endif()
   install(
     DIRECTORY "${ARG_PACKAGE_DIR}/"
@@ -42,8 +45,11 @@ function(_ament_cmake_python_install_package package_name)
 
   list(FIND AMENT_CMAKE_PYTHON_INSTALL_INSTALLED_NAMES "${package_name}" index)
   if(NOT index EQUAL -1)
-    message(FATAL_ERROR "ament_python_install_package() a Python module file or package with the same name '${package_name}' has been installed before")
+    message(FATAL_ERROR
+      "ament_python_install_package() a Python module file or package with "
+      "the same name '${package_name}' has been installed before")
   endif()
   list(APPEND AMENT_CMAKE_PYTHON_INSTALL_INSTALLED_NAMES "${package_name}")
-  set(AMENT_CMAKE_PYTHON_INSTALL_INSTALLED_NAMES "${AMENT_CMAKE_PYTHON_INSTALL_INSTALLED_NAMES}" PARENT_SCOPE)
+  set(AMENT_CMAKE_PYTHON_INSTALL_INSTALLED_NAMES
+    "${AMENT_CMAKE_PYTHON_INSTALL_INSTALLED_NAMES}" PARENT_SCOPE)
 endfunction()

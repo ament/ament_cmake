@@ -16,8 +16,13 @@
 
 macro(ament_auto_package)
   # export all found build dependencies which are also run dependencies
-  set(_run_depends ${${PROJECT_NAME}_BUILD_EXPORT_DEPENDS} ${${PROJECT_NAME}_BUILDTOOL_EXPORT_DEPENDS} ${${PROJECT_NAME}_EXEC_DEPENDS})
-  foreach(_dep ${${PROJECT_NAME}_FOUND_BUILD_DEPENDS} ${${PROJECT_NAME}_FOUND_BUILDTOOL_DEPENDS})
+  set(_run_depends
+    ${${PROJECT_NAME}_BUILD_EXPORT_DEPENDS}
+    ${${PROJECT_NAME}_BUILDTOOL_EXPORT_DEPENDS}
+    ${${PROJECT_NAME}_EXEC_DEPENDS})
+  foreach(_dep
+      ${${PROJECT_NAME}_FOUND_BUILD_DEPENDS}
+      ${${PROJECT_NAME}_FOUND_BUILDTOOL_DEPENDS})
     list(FIND _run_depends "${_dep}" _index)
     if(NOT _index EQUAL -1)
       ament_export_dependencies("${_dep}")

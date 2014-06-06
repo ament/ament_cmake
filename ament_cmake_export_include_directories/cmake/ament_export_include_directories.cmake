@@ -13,7 +13,8 @@
 #
 macro(ament_export_include_directories)
   if(_${PROJECT_NAME}_AMENT_PACKAGE)
-    message(FATAL_ERROR "ament_export_include_directories() must be called before ament_package()")
+    message(FATAL_ERROR "ament_export_include_directories() must be called "
+      "before ament_package()")
   endif()
 
   if(${ARGC} GREATER 0)
@@ -28,7 +29,9 @@ macro(ament_export_include_directories)
         list(APPEND _AMENT_EXPORT_RELATIVE_INCLUDE_DIRECTORIES "${_arg}")
       else()
         if(NOT IS_DIRECTORY "${_arg}")
-          message(WARNING "ament_export_include_directories() package '${PROJECT_NAME}' exports the include directory '${_arg}' which doesn't exist")
+          message(WARNING
+            "ament_export_include_directories() package '${PROJECT_NAME}' "
+            "exports the include directory '${_arg}' which doesn't exist")
         endif()
         list(APPEND _AMENT_EXPORT_ABSOLUTE_INCLUDE_DIRECTORIES "${_arg}")
       endif()

@@ -29,10 +29,12 @@ endmacro()
 function(_ament_add_gtest target)
   cmake_parse_arguments(ARG "" "TIMEOUT" "" ${ARGN})
   if(NOT ARG_UNPARSED_ARGUMENTS)
-    message(FATAL_ERROR "ament_add_gtest() must be invoked with at least one source file")
+    message(FATAL_ERROR
+      "ament_add_gtest() must be invoked with at least one source file")
   endif()
 
-  # should be EXCLUDE_FROM_ALL if it would be possible to add this target as a dependency to the "test" target
+  # should be EXCLUDE_FROM_ALL if it would be possible
+  # to add this target as a dependency to the "test" target
   add_executable("${target}" ${ARG_UNPARSED_ARGUMENTS})
   target_link_libraries("${target}" gtest)
 

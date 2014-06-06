@@ -7,7 +7,8 @@ macro(_ament_cmake_python_register_environment_hook)
 
     find_package(ament_cmake_core REQUIRED)
     find_package(ament_cmake_environment_hooks REQUIRED)
-    ament_environment_hooks("${ament_cmake_python_DIR}/environment/pythonpath.sh.in")
+    ament_environment_hooks(
+      "${ament_cmake_python_DIR}/environment/pythonpath.sh.in")
   endif()
 endmacro()
 

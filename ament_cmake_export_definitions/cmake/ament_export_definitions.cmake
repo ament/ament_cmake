@@ -12,7 +12,8 @@
 #
 macro(ament_export_definitions)
   if(_${PROJECT_NAME}_AMENT_PACKAGE)
-    message(FATAL_ERROR "ament_export_definitions() must be called before ament_package()")
+    message(FATAL_ERROR
+      "ament_export_definitions() must be called before ament_package()")
   endif()
 
   if(${ARGC} GREATER 0)

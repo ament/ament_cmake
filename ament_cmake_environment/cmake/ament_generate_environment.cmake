@@ -5,7 +5,8 @@
 #
 function(ament_generate_environment)
   if(ARGN)
-    message(FATAL_ERROR "ament_generate_environment() called with unused arguments: ${ARGN}")
+    message(FATAL_ERROR
+      "ament_generate_environment() called with unused arguments: ${ARGN}")
   endif()
 
   # configure and install setup files
@@ -25,7 +26,8 @@ function(_ament_generate_environment name extension)
     )
     set(file "${CMAKE_BINARY_DIR}/ament_cmake_environment/${name}.${extension}")
   elseif(NOT EXISTS "${file}")
-    message(FATAL_ERROR "ament_generate_environment() could find neither find '${file}.in' nor '${file}'")
+    message(FATAL_ERROR "ament_generate_environment() could find neither find "
+      "'${file}.in' nor '${file}'")
   endif()
 
   install(

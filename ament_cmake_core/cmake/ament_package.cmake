@@ -22,13 +22,17 @@
 macro(ament_package)
   # verify that project() has been called before
   if(NOT PROJECT_NAME)
-    message(FATAL_ERROR "ament_package() PROJECT_NAME is not set. You must call project() before calling ament_package().")
+    message(FATAL_ERROR "ament_package() PROJECT_NAME is not set. You must "
+      "call project() before calling ament_package().")
   endif()
   if(PROJECT_NAME STREQUAL "Project")
-    message(FATAL_ERROR "ament_package() PROJECT_NAME is set to 'Project', which is not a valid project name. You must call project() before calling ament_package().")
+    message(FATAL_ERROR "ament_package() PROJECT_NAME is set to 'Project', "
+      "which is not a valid project name. "
+      "You must call project() before calling ament_package().")
   endif()
 
-  # mark that ament_package() was called in order to detect wrong order of calling
+  # mark that ament_package() was called
+  # in order to detect wrong order of calling
   set(_${PROJECT_NAME}_AMENT_PACKAGE TRUE)
 
   # call ament_package_xml() if it has not been called before
@@ -44,7 +48,8 @@ endmacro()
 function(_ament_package)
   cmake_parse_arguments(PACKAGE "" "" "CONFIG_EXTRAS" ${ARGN})
   if(PACKAGE_UNPARSED_ARGUMENTS)
-    message(FATAL_ERROR "ament_package() called with unused arguments: ${PACKAGE_UNPARSED_ARGUMENTS}")
+    message(FATAL_ERROR "ament_package() called with unused arguments: "
+      "${PACKAGE_UNPARSED_ARGUMENTS}")
   endif()
 
   # set variable required by the configured files
@@ -54,7 +59,8 @@ function(_ament_package)
   # expand and install config extras
   set(PACKAGE_CONFIG_EXTRA_FILES "")
   foreach(extra ${${PROJECT_NAME}_CONFIG_EXTRAS} ${PACKAGE_CONFIG_EXTRAS})
-    assert_file_exists("${extra}" "ament_package() called with extra file '${extra}' which does not exist")
+    assert_file_exists("${extra}"
+      "ament_package() called with extra file '${extra}' which does not exist")
     stamp("${extra}")
 
     # expand template
@@ -70,7 +76,8 @@ function(_ament_package)
         ${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_core/${extra_filename}
         @ONLY
       )
-      set(extra "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_core/${extra_filename}")
+      set(extra
+        "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_core/${extra_filename}")
     endif()
 
     # install cmake file and register for CMake config file
@@ -83,7 +90,8 @@ function(_ament_package)
       get_filename_component(extra_filename "${extra}" NAME)
       list(APPEND PACKAGE_CONFIG_EXTRA_FILES "${extra_filename}")
     else()
-      message(FATAL_ERROR "ament_package() the CONFIG_EXTRAS file '${extra}' does neither end with '.cmake' nor with '.cmake.in'.")
+      message(FATAL_ERROR "ament_package() the CONFIG_EXTRAS file '${extra}' "
+        "does neither end with '.cmake' nor with '.cmake.in'.")
     endif()
   endforeach()
 
