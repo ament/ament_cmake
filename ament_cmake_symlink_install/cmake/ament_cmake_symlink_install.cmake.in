@@ -138,6 +138,54 @@ function(ament_cmake_symlink_install_files)
 endfunction()
 
 #
+# Reimplement CMake install(PROGRAMS) command to use symlinks instead of copying
+# resources.
+#
+# :param ARGN: the same arguments as the CMake install command.
+# :type ARGN: various
+#
+function(ament_cmake_symlink_install_programs)
+  #message(" - ament_cmake_symlink_install_programs(${ARGN})")
+  cmake_parse_arguments(ARG "OPTIONAL" "DESTINATION" "PROGRAMS" ${ARGN})
+  if(ARG_UNPARSED_ARGUMENTS)
+    message(FATAL_ERROR "ament_cmake_symlink_install_programs() called with "
+      "unused/unsupported arguments: ${ARG_UNPARSED_ARGUMENTS}")
+  endif()
+
+  # make destination an absolute path and ensure that it exists
+  if(NOT IS_ABSOLUTE "${ARG_DESTINATION}")
+    set(ARG_DESTINATION "@CMAKE_INSTALL_PREFIX@/${ARG_DESTINATION}")
+  endif()
+  if(NOT EXISTS "${ARG_DESTINATION}")
+    #message(" - ament_cmake_symlink_install_programs() create destination "
+    #  "directory '${ARG_DESTINATION}'")
+    file(MAKE_DIRECTORY "${ARG_DESTINATION}")
+  endif()
+
+  # iterate over programs
+  foreach(file ${ARG_PROGRAMS})
+    # make file an absolute path
+    if(NOT IS_ABSOLUTE "${file}")
+      set(file "@CMAKE_CURRENT_SOURCE_DIR@/${file}")
+    endif()
+
+    if(EXISTS "${file}")
+      # determine link name for file including destination path
+      get_filename_component(filename "${file}" NAME)
+      set(symlink "${ARG_DESTINATION}/${filename}")
+      #message(" - ament_cmake_symlink_install_programs() create symlink "
+      #  "'${symlink}' pointing to '${file}'")
+      _ament_cmake_symlink_create_symlink("${file}" "${symlink}")
+    else()
+      if(NOT ARG_OPTIONAL)
+        message(FATAL_ERROR
+          "ament_cmake_symlink_install_programs() can't find '${file}'")
+      endif()
+    endif()
+  endforeach()
+endfunction()
+
+#
 # Reimplement CMake install(TARGETS) command to use symlinks instead of copying
 # resources.
 #

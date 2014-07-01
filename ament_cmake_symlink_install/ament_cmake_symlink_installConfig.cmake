@@ -20,9 +20,8 @@ if(AMENT_CMAKE_SYMLINK_INSTALL)
     "${ament_cmake_symlink_install_DIR}/ament_cmake_symlink_install_directory.cmake")
   include(
     "${ament_cmake_symlink_install_DIR}/ament_cmake_symlink_install_files.cmake")
-  # TODO implement PROGRAMS signature
-  #include(
-  #  "${ament_cmake_symlink_install_DIR}/ament_cmake_symlink_install_programs.cmake")
+  include(
+    "${ament_cmake_symlink_install_DIR}/ament_cmake_symlink_install_programs.cmake")
   include(
     "${ament_cmake_symlink_install_DIR}/ament_cmake_symlink_install_targets.cmake")
   include("${ament_cmake_symlink_install_DIR}/install.cmake")
