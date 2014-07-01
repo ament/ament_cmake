@@ -20,8 +20,7 @@ function(ament_generate_package_environment)
     set(SOURCE_HOOKS "")
     foreach(hook ${_AMENT_CMAKE_ENVIRONMENT_HOOKS_${ext}})
       set(SOURCE_HOOKS
-        "${SOURCE_HOOKS}${AMENT_CMAKE_ENVIRONMENT_SOURCE_COMMAND_${ext}}"
-        " \"$AMENT_CURRENT_PREFIX/${hook}\"\n")
+        "${SOURCE_HOOKS}${AMENT_CMAKE_ENVIRONMENT_SOURCE_COMMAND_${ext}} \"$AMENT_CURRENT_PREFIX/${hook}\"\n")
     endforeach()
 
     configure_file(
