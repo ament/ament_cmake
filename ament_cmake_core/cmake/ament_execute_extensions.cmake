@@ -20,8 +20,7 @@ macro(ament_execute_extensions extension_point)
       list(GET _extension_list 1 _cmake_filename)
       set(_extension_file "${${_pkg_name}_DIR}/${_cmake_filename}")
       assert_file_exists("${_extension_file}"
-        "ament_execute_extensions(${extension_point}) registered extension "
-        "'${_extension_file}' does not exist")
+        "ament_execute_extensions(${extension_point}) registered extension '${_extension_file}' does not exist")
       include("${_extension_file}")
     endforeach()
   endif()
