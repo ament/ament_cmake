@@ -53,13 +53,13 @@ if(NOT "${_exported_library_targets}" STREQUAL "")
 endif()
 
 # append absolute libraries to @PROJECT_NAME@_LIBRARIES
-if(NOT "${_AMENT_EXPORT_ABSOLUTE_LIBRARIES}" STREQUAL "")
+if(NOT "${_exported_absolute_libraries}" STREQUAL "")
   # loop over absolute libraries
   # but remember related build configuration keyword if available
-  list(LENGTH _exported_libraries _length)
+  list(LENGTH _exported_absolute_libraries _length)
   set(_i 0)
   while(_i LESS _length)
-    list(GET _exported_libraries ${_i} _arg)
+    list(GET _exported_absolute_libraries ${_i} _arg)
     if("${_arg}" MATCHES "^debug|optimized|general$")
       # remember build configuration keyword
       # and get following absolute library
@@ -68,7 +68,7 @@ if(NOT "${_AMENT_EXPORT_ABSOLUTE_LIBRARIES}" STREQUAL "")
       if(_i EQUAL _length)
         message(FATAL_ERROR "Package '@PROJECT_NAME@' passes the build configuration keyword '${_cfg}' as the last exported target")
       endif()
-      list(GET _exported_libraries ${_i} _absolute_library)
+      list(GET _exported_absolute_libraries ${_i} _absolute_library)
     else()
       # the value is an absolute library without a build configuration keyword
       set(_cfg "")
