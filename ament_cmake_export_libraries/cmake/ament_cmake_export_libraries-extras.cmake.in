@@ -115,6 +115,7 @@ if(NOT "${_exported_library_names}" STREQUAL "")
     list(GET _library_dirs 0 _library_name)
     list(REMOVE_AT _library_dirs 0)
 
+    set(_lib "NOTFOUND")
     if(NOT _library_dirs)
       # search for library in the common locations
       find_library(
