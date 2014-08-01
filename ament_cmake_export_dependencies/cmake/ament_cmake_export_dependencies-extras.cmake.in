@@ -3,12 +3,16 @@
 set(_exported_dependencies "@_AMENT_CMAKE_EXPORT_DEPENDENCIES@")
 
 # find_package() all dependencies
-# and append their INCLUDE_DIRS and LIBRARIES variables
-# to @PROJECT_NAME@_INCLUDE_DIRS and @PROJECT_NAME@_LIBRARIES
+# and append their DEFINITIONS INCLUDE_DIRS and LIBRARIES variables
+# to @PROJECT_NAME@_DEFINITIONS , @PROJECT_NAME@_INCLUDE_DIRS and
+# @PROJECT_NAME@_LIBRARIES
 if(NOT "${_exported_dependencies}" STREQUAL "")
   foreach(_dep ${_exported_dependencies})
     if(NOT ${_dep}_FOUND)
       find_package("${_dep}" REQUIRED)
+    endif()
+    if(${_dep}_DEFINITIONS)
+      list(APPEND @PROJECT_NAME@_DEFINITIONS "${${_dep}_DEFINITIONS}")
     endif()
     if(${_dep}_INCLUDE_DIRS)
       list(APPEND @PROJECT_NAME@_INCLUDE_DIRS "${${_dep}_INCLUDE_DIRS}")
