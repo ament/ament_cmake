@@ -18,6 +18,7 @@ if(NOT ament_cmake_FIND_COMPONENTS)
     "nose"
     "python"
     "symlink_install"
+    "target_dependencies"
     "test"
   )
 endif()
