@@ -60,23 +60,13 @@ macro(ament_auto_add_library target)
       "${CMAKE_CURRENT_SOURCE_DIR}/include")
   endif()
   # link against other libraries of this package
-  if(NOT "${${PROJECT_NAME}_LIBRARIES}" STREQUAL "")
+  if(NOT "${${PROJECT_NAME}_LIBRARIES}" STREQUAL "" AND
+      NOT ARG_NO_TARGET_LINK_LIBRARIES)
     target_link_libraries("${target}" ${${PROJECT_NAME}_LIBRARIES})
   endif()
 
   # add exported information from found build dependencies
-  if(NOT "${${PROJECT_NAME}_FOUND_DEFINITIONS}" STREQUAL "")
-    target_compile_definitions("${target}" PUBLIC
-      ${${PROJECT_NAME}_FOUND_DEFINITIONS})
-  endif()
-  if(NOT "${${PROJECT_NAME}_FOUND_INCLUDE_DIRS}" STREQUAL "")
-    target_include_directories("${target}" PUBLIC
-      ${${PROJECT_NAME}_FOUND_INCLUDE_DIRS})
-  endif()
-  if(NOT "${${PROJECT_NAME}_FOUND_LIBRARIES}" STREQUAL "" AND
-      NOT ARG_NO_TARGET_LINK_LIBRARIES)
-    target_link_libraries("${target}" ${${PROJECT_NAME}_FOUND_LIBRARIES})
-  endif()
+  ament_target_dependencies(${target} ${${PROJECT_NAME}_FOUND_BUILD_DEPENDS})
 
   list(APPEND ${PROJECT_NAME}_LIBRARIES "${target}")
 endmacro()

@@ -15,6 +15,7 @@ if(NOT ament_cmake_FIND_COMPONENTS)
     "gmock"
     "gtest"
     "index"
+    "libraries"
     "nose"
     "python"
     "symlink_install"
