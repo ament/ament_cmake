@@ -23,6 +23,7 @@
   <build_export_depend>ament_cmake_gmock</build_export_depend>
   <build_export_depend>ament_cmake_gtest</build_export_depend>
   <build_export_depend>ament_cmake_index</build_export_depend>
+  <build_export_depend>ament_cmake_libraries</build_export_depend>
   <build_export_depend>ament_cmake_nose</build_export_depend>
   <build_export_depend>ament_cmake_python</build_export_depend>
   <build_export_depend>ament_cmake_symlink_install</build_export_depend>
