@@ -26,14 +26,14 @@ macro(ament_export_include_directories)
         # prefix relative paths with CMAKE_INSTALL_PREFIX
         # while avoiding to embed any absolute path
         set(_arg "\${${PROJECT_NAME}_DIR}/../../../${_arg}")
-        list(APPEND _AMENT_EXPORT_RELATIVE_INCLUDE_DIRECTORIES "${_arg}")
+        list_append_unique(_AMENT_EXPORT_RELATIVE_INCLUDE_DIRECTORIES "${_arg}")
       else()
         if(NOT IS_DIRECTORY "${_arg}")
           message(WARNING
             "ament_export_include_directories() package '${PROJECT_NAME}' "
             "exports the include directory '${_arg}' which doesn't exist")
         endif()
-        list(APPEND _AMENT_EXPORT_ABSOLUTE_INCLUDE_DIRECTORIES "${_arg}")
+        list_append_unique(_AMENT_EXPORT_ABSOLUTE_INCLUDE_DIRECTORIES "${_arg}")
       endif()
     endforeach()
   endif()
