@@ -56,6 +56,7 @@ foreach(filename
   "ament_register_extension"
   "assert_file_exists"
   "list_append_unique"
+  "normalize_path"
   "python"
   "stamp"
   "string_ends_with"
