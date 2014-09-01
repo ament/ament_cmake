@@ -2,6 +2,7 @@
 # ament_cmake_target_dependencies/ament_cmake_target_dependencies-extras.cmake
 
 find_package(ament_cmake_core REQUIRED)
+find_package(ament_cmake_include_directories REQUIRED)
 find_package(ament_cmake_libraries REQUIRED)
 
 include(
