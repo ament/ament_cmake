@@ -43,7 +43,7 @@ function(_ament_include_directories_order var prefixes)
         string(SUBSTRING "${include_dir}"
           0 ${prefix_length_plus_one} include_dir_prefix)
         # prefix match
-        if("${prefix}/" STREQUAL "${include_dir_prefix}")
+        if("${prefix}/ " STREQUAL "${include_dir_prefix} ")
           break()
         endif()
       endif()

@@ -6,7 +6,7 @@
 # :type ARGN: various
 #
 function(ament_cmake_symlink_install_directory directory_keyword)
-  if(NOT "${directory_keyword}" STREQUAL "DIRECTORY")
+  if(NOT "${directory_keyword} " STREQUAL "DIRECTORY ")
     message(FATAL_ERROR "ament_cmake_symlink_install_directory() first "
       "argument must be 'DIRECTORY', not '${directory_keyword}'")
   endif()

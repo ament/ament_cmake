@@ -12,10 +12,10 @@ if(NOT @PROJECT_NAME@_FIND_QUIETLY)
 endif()
 
 # warn when using a deprecated package
-if(NOT "@PACKAGE_DEPRECATED@" STREQUAL "")
+if(NOT "@PACKAGE_DEPRECATED@ " STREQUAL " ")
   set(_msg "Package '@PROJECT_NAME@' is deprecated")
   # append custom deprecation text if available
-  if(NOT "@PACKAGE_DEPRECATED@" STREQUAL "TRUE")
+  if(NOT "@PACKAGE_DEPRECATED@ " STREQUAL "TRUE ")
     set(_msg "${_msg} (@PACKAGE_DEPRECATED@)")
   endif()
   message(WARNING "${_msg}")

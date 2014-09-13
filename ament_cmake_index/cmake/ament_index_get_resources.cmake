@@ -9,12 +9,12 @@
 # @public
 #
 function(ament_index_get_resources var resource_type)
-  if("${resource_type}" STREQUAL "")
+  if("${resource_type} " STREQUAL " ")
     message(FATAL_ERROR
       "ament_index_get_resources() called without a 'resource_type'")
   endif()
 
-  if(NOT "${ARGN}" STREQUAL "")
+  if(NOT "${ARGN} " STREQUAL " ")
     message(FATAL_ERROR "ament_index_get_resources() called with unused "
       "arguments: ${ARGN}")
   endif()

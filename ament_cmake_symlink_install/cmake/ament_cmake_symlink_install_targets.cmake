@@ -6,7 +6,7 @@
 # :type ARGN: various
 #
 function(ament_cmake_symlink_install_targets)
-  if(NOT "${ARGV0}" STREQUAL "TARGETS")
+  if(NOT "${ARGV0} " STREQUAL "TARGETS ")
     message(FATAL_ERROR "ament_cmake_symlink_install_targets() first argument "
       "must be 'TARGETS', not '${ARGV0}'")
   endif()

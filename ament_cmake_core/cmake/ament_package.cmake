@@ -25,7 +25,7 @@ macro(ament_package)
     message(FATAL_ERROR "ament_package() PROJECT_NAME is not set. You must "
       "call project() before calling ament_package().")
   endif()
-  if(PROJECT_NAME STREQUAL "Project")
+  if("${PROJECT_NAME} " STREQUAL "Project ")
     message(FATAL_ERROR "ament_package() PROJECT_NAME is set to 'Project', "
       "which is not a valid project name. "
       "You must call project() before calling ament_package().")

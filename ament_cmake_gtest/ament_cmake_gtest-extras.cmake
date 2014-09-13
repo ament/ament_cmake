@@ -26,7 +26,7 @@ macro(_ament_cmake_gtest_find_gtest)
       set(_search_path_include "/usr/include/gtest")
       set(_search_path_src "/usr/src/gtest/src")
       # option() consider environment variable to find gtest
-      if(NOT "$ENV{GTEST_DIR}" STREQUAL "")
+      if(NOT "$ENV{GTEST_DIR} " STREQUAL " ")
         list(INSERT _search_path_include 0 "$ENV{GTEST_DIR}/include/gtest")
         list(INSERT _search_path_src 0 "$ENV{GTEST_DIR}/src")
       endif()
