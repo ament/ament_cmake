@@ -13,7 +13,7 @@ macro(_ament_cmake_gmock_find_gmock)
       set(_search_path_include "/usr/include/gmock")
       set(_search_path_src "/usr/src/gmock/src")
       # option() consider environment variable to find gmock
-      if(NOT "$ENV{GMOCK_DIR}" STREQUAL "")
+      if(NOT "$ENV{GMOCK_DIR} " STREQUAL " ")
         list(INSERT _search_path_include 0 "$ENV{GMOCK_DIR}/include/gmock")
         list(INSERT _search_path_src 0 "$ENV{GMOCK_DIR}/src")
       endif()

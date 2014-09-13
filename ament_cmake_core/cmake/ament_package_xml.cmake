@@ -35,7 +35,7 @@ macro(ament_package_xml)
   _ament_package_xml(${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_core ${ARGN})
 
   # verify that the package name from package.xml equals the project() name
-  if(NOT _AMENT_PACKAGE_NAME STREQUAL PROJECT_NAME)
+  if(NOT "${_AMENT_PACKAGE_NAME} " STREQUAL "${PROJECT_NAME} ")
     message(FATAL_ERROR "ament_package_xml() package name "
       "'${_AMENT_PACKAGE_NAME}'  in '${_PACKAGE_XML_DIRECTORY}/package.xml' "
       "does not match current PROJECT_NAME '${PROJECT_NAME}'. "

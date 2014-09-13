@@ -3,7 +3,7 @@ if(AMENT_CMAKE_ENVIRONMENT_GENERATION)
 endif()
 
 function(ament_cmake_environment_generate_parent_prefix_path_marker)
-  if(NOT "$ENV{AMENT_PREFIX_PATH}" STREQUAL "")
+  if(NOT "$ENV{AMENT_PREFIX_PATH} " STREQUAL " ")
     set(marker_file
       "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_environment/parent_prefix_path")
     file(WRITE "${marker_file}" "$ENV{AMENT_PREFIX_PATH}")

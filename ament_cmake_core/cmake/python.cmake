@@ -27,7 +27,7 @@ if(SETUPTOOLS_DEB_LAYOUT)
   set(PYTHON_PACKAGES_DIR dist-packages)
   set(SETUPTOOLS_ARG_EXTRA "--install-layout=deb")
   # use major version only when installing 3.x with debian layout
-  if("${PYTHON_VERSION_MAJOR}" STREQUAL "3")
+  if("${PYTHON_VERSION_MAJOR} " STREQUAL "3 ")
     set(_PYTHON_PATH_VERSION_SUFFIX "${PYTHON_VERSION_MAJOR}")
   endif()
 else()

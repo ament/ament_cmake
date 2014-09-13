@@ -9,7 +9,7 @@ configure_file(
 list(APPEND ${PROJECT_NAME}_CONFIG_EXTRAS "${_generated_extra_file}")
 
 # install export files for interfaces
-if(NOT "${_AMENT_CMAKE_EXPORT_INTERFACES}" STREQUAL "")
+if(NOT "${_AMENT_CMAKE_EXPORT_INTERFACES} " STREQUAL " ")
   foreach(_interface ${_AMENT_CMAKE_EXPORT_INTERFACES})
     install(
       EXPORT "${_interface}"
