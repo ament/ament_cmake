@@ -6,7 +6,7 @@ option(AMENT_CMAKE_ENVIRONMENT_PARENT_PREFIX_PATH_GENERATION
   "Generate marker file containing the parent prefix path" ON)
 
 # set supported extensions based on platform
-set(_non_windows_extensions "bash" "sh")
+set(_non_windows_extensions "bash" "sh" "zsh")
 set(_windows_extensions "bat")
 if(NOT WIN32)
   # non-windows
@@ -31,6 +31,7 @@ set(
 # set commands to source files with a specific extension
 set(AMENT_CMAKE_ENVIRONMENT_SOURCE_COMMAND_bash ".")
 set(AMENT_CMAKE_ENVIRONMENT_SOURCE_COMMAND_sh ".")
+set(AMENT_CMAKE_ENVIRONMENT_SOURCE_COMMAND_zsh ".")
 set(AMENT_CMAKE_ENVIRONMENT_SOURCE_COMMAND_bat "call")
 
 include("${ament_cmake_environment_DIR}/ament_generate_environment.cmake")
