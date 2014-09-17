@@ -6,7 +6,7 @@ option(AMENT_CMAKE_ENVIRONMENT_PARENT_PREFIX_PATH_GENERATION
   "Generate marker file containing the parent prefix path" ON)
 
 # set supported extensions based on platform
-set(_non_windows_extensions "zsh" "bash" "sh")
+set(_non_windows_extensions "bash" "sh" "zsh")
 set(_windows_extensions "bat")
 if(NOT WIN32)
   # non-windows
