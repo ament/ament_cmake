@@ -8,8 +8,8 @@
 : ${AMENT_SHELL:=sh}
 
 # find all packages under current prefix
-_FIND=`which find`
-_SORT=`which sort`
+_FIND=find
+_SORT=sort
 _RESOURCES="$($_FIND "$AMENT_CURRENT_PREFIX/share/ament_parent_prefix_path" -mindepth 1 -maxdepth 1 2> /dev/null | $_SORT)"
 unset _FIND
 unset _SORT
@@ -61,7 +61,7 @@ ament_cmake_environment_append_unique_value() {
 }
 
 # iterate over all ament_parent_prefix_path files
-_CAT=`which cat`
+_CAT=cat
 _IFS=$IFS
 IFS="
 "

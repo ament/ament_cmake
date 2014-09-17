@@ -8,11 +8,11 @@
 : ${AMENT_SHELL:=sh}
 
 # find all packages under current prefix
-_FIND=`which find`
-_SORT=`which sort`
-_PACKAGES="$($_FIND "$AMENT_CURRENT_PREFIX/share/ament_index/resource_index/packages" -mindepth 1 -maxdepth 1 -printf %f\\n 2> /dev/null | $_SORT)"
-unset _FIND
+_LS=ls
+_SORT=sort
+_PACKAGES="$(${_LS} "$AMENT_CURRENT_PREFIX/share/ament_index/resource_index/packages" | $_SORT)"
 unset _SORT
+unset _LS
 
 # source local_setup.EXT or local_setup.sh file for each package
 _IFS=$IFS
