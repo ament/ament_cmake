@@ -8,8 +8,9 @@
 : ${AMENT_SHELL:=sh}
 
 # find all packages under current prefix
-_FIND=find
-_SORT=sort
+# Note: commands like find are stored in variables to prevent evaluation of aliases
+_FIND=find  # Variable storage is important
+_SORT=sort  # Variable storage is important
 _RESOURCES="$($_FIND "$AMENT_CURRENT_PREFIX/share/ament_parent_prefix_path" -mindepth 1 -maxdepth 1 2> /dev/null | $_SORT)"
 unset _FIND
 unset _SORT
@@ -61,7 +62,8 @@ ament_cmake_environment_append_unique_value() {
 }
 
 # iterate over all ament_parent_prefix_path files
-_CAT=cat
+# Note: command cat is stored in a variable to prevent evaluation of aliases
+_CAT=cat  # Variable storage is important
 _IFS=$IFS
 IFS="
 "

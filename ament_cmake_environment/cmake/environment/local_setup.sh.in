@@ -8,9 +8,10 @@
 : ${AMENT_SHELL:=sh}
 
 # find all packages under current prefix
-_LS=ls
-_SORT=sort
-_PACKAGES="$(${_LS} "$AMENT_CURRENT_PREFIX/share/ament_index/resource_index/packages" | $_SORT)"
+# Note: commands like ls are stored in variables to prevent evaluation of aliases
+_LS=ls  # Variable storage is important
+_SORT=sort  # Variable storage is important
+_PACKAGES="$($_LS "$AMENT_CURRENT_PREFIX/share/ament_index/resource_index/packages" | $_SORT)"
 unset _SORT
 unset _LS
 
