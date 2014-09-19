@@ -59,7 +59,7 @@ macro(_ament_package_xml dest_dir)
   stamp(${PACKAGE_XML_DIRECTORY}/package.xml)
   stamp("${ament_cmake_core_DIR}/package_xml_2_cmake.py")
 
-  # extract information form package.xml
+  # extract information from package.xml
   file(MAKE_DIRECTORY ${dest_dir})
   if(NOT PYTHON_EXECUTABLE)
     message(FATAL_ERROR

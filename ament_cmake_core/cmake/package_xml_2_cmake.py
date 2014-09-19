@@ -2,7 +2,7 @@
 
 # Apache License 2.0
 #
-# Copyright (c) 2014, Open Source Robotics Foundation
+# Copyright (c) 2014, Open Source Robotics Foundation, Inc.
 
 from __future__ import print_function
 import argparse
