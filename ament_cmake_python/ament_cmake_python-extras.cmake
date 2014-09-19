@@ -5,10 +5,39 @@ macro(_ament_cmake_python_register_environment_hook)
   if(NOT DEFINED _AMENT_CMAKE_PYTHON_ENVIRONMENT_HOOK_REGISTERED)
     set(_AMENT_CMAKE_PYTHON_ENVIRONMENT_HOOK_REGISTERED TRUE)
 
+    _ament_cmake_python_get_python_install_dir()
+
     find_package(ament_cmake_core REQUIRED)
     find_package(ament_cmake_environment_hooks REQUIRED)
     ament_environment_hooks(
       "${ament_cmake_python_DIR}/environment/pythonpath.sh.in")
+  endif()
+endmacro()
+
+macro(_ament_cmake_python_get_python_install_dir)
+  if(NOT DEFINED PYTHON_INSTALL_DIR)
+    set(_python_code
+      "from distutils.sysconfig import get_python_lib"
+      "print(get_python_lib(prefix=''))"
+    )
+    execute_process(
+      COMMAND
+      "${PYTHON_EXECUTABLE}"
+      "-c"
+      "${_python_code}"
+      OUTPUT_VARIABLE _output
+      RESULT_VARIABLE _result
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+    if(NOT _result EQUAL 0)
+      message(FATAL_ERROR
+        "execute_process(${PYTHON_EXECUTABLE} -c '${_python_code}') returned error code ${_result}")
+    endif()
+
+    set(PYTHON_INSTALL_DIR
+      "${_output}"
+      CACHE INTERNAL
+      "The directory for Python library installation. This needs to be in PYTHONPATH when 'setup.py install' is called.")
   endif()
 endmacro()
 
