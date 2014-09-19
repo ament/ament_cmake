@@ -9,29 +9,30 @@ function(ament_generate_environment)
       "ament_generate_environment() called with unused arguments: ${ARGN}")
   endif()
 
+  find_package(ament_cmake_package_templates REQUIRED)
+
   # configure and install setup files
-  foreach(extension ${AMENT_CMAKE_ENVIRONMENT_SUPPORTED_EXTENSIONS})
-    _ament_generate_environment("setup" "${extension}")
-    _ament_generate_environment("local_setup" "${extension}")
-  endforeach()
-endfunction()
+  foreach(file ${ament_cmake_package_templates_PREFIX_LEVEL})
+    # check if the file is a template
+    string_ends_with("${file}" ".in" is_template)
+    if(is_template)
+      # cut of .in extension
+      string(LENGTH "${file}" length)
+      math(EXPR offset "${length} - 3")
+      string(SUBSTRING "${file}" 0 ${offset} name)
+      # expand template
+      get_filename_component(name "${name}" NAME)
+      configure_file(
+        "${file}"
+        "${CMAKE_BINARY_DIR}/ament_cmake_environment/${name}"
+        @ONLY
+      )
+      set(file "${CMAKE_BINARY_DIR}/ament_cmake_environment/${name}")
+    endif()
 
-function(_ament_generate_environment name extension)
-  set(file "${ament_cmake_environment_DIR}/environment/${name}.${extension}")
-  if(EXISTS "${file}.in")
-    configure_file(
-      "${file}.in"
-      "${CMAKE_BINARY_DIR}/ament_cmake_environment/${name}.${extension}"
-      @ONLY
+    install(
+      FILES "${file}"
+      DESTINATION "${CMAKE_INSTALL_PREFIX}"
     )
-    set(file "${CMAKE_BINARY_DIR}/ament_cmake_environment/${name}.${extension}")
-  elseif(NOT EXISTS "${file}")
-    message(FATAL_ERROR "ament_generate_environment() could find neither find "
-      "'${file}.in' nor '${file}'")
-  endif()
-
-  install(
-    FILES "${file}"
-    DESTINATION "${CMAKE_INSTALL_PREFIX}"
-  )
+  endforeach()
 endfunction()

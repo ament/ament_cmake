@@ -1,3 +1,0 @@
-# generated from ament_cmake_python/cmake/environment/pythonpath.sh.in
-
-ament_cmake_environment_prepend_unique_value PYTHONPATH "$AMENT_CURRENT_PREFIX/@PYTHON_INSTALL_DIR@"
