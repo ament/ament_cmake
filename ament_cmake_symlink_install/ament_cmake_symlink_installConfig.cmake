@@ -8,7 +8,7 @@ set(ament_cmake_symlink_install_FOUND)
 
 option(AMENT_CMAKE_SYMLINK_INSTALL
   "Replace the CMake install command with a custom implementation using symlinks instead of copying resources"
-  ON)
+  OFF)
 
 if(AMENT_CMAKE_SYMLINK_INSTALL)
   message(STATUS "Override CMake install command with custom implementation "
