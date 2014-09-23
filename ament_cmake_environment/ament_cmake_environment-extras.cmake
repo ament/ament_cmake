@@ -10,3 +10,5 @@ include("${ament_cmake_environment_DIR}/ament_generate_environment.cmake")
 find_package(ament_cmake_core REQUIRED)
 ament_register_extension("ament_package" "ament_cmake_environment"
   "ament_cmake_environment_package_hook.cmake")
+
+find_package(ament_cmake_environment_hooks REQUIRED)
