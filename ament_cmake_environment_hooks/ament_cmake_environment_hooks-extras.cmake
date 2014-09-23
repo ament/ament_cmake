@@ -11,5 +11,4 @@ find_package(ament_cmake_core REQUIRED)
 ament_register_extension("ament_package" "ament_cmake_environment_hooks"
   "ament_cmake_environment_hooks_package_hook.cmake")
 
-find_package(ament_cmake_environment REQUIRED)
 find_package(ament_cmake_index REQUIRED)
