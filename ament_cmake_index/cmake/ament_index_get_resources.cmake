@@ -19,7 +19,7 @@ function(ament_index_get_resources var resource_type)
       "arguments: ${ARGN}")
   endif()
 
-  set(paths_to_search $ENV{AMENT_PREFIX_PATH})
+  string(REPLACE ":" ";" paths_to_search "$ENV{AMENT_PREFIX_PATH}")
   # Remove CMAKE_INSTALL_PREFIX if it is in the list of paths to search,
   # and add it to the list at the front
   list(REMOVE_ITEM paths_to_search "${CMAKE_INSTALL_PREFIX}")
