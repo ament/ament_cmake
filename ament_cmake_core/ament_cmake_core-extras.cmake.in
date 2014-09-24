@@ -1,5 +1,0 @@
-# generated from ament_cmake_core/ament_cmake_core-extras.cmake.in
-
-find_package(ament_cmake_symlink_install REQUIRED)
-
-include("${@PROJECT_NAME@_DIR}/all.cmake" NO_POLICY_SCOPE)

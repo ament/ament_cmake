@@ -2,7 +2,16 @@
 <package format="2">
   <name>ament_cmake_core</name>
   <version>0.0.0</version>
-  <description>The core of the ament buildsystem in CMake.</description>
+  <description>
+    The core of the ament buildsystem in CMake.
+
+    Several subcomponents provide specific funtionalities:
+    * environment: provide prefix-level setup files
+    * environment_hooks: provide package-level setup files and environment hooks
+    * index: store information in an index and retrieve them without crawling
+    * package_templates: templates from the ament_package Python package
+    * symlink_install: use symlinks for CMake install commands
+  </description>
   <maintainer email="dthomas@osrfoundation.org">Dirk Thomas</maintainer>
   <license>Apache License 2.0</license>
 
@@ -11,8 +20,4 @@
 
   <buildtool_export_depend>cmake</buildtool_export_depend>
   <buildtool_export_depend>python-ament-package</buildtool_export_depend>
-
-  <build_depend>ament_cmake_symlink_install</build_depend>
-
-  <build_export_depend>ament_cmake_symlink_install</build_export_depend>
 </package>

@@ -1,0 +1,31 @@
+# generated from ament/cmake/core/template/nameConfig.cmake.in
+
+# prevent multiple inclusion
+if(_@PROJECT_NAME@_CONFIG_INCLUDED)
+  return()
+endif()
+set(_@PROJECT_NAME@_CONFIG_INCLUDED TRUE)
+
+# output package information
+if(NOT @PROJECT_NAME@_FIND_QUIETLY)
+  message(" - Found @PROJECT_NAME@: @PACKAGE_VERSION@ (${@PROJECT_NAME@_DIR})")
+endif()
+
+# warn when using a deprecated package
+if(NOT "@PACKAGE_DEPRECATED@ " STREQUAL " ")
+  set(_msg "Package '@PROJECT_NAME@' is deprecated")
+  # append custom deprecation text if available
+  if(NOT "@PACKAGE_DEPRECATED@ " STREQUAL "TRUE ")
+    set(_msg "${_msg} (@PACKAGE_DEPRECATED@)")
+  endif()
+  message(WARNING "${_msg}")
+endif()
+
+# flag package as ament-based to distinguish it after being find_package()-ed
+set(@PROJECT_NAME@_FOUND_AMENT_PACKAGE TRUE)
+
+# include all config extra files
+set(_extras "@PACKAGE_CONFIG_EXTRA_FILES@")
+foreach(_extra ${_extras})
+  include("${@PROJECT_NAME@_DIR}/${_extra}")
+endforeach()
