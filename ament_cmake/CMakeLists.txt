@@ -2,24 +2,23 @@ cmake_minimum_required(VERSION 2.8.3)
 
 project(ament_cmake)
 
-find_package(ament_cmake_symlink_install REQUIRED)
+find_package(ament_cmake_core REQUIRED)
+find_package(ament_cmake_export_dependencies REQUIRED)
 
-install(
-  FILES package.xml
-  DESTINATION share/${PROJECT_NAME}
+ament_export_dependencies(
+  "ament_cmake_core"
+  "ament_cmake_export_definitions"
+  "ament_cmake_export_dependencies"
+  "ament_cmake_export_include_directories"
+  "ament_cmake_export_interfaces"
+  "ament_cmake_export_libraries"
+  "ament_cmake_gmock"
+  "ament_cmake_gtest"
+  "ament_cmake_libraries"
+  "ament_cmake_nose"
+  "ament_cmake_python"
+  "ament_cmake_target_dependencies"
+  "ament_cmake_test"
 )
 
-install(
-  FILES ament_cmakeConfig.cmake
-  DESTINATION share/${PROJECT_NAME}/cmake
-)
-
-# install package marker file into index manually
-# since this package does not depend on ament_cmake_index
-set(marker_file
-  "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake/packages/${PROJECT_NAME}")
-file(WRITE "${marker_file}" "")
-install(
-  FILES "${marker_file}"
-  DESTINATION "share/ament_index/resource_index/packages"
-)
+ament_package()
