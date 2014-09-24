@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8.3)
 
-project(ament_cmake_python)
+project(ament_cmake_python NONE)
 
 find_package(ament_cmake_core REQUIRED)
 

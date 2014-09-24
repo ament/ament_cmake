@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8.3)
 
-project(ament_cmake_export_definitions)
+project(ament_cmake_export_definitions NONE)
 
 find_package(ament_cmake_core REQUIRED)
 

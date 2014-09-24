@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8.3)
 
-project(ament_cmake_core)
+project(ament_cmake_core NONE)
 
 # include some CMake functions of this package
 set(ament_cmake_core_DIR "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
