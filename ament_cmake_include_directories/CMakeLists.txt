@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8.3)
 
-project(ament_cmake_include_directories)
+project(ament_cmake_include_directories NONE)
 
 find_package(ament_cmake_core REQUIRED)
 

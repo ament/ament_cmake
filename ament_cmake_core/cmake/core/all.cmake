@@ -42,7 +42,7 @@ _set_cmake_policy_to_new_if_available(CMP0023)
 
 # the following operations must be performed inside a project context
 if(NOT PROJECT_NAME)
-  project(ament_cmake_internal)
+  project(ament_cmake_internal NONE)
 endif()
 
 # include CMake functions
