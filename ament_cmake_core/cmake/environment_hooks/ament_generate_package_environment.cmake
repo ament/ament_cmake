@@ -36,15 +36,14 @@ function(ament_generate_package_environment)
       string(SUBSTRING "${name}" ${index} -1 extension)
 
       # collect package hooks to be sourced for this extension
-      set(SOURCE_HOOKS "")
-      set(source_command ".")
-      if("${extension} " STREQUAL "bat ")
-        set(source_command "call")
+      set(ENVIRONMENT_HOOKS "")
+      if(NOT "${_AMENT_CMAKE_ENVIRONMENT_HOOKS_${extension}} " STREQUAL " ")
+        list(SORT _AMENT_CMAKE_ENVIRONMENT_HOOKS_${extension})
+        foreach(hook ${_AMENT_CMAKE_ENVIRONMENT_HOOKS_${extension}})
+          set(ENVIRONMENT_HOOKS
+            "${ENVIRONMENT_HOOKS}ament_append_value AMENT_ENVIRONMENT_HOOKS \"$AMENT_CURRENT_PREFIX/${hook}\"\n")
+        endforeach()
       endif()
-      foreach(hook ${_AMENT_CMAKE_ENVIRONMENT_HOOKS_${extension}})
-        set(SOURCE_HOOKS
-          "${SOURCE_HOOKS}${source_command} \"$AMENT_CURRENT_PREFIX/${hook}\"\n")
-      endforeach()
 
       # expand template
       configure_file(
