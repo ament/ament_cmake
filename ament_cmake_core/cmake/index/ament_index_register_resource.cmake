@@ -26,7 +26,7 @@ function(ament_index_register_resource resource_type)
       "ament_index_register_resource() called without a 'resource_type'")
   endif()
 
-  cmake_parse_arguments(ARG "" "PACKAGE_NAME;CONTENT;CONTENT_FILE" "" ${ARGN})
+  cmake_parse_arguments(ARG "" "PACKAGE_NAME;CONTENT_FILE" "CONTENT" ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "ament_index_register_resource() called with unused "
       "arguments: ${ARG_UNPARSED_ARGUMENTS}")
