@@ -16,8 +16,8 @@
   <license>Apache License 2.0</license>
 
   <buildtool_depend>cmake</buildtool_depend>
-  <buildtool_depend>python-ament-package</buildtool_depend>
+  <buildtool_depend>ament_package</buildtool_depend>
 
   <buildtool_export_depend>cmake</buildtool_export_depend>
-  <buildtool_export_depend>python-ament-package</buildtool_export_depend>
+  <buildtool_export_depend>ament_package</buildtool_export_depend>
 </package>
