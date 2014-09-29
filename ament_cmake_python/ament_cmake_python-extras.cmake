@@ -17,7 +17,8 @@ macro(_ament_cmake_python_get_python_install_dir)
   if(NOT DEFINED PYTHON_INSTALL_DIR)
     set(_python_code
       "from distutils.sysconfig import get_python_lib"
-      "print(get_python_lib(prefix=''))"
+      "from os.path import relpath"
+      "print(relpath(get_python_lib(prefix='${CMAKE_INSTALL_PREFIX}'), start='${CMAKE_INSTALL_PREFIX}'))"
     )
     execute_process(
       COMMAND
