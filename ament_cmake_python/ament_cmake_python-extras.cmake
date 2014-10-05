@@ -31,7 +31,8 @@ macro(_ament_cmake_python_get_python_install_dir)
     )
     if(NOT _result EQUAL 0)
       message(FATAL_ERROR
-        "execute_process(${PYTHON_EXECUTABLE} -c '${_python_code}') returned error code ${_result}")
+        "execute_process(${PYTHON_EXECUTABLE} -c '${_python_code}') returned "
+        "error code ${_result}")
     endif()
 
     set(PYTHON_INSTALL_DIR

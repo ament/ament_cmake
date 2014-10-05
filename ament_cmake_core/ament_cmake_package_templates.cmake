@@ -1,7 +1,8 @@
 # extract information from ament_package.templates
 if(NOT PYTHON_EXECUTABLE)
   message(FATAL_ERROR
-    "ament_cmake_package_templates: variable 'PYTHON_EXECUTABLE' must not be empty")
+    "ament_cmake_package_templates: variable 'PYTHON_EXECUTABLE' must not be "
+    "empty")
 endif()
 
 # stamp script to generate CMake code
