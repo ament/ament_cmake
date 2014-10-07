@@ -40,6 +40,8 @@ function(_ament_cmake_python_install_package package_name)
   install(
     DIRECTORY "${ARG_PACKAGE_DIR}/"
     DESTINATION "${PYTHON_INSTALL_DIR}/${package_name}"
+    PATTERN "*.pyc" EXCLUDE
+    PATTERN "__pycache__" EXCLUDE
   )
   # TODO optionally compile Python files
 
