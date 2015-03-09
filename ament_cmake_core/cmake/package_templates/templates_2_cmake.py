@@ -16,6 +16,8 @@ from ament_package.templates import get_package_level_template_path
 from ament_package.templates import get_prefix_level_template_names
 from ament_package.templates import get_prefix_level_template_path
 
+IS_WINDOWS = os.name == 'nt'
+
 
 def main(argv=sys.argv[1:]):
     """
@@ -50,6 +52,20 @@ def main(argv=sys.argv[1:]):
             print(line)
 
 
+def escape_back_slash(line):
+    """
+    Return a the given string with backslashes escaped.
+
+    This is needed to prevent CMake from interpretting paths on Windows as
+    invalid escape sequences.
+
+    :returns: str
+    """
+    if IS_WINDOWS:
+        return line.replace('\\', '/')
+    return line
+
+
 def generate_cmake_code():
     """
     Return a list of CMake set() commands containing the template information.
@@ -59,9 +75,10 @@ def generate_cmake_code():
     variables = []
     variables.append(('TEMPLATE_DIR', '"%s"' % TEMPLATE_DIRECTORY))
 
+    ext = '.bat.in' if IS_WINDOWS else '.sh.in'
     variables.append((
         'ENVIRONMENT_HOOK_PYTHONPATH',
-        '"%s"' % get_environment_hook_template_path('pythonpath.sh.in')))
+        '"%s"' % get_environment_hook_template_path('pythonpath' + ext)))
 
     templates = []
     for name in get_package_level_template_names():
@@ -86,7 +103,7 @@ def generate_cmake_code():
                              % (k, vv))
         else:
             lines.append('set(ament_cmake_package_templates_%s %s)' % (k, v))
-    return lines
+    return [escape_back_slash(l) for l in lines]
 
 
 if __name__ == '__main__':
