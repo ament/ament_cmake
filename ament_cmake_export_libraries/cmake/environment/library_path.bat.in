@@ -19,7 +19,7 @@ goto:eof
   set "_is_duplicate="
   if "%_list%" NEQ "" (
     for %%a in ("%_list:;=";"%") do (
-      if "%%a" == "%_value%" set "_is_duplicate=1"
+      if "%%~a" == "%_value%" set "_is_duplicate=1"
     )
   )
   :: if it is not a duplicate prepend it
