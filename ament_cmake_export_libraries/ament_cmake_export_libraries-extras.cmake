@@ -14,7 +14,6 @@ macro(_ament_cmake_export_libraries_register_environment_hook)
     endif()
     ament_environment_hooks(
       "${ament_cmake_export_libraries_DIR}/environment/library_path${_ext}")
-    unset(_ext)
   endif()
 endmacro()
 
