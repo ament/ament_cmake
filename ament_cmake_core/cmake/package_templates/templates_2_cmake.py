@@ -16,6 +16,8 @@ from ament_package.templates import get_package_level_template_path
 from ament_package.templates import get_prefix_level_template_names
 from ament_package.templates import get_prefix_level_template_path
 
+IS_WINDOWS = os.name == 'nt'
+
 
 def main(argv=sys.argv[1:]):
     """
