@@ -8,12 +8,13 @@ macro(_ament_cmake_export_libraries_register_environment_hook)
 
     find_package(ament_cmake_core REQUIRED)
     if(WIN32)
-      ament_environment_hooks(
-        "${ament_cmake_export_libraries_DIR}/environment/library_path.bat.in")
+      set(_ext .bat)
     else()
-      ament_environment_hooks(
-        "${ament_cmake_export_libraries_DIR}/environment/library_path.sh.in")
+      set(_ext .sh)
     endif()
+    ament_environment_hooks(
+      "${ament_cmake_export_libraries_DIR}/environment/library_path.bat${_ext}")
+    unset(_ext)
   endif()
 endmacro()
 
