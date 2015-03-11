@@ -7,7 +7,6 @@ ament_environment_hooks(
   "${ament_cmake_core_DIR}/environment_hooks/environment/ament_prefix_path${_ext}"
   "${ament_cmake_core_DIR}/environment_hooks/environment/path${_ext}"
 )
-unset(_ext)
 
 if(AMENT_CMAKE_ENVIRONMENT_PACKAGE_GENERATION)
   ament_generate_package_environment()
