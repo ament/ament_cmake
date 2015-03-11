@@ -6,7 +6,6 @@
 
 from __future__ import print_function
 import argparse
-import os
 import sys
 
 try:
@@ -15,8 +14,6 @@ except ImportError as e:
     sys.exit("ImportError: 'from ament_package import parse_package_string' "
              "failed: %s\nMake sure that you have installed 'ament_package', "
              "it is up to date and on the PYTHONPATH." % e)
-
-IS_WINDOWS = os.name == 'nt'
 
 
 def main(argv=sys.argv[1:]):
@@ -76,20 +73,6 @@ def get_dependency_values(key, depends):
     return dependencies
 
 
-def escape_back_slash(line):
-    """
-    Return a the given string with backslashes escaped.
-
-    This is needed to prevent CMake from interpretting paths on Windows as
-    invalid escape sequences.
-
-    :returns: str
-    """
-    if IS_WINDOWS:
-        return line.replace('\\', '/')
-    return line
-
-
 def generate_cmake_code(package):
     """
     Return a list of CMake set() commands containing the manifest information.
@@ -128,7 +111,9 @@ def generate_cmake_code(package):
     lines.append('set(_AMENT_PACKAGE_NAME "%s")' % package.name)
     for (k, v) in variables:
         lines.append('set(%s_%s %s)' % (package.name, k, v))
-    return [escape_back_slash(l) for l in lines]
+    # Ensure backslashes are replaced with forward slashes because CMake cannot
+    # parse files with backslashes in it.
+    return [l.replace('\\', '/') for l in lines]
 
 
 if __name__ == '__main__':

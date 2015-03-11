@@ -16,8 +16,6 @@ from ament_package.templates import get_package_level_template_path
 from ament_package.templates import get_prefix_level_template_names
 from ament_package.templates import get_prefix_level_template_path
 
-IS_WINDOWS = os.name == 'nt'
-
 
 def main(argv=sys.argv[1:]):
     """
@@ -50,20 +48,6 @@ def main(argv=sys.argv[1:]):
     else:
         for line in lines:
             print(line)
-
-
-def escape_back_slash(line):
-    """
-    Return a the given string with backslashes escaped.
-
-    This is needed to prevent CMake from interpretting paths on Windows as
-    invalid escape sequences.
-
-    :returns: str
-    """
-    if IS_WINDOWS:
-        return line.replace('\\', '/')
-    return line
 
 
 def generate_cmake_code():
@@ -103,7 +87,9 @@ def generate_cmake_code():
                              % (k, vv))
         else:
             lines.append('set(ament_cmake_package_templates_%s %s)' % (k, v))
-    return [escape_back_slash(l) for l in lines]
+    # Ensure backslashes are replaced with forward slashes because CMake cannot
+    # parse files with backslashes in it.
+    return [l.replace('\\', '/') for l in lines]
 
 
 if __name__ == '__main__':
