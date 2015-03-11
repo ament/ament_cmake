@@ -1,6 +1,7 @@
 # copied from ament_core/ament_index-extras.cmake
 
 include("${ament_cmake_core_DIR}/index/ament_index_get_resources.cmake")
+include("${ament_cmake_core_DIR}/index/ament_index_has_resource.cmake")
 include("${ament_cmake_core_DIR}/index/ament_index_register_package.cmake")
 include("${ament_cmake_core_DIR}/index/ament_index_register_resource.cmake")
 
