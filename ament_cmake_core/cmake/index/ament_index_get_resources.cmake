@@ -19,7 +19,20 @@ function(ament_index_get_resources var resource_type)
       "arguments: ${ARGN}")
   endif()
 
-  string(REPLACE ":" ";" paths_to_search "$ENV{AMENT_PREFIX_PATH}")
+  if(NOT WIN32)
+    string(REPLACE ":" ";" raw_paths_to_search "$ENV{AMENT_PREFIX_PATH}")
+  else()
+    # The path separator is already ; on Windows, plus the C:\'s : would match.
+    set(raw_paths_to_search "$ENV{AMENT_PREFIX_PATH}")
+  endif()
+  # Remove any empty strings and make sure slashes are consistent
+  set(paths_to_search)
+  foreach(path IN LISTS raw_paths_to_search)
+    if(NOT "${path} " STREQUAL " ")
+      string(REPLACE "\\" "/" normalized_path "${path}")
+      list(APPEND paths_to_search "${normalized_path}")
+    endif()
+  endforeach()
   # Remove CMAKE_INSTALL_PREFIX if it is in the list of paths to search,
   # and add it to the list at the front
   list(REMOVE_ITEM paths_to_search "${CMAKE_INSTALL_PREFIX}")
