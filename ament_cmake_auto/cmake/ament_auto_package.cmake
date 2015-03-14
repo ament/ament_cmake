@@ -42,6 +42,7 @@ macro(ament_auto_package)
       TARGETS ${${PROJECT_NAME}_LIBRARIES}
       ARCHIVE DESTINATION lib
       LIBRARY DESTINATION lib
+      RUNTIME DESTINATION bin
     )
   endif()
 
@@ -49,6 +50,8 @@ macro(ament_auto_package)
   if(NOT "${${PROJECT_NAME}_EXECUTABLES} " STREQUAL " ")
     install(
       TARGETS ${${PROJECT_NAME}_EXECUTABLES}
+      ARCHIVE DESTINATION lib
+      LIBRARY DESTINATION lib
       RUNTIME DESTINATION bin
     )
   endif()
