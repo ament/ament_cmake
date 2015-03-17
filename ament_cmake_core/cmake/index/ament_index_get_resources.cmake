@@ -19,11 +19,10 @@ function(ament_index_get_resources var resource_type)
       "arguments: ${ARGN}")
   endif()
 
+  set(raw_paths_to_search "$ENV{AMENT_PREFIX_PATH}")
   if(NOT WIN32)
-    string(REPLACE ":" ";" raw_paths_to_search "$ENV{AMENT_PREFIX_PATH}")
-  else()
-    # The path separator is already ; on Windows, plus the C:\'s : would match.
-    set(raw_paths_to_search "$ENV{AMENT_PREFIX_PATH}")
+    # convert the path separator to CMake list separators
+    string(REPLACE ":" ";" raw_paths_to_search "${raw_paths_to_search}")
   endif()
   # Remove any empty strings and make sure slashes are consistent
   set(paths_to_search)
