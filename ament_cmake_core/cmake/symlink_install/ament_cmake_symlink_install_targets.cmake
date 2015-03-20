@@ -66,6 +66,13 @@ function(ament_cmake_symlink_install_targets)
     string(REPLACE ";" "\" \"" target_files_quoted
       "\"TARGET_FILES;${target_files}\"")
     string(REPLACE ";" "\" \"" argn_quoted "\"${ARGN}\"")
+
+    # join destination keyword with kind of target (e.g. ARCHIVE)
+    # to simplify parsing in the next CMake function
+    string(REPLACE "\"ARCHIVE\" \"DESTINATION\"" "\"ARCHIVE_DESTINATION\"" argn_quoted "${argn_quoted}")
+    string(REPLACE "\"LIBRARY\" \"DESTINATION\"" "\"LIBRARY_DESTINATION\"" argn_quoted "${argn_quoted}")
+    string(REPLACE "\"RUNTIME\" \"DESTINATION\"" "\"RUNTIME_DESTINATION\"" argn_quoted "${argn_quoted}")
+
     ament_cmake_symlink_install_append_install_code(
       "ament_cmake_symlink_install_targets(${target_files_quoted};${argn_quoted})"
       COMMENTS "install(${argn_quoted})"
