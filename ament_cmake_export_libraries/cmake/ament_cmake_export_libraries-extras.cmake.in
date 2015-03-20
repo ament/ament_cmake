@@ -39,7 +39,7 @@ if(NOT "${_exported_library_targets} " STREQUAL " ")
 
     if(NOT _lib)
       # warn about not existing library and ignore it
-      message(WARNING "Package '@PROJECT_NAME@' exports the library '${_library_target}' which couldn't be found")
+      message(FATAL_ERROR "Package '@PROJECT_NAME@' exports the library '${_library_target}' which couldn't be found")
     elseif(NOT IS_ABSOLUTE "${_lib}")
       # the found library must be an absolute path
       message(FATAL_ERROR "Package '@PROJECT_NAME@' found the library '${_library_target}' at '${_lib}' which is not an absolute path")
