@@ -268,11 +268,19 @@ function(_ament_cmake_symlink_create_symlink absolute_file symlink)
     file(REMOVE "${symlink}")
   endif()
 
-  execute_process(
-    COMMAND "@CMAKE_COMMAND@" "-E" "create_symlink"
-      "${absolute_file}"
-      "${symlink}"
-  )
+  if(NOT WIN32)
+    execute_process(
+      COMMAND "@CMAKE_COMMAND@" "-E" "create_symlink"
+        "${absolute_file}"
+        "${symlink}"
+    )
+  else()
+    execute_process(
+      COMMAND "mklink"
+        "${symlink}"
+        "${absolute_file}"
+    )
+  endif()
   # the CMake command does not provide a return code so check manually
   if(NOT EXISTS "${symlink}" OR NOT IS_SYMLINK "${symlink}")
     get_filename_component(destination "${symlink}" REALPATH)
