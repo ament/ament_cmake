@@ -40,8 +40,13 @@ function(ament_generate_package_environment)
       if(NOT "${_AMENT_CMAKE_ENVIRONMENT_HOOKS_${extension}} " STREQUAL " ")
         list(SORT _AMENT_CMAKE_ENVIRONMENT_HOOKS_${extension})
         foreach(hook ${_AMENT_CMAKE_ENVIRONMENT_HOOKS_${extension}})
-          set(ENVIRONMENT_HOOKS
-            "${ENVIRONMENT_HOOKS}ament_append_value AMENT_ENVIRONMENT_HOOKS \"$AMENT_CURRENT_PREFIX/${hook}\"\n")
+          if(WIN32)
+            set(ENVIRONMENT_HOOKS
+                "${ENVIRONMENT_HOOKS}call:ament_append_value AMENT_ENVIRONMENT_HOOKS[${PROJECT_NAME}] \"%AMENT_CURRENT_PREFIX%/${hook}\"\n")
+          else()
+            set(ENVIRONMENT_HOOKS
+                "${ENVIRONMENT_HOOKS}ament_append_value AMENT_ENVIRONMENT_HOOKS \"$AMENT_CURRENT_PREFIX/${hook}\"\n")
+          endif()
         endforeach()
       endif()
 

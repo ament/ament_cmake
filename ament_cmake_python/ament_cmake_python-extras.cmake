@@ -18,7 +18,7 @@ macro(_ament_cmake_python_get_python_install_dir)
     set(_python_code
       "from distutils.sysconfig import get_python_lib"
       "from os.path import relpath"
-      "print(relpath(get_python_lib(prefix='${CMAKE_INSTALL_PREFIX}'), start='${CMAKE_INSTALL_PREFIX}'))"
+      "print(relpath(get_python_lib(prefix='${CMAKE_INSTALL_PREFIX}'), start='${CMAKE_INSTALL_PREFIX}').replace('\\\\', '/'))"
     )
     execute_process(
       COMMAND

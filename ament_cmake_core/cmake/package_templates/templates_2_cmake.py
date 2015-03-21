@@ -16,6 +16,8 @@ from ament_package.templates import get_package_level_template_path
 from ament_package.templates import get_prefix_level_template_names
 from ament_package.templates import get_prefix_level_template_path
 
+IS_WINDOWS = os.name == 'nt'
+
 
 def main(argv=sys.argv[1:]):
     """
@@ -59,9 +61,10 @@ def generate_cmake_code():
     variables = []
     variables.append(('TEMPLATE_DIR', '"%s"' % TEMPLATE_DIRECTORY))
 
+    ext = '.bat.in' if IS_WINDOWS else '.sh.in'
     variables.append((
         'ENVIRONMENT_HOOK_PYTHONPATH',
-        '"%s"' % get_environment_hook_template_path('pythonpath.sh.in')))
+        '"%s"' % get_environment_hook_template_path('pythonpath' + ext)))
 
     templates = []
     for name in get_package_level_template_names():
@@ -86,7 +89,9 @@ def generate_cmake_code():
                              % (k, vv))
         else:
             lines.append('set(ament_cmake_package_templates_%s %s)' % (k, v))
-    return lines
+    # Ensure backslashes are replaced with forward slashes because CMake cannot
+    # parse files with backslashes in it.
+    return [l.replace('\\', '/') for l in lines]
 
 
 if __name__ == '__main__':

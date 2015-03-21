@@ -111,7 +111,9 @@ def generate_cmake_code(package):
     lines.append('set(_AMENT_PACKAGE_NAME "%s")' % package.name)
     for (k, v) in variables:
         lines.append('set(%s_%s %s)' % (package.name, k, v))
-    return lines
+    # Ensure backslashes are replaced with forward slashes because CMake cannot
+    # parse files with backslashes in it.
+    return [l.replace('\\', '/') for l in lines]
 
 
 if __name__ == '__main__':
