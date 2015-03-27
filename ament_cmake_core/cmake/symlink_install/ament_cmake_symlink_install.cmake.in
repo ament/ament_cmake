@@ -255,7 +255,7 @@ endfunction()
 
 function(_ament_cmake_symlink_create_symlink absolute_file symlink)
   # avoid any work if correct symlink is already in place
-  if(EXISTS "${symlink}" AND IS_SYMLINK "${symlink}")
+  if(WIN32 AND EXISTS "${symlink}" AND IS_SYMLINK "${symlink}")
     get_filename_component(destination "${symlink}" REALPATH)
     if("${destination} " STREQUAL "${absolute_file} ")
       message(STATUS "Up-to-date symlink: ${symlink}")
@@ -274,18 +274,25 @@ function(_ament_cmake_symlink_create_symlink absolute_file symlink)
         "${absolute_file}"
         "${symlink}"
     )
+    # the CMake command does not provide a return code so check manually
+    if(NOT EXISTS "${symlink}" OR NOT IS_SYMLINK "${symlink}")
+      get_filename_component(destination "${symlink}" REALPATH)
+      message(FATAL_ERROR
+        "Could not create symlink '${symlink}' pointing to '${absolute_file}'")
+    endif()
   else()
+    string(REPLACE "/" "\\" symlink "${symlink}")
+    string(REPLACE "/" "\\" absolute_file "${absolute_file}")
     execute_process(
-      COMMAND "mklink"
+      COMMAND "cmd" "/C" "mklink"
         "${symlink}"
         "${absolute_file}"
+      RESULT_VARIABLE ret
     )
-  endif()
-  # the CMake command does not provide a return code so check manually
-  if(NOT EXISTS "${symlink}" OR NOT IS_SYMLINK "${symlink}")
-    get_filename_component(destination "${symlink}" REALPATH)
-    message(FATAL_ERROR
-      "Could not create symlink '${symlink}' pointing to '${absolute_file}'")
+    if(NOT ret EQUAL 0)
+      message(FATAL_ERROR
+        "Could not create symlink '${symlink}' pointing to '${absolute_file}': ${ret}")
+    endif()
   endif()
 endfunction()
 
