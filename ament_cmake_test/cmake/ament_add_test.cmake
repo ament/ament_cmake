@@ -12,6 +12,8 @@ include(CMakeParseArguments)
 # :type testname: string
 # :param COMMAND: the command including its arguments to invoke
 # :type COMMAND: list of strings
+# :param OUTPUT_FILE: the path of the file to pipe the output to
+# :type OUTPUT_FILE: string
 # :param TIMEOUT: the test timeout in seconds, default: 60
 # :type TIMEOUT: integer
 # :param WORKING_DIRECTORY: the working directory for invoking the
@@ -26,7 +28,7 @@ include(CMakeParseArguments)
 #
 function(ament_add_test testname)
   cmake_parse_arguments(ARG "GENERATE_RESULT_FOR_RETURN_CODE_ZERO"
-    "TIMEOUT;WORKING_DIRECTORY" "COMMAND" ${ARGN})
+    "OUTPUT_FILE;TIMEOUT;WORKING_DIRECTORY" "COMMAND" ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "ament_add_test() called with unused arguments: "
       "${ARG_UNPARSED_ARGUMENTS}")
@@ -47,10 +49,13 @@ function(ament_add_test testname)
   endif()
 
   # wrap command with run_test script to ensure test result generation
-  set(cmd_wrapper ${PYTHON_EXECUTABLE} ${ament_cmake_test_DIR}/run_test.py
+  set(cmd_wrapper "${PYTHON_EXECUTABLE}" "${ament_cmake_test_DIR}/run_test.py"
     "${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/${testname}.xml")
   if(ARG_GENERATE_RESULT_FOR_RETURN_CODE_ZERO)
     list(APPEND cmd_wrapper "--generate-result-on-success")
+  endif()
+  if(ARG_OUTPUT_FILE)
+    list(APPEND cmd_wrapper "--output-file" "${ARG_OUTPUT_FILE}")
   endif()
   list(APPEND cmd_wrapper "--command" ${ARG_COMMAND})
 

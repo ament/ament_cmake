@@ -27,6 +27,9 @@ def main(argv=sys.argv[1:]):
              'It must be passed after other arguments since it collects all '
              'following options.')
     parser.add_argument(
+        '--output-file',
+        help='The path to the output log file')
+    parser.add_argument(
         '--generate-result-on-success',
         action='store_true',
         default=False,
@@ -62,7 +65,12 @@ def main(argv=sys.argv[1:]):
 
     print("-- run_test.py: invoke following command in '%s':\n - %s" %
           (os.getcwd(), ' '.join(args.command)))
-    rc = subprocess.call(args.command, shell=True)
+
+    if args.output_file:
+        with open(args.output_file, 'w') as h:
+            rc = subprocess.call(args.command, stdout=h, stderr=subprocess.STDOUT)
+    else:
+        rc = subprocess.call(args.command)
 
     print("-- run_test.py: verify result file '%s'" % args.result_file)
 
