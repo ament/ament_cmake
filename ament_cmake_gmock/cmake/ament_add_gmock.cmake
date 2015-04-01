@@ -43,7 +43,8 @@ function(_ament_add_gmock target)
     set(target_path "${CMAKE_CURRENT_BINARY_DIR}")
   endif()
   set(cmd
-    "\"${target_path}/${target}\" \"--gtest_output=xml:${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/${target}.xml\"")
+    "${target_path}/${target}"
+    "--gtest_output=xml:${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/${target}.xml")
   if(ARG_TIMEOUT)
     set(ARG_TIMEOUT "TIMEOUT" ${ARG_TIMEOUT})
   endif()

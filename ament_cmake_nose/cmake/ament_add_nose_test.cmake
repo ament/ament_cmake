@@ -37,7 +37,8 @@ function(_ament_add_nose_test testname path)
   endif()
 
   set(cmd
-    "${NOSETESTS} \"${path}\" --with-xunit \"--xunit-file=${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/${testname}.xml\"")
+    "${NOSETESTS}" "${path}" "--with-xunit"
+    "--xunit-file=${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/${testname}.xml")
   if(ARG_TIMEOUT)
     set(ARG_TIMEOUT "TIMEOUT" "${ARG_TIMEOUT}")
   endif()
