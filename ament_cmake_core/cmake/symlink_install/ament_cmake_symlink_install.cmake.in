@@ -13,7 +13,7 @@ include(CMakeParseArguments)
 #
 function(ament_cmake_symlink_install_directory)
   #message(" - ament_cmake_symlink_install_directory(${ARGN})")
-  cmake_parse_arguments(ARG "OPTIONAL" "DESTINATION" "DIRECTORY" ${ARGN})
+  cmake_parse_arguments(ARG "OPTIONAL" "DESTINATION" "DIRECTORY;PATTERN;PATTERN_EXCLUDE" ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "ament_cmake_symlink_install_directory() called with "
       "unused/unsupported arguments: ${ARG_UNPARSED_ARGUMENTS}")
@@ -27,6 +27,11 @@ function(ament_cmake_symlink_install_directory)
     #message(" - ament_cmake_symlink_install_directory() create destination "
     #  "directory '${ARG_DESTINATION}'")
     file(MAKE_DIRECTORY "${ARG_DESTINATION}")
+  endif()
+
+  # default pattern to include
+  if("${ARG_PATTERN} " STREQUAL " ")
+    set(ARG_PATTERN "*")
   endif()
 
   # iterate over directories
@@ -54,12 +59,30 @@ function(ament_cmake_symlink_install_directory)
       #  "'${destination}/*' pointing to '${dir}/*'")
 
       # glob recursive files
-      file(
-        GLOB_RECURSE
-        relative_files
-        RELATIVE "${dir}"
-        "${dir}/*"
-      )
+      set(relative_files "")
+      foreach(pattern ${ARG_PATTERN})
+        file(
+          GLOB_RECURSE
+          include_files
+          RELATIVE "${dir}"
+          "${dir}/${pattern}"
+        )
+        if(NOT "${include_files} " STREQUAL " ")
+          list(APPEND relative_files ${include_files})
+        endif()
+      endforeach()
+      foreach(pattern ${ARG_PATTERN_EXCLUDE})
+        file(
+          GLOB_RECURSE
+          exclude_files
+          RELATIVE "${dir}"
+          "${dir}/${pattern}"
+        )
+        if(NOT "${exclude_files} " STREQUAL " ")
+          list(REMOVE_ITEM relative_files ${exclude_files})
+        endif()
+      endforeach()
+      list(SORT relative_files)
       #message(" - ament_cmake_symlink_install_directory() files: "
       #  "${relative_files}")
 
