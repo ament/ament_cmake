@@ -32,9 +32,7 @@ function(ament_cmake_symlink_install_directory directory_keyword)
     "CONFIGURATIONS"
     "COMPONENT"
     "FILES_MATCHING"
-    "PATTERN"
     "REGEX"
-    "EXCLUDE"
     "PERMISSIONS"
   )
   foreach(unsupported_keyword ${unsupported_keywords})
@@ -49,7 +47,31 @@ function(ament_cmake_symlink_install_directory directory_keyword)
 
   if(index EQUAL -1)
     #message("   - using symlinks")
-    string(REPLACE ";" "\" \"" argn_quoted "\"${ARGN}\"")
+    # merge 'PATTERN "xxx" EXCLUDE' arguments to 'PATTERN_EXCLUDE "xxx"'
+    set(argn ${ARGN})
+    list(LENGTH argn length)
+    set(i 0)
+    while(i LESS length)
+      list(GET argn ${i} arg)
+      if("${arg}" STREQUAL "PATTERN")
+        math(EXPR j "${i} + 2")
+        if(j LESS length)
+          list(GET argn ${j} arg)
+          if("${arg}" STREQUAL "EXCLUDE")
+            # replace "PATTERN" with "PATTERN_EXCLUDE"
+            list(REMOVE_AT argn ${i})
+            list(INSERT argn ${i} "PATTERN_EXCLUDE")
+            # remove "EXCLUDE"
+            list(REMOVE_AT argn ${j})
+            # get changed length
+            list(LENGTH argn length)
+          endif()
+        endif()
+      endif()
+      math(EXPR i "${i} + 1")
+    endwhile()
+
+    string(REPLACE ";" "\" \"" argn_quoted "\"${argn}\"")
     ament_cmake_symlink_install_append_install_code(
       "ament_cmake_symlink_install_directory(DIRECTORY ${argn_quoted})"
       COMMENTS "install(DIRECTORY ${argn_quoted})"
