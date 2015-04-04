@@ -29,5 +29,5 @@ ament_package(
 install(
   DIRECTORY cmake
   DESTINATION share/${PROJECT_NAME}
-  PATTERN "package_templates" EXCLUDE
+  PATTERN "package_templates/*" EXCLUDE
 )
