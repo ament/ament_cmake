@@ -80,11 +80,19 @@ def main(argv=sys.argv[1:]):
     print("-- run_test.py: invoke following command in '%s':\n - %s" %
           (os.getcwd(), ' '.join(args.command)))
 
+    h = None
     if args.output_file:
-        with open(args.output_file, 'w') as h:
-            rc = subprocess.call(args.command, stdout=h, stderr=subprocess.STDOUT)
-    else:
-        rc = subprocess.call(args.command)
+        h = open(args.output_file, 'wb')
+    try:
+        proc = subprocess.Popen(args.command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        for line in proc.stdout:
+            print(line.decode(), end='')
+            if h:
+                h.write(line)
+        rc = proc.returncode
+    finally:
+        if h:
+            h.close()
 
     print("-- run_test.py: verify result file '%s'" % args.result_file)
 
