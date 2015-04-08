@@ -19,8 +19,8 @@ macro(_ament_cmake_nose_find_nosetests)
   if(NOT DEFINED _AMENT_CMAKE_NOSE_FIND_NOSETESTS)
     set(_AMENT_CMAKE_NOSE_FIND_NOSETESTS TRUE)
 
-    find_package(ament_cmake_core REQUIRED)
-    find_package(ament_cmake_test REQUIRED)
+    find_package(ament_cmake_core QUIET REQUIRED)
+    find_package(ament_cmake_test QUIET REQUIRED)
 
     find_program(NOSETESTS NAMES
       "nosetests${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}"

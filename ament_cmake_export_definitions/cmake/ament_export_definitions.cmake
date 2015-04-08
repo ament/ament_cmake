@@ -32,7 +32,6 @@ macro(ament_export_definitions)
 
   if(${ARGC} GREATER 0)
     _ament_cmake_export_definitions_register_package_hook()
-    message(" - ament_export_definitions(${ARGN})")
     foreach(_arg ${ARGN})
       list(APPEND _AMENT_CMAKE_EXPORT_DEFINITIONS "${_arg}")
     endforeach()

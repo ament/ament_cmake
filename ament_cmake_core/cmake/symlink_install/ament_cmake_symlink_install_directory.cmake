@@ -46,7 +46,6 @@ function(ament_cmake_symlink_install_directory directory_keyword)
   endforeach()
 
   if(index EQUAL -1)
-    #message("   - using symlinks")
     # merge 'PATTERN "xxx" EXCLUDE' arguments to 'PATTERN_EXCLUDE "xxx"'
     set(argn ${ARGN})
     list(LENGTH argn length)

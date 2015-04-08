@@ -32,7 +32,6 @@ function(ament_environment_hooks)
   endif()
 
   foreach(hook ${ARGN})
-    message(" - ament_environment_hooks() ${hook}")
     assert_file_exists("${hook}"
       "ament_environment_hooks() the passed hook file '${hook}' does not exist")
     stamp("${hook}")

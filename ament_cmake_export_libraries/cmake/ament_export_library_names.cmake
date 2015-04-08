@@ -34,7 +34,6 @@ macro(ament_export_library_names)
   if(_ARG_UNPARSED_ARGUMENTS)
     _ament_cmake_export_libraries_register_environment_hook()
     _ament_cmake_export_libraries_register_package_hook()
-    message(" - ament_export_library_names(${ARGN})")
 
     # library directories need to be added as a suffix to each library name
     set(_library_dirs "")

@@ -42,7 +42,6 @@ function(ament_cmake_symlink_install_programs programs_keyword)
   endforeach()
 
   if(index EQUAL -1)
-    #message("   - using symlinks")
     string(REPLACE ";" "\" \"" argn_quoted "\"${ARGN}\"")
     ament_cmake_symlink_install_append_install_code(
       "ament_cmake_symlink_install_programs(PROGRAMS ${argn_quoted})"

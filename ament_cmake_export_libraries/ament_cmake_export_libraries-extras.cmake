@@ -20,7 +20,7 @@ macro(_ament_cmake_export_libraries_register_environment_hook)
   if(NOT DEFINED _AMENT_CMAKE_EXPORT_LIBRARIES_ENVIRONMENT_HOOK_REGISTERED)
     set(_AMENT_CMAKE_EXPORT_LIBRARIES_ENVIRONMENT_HOOK_REGISTERED TRUE)
 
-    find_package(ament_cmake_core REQUIRED)
+    find_package(ament_cmake_core QUIET REQUIRED)
     if(WIN32)
       set(_ext ".bat.in")
     else()
@@ -36,7 +36,7 @@ macro(_ament_cmake_export_libraries_register_package_hook)
   if(NOT DEFINED _AMENT_CMAKE_EXPORT_LIBRARIES_PACKAGE_HOOK_REGISTERED)
     set(_AMENT_CMAKE_EXPORT_LIBRARIES_PACKAGE_HOOK_REGISTERED TRUE)
 
-    find_package(ament_cmake_core REQUIRED)
+    find_package(ament_cmake_core QUIET REQUIRED)
     ament_register_extension("ament_package" "ament_cmake_export_libraries"
       "ament_cmake_export_libraries_package_hook.cmake")
   endif()

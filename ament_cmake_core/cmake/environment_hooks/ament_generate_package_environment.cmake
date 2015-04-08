@@ -23,8 +23,6 @@ function(ament_generate_package_environment)
       "unused arguments: ${ARGN}")
   endif()
 
-  message(" - ament_generate_package_environment()")
-
   # mark that ament_generate_package_environment() was called
   # in order to detect wrong order of calling
   set(_${PROJECT_NAME}_AMENT_GENERATE_PACKAGE_ENVIRONMENT TRUE PARENT_SCOPE)

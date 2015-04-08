@@ -33,8 +33,6 @@ macro(ament_export_libraries)
   if(${ARGC} GREATER 0)
     _ament_cmake_export_libraries_register_environment_hook()
     _ament_cmake_export_libraries_register_package_hook()
-    message(" - ament_export_libraries(${ARGN})")
-
     # loop over libraries
     # but remember related build configuration keyword if available
     set(_argn ${ARGN})

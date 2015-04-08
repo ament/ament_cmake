@@ -21,7 +21,7 @@ macro(_ament_cmake_python_register_environment_hook)
 
     _ament_cmake_python_get_python_install_dir()
 
-    find_package(ament_cmake_core REQUIRED)
+    find_package(ament_cmake_core QUIET REQUIRED)
     ament_environment_hooks(
       "${ament_cmake_package_templates_ENVIRONMENT_HOOK_PYTHONPATH}")
   endif()
