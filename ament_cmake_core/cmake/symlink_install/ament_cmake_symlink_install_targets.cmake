@@ -50,8 +50,6 @@ function(ament_cmake_symlink_install_targets)
   endforeach()
 
   if(index EQUAL -1)
-    #message("   - using symlinks")
-
     cmake_parse_arguments(ARG "ARCHIVE;LIBRARY;RUNTIME;OPTIONAL" "DESTINATION"
       "TARGETS" ${ARGN})
     if(ARG_UNPARSED_ARGUMENTS)

@@ -20,7 +20,6 @@
 #
 function(install signature)
   string(TOUPPER "${signature}" signature)
-  #message(" - install(${signature};${ARGN})")
 
   if("${signature} " STREQUAL "DIRECTORY ")
     ament_cmake_symlink_install_directory(DIRECTORY ${ARGN})

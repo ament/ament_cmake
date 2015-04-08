@@ -19,7 +19,7 @@ macro(_ament_cmake_gtest_find_gtest)
   if(NOT DEFINED _AMENT_CMAKE_GTEST_FIND_GTEST)
     set(_AMENT_CMAKE_GTEST_FIND_GTEST TRUE)
 
-    find_package(ament_cmake_test REQUIRED)
+    find_package(ament_cmake_test QUIET REQUIRED)
 
     # allow other packages to find gtest instead
     ament_execute_extensions(ament_cmake_gtest_find_gtest)

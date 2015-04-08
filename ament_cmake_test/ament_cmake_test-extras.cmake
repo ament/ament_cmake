@@ -26,6 +26,6 @@ if(AMENT_ENABLE_TESTING)
   enable_testing()
 endif()
 
-find_package(ament_cmake_core REQUIRED)
+find_package(ament_cmake_core QUIET REQUIRED)
 
 include("${ament_cmake_test_DIR}/ament_add_test.cmake")

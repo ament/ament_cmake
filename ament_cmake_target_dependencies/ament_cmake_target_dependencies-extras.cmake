@@ -15,9 +15,9 @@
 # copied from
 # ament_cmake_target_dependencies/ament_cmake_target_dependencies-extras.cmake
 
-find_package(ament_cmake_core REQUIRED)
-find_package(ament_cmake_include_directories REQUIRED)
-find_package(ament_cmake_libraries REQUIRED)
+find_package(ament_cmake_core QUIET REQUIRED)
+find_package(ament_cmake_include_directories QUIET REQUIRED)
+find_package(ament_cmake_libraries QUIET REQUIRED)
 
 include(
   "${ament_cmake_target_dependencies_DIR}/ament_target_dependencies.cmake")

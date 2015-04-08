@@ -20,7 +20,7 @@ macro(_ament_cmake_export_dependencies_register_package_hook)
   if(NOT DEFINED _AMENT_CMAKE_EXPORT_DEPENDENCIES_PACKAGE_HOOK_REGISTERED)
     set(_AMENT_CMAKE_EXPORT_DEPENDENCIES_PACKAGE_HOOK_REGISTERED TRUE)
 
-    find_package(ament_cmake_core REQUIRED)
+    find_package(ament_cmake_core QUIET REQUIRED)
     ament_register_extension("ament_package" "ament_cmake_export_dependencies"
       "ament_cmake_export_dependencies_package_hook.cmake")
   endif()

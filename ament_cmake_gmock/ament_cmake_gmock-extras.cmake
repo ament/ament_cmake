@@ -19,7 +19,7 @@ macro(_ament_cmake_gmock_find_gmock)
   if(NOT DEFINED _AMENT_CMAKE_GMOCK_FIND_GMOCK)
     set(_AMENT_CMAKE_GMOCK_FIND_GMOCK TRUE)
 
-    find_package(ament_cmake_test REQUIRED)
+    find_package(ament_cmake_test QUIET REQUIRED)
 
     if(NOT GMOCK_FOUND)
       # find gmock include and source folders
@@ -120,6 +120,6 @@ endmacro()
 include("${ament_cmake_gmock_DIR}/ament_add_gmock.cmake")
 include("${ament_cmake_gmock_DIR}/ament_find_gmock.cmake")
 
-find_package(ament_cmake_core REQUIRED)
+find_package(ament_cmake_core QUIET REQUIRED)
 ament_register_extension("ament_cmake_gtest_find_gtest" "ament_cmake_gmock"
   "ament_cmake_gmock_find_gtest_hook.cmake")

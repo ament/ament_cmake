@@ -32,7 +32,6 @@ macro(ament_export_interfaces)
 
   if(${ARGC} GREATER 0)
     _ament_cmake_export_interfaces_register_package_hook()
-    message(" - ament_export_interfaces(${ARGN})")
     foreach(_arg ${ARGN})
       list(APPEND _AMENT_CMAKE_EXPORT_INTERFACES "${_arg}")
     endforeach()

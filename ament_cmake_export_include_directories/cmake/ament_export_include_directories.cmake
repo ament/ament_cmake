@@ -33,8 +33,6 @@ macro(ament_export_include_directories)
 
   if(${ARGC} GREATER 0)
     _ament_cmake_export_include_directories_register_package_hook()
-    message(" - ament_export_include_directories(${ARGN})")
-
     foreach(_arg ${ARGN})
       if(NOT IS_ABSOLUTE "${_arg}")
         # prefix relative paths with CMAKE_INSTALL_PREFIX

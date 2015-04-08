@@ -32,7 +32,6 @@ macro(ament_export_dependencies)
 
   if(${ARGC} GREATER 0)
     _ament_cmake_export_dependencies_register_package_hook()
-    message(" - ament_export_dependencies(${ARGN})")
     foreach(_arg ${ARGN})
       # only pass package name
       # will be resolved by downstream packages
