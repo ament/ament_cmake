@@ -57,7 +57,7 @@ function(_ament_cmake_python_install_package package_name)
     PATTERN "*.pyc" EXCLUDE
     PATTERN "__pycache__" EXCLUDE
   )
-  # TODO optionally compile Python files
+  # TODO(dirk-thomas): optionally compile Python files
 
   list(FIND AMENT_CMAKE_PYTHON_INSTALL_INSTALLED_NAMES "${package_name}" index)
   if(NOT index EQUAL -1)
