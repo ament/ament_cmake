@@ -65,6 +65,10 @@ if(NOT PROJECT_NAME)
   project(ament_cmake_internal NONE)
 endif()
 
+# use AMENT_ENABLE_TESTING to avoid warnings about not using it
+if(DEFINED AMENT_ENABLE_TESTING AND AMENT_ENABLE_TESTING)
+endif()
+
 # include CMake functions
 include(CMakeParseArguments)
 
