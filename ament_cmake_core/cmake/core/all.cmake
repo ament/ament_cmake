@@ -53,6 +53,12 @@ _set_cmake_policy_to_new_if_available(CMP0020)
 _set_cmake_policy_to_new_if_available(CMP0021)
 _set_cmake_policy_to_new_if_available(CMP0022)
 _set_cmake_policy_to_new_if_available(CMP0023)
+_set_cmake_policy_to_new_if_available(CMP0042)
+
+# set RPATH to ON for OS X
+if(APPLE)
+  set(CMAKE_MACOSX_RPATH ON)
+endif()
 
 # the following operations must be performed inside a project context
 if(NOT PROJECT_NAME)
