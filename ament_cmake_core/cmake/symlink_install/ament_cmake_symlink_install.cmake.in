@@ -112,7 +112,7 @@ endfunction()
 # :type ARGN: various
 #
 function(ament_cmake_symlink_install_files)
-  cmake_parse_arguments(ARG "OPTIONAL" "DESTINATION" "FILES" ${ARGN})
+  cmake_parse_arguments(ARG "OPTIONAL" "DESTINATION;RENAME" "FILES" ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "ament_cmake_symlink_install_files() called with "
       "unused/unsupported arguments: ${ARG_UNPARSED_ARGUMENTS}")
@@ -126,6 +126,14 @@ function(ament_cmake_symlink_install_files)
     file(MAKE_DIRECTORY "${ARG_DESTINATION}")
   endif()
 
+  if(ARG_RENAME)
+    list(LENGTH ARG_FILES file_count)
+    if(NOT file_count EQUAL 1)
+    message(FATAL_ERROR "ament_cmake_symlink_install_files() called with "
+      "RENAME argument but not with a single file")
+    endif()
+  endif()
+
   # iterate over files
   foreach(file ${ARG_FILES})
     # make file an absolute path
@@ -136,7 +144,11 @@ function(ament_cmake_symlink_install_files)
     if(EXISTS "${file}")
       # determine link name for file including destination path
       get_filename_component(filename "${file}" NAME)
-      set(symlink "${ARG_DESTINATION}/${filename}")
+      if(NOT ARG_RENAME)
+        set(symlink "${ARG_DESTINATION}/${filename}")
+      else()
+        set(symlink "${ARG_DESTINATION}/${ARG_RENAME}")
+      endif()
       _ament_cmake_symlink_install_create_symlink("${file}" "${symlink}")
     else()
       if(NOT ARG_OPTIONAL)
