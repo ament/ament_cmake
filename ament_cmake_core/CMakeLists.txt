@@ -8,6 +8,8 @@ include("ament_cmake_core-extras.cmake" NO_POLICY_SCOPE)
 include("ament_cmake_environment-extras.cmake" NO_POLICY_SCOPE)
 include("ament_cmake_environment_hooks-extras.cmake" NO_POLICY_SCOPE)
 include("ament_cmake_index-extras.cmake" NO_POLICY_SCOPE)
+include("ament_cmake_uninstall_target-extras.cmake" NO_POLICY_SCOPE)
+# must be afer uninstall_target
 include("ament_cmake_symlink_install-extras.cmake" NO_POLICY_SCOPE)
 
 ament_package_xml()
@@ -23,7 +25,8 @@ ament_package(
   "ament_cmake_environment_hooks-extras.cmake"
   "ament_cmake_index-extras.cmake"
   "ament_cmake_package_templates-extras.cmake.in"
-  "ament_cmake_symlink_install-extras.cmake"
+  "ament_cmake_uninstall_target-extras.cmake"
+  "ament_cmake_symlink_install-extras.cmake"  # must be afer uninstall_target
 )
 
 install(

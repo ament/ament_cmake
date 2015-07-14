@@ -4,6 +4,9 @@
 # include CMake functions
 include(CMakeParseArguments)
 
+# create empty symlink install manifest before starting install step
+file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/symlink_install_manifest.txt")
+
 #
 # Reimplement CMake install(DIRECTORY) command to use symlinks instead of
 # copying resources.
@@ -251,6 +254,10 @@ function(ament_cmake_symlink_install_targets)
 endfunction()
 
 function(_ament_cmake_symlink_install_create_symlink absolute_file symlink)
+  # register symlink for being removed during install step
+  file(APPEND "${CMAKE_CURRENT_BINARY_DIR}/symlink_install_manifest.txt"
+    "${symlink}\n")
+
   # avoid any work if correct symlink is already in place
   if(EXISTS "${symlink}" AND IS_SYMLINK "${symlink}")
     get_filename_component(destination "${symlink}" REALPATH)
