@@ -17,7 +17,6 @@ include(CMakeParseArguments)
 
 #
 # Register a CMake script for execution at install time.
-# The script is populated with th
 #
 # :param ARGN: the list of CMake code lines
 # :type ARGN: list of strings
