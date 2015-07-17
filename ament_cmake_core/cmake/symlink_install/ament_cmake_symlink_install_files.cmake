@@ -29,7 +29,6 @@ function(ament_cmake_symlink_install_files files_keyword)
     "PERMISSIONS"
     "CONFIGURATIONS"
     "COMPONENT"
-    "RENAME"
   )
   foreach(unsupported_keyword ${unsupported_keywords})
     list(FIND ARGN "${unsupported_keyword}" index)

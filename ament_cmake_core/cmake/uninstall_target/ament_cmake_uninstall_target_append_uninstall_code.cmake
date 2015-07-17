@@ -1,4 +1,4 @@
-# Copyright 2014 Open Source Robotics Foundation, Inc.
+# Copyright 2015 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,22 +16,22 @@
 include(CMakeParseArguments)
 
 #
-# Register a CMake script for execution at install time.
+# Register a CMake script for execution at uninstall time.
 #
 # :param ARGN: the list of CMake code lines
 # :type ARGN: list of strings
 # :param COMMENTS: an optional list of comments
 # :type COMMENTS: list of string
 #
-function(ament_cmake_symlink_install_append_install_code)
+function(ament_cmake_uninstall_target_append_uninstall_code)
   cmake_parse_arguments(ARG "" "" "COMMENTS" ${ARGN})
 
-  # append code to install script
+  # append code to uninstall script
   if(ARG_COMMENTS)
-    file(APPEND "${AMENT_CMAKE_SYMLINK_INSTALL_INSTALL_SCRIPT}"
+    file(APPEND "${AMENT_CMAKE_UNINSTALL_TARGET_UNINSTALL_SCRIPT}"
       "\n# ${ARG_COMMENTS}\n")
   endif()
   foreach(code ${ARG_UNPARSED_ARGUMENTS})
-    file(APPEND "${AMENT_CMAKE_SYMLINK_INSTALL_INSTALL_SCRIPT}" "${code}\n")
+    file(APPEND "${AMENT_CMAKE_UNINSTALL_TARGET_UNINSTALL_SCRIPT}" "${code}\n")
   endforeach()
 endfunction()

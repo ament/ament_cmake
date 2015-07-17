@@ -35,7 +35,7 @@ if(AMENT_CMAKE_SYMLINK_INSTALL)
   include("${ament_cmake_core_DIR}/symlink_install/install.cmake")
 
   # create the install script from the template
-  # ament_cmake_core/cmake/symlink_install/ament_cmake_symlink_install-extras.cmake.in
+  # ament_cmake_core/cmake/symlink_install/ament_cmake_symlink_install.cmake.in
   set(AMENT_CMAKE_SYMLINK_INSTALL_INSTALL_SCRIPT
     "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_symlink_install/ament_cmake_symlink_install.cmake")
   configure_file(
@@ -45,4 +45,18 @@ if(AMENT_CMAKE_SYMLINK_INSTALL)
   )
   # register script for being executed at install time
   install(SCRIPT "${AMENT_CMAKE_SYMLINK_INSTALL_INSTALL_SCRIPT}")
+
+  if(AMENT_CMAKE_UNINSTALL_TARGET)
+    # register uninstall script
+    set(AMENT_CMAKE_SYMLINK_INSTALL_UNINSTALL_SCRIPT
+      "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_symlink_install/ament_cmake_symlink_install_uninstall_script.cmake")
+    configure_file(
+      "${ament_cmake_core_DIR}/symlink_install/ament_cmake_symlink_install_uninstall_script.cmake.in"
+      "${AMENT_CMAKE_SYMLINK_INSTALL_UNINSTALL_SCRIPT}"
+      @ONLY
+    )
+    ament_cmake_uninstall_target_append_uninstall_code(
+      "include(\"${AMENT_CMAKE_SYMLINK_INSTALL_UNINSTALL_SCRIPT}\")"
+      COMMENTS "uninstall files installed using the symlink install functions")
+  endif()
 endif()
