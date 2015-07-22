@@ -15,7 +15,7 @@
 # copied from ament_cmake_core/ament_cmake_environment-extras.cmake
 
 option(AMENT_CMAKE_ENVIRONMENT_GENERATION
-  "Generate environment files in the CMAKE_INSTALL_PREFIX" ON)
+  "Generate environment files in the CMAKE_INSTALL_PREFIX" OFF)
 option(AMENT_CMAKE_ENVIRONMENT_PARENT_PREFIX_PATH_GENERATION
   "Generate marker file containing the parent prefix path" ON)
 
