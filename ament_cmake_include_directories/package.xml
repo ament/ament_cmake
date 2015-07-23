@@ -9,4 +9,8 @@
   <buildtool_depend>ament_cmake_core</buildtool_depend>
 
   <buildtool_export_depend>ament_cmake_core</buildtool_export_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
 </package>
