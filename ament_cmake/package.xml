@@ -26,4 +26,8 @@
   <build_export_depend>ament_cmake_python</build_export_depend>
   <build_export_depend>ament_cmake_target_dependencies</build_export_depend>
   <build_export_depend>ament_cmake_test</build_export_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
 </package>

@@ -10,4 +10,8 @@
 
   <buildtool_export_depend>ament_cmake_test</buildtool_export_depend>
   <buildtool_export_depend>google-mock</buildtool_export_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
 </package>
