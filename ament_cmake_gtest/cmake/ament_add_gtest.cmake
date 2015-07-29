@@ -18,7 +18,7 @@ include(CMakeParseArguments)
 #
 # Add a gtest.
 #
-# Call add_executable(target ARGN), link it against the gtest library
+# Call add_executable(target ARGN), link it against the gtest libraries
 # and register the executable as a test.
 #
 # :param target: the target name which will also be used as the test name
@@ -30,6 +30,9 @@ include(CMakeParseArguments)
 # :param WORKING_DIRECTORY: the working directory for invoking the
 #   executable in, default: CMAKE_SOURCE_DIR
 # :type WORKING_DIRECTORY: string
+# :param SKIP_LINKING_MAIN_LIBRARIES: if set skip linking against the gtest
+#   main libraries
+# :type SKIP_LINKING_MAIN_LIBRARIES: option
 #
 # @public
 #
@@ -41,7 +44,7 @@ macro(ament_add_gtest target)
 endmacro()
 
 function(_ament_add_gtest target)
-  cmake_parse_arguments(ARG "" "TIMEOUT" "" ${ARGN})
+  cmake_parse_arguments(ARG "SKIP_LINKING_MAIN_LIBRARIES" "TIMEOUT" "" ${ARGN})
   if(NOT ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR
       "ament_add_gtest() must be invoked with at least one source file")
@@ -50,7 +53,10 @@ function(_ament_add_gtest target)
   # should be EXCLUDE_FROM_ALL if it would be possible
   # to add this target as a dependency to the "test" target
   add_executable("${target}" ${ARG_UNPARSED_ARGUMENTS})
-  target_link_libraries("${target}" gtest)
+  target_link_libraries("${target}" GTEST_LIBRARIES)
+  if(NOT ARG_SKIP_LINKING_MAIN_LIBRARIES)
+    target_link_libraries("${target}" GTEST_MAIN_LIBRARIES)
+  endif()
 
   get_target_property(target_path "${target}" RUNTIME_OUTPUT_DIRECTORY)
   if(NOT target_path)
