@@ -53,9 +53,9 @@ function(_ament_add_gtest target)
   # should be EXCLUDE_FROM_ALL if it would be possible
   # to add this target as a dependency to the "test" target
   add_executable("${target}" ${ARG_UNPARSED_ARGUMENTS})
-  target_link_libraries("${target}" GTEST_LIBRARIES)
+  target_link_libraries("${target}" ${GTEST_LIBRARIES})
   if(NOT ARG_SKIP_LINKING_MAIN_LIBRARIES)
-    target_link_libraries("${target}" GTEST_MAIN_LIBRARIES)
+    target_link_libraries("${target}" ${GTEST_MAIN_LIBRARIES})
   endif()
 
   get_target_property(target_path "${target}" RUNTIME_OUTPUT_DIRECTORY)
