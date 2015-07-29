@@ -21,6 +21,9 @@ include(CMakeParseArguments)
 # Call add_executable(target ARGN), link it against the gtest libraries
 # and register the executable as a test.
 #
+# If gtest is not available the specified target is not being created and
+# therefore the target existence should be checked before being used.
+#
 # :param target: the target name which will also be used as the test name
 # :type target: string
 # :param ARGN: the list of source files
