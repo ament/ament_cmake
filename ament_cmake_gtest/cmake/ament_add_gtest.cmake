@@ -78,6 +78,7 @@ function(_ament_add_gtest target)
   ament_add_test(
     "${target}"
     COMMAND ${cmd}
+    OUTPUT_FILE "${CMAKE_BINARY_DIR}/ament_cmake_gtest/${target}.txt"
     ${ARG_TIMEOUT}
     ${ARG_WORKING_DIRECTORY}
   )
