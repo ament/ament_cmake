@@ -63,7 +63,7 @@ function(ament_add_test testname)
   endif()
 
   # wrap command with run_test script to ensure test result generation
-  set(cmd_wrapper "${PYTHON_EXECUTABLE}" "${ament_cmake_test_DIR}/run_test.py"
+  set(cmd_wrapper "${PYTHON_EXECUTABLE}" "-u" "${ament_cmake_test_DIR}/run_test.py"
     "${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/${testname}.xml")
   if(ARG_GENERATE_RESULT_FOR_RETURN_CODE_ZERO)
     list(APPEND cmd_wrapper "--generate-result-on-success")

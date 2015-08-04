@@ -86,6 +86,9 @@ def main(argv=sys.argv[1:]):
     output = ''
     h = None
     if args.output_file:
+        output_path = os.path.dirname(args.output_file)
+        if not os.path.exists(output_path):
+            os.makedirs(output_path)
         h = open(args.output_file, 'wb')
     try:
         proc = subprocess.Popen(args.command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -95,6 +98,7 @@ def main(argv=sys.argv[1:]):
             output += decoded_line
             if h:
                 h.write(line)
+                h.flush()
         proc.wait()
         rc = proc.returncode
         print('-- run_test.py: return code', rc, file=sys.stderr if rc else sys.stdout)
