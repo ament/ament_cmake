@@ -30,6 +30,9 @@ include(CMakeParseArguments)
 # :param WORKING_DIRECTORY: the working directory for invoking the
 #   executable in, default: CMAKE_SOURCE_DIR
 # :type WORKING_DIRECTORY: string
+# :param SKIP_LINKING_MAIN_LIBRARIES: if set skip linking against the gmock
+#   main libraries
+# :type SKIP_LINKING_MAIN_LIBRARIES: option
 #
 # @public
 #
@@ -41,7 +44,7 @@ macro(ament_add_gmock target)
 endmacro()
 
 function(_ament_add_gmock target)
-  cmake_parse_arguments(ARG "" "TIMEOUT" "" ${ARGN})
+  cmake_parse_arguments(ARG "SKIP_LINKING_MAIN_LIBRARIES" "TIMEOUT" "" ${ARGN})
   if(NOT ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR
       "ament_add_gmock() must be invoked with at least one source file")
@@ -50,7 +53,11 @@ function(_ament_add_gmock target)
   # should be EXCLUDE_FROM_ALL if it would be possible
   # to add this target as a dependency to the "test" target
   add_executable("${target}" ${ARG_UNPARSED_ARGUMENTS})
-  target_link_libraries("${target}" gmock)
+  target_include_directories("${target}" PUBLIC "${GMOCK_INCLUDE_DIRS}")
+  target_link_libraries("${target}" ${GMOCK_LIBRARIES})
+  if(NOT ARG_SKIP_LINKING_MAIN_LIBRARIES)
+    target_link_libraries("${target}" ${GMOCK_MAIN_LIBRARIES})
+  endif()
 
   get_target_property(target_path "${target}" RUNTIME_OUTPUT_DIRECTORY)
   if(NOT target_path)
