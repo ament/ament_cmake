@@ -16,6 +16,7 @@
 
 from __future__ import print_function
 import argparse
+from collections import OrderedDict
 import sys
 
 try:
@@ -121,9 +122,20 @@ def generate_cmake_code(package):
     lines.append('set(_AMENT_PACKAGE_NAME "%s")' % package.name)
     for (k, v) in variables:
         lines.append('set(%s_%s %s)' % (package.name, k, v))
-    # Ensure backslashes are replaced with forward slashes because CMake cannot
-    # parse files with backslashes in it.
-    return [l.replace('\\', '/') for l in lines]
+
+    lines.append('set(%s_EXPORT_TAGS)' % package.name)
+    replaces = OrderedDict()
+    replaces['${prefix}/'] = ''
+    replaces['\\'] = '\\\\'  # escape backslashes
+    replaces['"'] = '\\"'  # prevent double quotes to end the CMake string
+    replaces[';'] = '\\;'  # prevent semicolons to be interpreted as list separators
+    for export in package.exports:
+        export = str(export)
+        for k, v in replaces.items():
+            export = export.replace(k, v)
+        lines.append('list(APPEND %s_EXPORT_TAGS "%s")' % (package.name, export))
+
+    return lines
 
 
 if __name__ == '__main__':
