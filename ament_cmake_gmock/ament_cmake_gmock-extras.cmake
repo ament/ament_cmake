@@ -23,14 +23,13 @@ macro(_ament_cmake_gmock_find_gmock)
 
     if(NOT GMOCK_FOUND)
       # find gmock include and source folders
-      # build the list of locations to search in reverse order
-      # the last result is to use the internal GMock fork from this package
-      set(_prefix "${ament_cmake_gmock_DIR}/../../..")
-      set(_search_path_include "${_prefix}/src/ament_cmake_gmock/googlemock-1.7.0/include/gmock")
-      set(_search_path_src "${_prefix}/src/ament_cmake_gmock/googlemock-1.7.0/src")
-      # also fall back to system installed path (i.e. on Ubuntu)
-      list(INSERT _search_path_include 0 "/usr/include/gmock")
-      list(INSERT _search_path_src 0 "/usr/src/gmock/src")
+      # fall back to system installed path (i.e. on Ubuntu)
+      set(_search_path_include "/usr/include/gmock")
+      set(_search_path_src "/usr/src/gmock/src")
+      # failing that use the internal GMock 1.7.0 snapshot from this package
+      set(_vendor_prefix "${ament_cmake_gmock_DIR}/../../../src/ament_cmake_gmock")
+      list(APPEND _search_path_include "${_vendor_prefix}/googlemock-1.7.0/include/gmock")
+      list(APPEND _search_path_src "${_vendor_prefix}/googlemock-1.7.0/src")
       # option() consider environment variable to find gmock
       if(NOT "$ENV{GMOCK_DIR} " STREQUAL " ")
         list(INSERT _search_path_include 0 "$ENV{GMOCK_DIR}/include/gmock")
