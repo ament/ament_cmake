@@ -78,43 +78,59 @@ def main(argv=sys.argv[1:]):
     with open(args.result_file, 'w') as h:
         h.write(failure_result_file)
 
-    print("-- run_test.py: invoking following command in '%s':\n - %s" %
-          (os.getcwd(), ' '.join(args.command)))
-
     # collect output / exception to generate more detailed result file
     # if the command fails to generate it
     output = ''
-    h = None
+    output_handle = None
     if args.output_file:
         output_path = os.path.dirname(args.output_file)
         if not os.path.exists(output_path):
             os.makedirs(output_path)
-        h = open(args.output_file, 'wb')
+        output_handle = open(args.output_file, 'wb')
+
+    def log(msg, **kwargs):
+        print(msg, **kwargs)
+        if output_handle:
+            output_handle.write((msg + '\n').encode())
+            output_handle.flush()
+
+    log("-- run_test.py: invoking following command in '%s':\n - %s" %
+        (os.getcwd(), ' '.join(args.command)))
+    if output_handle:
+        output_handle.write('\n'.encode())
+        output_handle.flush()
+
     try:
         proc = subprocess.Popen(args.command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        for line in proc.stdout:
+        while True:
+            line = proc.stdout.readline()
+            if not line:
+                break
             decoded_line = line.decode()
             print(decoded_line, end='')
             output += decoded_line
-            if h:
-                h.write(line)
-                h.flush()
+            if output_handle:
+                output_handle.write(line)
+                output_handle.flush()
         proc.wait()
         rc = proc.returncode
-        print('-- run_test.py: return code', rc, file=sys.stderr if rc else sys.stdout)
+        if output_handle:
+            # separate progress of this script from subprocess output
+            output_handle.write('\n\n'.encode())
+        log('-- run_test.py: return code ' + str(rc), file=sys.stderr if rc else sys.stdout)
     except Exception as e:
-        print('-- run_test.py: invocation failed:', str(e), file=sys.stderr)
+        if output_handle:
+            # separate subprocess output from progress of this script
+            output_handle.write('\n\n'.encode())
+        log('-- run_test.py: invocation failed: ' + str(e), file=sys.stderr)
         output += str(e)
         rc = 1
-    finally:
-        if h:
-            h.close()
 
     if not rc and args.generate_result_on_success:
         # generate result file with one passed test
         # if it was expected that no result file was generated
         # and the command returned with code zero
-        print("-- run_test.py: generate result file '%s' with successful test" % args.result_file)
+        log("-- run_test.py: generate result file '%s' with successful test" % args.result_file)
         success_result_file = _generate_result(args.result_file)
         with open(args.result_file, 'w') as h:
             h.write(success_result_file)
@@ -125,8 +141,8 @@ def main(argv=sys.argv[1:]):
             not_changed = h.read() == failure_result_file
 
         if not_changed:
-            print("-- run_test.py: generate result file '%s' with failed test" % args.result_file,
-                  file=sys.stderr)
+            log("-- run_test.py: generate result file '%s' with failed test" % args.result_file,
+                file=sys.stderr)
             # regenerate result file to include output / exception of the invoked command
             failure_result_file = _generate_result(
                 args.result_file,
@@ -136,7 +152,7 @@ def main(argv=sys.argv[1:]):
                 h.write(failure_result_file)
 
         else:
-            print("-- run_test.py: verify result file '%s'" % args.result_file)
+            log("-- run_test.py: verify result file '%s'" % args.result_file)
             # if result file exists ensure that it contains valid xml
             # unit test suites are not good about screening out
             # illegal unicode characters
@@ -146,15 +162,14 @@ def main(argv=sys.argv[1:]):
             except ParseError as e:
                 modified = _tidy_xml(args.result_file)
                 if not modified:
-                    print("Invalid XML in result file '%s': %s" %
-                          (args.result_file, str(e)), file=sys.stderr)
+                    log("Invalid XML in result file '%s': %s" %
+                        (args.result_file, str(e)), file=sys.stderr)
                 else:
                     try:
                         tree = ElementTree(None, args.result_file)
                     except ParseError as e:
-                        print("Invalid XML in result file '%s' "
-                              "(even after trying to tidy it): %s" %
-                              (args.result_file, str(e)), file=sys.stderr)
+                        log("Invalid XML in result file '%s' (even after trying to tidy it): %s" %
+                            (args.result_file, str(e)), file=sys.stderr)
 
             if not tree:
                 # set error code when result file is not parsable
@@ -169,8 +184,8 @@ def main(argv=sys.argv[1:]):
 
     # ensure that a result file exists at the end
     if not rc and not os.path.exists(args.result_file):
-        print('-- run_test.py: override return code since no result file was '
-              'generated', file=sys.stderr)
+        log('-- run_test.py: override return code since no result file was '
+            'generated', file=sys.stderr)
         rc = 1
 
     return rc
