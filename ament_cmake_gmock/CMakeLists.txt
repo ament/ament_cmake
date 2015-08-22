@@ -12,3 +12,8 @@ install(
   DIRECTORY cmake
   DESTINATION share/${PROJECT_NAME}
 )
+
+install(
+  DIRECTORY vendor/
+  DESTINATION src/${PROJECT_NAME}
+)

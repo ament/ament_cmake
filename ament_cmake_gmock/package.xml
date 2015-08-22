@@ -5,6 +5,7 @@
   <description>The ability to add Google mock-based tests in the ament buildsystem in CMake.</description>
   <maintainer email="dthomas@osrfoundation.org">Dirk Thomas</maintainer>
   <license>Apache License 2.0</license>
+  <license>BSD</license>
 
   <buildtool_depend>ament_cmake_core</buildtool_depend>
 

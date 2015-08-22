@@ -26,6 +26,10 @@ macro(_ament_cmake_gmock_find_gmock)
       # fall back to system installed path (i.e. on Ubuntu)
       set(_search_path_include "/usr/include/gmock")
       set(_search_path_src "/usr/src/gmock/src")
+      # failing that use the internal GMock 1.7.0 snapshot from this package
+      set(_vendor_prefix "${ament_cmake_gmock_DIR}/../../../src/ament_cmake_gmock")
+      list(APPEND _search_path_include "${_vendor_prefix}/googlemock-1.7.0/include/gmock")
+      list(APPEND _search_path_src "${_vendor_prefix}/googlemock-1.7.0/src")
       # option() consider environment variable to find gmock
       if(NOT "$ENV{GMOCK_DIR} " STREQUAL " ")
         list(INSERT _search_path_include 0 "$ENV{GMOCK_DIR}/include/gmock")
@@ -35,7 +39,10 @@ macro(_ament_cmake_gmock_find_gmock)
         PATHS ${_search_path_include}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH
       )
-      find_file(_gmock_src_file "gmock.cc"
+      find_file(_gmock_src_file
+        NAMES
+          "gmock.cc"
+          "gmock-gtest-all.cc"  # Alternative when using "fused" sources.
         PATHS ${_search_path_src}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH
       )
