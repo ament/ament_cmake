@@ -19,6 +19,9 @@
 # ``GTEST_LIBRARIES``, ``GTEST_MAIN_LIBRARIES`` and
 # ``GTEST_BOTH_LIBRARIES``.
 #
+# Note: you should always link against ``GTEST_LIBRARIES`` and optionally
+# additionally against ``GTEST_MAIN_LIBRARIES``.
+#
 # @public
 #
 macro(ament_find_gtest)

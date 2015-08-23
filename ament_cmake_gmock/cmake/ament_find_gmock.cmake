@@ -16,8 +16,10 @@
 # Find gmock.
 #
 # Set the variables ``GMOCK_FOUND``, ``GMOCK_INCLUDE_DIRS``,
-# ``GMOCK_LIBRARIES``, ``GMOCK_MAIN_LIBRARIES`` and
-# ``GMOCK_BOTH_LIBRARIES``.
+# ``GMOCK_LIBRARIES`` and ``GMOCK_MAIN_LIBRARIES``.
+#
+# Note: you should only link against one of the variables, either
+# ``GMOCK_LIBRARIES`` or ``GMOCK_MAIN_LIBRARIES``
 #
 # @public
 #
