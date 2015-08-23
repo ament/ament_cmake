@@ -20,6 +20,7 @@ macro(_ament_cmake_gtest_find_gtest)
     set(_AMENT_CMAKE_GTEST_FIND_GTEST TRUE)
 
     find_package(ament_cmake_test QUIET REQUIRED)
+    find_package(gtest_vendor QUIET)
 
     # allow other packages to find gtest instead
     ament_execute_extensions(ament_cmake_gtest_find_gtest)
@@ -35,20 +36,30 @@ macro(_ament_cmake_gtest_find_gtest)
       set(GTEST_MAIN_LIBRARIES ${GTEST_MAIN_LIBRARIES} CACHE INTERNAL "")
       set(GTEST_BOTH_LIBRARIES ${GTEST_BOTH_LIBRARIES} CACHE INTERNAL "")
     else()
-      # find gtest include and source folders
-      # fall back to system installed path (i.e. on Ubuntu)
-      set(_search_path_include "/usr/include/gtest")
-      set(_search_path_src "/usr/src/gtest/src")
+      # search path for gtest includes and sources
+      set(_search_path_include "")
+      set(_search_path_src "")
       # option() consider environment variable to find gtest
       if(NOT "$ENV{GTEST_DIR} " STREQUAL " ")
-        list(INSERT _search_path_include 0 "$ENV{GTEST_DIR}/include/gtest")
-        list(INSERT _search_path_src 0 "$ENV{GTEST_DIR}/src")
+        list(APPEND _search_path_include "$ENV{GTEST_DIR}/include/gtest")
+        list(APPEND _search_path_src "$ENV{GTEST_DIR}/src")
       endif()
+      # check to system installed path (i.e. on Ubuntu)
+      set(_search_path_include "/usr/include/gtest")
+      set(_search_path_src "/usr/src/gtest/src")
+      # check gtest_vendor path
+      if(gtest_vendor_FOUND AND gtest_vendor_BASE_DIR)
+        list(APPEND _search_path_include "${gtest_vendor_BASE_DIR}/include/gtest")
+        list(APPEND _search_path_src "${gtest_vendor_BASE_DIR}/src")
+      endif()
+
       find_file(_gtest_header_file "gtest.h"
         PATHS ${_search_path_include}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH
       )
-      find_file(_gtest_src_file "gtest.cc"
+      find_file(_gtest_src_file
+        "gtest.cc"
+        "gtest-all.cc"  # alternative when using "fused" sources
         PATHS ${_search_path_src}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH
       )
