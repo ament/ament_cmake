@@ -13,7 +13,7 @@
 # limitations under the License.
 
 #
-# Get all registered package resource of a specific type from the index.
+# Get all registered package resources of a specific type from the index.
 #
 # :param var: the output variable name
 # :type var: list of resource names
@@ -43,7 +43,7 @@ function(ament_index_get_resources var resource_type)
   foreach(path IN LISTS raw_paths_to_search)
     if(NOT "${path} " STREQUAL " ")
       string(REPLACE "\\" "/" normalized_path "${path}")
-      list(APPEND paths_to_search "${normalized_path}")
+      list_append_unique(paths_to_search "${normalized_path}")
     endif()
   endforeach()
   # Remove CMAKE_INSTALL_PREFIX if it is in the list of paths to search,
@@ -55,7 +55,7 @@ function(ament_index_get_resources var resource_type)
     file(GLOB resources
       RELATIVE "${path}/share/ament_index/resource_index/${resource_type}"
       "${path}/share/ament_index/resource_index/${resource_type}/*")
-    list(APPEND all_resources "${resources}")
+    list_append_unique(all_resources ${resources})
   endforeach()
   set(${var} "${all_resources}" PARENT_SCOPE)
 endfunction()
