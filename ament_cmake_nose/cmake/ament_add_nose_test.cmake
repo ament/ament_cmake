@@ -60,7 +60,7 @@ function(_ament_add_nose_test testname path)
   ament_add_test(
     "${testname}"
     COMMAND ${cmd}
-    OUTPUT_FILE "${CMAKE_BINARY_DIR}/ament_cmake_nose/${target}.txt"
+    OUTPUT_FILE "${CMAKE_BINARY_DIR}/ament_cmake_nose/${testname}.txt"
     ${ARG_TIMEOUT}
     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
   )
