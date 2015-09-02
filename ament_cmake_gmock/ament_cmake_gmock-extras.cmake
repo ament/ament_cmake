@@ -20,22 +20,33 @@ macro(_ament_cmake_gmock_find_gmock)
     set(_AMENT_CMAKE_GMOCK_FIND_GMOCK TRUE)
 
     find_package(ament_cmake_test QUIET REQUIRED)
+    find_package(gmock_vendor QUIET)
 
     if(NOT GMOCK_FOUND)
-      # find gmock include and source folders
-      # fall back to system installed path (i.e. on Ubuntu)
-      set(_search_path_include "/usr/include/gmock")
-      set(_search_path_src "/usr/src/gmock/src")
+      # search path for gmock includes and sources
+      set(_search_path_include "")
+      set(_search_path_src "")
       # option() consider environment variable to find gmock
       if(NOT "$ENV{GMOCK_DIR} " STREQUAL " ")
-        list(INSERT _search_path_include 0 "$ENV{GMOCK_DIR}/include/gmock")
-        list(INSERT _search_path_src 0 "$ENV{GMOCK_DIR}/src")
+        list(APPEND _search_path_include "$ENV{GMOCK_DIR}/include/gmock")
+        list(APPEND _search_path_src "$ENV{GMOCK_DIR}/src")
       endif()
+      # check to system installed path (i.e. on Ubuntu)
+      set(_search_path_include "/usr/include/gmock")
+      set(_search_path_src "/usr/src/gmock/src")
+      # check gmock_vendor path
+      if(gmock_vendor_FOUND AND gmock_vendor_BASE_DIR)
+        list(APPEND _search_path_include "${gmock_vendor_BASE_DIR}/include/gmock")
+        list(APPEND _search_path_src "${gmock_vendor_BASE_DIR}/src")
+      endif()
+
       find_file(_gmock_header_file "gmock.h"
         PATHS ${_search_path_include}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH
       )
-      find_file(_gmock_src_file "gmock.cc"
+      find_file(_gmock_src_file
+        "gmock.cc"
+        "gmock-gtest-all.cc"  # alternative when using "fused" sources
         PATHS ${_search_path_src}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH
       )
@@ -62,17 +73,22 @@ macro(_ament_cmake_gmock_find_gmock)
         message(STATUS "Found gmock sources under '${_gmock_base_dir}': "
           "C++ tests using 'Google Mock' will be built")
 
-        set(_gtest_base_dir "${_gmock_base_dir}/gtest")
-        # set from-source variables for embedded gtest
-        set(GTEST_FROM_SOURCE_FOUND TRUE CACHE INTERNAL "")
-        set(GTEST_FROM_SOURCE_INCLUDE_DIRS "${_gmock_base_dir}/gtest/include"
-          CACHE INTERNAL "")
-        set(GTEST_FROM_SOURCE_LIBRARY_DIRS "${_gmock_binary_dir}/gtest"
-          CACHE INTERNAL "")
-        set(GTEST_FROM_SOURCE_LIBRARIES "gtest" CACHE INTERNAL "")
-        set(GTEST_FROM_SOURCE_MAIN_LIBRARIES "gtest_main" CACHE INTERNAL "")
-        message(STATUS "Found gtest sources under '${_gtest_base_dir}': "
-          "C++ tests using 'Google Test' will be built")
+        if(NOT "${_gmock_base_dir} " STREQUAL "${gmock_vendor_BASE_DIR} ")
+          set(_gtest_base_dir "${_gmock_base_dir}/gtest")
+          # set from-source variables for embedded gtest
+          set(GTEST_FROM_SOURCE_FOUND TRUE CACHE INTERNAL "")
+          set(GTEST_FROM_SOURCE_INCLUDE_DIRS "${_gtest_base_dir}/include"
+            CACHE INTERNAL "")
+          set(GTEST_FROM_SOURCE_LIBRARY_DIRS "${_gmock_binary_dir}/gtest"
+            CACHE INTERNAL "")
+          set(GTEST_FROM_SOURCE_LIBRARIES "gtest" CACHE INTERNAL "")
+          set(GTEST_FROM_SOURCE_MAIN_LIBRARIES "gtest_main" CACHE INTERNAL "")
+          message(STATUS "Found gtest sources under '${_gtest_base_dir}': "
+            "C++ tests using 'Google Test' will be built")
+        else()
+          # if gmock_vendor is being used it should not be used for gtests
+          # instead gtest_vendor should be used directly
+        endif()
       endif()
       if(GMOCK_FROM_SOURCE_FOUND)
         # set the same variables as find_package() would set
@@ -83,7 +99,6 @@ macro(_ament_cmake_gmock_find_gmock)
         set(GMOCK_LIBRARY_DIRS ${GMOCK_FROM_SOURCE_LIBRARY_DIRS})
         set(GMOCK_LIBRARIES ${GMOCK_FROM_SOURCE_LIBRARIES})
         set(GMOCK_MAIN_LIBRARIES ${GMOCK_FROM_SOURCE_MAIN_LIBRARIES})
-        set(GMOCK_BOTH_LIBRARIES ${GMOCK_LIBRARIES} ${GMOCK_MAIN_LIBRARIES})
         # also set the gtest variables
         # but do NOT set GTEST_FOUND in the cache when using gtest from source
         # since the subdirectory must always be added to add the gmock targets
@@ -98,7 +113,9 @@ macro(_ament_cmake_gmock_find_gmock)
         # headers embedded in gmock
         # therefore prepending the include dir of the embedded gtest version
         # to ensure it is being used
-        include_directories(BEFORE "${GTEST_INCLUDE_DIRS}")
+        if(NOT "${GTEST_INCLUDE_DIRS} " STREQUAL " ")
+          include_directories(BEFORE "${GTEST_INCLUDE_DIRS}")
+        endif()
       endif()
     endif()
     if(NOT GMOCK_FOUND)
