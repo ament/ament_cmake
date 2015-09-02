@@ -24,6 +24,10 @@ set(
 
 if(AMENT_ENABLE_TESTING)
   enable_testing()
+  # configure ctest not to truncate the dashboard summary
+  file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/CTestCustom.ctest"
+    "set(CTEST_CUSTOM_MAXIMUM_PASSED_TEST_OUTPUT_SIZE 0)\n"
+    "set(CTEST_CUSTOM_MAXIMUM_FAILED_TEST_OUTPUT_SIZE 0)\n")
 endif()
 
 find_package(ament_cmake_core QUIET REQUIRED)
