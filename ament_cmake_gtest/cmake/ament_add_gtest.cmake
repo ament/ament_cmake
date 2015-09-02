@@ -64,9 +64,10 @@ function(_ament_add_gtest target)
 
   get_target_property(executable "${target}" LOCATION)
   string(REPLACE "$(Configuration)" "$<CONFIGURATION>" executable "${executable}")
+  set(result_file "${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/${target}.gtest.xml")
   set(cmd
     "${executable}"
-    "--gtest_output=xml:${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/${target}.xml")
+    "--gtest_output=xml:${result_file}")
   if(ARG_TIMEOUT)
     set(ARG_TIMEOUT "TIMEOUT" ${ARG_TIMEOUT})
   endif()
@@ -78,6 +79,7 @@ function(_ament_add_gtest target)
     "${target}"
     COMMAND ${cmd}
     OUTPUT_FILE "${CMAKE_BINARY_DIR}/ament_cmake_gtest/${target}.txt"
+    RESULT_FILE "${result_file}"
     ${ARG_TIMEOUT}
     ${ARG_WORKING_DIRECTORY}
   )

@@ -42,7 +42,7 @@ include(CMakeParseArguments)
 #
 function(ament_add_test testname)
   cmake_parse_arguments(ARG "GENERATE_RESULT_FOR_RETURN_CODE_ZERO"
-    "OUTPUT_FILE;TIMEOUT;WORKING_DIRECTORY" "COMMAND" ${ARGN})
+    "OUTPUT_FILE;RESULT_FILE;TIMEOUT;WORKING_DIRECTORY" "COMMAND" ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "ament_add_test() called with unused arguments: "
       "${ARG_UNPARSED_ARGUMENTS}")
@@ -50,6 +50,9 @@ function(ament_add_test testname)
   if(NOT ARG_COMMAND)
     message(FATAL_ERROR
       "ament_add_test() must be invoked with the COMMAND argument")
+  endif()
+  if(NOT ARG_RESULT_FILE)
+    set(ARG_RESULT_FILE "${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/${testname}.xml")
   endif()
   if(NOT ARG_TIMEOUT)
     set(ARG_TIMEOUT 60)
@@ -64,7 +67,7 @@ function(ament_add_test testname)
 
   # wrap command with run_test script to ensure test result generation
   set(cmd_wrapper "${PYTHON_EXECUTABLE}" "-u" "${ament_cmake_test_DIR}/run_test.py"
-    "${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/${testname}.xml")
+    "${ARG_RESULT_FILE}")
   if(ARG_GENERATE_RESULT_FOR_RETURN_CODE_ZERO)
     list(APPEND cmd_wrapper "--generate-result-on-success")
   endif()

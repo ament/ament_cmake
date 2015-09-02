@@ -50,9 +50,10 @@ function(_ament_add_nose_test testname path)
       "ament_add_nose_test() the path '${path}' does not exist")
   endif()
 
+  set(result_file "${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/${testname}.xunit.xml")
   set(cmd
     "${NOSETESTS}" "${path}" "--with-xunit"
-    "--xunit-file=${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/${testname}.xml")
+    "--xunit-file=${result_file}")
   if(ARG_TIMEOUT)
     set(ARG_TIMEOUT "TIMEOUT" "${ARG_TIMEOUT}")
   endif()
@@ -61,6 +62,7 @@ function(_ament_add_nose_test testname path)
     "${testname}"
     COMMAND ${cmd}
     OUTPUT_FILE "${CMAKE_BINARY_DIR}/ament_cmake_nose/${testname}.txt"
+    RESULT_FILE "${result_file}"
     ${ARG_TIMEOUT}
     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
   )
