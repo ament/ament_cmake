@@ -62,13 +62,12 @@ function(_ament_add_gtest target)
     target_link_libraries("${target}" ${GTEST_MAIN_LIBRARIES})
   endif()
 
-  get_target_property(target_path "${target}" RUNTIME_OUTPUT_DIRECTORY)
-  if(NOT target_path)
-    set(target_path "${CMAKE_CURRENT_BINARY_DIR}")
-  endif()
+  get_target_property(executable "${target}" LOCATION)
+  string(REPLACE "$(Configuration)" "$<CONFIGURATION>" executable "${executable}")
+  set(result_file "${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/${target}.gtest.xml")
   set(cmd
-    "${target_path}/${target}"
-    "--gtest_output=xml:${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/${target}.xml")
+    "${executable}"
+    "--gtest_output=xml:${result_file}")
   if(ARG_TIMEOUT)
     set(ARG_TIMEOUT "TIMEOUT" ${ARG_TIMEOUT})
   endif()
@@ -80,11 +79,12 @@ function(_ament_add_gtest target)
     "${target}"
     COMMAND ${cmd}
     OUTPUT_FILE "${CMAKE_BINARY_DIR}/ament_cmake_gtest/${target}.txt"
+    RESULT_FILE "${result_file}"
     ${ARG_TIMEOUT}
     ${ARG_WORKING_DIRECTORY}
   )
   set_tests_properties(
     "${target}"
-    PROPERTIES REQUIRED_FILES "${target_path}/${target}"
+    PROPERTIES REQUIRED_FILES "${executable}"
   )
 endfunction()
