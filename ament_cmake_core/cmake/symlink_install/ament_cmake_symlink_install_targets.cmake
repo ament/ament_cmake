@@ -69,10 +69,8 @@ function(ament_cmake_symlink_install_targets)
         message(FATAL_ERROR "ament_cmake_symlink_install_targets() "
           "'${target}' is an imported target")
       endif()
-      # TODO consider using a generator expression instead
-      # $<TARGET_FILE:target>
-      get_property(location TARGET ${target} PROPERTY LOCATION)
-      list(APPEND target_files "${location}")
+      message("target: $<TARGET_FILE:${target}>")
+      list(APPEND target_files "$<TARGET_FILE:${target}>")
     endforeach()
 
     string(REPLACE ";" "\" \"" target_files_quoted
