@@ -71,6 +71,10 @@ function(ament_cmake_symlink_install_targets)
       endif()
       # TODO consider using a generator expression instead
       # $<TARGET_FILE:target>
+      # until then set the policy explicitly in order to avoid warning with newer CMake versions.
+      if(POLICY CMP0026)
+        cmake_policy(SET CMP0026 OLD)
+      endif()
       get_property(location TARGET ${target} PROPERTY LOCATION)
       list(APPEND target_files "${location}")
     endforeach()
