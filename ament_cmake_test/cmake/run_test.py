@@ -192,18 +192,19 @@ def main(argv=sys.argv[1:]):
 
 
 def _generate_result(result_file, failure_message=None):
+    # the generated result file must be readable
+    # by any of the Jenkins test result report publishers
     pkgname = os.path.basename(os.path.dirname(result_file))
     testname = os.path.splitext(os.path.basename(result_file))[0]
-    name = '%s.%s' % (pkgname, testname)
     failure_message = '<failure message=%s/>' % quoteattr(failure_message) \
         if failure_message else ''
     return '''<?xml version="1.0" encoding="UTF-8"?>
-<testsuite tests="1" failures="%d" time="1" errors="0" name="%s">
-  <testcase name="missing_result" status="run" time="1" classname="%s">
+<testsuite name="%s" tests="1" failures="%d" time="0" errors="0">
+  <testcase classname="%s" name="%s.missing_result" status="run" time="0">
     %s
   </testcase>
 </testsuite>\n''' % \
-        (1 if failure_message else 0, name, name, failure_message)
+        (pkgname, 1 if failure_message else 0, pkgname, testname, failure_message)
 
 
 def _tidy_xml(filename):
