@@ -54,6 +54,10 @@ function(_ament_add_nose_test testname path)
   set(cmd
     "${NOSETESTS}" "${path}" "--with-xunit"
     "--xunit-file=${result_file}")
+  if(NOT "${NOSETESTS_VERSION}" LESS "1.3.5")
+    list(APPEND cmd "--xunit-testsuite-name=${PROJECT_NAME}.nosetests")
+  endif()
+
   if(ARG_TIMEOUT)
     set(ARG_TIMEOUT "TIMEOUT" "${ARG_TIMEOUT}")
   endif()

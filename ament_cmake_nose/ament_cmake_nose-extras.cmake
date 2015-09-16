@@ -29,7 +29,23 @@ macro(_ament_cmake_nose_find_nosetests)
       "nosetests-${PYTHON_VERSION_MAJOR}"
       "nosetests")
     if(NOSETESTS)
-      message(STATUS "Using Python nosetests: ${NOSETESTS}")
+      set(_cmd "${NOSETESTS}" "--version")
+      execute_process(
+        COMMAND ${_cmd}
+        RESULT_VARIABLE _res
+        OUTPUT_VARIABLE _output
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+      if(NOT _res EQUAL 0)
+        string(REPLACE ";" " " _cmd_str "${_cmd}")
+        message(FATAL_ERROR "Failed to invoke nosetest: '${_cmd_str}' returned error code ${_res}")
+      endif()
+      string(REPLACE " version " ";" _output_list "${_output}")
+      list(LENGTH _output_list _length)
+      if(NOT _length EQUAL 2)
+        message(FATAL_ERROR "Failed to extract nosetest version from '${_output}'")
+      endif()
+      list(GET _output_list 1 NOSETESTS_VERSION)
+      message(STATUS "Using Python nosetests: ${NOSETESTS} (${NOSETESTS_VERSION})")
     else()
       if("${PYTHON_VERSION_MAJOR} " STREQUAL "3 ")
         set(_python_nosetests_package "python3-nose")
