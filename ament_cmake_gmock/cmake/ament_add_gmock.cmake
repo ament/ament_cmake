@@ -88,6 +88,8 @@ function(_ament_add_gmock target)
   )
   set_tests_properties(
     "${target}"
-    PROPERTIES REQUIRED_FILES "${executable}"
+    PROPERTIES
+    REQUIRED_FILES "${executable}"
+    LABELS "gmock"
   )
 endfunction()

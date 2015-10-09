@@ -70,6 +70,11 @@ function(_ament_add_nose_test testname path)
     ${ARG_TIMEOUT}
     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
   )
+  set_tests_properties(
+    "${testname}"
+    PROPERTIES
+    LABELS "nose"
+  )
 endfunction()
 
 # TODO provide function to register all found tests separately
