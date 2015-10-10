@@ -91,6 +91,8 @@ function(_ament_add_gtest target)
   )
   set_tests_properties(
     "${target}"
-    PROPERTIES REQUIRED_FILES "${executable}"
+    PROPERTIES
+    REQUIRED_FILES "${executable}"
+    LABELS "gtest"
   )
 endfunction()
