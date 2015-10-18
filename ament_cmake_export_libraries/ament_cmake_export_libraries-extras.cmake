@@ -20,14 +20,11 @@ macro(_ament_cmake_export_libraries_register_environment_hook)
   if(NOT DEFINED _AMENT_CMAKE_EXPORT_LIBRARIES_ENVIRONMENT_HOOK_REGISTERED)
     set(_AMENT_CMAKE_EXPORT_LIBRARIES_ENVIRONMENT_HOOK_REGISTERED TRUE)
 
-    find_package(ament_cmake_core QUIET REQUIRED)
-    if(WIN32)
-      set(_ext ".bat.in")
-    else()
-      set(_ext ".sh.in")
+    if(NOT WIN32)
+      find_package(ament_cmake_core QUIET REQUIRED)
+      ament_environment_hooks(
+        "${ament_cmake_export_libraries_DIR}/environment/library_path.sh.in")
     endif()
-    ament_environment_hooks(
-      "${ament_cmake_export_libraries_DIR}/environment/library_path${_ext}")
   endif()
 endmacro()
 
