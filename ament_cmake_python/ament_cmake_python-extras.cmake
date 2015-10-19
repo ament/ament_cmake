@@ -22,17 +22,25 @@ macro(_ament_cmake_python_register_environment_hook)
     _ament_cmake_python_get_python_install_dir()
 
     find_package(ament_cmake_core QUIET REQUIRED)
+
+    # backup variable
+    set(_PYTHON_INSTALL_DIR "${PYTHON_INSTALL_DIR}")
+    # use native separators in environment hook to match what pure Python packages do
+    file(TO_NATIVE_PATH "${PYTHON_INSTALL_DIR}" PYTHON_INSTALL_DIR)
     ament_environment_hooks(
       "${ament_cmake_package_templates_ENVIRONMENT_HOOK_PYTHONPATH}")
+    # restore variable
+    set(PYTHON_INSTALL_DIR "${_PYTHON_INSTALL_DIR}")
   endif()
 endmacro()
 
 macro(_ament_cmake_python_get_python_install_dir)
   if(NOT DEFINED PYTHON_INSTALL_DIR)
+    # avoid storing backslash in cached variable since CMake will interpret it as escape character
     set(_python_code
       "from distutils.sysconfig import get_python_lib"
-      "from os.path import relpath"
-      "print(relpath(get_python_lib(prefix='${CMAKE_INSTALL_PREFIX}'), start='${CMAKE_INSTALL_PREFIX}').replace('\\\\', '/'))"
+      "import os"
+      "print(os.path.relpath(get_python_lib(prefix='${CMAKE_INSTALL_PREFIX}'), start='${CMAKE_INSTALL_PREFIX}').replace(os.sep, '/'))"
     )
     execute_process(
       COMMAND
