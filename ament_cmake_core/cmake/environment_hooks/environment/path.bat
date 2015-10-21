@@ -1,31 +1,38 @@
 :: copied from ament_cmake_core/cmake/environment_hooks/environment/path.bat
+@echo off
 
 call:ament_prepend_unique_value PATH "%AMENT_CURRENT_PREFIX%\bin"
 
 goto:eof
 
-:: function to prepend non-duplicate values to environment variables
-:: using colons as separators and avoiding trailing separators
+
+:: Prepend non-duplicate values to environment variables
+:: using semicolons as separators and avoiding trailing separators.
+:: first argument: the name of the result variable
+:: second argument: the value
 :ament_prepend_unique_value
   setlocal enabledelayedexpansion
   :: arguments
-  set "_listname=%~1"
-  set "_value=%~2"
+  set "listname=%~1"
+  set "value=%~2"
   :: expand the list variable
-  set "_list=!%_listname%!"
+  set "list=!%listname%!"
   :: check if the list contains the value
-  set "_is_duplicate="
-  if "%_list%" NEQ "" (
-    for %%a in ("%_list:;=";"%") do (
-      if "%%~a" == "%_value%" set "_is_duplicate=1"
+  set "is_duplicate="
+  if "%list%" NEQ "" (
+    for %%v in ("%list:;=";"%") do (
+      if "%%~v" == "%value%" set "is_duplicate=1"
     )
   )
   :: if it is not a duplicate prepend it
-  if "%_is_duplicate%" == "" (
-    :: produces a trailing semicolon when the list empty, but that's ok
-    set "_list=%_value%;%_list%"
+  if "%is_duplicate%" == "" (
+    :: if not empty, prepend a semi-colon
+    if "!list!" NEQ "" set "list=;!list!"
+    :: prepend the value
+    set "list=%value%!list!"
   )
-  (endlocal
-    set "%~1=%_list%"
+  endlocal & (
+    :: set result variable in parent scope
+    set "%~1=%list%"
   )
 goto:eof
