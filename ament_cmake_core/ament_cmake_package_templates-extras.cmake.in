@@ -3,6 +3,8 @@
 set(ament_cmake_package_templates_TEMPLATE_DIR
   "@ament_cmake_package_templates_TEMPLATE_DIR@")
 
+set(ament_cmake_package_templates_ENVIRONMENT_HOOK_LIBRARY_PATH
+  "@ament_cmake_package_templates_ENVIRONMENT_HOOK_LIBRARY_PATH@")
 set(ament_cmake_package_templates_ENVIRONMENT_HOOK_PYTHONPATH
   "@ament_cmake_package_templates_ENVIRONMENT_HOOK_PYTHONPATH@")
 
