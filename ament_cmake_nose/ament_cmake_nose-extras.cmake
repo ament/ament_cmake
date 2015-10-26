@@ -29,7 +29,9 @@ macro(_ament_cmake_nose_find_nosetests)
       "nosetests-${PYTHON_VERSION_MAJOR}"
       "nosetests")
     if(NOSETESTS)
-      set(_cmd "${NOSETESTS}" "--version")
+      # if Python is located in a path containing spaces the shebang line of nosetests is invalid
+      # to avoid using the shebang line of nosetests the script is being invoked through Python
+      set(_cmd "${PYTHON_EXECUTABLE}" "${NOSETESTS}" "--version")
       execute_process(
         COMMAND ${_cmd}
         RESULT_VARIABLE _res
