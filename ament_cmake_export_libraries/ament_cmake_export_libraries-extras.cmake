@@ -23,7 +23,7 @@ macro(_ament_cmake_export_libraries_register_environment_hook)
     if(NOT WIN32)
       find_package(ament_cmake_core QUIET REQUIRED)
       ament_environment_hooks(
-        "${ament_cmake_export_libraries_DIR}/environment/library_path.sh.in")
+        "${ament_cmake_package_templates_ENVIRONMENT_HOOK_LIBRARY_PATH}")
     endif()
   endif()
 endmacro()
