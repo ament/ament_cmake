@@ -8,7 +8,7 @@ set(_@PROJECT_NAME@_CONFIG_INCLUDED TRUE)
 
 # output package information
 if(NOT @PROJECT_NAME@_FIND_QUIETLY)
-  message(" - Found @PROJECT_NAME@: @PACKAGE_VERSION@ (${@PROJECT_NAME@_DIR})")
+  message(STATUS "Found @PROJECT_NAME@: @PACKAGE_VERSION@ (${@PROJECT_NAME@_DIR})")
 endif()
 
 # warn when using a deprecated package

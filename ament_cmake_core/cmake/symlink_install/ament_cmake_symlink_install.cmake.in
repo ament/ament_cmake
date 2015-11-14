@@ -300,6 +300,6 @@ endfunction()
 
 # end of template
 
-message(" - Execute custom install script")
+message(STATUS "Execute custom install script")
 
 # begin of custom install code

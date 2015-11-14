@@ -55,6 +55,6 @@ endforeach()
 
 # end of template
 
-message(" - Execute custom uninstall script")
+message(STATUS "Execute custom uninstall script")
 
 # begin of custom uninstall code
