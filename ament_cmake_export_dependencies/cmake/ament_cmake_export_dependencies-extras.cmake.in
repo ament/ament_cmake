@@ -2,6 +2,8 @@
 
 set(_exported_dependencies "@_AMENT_CMAKE_EXPORT_DEPENDENCIES@")
 
+find_package(ament_cmake_libraries QUIET REQUIRED)
+
 # find_package() all dependencies
 # and append their DEFINITIONS INCLUDE_DIRS and LIBRARIES variables
 # to @PROJECT_NAME@_DEFINITIONS , @PROJECT_NAME@_INCLUDE_DIRS and
@@ -13,21 +15,26 @@ if(NOT "${_exported_dependencies} " STREQUAL " ")
   find_package(ament_cmake_core QUIET REQUIRED)
   set(@PROJECT_NAME@_DEPENDENCIES ${_exported_dependencies})
   set(@PROJECT_NAME@_RECURSIVE_DEPENDENCIES ${_exported_dependencies})
+  set(_libraries)
   foreach(_dep ${_exported_dependencies})
     if(NOT ${_dep}_FOUND)
       find_package("${_dep}" QUIET REQUIRED)
     endif()
     if(${_dep}_DEFINITIONS)
-      list(APPEND @PROJECT_NAME@_DEFINITIONS "${${_dep}_DEFINITIONS}")
+      list_append_unique(@PROJECT_NAME@_DEFINITIONS "${${_dep}_DEFINITIONS}")
     endif()
     if(${_dep}_INCLUDE_DIRS)
-      list(APPEND @PROJECT_NAME@_INCLUDE_DIRS "${${_dep}_INCLUDE_DIRS}")
+      list_append_unique(@PROJECT_NAME@_INCLUDE_DIRS "${${_dep}_INCLUDE_DIRS}")
     endif()
     if(${_dep}_LIBRARIES)
-      list(APPEND @PROJECT_NAME@_LIBRARIES "${${_dep}_LIBRARIES}")
+      list(APPEND _libraries "${${_dep}_LIBRARIES}")
     endif()
     if(${_dep}_RECURSIVE_DEPENDENCIES)
       list_append_unique(@PROJECT_NAME@_RECURSIVE_DEPENDENCIES "${${_dep}_RECURSIVE_DEPENDENCIES}")
+    endif()
+    if(_libraries)
+      ament_libraries_deduplicate(_libraries "${_libraries}")
+      list(APPEND @PROJECT_NAME@_LIBRARIES "${_libraries}")
     endif()
   endforeach()
 endif()
