@@ -151,36 +151,35 @@ def main(argv=sys.argv[1:]):
             with open(args.result_file, 'w') as h:
                 h.write(failure_result_file)
 
-        else:
-            log("-- run_test.py: verify result file '%s'" % args.result_file)
-            # if result file exists ensure that it contains valid xml
-            # unit test suites are not good about screening out
-            # illegal unicode characters
-            tree = None
-            try:
-                tree = ElementTree(None, args.result_file)
-            except ParseError as e:
-                modified = _tidy_xml(args.result_file)
-                if not modified:
-                    log("Invalid XML in result file '%s': %s" %
-                        (args.result_file, str(e)), file=sys.stderr)
-                else:
-                    try:
-                        tree = ElementTree(None, args.result_file)
-                    except ParseError as e:
-                        log("Invalid XML in result file '%s' (even after trying to tidy it): %s" %
-                            (args.result_file, str(e)), file=sys.stderr)
-
-            if not tree:
-                # set error code when result file is not parsable
-                rc = 1
+        log("-- run_test.py: verify result file '%s'" % args.result_file)
+        # if result file exists ensure that it contains valid xml
+        # unit test suites are not good about screening out
+        # illegal unicode characters
+        tree = None
+        try:
+            tree = ElementTree(None, args.result_file)
+        except ParseError as e:
+            modified = _tidy_xml(args.result_file)
+            if not modified:
+                log("Invalid XML in result file '%s': %s" %
+                    (args.result_file, str(e)), file=sys.stderr)
             else:
-                # set error code when result file contains errors or failures
-                root = tree.getroot()
-                num_errors = int(root.attrib.get('errors', 0))
-                num_failures = int(root.attrib.get('failures', 0))
-                if num_errors or num_failures:
-                    rc = 1
+                try:
+                    tree = ElementTree(None, args.result_file)
+                except ParseError as e:
+                    log("Invalid XML in result file '%s' (even after trying to tidy it): %s" %
+                        (args.result_file, str(e)), file=sys.stderr)
+
+        if not tree:
+            # set error code when result file is not parsable
+            rc = 1
+        else:
+            # set error code when result file contains errors or failures
+            root = tree.getroot()
+            num_errors = int(root.attrib.get('errors', 0))
+            num_failures = int(root.attrib.get('failures', 0))
+            if num_errors or num_failures:
+                rc = 1
 
     # ensure that a result file exists at the end
     if not rc and not os.path.exists(args.result_file):
