@@ -281,7 +281,7 @@ function(_ament_cmake_symlink_install_create_symlink absolute_file symlink)
   endif()
 
   message(STATUS "Symlinking: ${symlink}")
-  if(EXISTS "${symlink}")
+  if(EXISTS "${symlink}" OR IS_SYMLINK "${symlink}")
     file(REMOVE "${symlink}")
   endif()
 
