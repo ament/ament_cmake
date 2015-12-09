@@ -42,7 +42,7 @@ include(CMakeParseArguments)
 #
 function(ament_add_test testname)
   cmake_parse_arguments(ARG "GENERATE_RESULT_FOR_RETURN_CODE_ZERO"
-    "OUTPUT_FILE;RESULT_FILE;TIMEOUT;WORKING_DIRECTORY" "COMMAND" ${ARGN})
+    "ENV;OUTPUT_FILE;RESULT_FILE;TIMEOUT;WORKING_DIRECTORY" "COMMAND" ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "ament_add_test() called with unused arguments: "
       "${ARG_UNPARSED_ARGUMENTS}")
@@ -73,6 +73,9 @@ function(ament_add_test testname)
   endif()
   if(ARG_OUTPUT_FILE)
     list(APPEND cmd_wrapper "--output-file" "${ARG_OUTPUT_FILE}")
+  endif()
+  if(ARG_ENV)
+    list(APPEND cmd_wrapper "--env" "${ARG_ENV}")
   endif()
   list(APPEND cmd_wrapper "--command" ${ARG_COMMAND})
 
