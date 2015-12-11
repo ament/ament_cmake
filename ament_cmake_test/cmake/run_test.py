@@ -42,6 +42,10 @@ def main(argv=sys.argv[1:]):
              'It must be passed after other arguments since it collects all '
              'following options.')
     parser.add_argument(
+        '--env',
+        nargs='+',
+        help='Extra environment variables to set when running, e.g. FOO=foo BAR=bar')
+    parser.add_argument(
         '--output-file',
         help='The path to the output log file')
     parser.add_argument(
@@ -94,6 +98,20 @@ def main(argv=sys.argv[1:]):
             output_handle.write((msg + '\n').encode())
             output_handle.flush()
 
+    env = None
+    if args.env:
+        env = dict(os.environ)
+        log('-- run_test.py: extra environment variables:')
+        for env_str in args.env:
+            try:
+                index = env_str.index('=')
+            except ValueError:
+                parser.error("--env argument '%s' contains no equal sign", env_str)
+            key = env_str[0:index]
+            value = env_str[index + 1:]
+            log(' - {0}={1}'.format(key, value))
+            env[key] = value
+
     log("-- run_test.py: invoking following command in '%s':\n - %s" %
         (os.getcwd(), ' '.join(args.command)))
     if output_handle:
@@ -101,7 +119,10 @@ def main(argv=sys.argv[1:]):
         output_handle.flush()
 
     try:
-        proc = subprocess.Popen(args.command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        proc = subprocess.Popen(
+            args.command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+            env=env
+        )
         while True:
             line = proc.stdout.readline()
             if not line:
