@@ -44,7 +44,7 @@ def main(argv=sys.argv[1:]):
     parser.add_argument(
         '--env',
         nargs='+',
-        help='extra environment variables to set when running, e.g. FOO=foo BAR=bar')
+        help='Extra environment variables to set when running, e.g. FOO=foo BAR=bar')
     parser.add_argument(
         '--output-file',
         help='The path to the output log file')
@@ -98,16 +98,19 @@ def main(argv=sys.argv[1:]):
             output_handle.write((msg + '\n').encode())
             output_handle.flush()
 
-    extra_env = dict(os.environ)
+    env = None
     if args.env:
-        log("-- run_test.py: extra environment variables:")
-        for env in args.env:
-            split_env = env.split('=')
-            assert(len(split_env) >= 2)
-            key = split_env[0]
-            value = '='.join(split_env[1:])
-            log(" - {0}={1}".format(key, value))
-            extra_env[key] = value
+        env = dict(os.environ)
+        log('-- run_test.py: extra environment variables:')
+        for env_str in args.env:
+            try:
+                index = env_str.index('=')
+            except ValueError:
+                parser.error("--env argument '%s' contains no equal sign", env_str)
+            key = env_str[0:index]
+            value = env_str[index + 1:]
+            log(' - {0}={1}'.format(key, value))
+            env[key] = value
 
     log("-- run_test.py: invoking following command in '%s':\n - %s" %
         (os.getcwd(), ' '.join(args.command)))
@@ -118,7 +121,7 @@ def main(argv=sys.argv[1:]):
     try:
         proc = subprocess.Popen(
             args.command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-            env=extra_env
+            env=env
         )
         while True:
             line = proc.stdout.readline()
