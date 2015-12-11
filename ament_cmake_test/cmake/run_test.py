@@ -43,7 +43,8 @@ def main(argv=sys.argv[1:]):
              'following options.')
     parser.add_argument(
         '--env',
-        help='extra environment to set when running, in the format FOO=foo;BAR=bar')
+        nargs='+',
+        help='extra environment variables to set when running, e.g. FOO=foo BAR=bar')
     parser.add_argument(
         '--output-file',
         help='The path to the output log file')
@@ -100,8 +101,7 @@ def main(argv=sys.argv[1:]):
     extra_env = dict(os.environ)
     if args.env:
         log("-- run_test.py: extra environment variables:")
-        envs = args.env.split(';')
-        for env in envs:
+        for env in args.env:
             split_env = env.split('=')
             assert(len(split_env) >= 2)
             key = split_env[0]

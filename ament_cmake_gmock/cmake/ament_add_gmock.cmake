@@ -44,7 +44,7 @@ macro(ament_add_gmock target)
 endmacro()
 
 function(_ament_add_gmock target)
-  cmake_parse_arguments(ARG "SKIP_LINKING_MAIN_LIBRARIES" "TIMEOUT" "" ${ARGN})
+  cmake_parse_arguments(ARG "SKIP_LINKING_MAIN_LIBRARIES" "TIMEOUT" "ENV" ${ARGN})
   if(NOT ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR
       "ament_add_gmock() must be invoked with at least one source file")
@@ -71,6 +71,9 @@ function(_ament_add_gmock target)
   set(cmd
     "${executable}"
     "--gtest_output=xml:${result_file}")
+  if(ARG_ENV)
+    set(ARG_ENV "ENV" ${ARG_ENV})
+  endif()
   if(ARG_TIMEOUT)
     set(ARG_TIMEOUT "TIMEOUT" ${ARG_TIMEOUT})
   endif()
@@ -83,6 +86,7 @@ function(_ament_add_gmock target)
     COMMAND ${cmd}
     OUTPUT_FILE "${CMAKE_BINARY_DIR}/ament_cmake_gmock/${target}.txt"
     RESULT_FILE "${result_file}"
+    ${ARG_ENV}
     ${ARG_TIMEOUT}
     ${ARG_WORKING_DIRECTORY}
   )
