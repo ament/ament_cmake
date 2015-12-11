@@ -47,7 +47,7 @@ macro(ament_add_gtest target)
 endmacro()
 
 function(_ament_add_gtest target)
-  cmake_parse_arguments(ARG "SKIP_LINKING_MAIN_LIBRARIES" "TIMEOUT;ENV" "" ${ARGN})
+  cmake_parse_arguments(ARG "SKIP_LINKING_MAIN_LIBRARIES" "TIMEOUT" "ENV" ${ARGN})
   if(NOT ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR
       "ament_add_gtest() must be invoked with at least one source file")
@@ -74,6 +74,9 @@ function(_ament_add_gtest target)
   set(cmd
     "${executable}"
     "--gtest_output=xml:${result_file}")
+  if(ARG_ENV)
+    set(ARG_ENV "ENV" ${ARG_ENV})
+  endif()
   if(ARG_TIMEOUT)
     set(ARG_TIMEOUT "TIMEOUT" ${ARG_TIMEOUT})
   endif()
@@ -86,7 +89,7 @@ function(_ament_add_gtest target)
     COMMAND ${cmd}
     OUTPUT_FILE "${CMAKE_BINARY_DIR}/ament_cmake_gtest/${target}.txt"
     RESULT_FILE "${result_file}"
-    ENV ${ARG_ENV}
+    ${ARG_ENV}
     ${ARG_TIMEOUT}
     ${ARG_WORKING_DIRECTORY}
   )
