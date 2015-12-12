@@ -66,7 +66,7 @@ macro(_ament_package_xml dest_dir)
 
   # set default directory
   if(NOT PACKAGE_XML_DIRECTORY)
-    set(PACKAGE_XML_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+    set(PACKAGE_XML_DIRECTORY ${PROJECT_SOURCE_DIR})
   endif()
 
   # stamp package.xml as well as script to generate CMake code from it
