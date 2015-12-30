@@ -29,6 +29,16 @@ from xml.etree.ElementTree import ParseError
 from xml.sax.saxutils import quoteattr
 
 
+def separate_env_vars(env_str, env_argument_name):
+    try:
+        index = env_str.index('=')
+    except ValueError:
+        parser.error("--%s argument '%s' contains no equal sign", env_argument_name, env_str)
+    key = env_str[0:index]
+    value = env_str[index + 1:]
+    return key, value
+
+
 def main(argv=sys.argv[1:]):
     parser = argparse.ArgumentParser(
         description='Run the test command passed as an argument and ensures'
@@ -45,6 +55,10 @@ def main(argv=sys.argv[1:]):
         '--env',
         nargs='+',
         help='Extra environment variables to set when running, e.g. FOO=foo BAR=bar')
+    parser.add_argument(
+        '--append-env',
+        nargs='+',
+        help='Extra environment variables to append, or set, when running, e.g. FOO=foo BAR=bar')
     parser.add_argument(
         '--output-file',
         help='The path to the output log file')
@@ -99,18 +113,24 @@ def main(argv=sys.argv[1:]):
             output_handle.flush()
 
     env = None
-    if args.env:
+    if args.env or args.append_env:
         env = dict(os.environ)
-        log('-- run_test.py: extra environment variables:')
-        for env_str in args.env:
-            try:
-                index = env_str.index('=')
-            except ValueError:
-                parser.error("--env argument '%s' contains no equal sign", env_str)
-            key = env_str[0:index]
-            value = env_str[index + 1:]
-            log(' - {0}={1}'.format(key, value))
-            env[key] = value
+        if args.env:
+            log('-- run_test.py: extra environment variables:')
+            for env_str in args.env:
+                key, value = separate_env_vars(env_str, 'env')
+                log(' - {0}={1}'.format(key, value))
+                env[key] = value
+        if args.append_env:
+            log('-- run_test.py: extra environment variables to append:')
+            for env_str in args.append_env:
+                key, value = separate_env_vars(env_str, 'append-env')
+                log(' - {0}={1}'.format(key, value))
+                if key not in env:
+                    env[key] = ''
+                if not env[key].endswith(os.pathsep):
+                    env[key] += os.pathsep
+                env[key] += value
 
     log("-- run_test.py: invoking following command in '%s':\n - %s" %
         (os.getcwd(), ' '.join(args.command)))
