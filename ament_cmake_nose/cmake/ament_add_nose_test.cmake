@@ -25,6 +25,14 @@ include(CMakeParseArguments)
 # :type path: string
 # :param TIMEOUT: the test timeout in seconds, default: 60
 # :type TIMEOUT: integer
+# :param ENV: list of env vars to set; listed as ``VAR=value``
+# :type ENV: list of strings
+# :param APPEND_ENV: list of env vars to append if already set, otherwise set;
+#                    listed as ``VAR=value``
+# :type APPEND_ENV: list of strings
+# :param APPEND_LIBRARY_DIRS: list of library dirs to append to the appropriate
+#                             OS specific env var, a la LD_LIBRARY_PATH
+# :type APPEND_LIBRARY_DIRS: list of strings
 #
 # @public
 #
@@ -36,7 +44,11 @@ macro(ament_add_nose_test testname path)
 endmacro()
 
 function(_ament_add_nose_test testname path)
-  cmake_parse_arguments(ARG "" "TIMEOUT" "" ${ARGN})
+  cmake_parse_arguments(ARG
+    ""
+    "TIMEOUT"
+    "APPEND_ENV;APPEND_LIBRARY_DIRS;ENV"
+    ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "ament_add_nose_test() called with unused arguments: "
       "${ARG_UNPARSED_ARGUMENTS}")
@@ -61,6 +73,15 @@ function(_ament_add_nose_test testname path)
     endif()
   endif()
 
+  if(ARG_ENV)
+    set(ARG_ENV "ENV" ${ARG_ENV})
+  endif()
+  if(ARG_APPEND_ENV)
+    set(ARG_APPEND_ENV "APPEND_ENV" ${ARG_APPEND_ENV})
+  endif()
+  if(ARG_APPEND_LIBRARY_DIRS)
+    set(ARG_APPEND_LIBRARY_DIRS "APPEND_LIBRARY_DIRS" ${ARG_APPEND_LIBRARY_DIRS})
+  endif()
   if(ARG_TIMEOUT)
     set(ARG_TIMEOUT "TIMEOUT" "${ARG_TIMEOUT}")
   endif()
@@ -70,6 +91,9 @@ function(_ament_add_nose_test testname path)
     COMMAND ${cmd}
     OUTPUT_FILE "${CMAKE_BINARY_DIR}/ament_cmake_nose/${testname}.txt"
     RESULT_FILE "${result_file}"
+    ${ARG_ENV}
+    ${ARG_APPEND_ENV}
+    ${ARG_APPEND_LIBRARY_DIRS}
     ${ARG_TIMEOUT}
     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
   )

@@ -37,12 +37,23 @@ include(CMakeParseArguments)
 #   file when the command invocation returns with code zero
 #   command in, default: CMAKE_SOURCE_DIR
 # :type GENERATE_RESULT_FOR_RETURN_CODE_ZERO: option
+# :param ENV: list of env vars to set; listed as ``VAR=value``
+# :type ENV: list of strings
+# :param APPEND_ENV: list of env vars to append if already set, otherwise set;
+#                    listed as ``VAR=value``
+# :type APPEND_ENV: list of strings
+# :param APPEND_LIBRARY_DIRS: list of library dirs to append to the appropriate
+#                             OS specific env var, a la LD_LIBRARY_PATH
+# :type APPEND_LIBRARY_DIRS: list of strings
 #
 # @public
 #
 function(ament_add_test testname)
-  cmake_parse_arguments(ARG "GENERATE_RESULT_FOR_RETURN_CODE_ZERO"
-    "OUTPUT_FILE;RESULT_FILE;TIMEOUT;WORKING_DIRECTORY" "COMMAND;ENV" ${ARGN})
+  cmake_parse_arguments(ARG
+    "GENERATE_RESULT_FOR_RETURN_CODE_ZERO"
+    "OUTPUT_FILE;RESULT_FILE;TIMEOUT;WORKING_DIRECTORY"
+    "APPEND_ENV;APPEND_LIBRARY_DIRS;COMMAND;ENV"
+    ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "ament_add_test() called with unused arguments: "
       "${ARG_UNPARSED_ARGUMENTS}")
@@ -77,6 +88,26 @@ function(ament_add_test testname)
   if(ARG_ENV)
     list(APPEND cmd_wrapper "--env")
     foreach(_env ${ARG_ENV})
+      list(APPEND cmd_wrapper "${_env}")
+    endforeach()
+  endif()
+  if(ARG_APPEND_LIBRARY_DIRS)
+    if(WIN32)
+      set(_library_dirs_env_var PATH)
+    endif()
+    if(UNIX AND NOT APPLE)
+      set(_library_dirs_env_var LD_LIBRARY_PATH)
+    endif()
+    if(APPLE)
+      set(_library_dirs_env_var DYLD_LIBRARY_PATH)
+    endif()
+    foreach(_dir ${ARG_APPEND_LIBRARY_DIRS})
+      list(APPEND ARG_APPEND_ENV "${_library_dirs_env_var}=${_dir}")
+    endforeach()
+  endif()
+  if(ARG_APPEND_ENV)
+    list(APPEND cmd_wrapper "--append-env")
+    foreach(_env ${ARG_APPEND_ENV})
       list(APPEND cmd_wrapper "${_env}")
     endforeach()
   endif()

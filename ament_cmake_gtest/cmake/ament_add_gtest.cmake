@@ -36,6 +36,14 @@ include(CMakeParseArguments)
 # :param SKIP_LINKING_MAIN_LIBRARIES: if set skip linking against the gtest
 #   main libraries
 # :type SKIP_LINKING_MAIN_LIBRARIES: option
+# :param ENV: list of env vars to set; listed as ``VAR=value``
+# :type ENV: list of strings
+# :param APPEND_ENV: list of env vars to append if already set, otherwise set;
+#                    listed as ``VAR=value``
+# :type APPEND_ENV: list of strings
+# :param APPEND_LIBRARY_DIRS: list of library dirs to append to the appropriate
+#                             OS specific env var, a la LD_LIBRARY_PATH
+# :type APPEND_LIBRARY_DIRS: list of strings
 #
 # @public
 #
@@ -47,7 +55,11 @@ macro(ament_add_gtest target)
 endmacro()
 
 function(_ament_add_gtest target)
-  cmake_parse_arguments(ARG "SKIP_LINKING_MAIN_LIBRARIES" "TIMEOUT" "ENV" ${ARGN})
+  cmake_parse_arguments(ARG
+    "SKIP_LINKING_MAIN_LIBRARIES"
+    "TIMEOUT"
+    "APPEND_ENV;APPEND_LIBRARY_DIRS;ENV"
+    ${ARGN})
   if(NOT ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR
       "ament_add_gtest() must be invoked with at least one source file")
@@ -77,6 +89,12 @@ function(_ament_add_gtest target)
   if(ARG_ENV)
     set(ARG_ENV "ENV" ${ARG_ENV})
   endif()
+  if(ARG_APPEND_ENV)
+    set(ARG_APPEND_ENV "APPEND_ENV" ${ARG_APPEND_ENV})
+  endif()
+  if(ARG_APPEND_LIBRARY_DIRS)
+    set(ARG_APPEND_LIBRARY_DIRS "APPEND_LIBRARY_DIRS" ${ARG_APPEND_LIBRARY_DIRS})
+  endif()
   if(ARG_TIMEOUT)
     set(ARG_TIMEOUT "TIMEOUT" ${ARG_TIMEOUT})
   endif()
@@ -90,6 +108,8 @@ function(_ament_add_gtest target)
     OUTPUT_FILE "${CMAKE_BINARY_DIR}/ament_cmake_gtest/${target}.txt"
     RESULT_FILE "${result_file}"
     ${ARG_ENV}
+    ${ARG_APPEND_ENV}
+    ${ARG_APPEND_LIBRARY_DIRS}
     ${ARG_TIMEOUT}
     ${ARG_WORKING_DIRECTORY}
   )
