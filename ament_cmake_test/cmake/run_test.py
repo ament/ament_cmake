@@ -29,7 +29,7 @@ from xml.etree.ElementTree import ParseError
 from xml.sax.saxutils import quoteattr
 
 
-def separate_env_vars(env_str, env_argument_name):
+def separate_env_vars(env_str, env_argument_name, parser):
     try:
         index = env_str.index('=')
     except ValueError:
@@ -118,13 +118,13 @@ def main(argv=sys.argv[1:]):
         if args.env:
             log('-- run_test.py: extra environment variables:')
             for env_str in args.env:
-                key, value = separate_env_vars(env_str, 'env')
+                key, value = separate_env_vars(env_str, 'env', parser)
                 log(' - {0}={1}'.format(key, value))
                 env[key] = value
         if args.append_env:
             log('-- run_test.py: extra environment variables to append:')
             for env_str in args.append_env:
-                key, value = separate_env_vars(env_str, 'append-env')
+                key, value = separate_env_vars(env_str, 'append-env', parser)
                 log(' - {0}={1}'.format(key, value))
                 if key not in env:
                     env[key] = ''

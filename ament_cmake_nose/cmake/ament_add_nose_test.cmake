@@ -28,10 +28,10 @@ include(CMakeParseArguments)
 # :param ENV: list of env vars to set; listed as ``VAR=value``
 # :type ENV: list of strings
 # :param APPEND_ENV: list of env vars to append if already set, otherwise set;
-#                    listed as ``VAR=value``
+#   listed as ``VAR=value``
 # :type APPEND_ENV: list of strings
 # :param APPEND_LIBRARY_DIRS: list of library dirs to append to the appropriate
-#                             OS specific env var, a la LD_LIBRARY_PATH
+#   OS specific env var, a la LD_LIBRARY_PATH
 # :type APPEND_LIBRARY_DIRS: list of strings
 #
 # @public
