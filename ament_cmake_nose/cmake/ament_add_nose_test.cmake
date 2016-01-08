@@ -23,8 +23,12 @@ include(CMakeParseArguments)
 # :param path: the path to a file or folder where ``nosetests``
 #   should be invoked on
 # :type path: string
-# :param TIMEOUT: the test timeout in seconds, default: 60
+# :param TIMEOUT: the test timeout in seconds,
+#   default defined by ``ament_add_test()``
 # :type TIMEOUT: integer
+# :param WORKING_DIRECTORY: the working directory for invoking the
+#   command in, default defined by ``ament_add_test()``
+# :type WORKING_DIRECTORY: string
 # :param ENV: list of env vars to set; listed as ``VAR=value``
 # :type ENV: list of strings
 # :param APPEND_ENV: list of env vars to append if already set, otherwise set;
@@ -46,7 +50,7 @@ endmacro()
 function(_ament_add_nose_test testname path)
   cmake_parse_arguments(ARG
     ""
-    "TIMEOUT"
+    "TIMEOUT;WORKING_DIRECTORY"
     "APPEND_ENV;APPEND_LIBRARY_DIRS;ENV"
     ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
@@ -85,6 +89,9 @@ function(_ament_add_nose_test testname path)
   if(ARG_TIMEOUT)
     set(ARG_TIMEOUT "TIMEOUT" "${ARG_TIMEOUT}")
   endif()
+  if(ARG_WORKING_DIRECTORY)
+    set(ARG_WORKING_DIRECTORY "WORKING_DIRECTORY" "${ARG_WORKING_DIRECTORY}")
+  endif()
 
   ament_add_test(
     "${testname}"
@@ -95,7 +102,7 @@ function(_ament_add_nose_test testname path)
     ${ARG_APPEND_ENV}
     ${ARG_APPEND_LIBRARY_DIRS}
     ${ARG_TIMEOUT}
-    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+    ${ARG_WORKING_DIRECTORY}
   )
   set_tests_properties(
     "${testname}"
