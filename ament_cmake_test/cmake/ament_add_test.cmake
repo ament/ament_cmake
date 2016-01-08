@@ -73,7 +73,7 @@ function(ament_add_test testname)
       "valid number and greater than zero")
   endif()
   if(NOT ARG_WORKING_DIRECTORY)
-    set(WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
+    set(ARG_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
   endif()
 
   # wrap command with run_test script to ensure test result generation
