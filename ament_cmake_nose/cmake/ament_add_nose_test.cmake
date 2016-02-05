@@ -61,7 +61,9 @@ function(_ament_add_nose_test testname path)
   if(NOT IS_ABSOLUTE "${path}")
     set(path "${CMAKE_CURRENT_SOURCE_DIR}/${path}")
   endif()
-  if(NOT EXISTS "${path}")
+  # only check existence of path if it doesn't contain generator expressions
+  string(FIND "${path}" "$<" index)
+  if(index EQUAL -1 AND NOT EXISTS "${path}")
     message(FATAL_ERROR
       "ament_add_nose_test() the path '${path}' does not exist")
   endif()
