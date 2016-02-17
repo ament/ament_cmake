@@ -17,6 +17,9 @@
 #
 # :param module_file: the Python module file
 # :type MODULE_FILE: string
+# :param DESTINATION: the base package to install the module to, rooted on
+#   PYTHON_INSTALL_DIR (default: install as a top level module)
+# :type DESTINATION: string
 #
 macro(ament_python_install_module)
   _ament_cmake_python_register_environment_hook()
@@ -24,9 +27,10 @@ macro(ament_python_install_module)
 endmacro()
 
 function(_ament_cmake_python_install_module module_file)
-  if(ARGN)
-    message(FATAL_ERROR
-      "ament_python_install_module() called with unused arguments: ${ARGN}")
+  cmake_parse_arguments(ARG "" "DESTINATION" "" ${ARGN})
+  if(ARG_UNPARSED_ARGUMENTS)
+    message(FATAL_ERROR "ament_python_install_module() called with unused "
+      "arguments: ${ARG_UNPARSED_ARGUMENTS}")
   endif()
 
   if(NOT IS_ABSOLUTE "${module_file}")
@@ -41,19 +45,32 @@ function(_ament_cmake_python_install_module module_file)
     message(FATAL_ERROR "ament_python_install_module() variable "
       "'PYTHON_INSTALL_DIR' must not be empty")
   endif()
+
+  set(destination "")
+  set(module_name "")
+  get_filename_component(name "${module_file}" NAME_WE)
+
+  if(NOT ARG_DESTINATION)
+    set(destination "${PYTHON_INSTALL_DIR}")
+    set(module_name "${name}")
+  else()
+    set(destination "${PYTHON_INSTALL_DIR}/${ARG_DESTINATION}")
+    set(module_name "${ARG_DESTINATION}/${name}")
+  endif()
+
   install(
     FILES "${module_file}"
-    DESTINATION "${PYTHON_INSTALL_DIR}"
+    DESTINATION "${destination}"
   )
   # TODO optionally compile Python file
 
   get_filename_component(name "${module_file}" NAME_WE)
-  list(FIND AMENT_CMAKE_PYTHON_INSTALL_INSTALLED_NAMES "${name}" index)
+  list(FIND AMENT_CMAKE_PYTHON_INSTALL_INSTALLED_NAMES "${destination}" index)
   if(NOT index EQUAL -1)
     message(FATAL_ERROR "ament_python_install_module() a Python module file "
-      "or package with the same name '${name}' has been installed before")
+      "or package with the same name '${destination}' has been installed before")
   endif()
-  list(APPEND AMENT_CMAKE_PYTHON_INSTALL_INSTALLED_NAMES "${name}")
+  list(APPEND AMENT_CMAKE_PYTHON_INSTALL_INSTALLED_NAMES "${destination}")
   set(AMENT_CMAKE_PYTHON_INSTALL_INSTALLED_NAMES
     "${AMENT_CMAKE_PYTHON_INSTALL_INSTALLED_NAMES}" PARENT_SCOPE)
 endfunction()
