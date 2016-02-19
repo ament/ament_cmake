@@ -17,9 +17,9 @@
 #
 # :param module_file: the Python module file
 # :type MODULE_FILE: string
-# :param DESTINATION: the base package to install the module to, rooted on
-#   PYTHON_INSTALL_DIR (default: install as a top level module)
-# :type DESTINATION: string
+# :param DESTINATION_SUFFIX: the base package to install the module to
+#   (default: empty, install as a top level module)
+# :type DESTINATION_SUFFIX: string
 #
 macro(ament_python_install_module)
   _ament_cmake_python_register_environment_hook()
@@ -27,7 +27,7 @@ macro(ament_python_install_module)
 endmacro()
 
 function(_ament_cmake_python_install_module module_file)
-  cmake_parse_arguments(ARG "" "DESTINATION" "" ${ARGN})
+  cmake_parse_arguments(ARG "" "DESTINATION_SUFFIX" "" ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "ament_python_install_module() called with unused "
       "arguments: ${ARG_UNPARSED_ARGUMENTS}")
@@ -46,16 +46,9 @@ function(_ament_cmake_python_install_module module_file)
       "'PYTHON_INSTALL_DIR' must not be empty")
   endif()
 
-  set(destination "")
-  set(module_name "")
-  get_filename_component(name "${module_file}" NAME_WE)
-
-  if(NOT ARG_DESTINATION)
-    set(destination "${PYTHON_INSTALL_DIR}")
-    set(module_name "${name}")
-  else()
-    set(destination "${PYTHON_INSTALL_DIR}/${ARG_DESTINATION}")
-    set(module_name "${ARG_DESTINATION}/${name}")
+  set(destination "${PYTHON_INSTALL_DIR}")
+  if(ARG_DESTINATION_SUFFIX)
+    set(destination "${destination}/${ARG_DESTINATION_SUFFIX}")
   endif()
 
   install(
