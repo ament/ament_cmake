@@ -69,6 +69,19 @@ endif()
 if(DEFINED AMENT_ENABLE_TESTING AND AMENT_ENABLE_TESTING)
 endif()
 
+# Search packages for host system instead of packages for target system
+# in case of cross compilation these macro should be defined by toolchain file
+if(NOT COMMAND find_host_package)
+  macro(find_host_package)
+    find_package(${ARGN})
+  endmacro()
+endif()
+if(NOT COMMAND find_host_program)
+  macro(find_host_program)
+    find_program(${ARGN})
+  endmacro()
+endif()
+
 # include CMake functions
 include(CMakeParseArguments)
 

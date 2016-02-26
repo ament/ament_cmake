@@ -19,5 +19,5 @@ if(NOT PYTHON_VERSION)
   set(PYTHON_VERSION "3")
 endif()
 
-find_package(PythonInterp ${PYTHON_VERSION} REQUIRED)
+find_host_package(PythonInterp ${PYTHON_VERSION} REQUIRED)
 message(STATUS "Using PYTHON_EXECUTABLE: ${PYTHON_EXECUTABLE}")
