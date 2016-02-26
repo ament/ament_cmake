@@ -11,6 +11,7 @@ ament_export_dependencies(
   "ament_cmake_export_dependencies"
   "ament_cmake_export_include_directories"
   "ament_cmake_export_interfaces"
+  "ament_cmake_export_jars"
   "ament_cmake_export_libraries"
   "ament_cmake_libraries"
   "ament_cmake_python"
