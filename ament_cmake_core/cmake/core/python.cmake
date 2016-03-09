@@ -12,12 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set(PYTHON_VERSION "" CACHE STRING
-  "Specify specific Python version to use ('major.minor' or 'major')")
-# if not specified otherwise use Python 3
-if(NOT PYTHON_VERSION)
-  set(PYTHON_VERSION "3")
-endif()
+if("${PYTHON_HOST_EXECUTABLE} " STREQUAL " ")
+  set(PYTHON_VERSION "" CACHE STRING
+    "Specify specific Python version to use ('major.minor' or 'major')")
+  # if not specified otherwise use Python 3
+  if(NOT PYTHON_VERSION)
+    set(PYTHON_VERSION "3")
+  endif()
 
-find_package(PythonInterp ${PYTHON_VERSION} REQUIRED)
+  find_package(PythonInterp ${PYTHON_VERSION} REQUIRED)
+else()
+  set(PYTHON_EXECUTABLE "${PYTHON_HOST_EXECUTABLE}")
+endif()
 message(STATUS "Using PYTHON_EXECUTABLE: ${PYTHON_EXECUTABLE}")
