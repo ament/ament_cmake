@@ -19,7 +19,6 @@ import argparse
 import os
 import sys
 
-from ament_package.templates import TEMPLATE_DIRECTORY
 from ament_package.templates import get_environment_hook_template_path
 from ament_package.templates import get_package_level_template_names
 from ament_package.templates import get_package_level_template_path
@@ -69,7 +68,6 @@ def generate_cmake_code():
     :returns: list of str
     """
     variables = []
-    variables.append(('TEMPLATE_DIR', '"%s"' % TEMPLATE_DIRECTORY))
 
     if not IS_WINDOWS:
         variables.append((
