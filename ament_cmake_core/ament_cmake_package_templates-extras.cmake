@@ -21,7 +21,7 @@ endif()
 
 # stamp script to generate CMake code
 set(_generator
-  "${CMAKE_CURRENT_SOURCE_DIR}/cmake/package_templates/templates_2_cmake.py")
+  "${ament_cmake_core_DIR}/package_templates/templates_2_cmake.py")
 stamp("${_generator}")
 
 # invoke generator script
