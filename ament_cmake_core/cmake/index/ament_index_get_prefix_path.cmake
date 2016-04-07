@@ -17,16 +17,27 @@
 #
 # :param var: the output variable name for the prefix path
 # :type var: string
+# :param SKIP_AMENT_PREFIX_PATH: if set skip adding the paths from the
+#   environment variable ``AMENT_PREFIX_PATH``
+# :type SKIP_AMENT_PREFIX_PATH: option
+# :param SKIP_BINARY_DIR: if set skip adding the folder within the binary dir
+# :type SKIP_BINARY_DIR: option
 #
 # @public
 #
 function(ament_index_get_prefix_path var)
-  if(NOT "${ARGN} " STREQUAL " ")
+  cmake_parse_arguments(ARG
+    "SKIP_AMENT_PREFIX_PATH;SKIP_BINARY_DIR" "" "" ${ARGN})
+  if(ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "ament_index_get_prefix_path() called with unused "
-      "arguments: ${ARGN}")
+      "arguments: ${ARG_UNPARSED_ARGUMENTS}")
   endif()
 
-  string(REPLACE ":" ";" prefix_path "$ENV{AMENT_PREFIX_PATH}")
+  if(NOT ARG_SKIP_AMENT_PREFIX_PATH)
+    string(REPLACE ":" ";" prefix_path "$ENV{AMENT_PREFIX_PATH}")
+  else()
+    set(prefix_path "")
+  endif()
 
   # Remove CMAKE_INSTALL_PREFIX if it is in the list of paths to search,
   # and add it to the list at the front
@@ -34,8 +45,10 @@ function(ament_index_get_prefix_path var)
   list(REMOVE_ITEM prefix_path "${CMAKE_INSTALL_PREFIX}")
   list(INSERT prefix_path 0 "${CMAKE_INSTALL_PREFIX}")
 
-  # prepend path from binary dir
-  list(INSERT prefix_path 0 "${CMAKE_BINARY_DIR}/ament_cmake_index")
+  if(NOT ARG_SKIP_BINARY_DIR)
+    # prepend path from binary dir
+    list(INSERT prefix_path 0 "${CMAKE_BINARY_DIR}/ament_cmake_index")
+  endif()
 
   set(${var} "${prefix_path}" PARENT_SCOPE)
 endfunction()
