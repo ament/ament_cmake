@@ -33,11 +33,7 @@ function(ament_index_get_resources var resource_type)
       "arguments: ${ARGN}")
   endif()
 
-  set(raw_paths_to_search "$ENV{AMENT_PREFIX_PATH}")
-  if(NOT WIN32)
-    # convert the path separator to CMake list separators
-    string(REPLACE ":" ";" raw_paths_to_search "${raw_paths_to_search}")
-  endif()
+  ament_index_get_prefix_path(raw_paths_to_search)
   # Remove any empty strings and make sure slashes are consistent
   set(paths_to_search)
   foreach(path IN LISTS raw_paths_to_search)
@@ -46,10 +42,6 @@ function(ament_index_get_resources var resource_type)
       list_append_unique(paths_to_search "${normalized_path}")
     endif()
   endforeach()
-  # Remove CMAKE_INSTALL_PREFIX if it is in the list of paths to search,
-  # and add it to the list at the front
-  list(REMOVE_ITEM paths_to_search "${CMAKE_INSTALL_PREFIX}")
-  list(INSERT paths_to_search 0 "${CMAKE_INSTALL_PREFIX}")
   set(all_resources "")
   foreach(path IN LISTS paths_to_search)
     file(GLOB resources

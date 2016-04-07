@@ -40,11 +40,7 @@ function(ament_index_get_resource var resource_type resource_name)
       "arguments: ${ARGN}")
   endif()
 
-  string(REPLACE ":" ";" paths_to_search "$ENV{AMENT_PREFIX_PATH}")
-  # Remove CMAKE_INSTALL_PREFIX if it is in the list of paths to search,
-  # and add it to the list at the front
-  list(REMOVE_ITEM paths_to_search "${CMAKE_INSTALL_PREFIX}")
-  list(INSERT paths_to_search 0 "${CMAKE_INSTALL_PREFIX}")
+  ament_index_get_prefix_path(paths_to_search)
   foreach(path IN LISTS paths_to_search)
     set(filename
       "${path}/share/ament_index/resource_index/${resource_type}/${resource_name}")
