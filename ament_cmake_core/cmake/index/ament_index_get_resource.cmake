@@ -22,6 +22,9 @@
 # :type resource_type: string
 # :param resource_name: the name of the resource
 # :type resource_name: string
+# :param PREFIX_PATH: the prefix path to search for (default
+#   ``ament_index_get_prefix_path()``).
+# :type PREFIX_PATH: list of strings
 #
 # @public
 #
@@ -35,13 +38,19 @@ function(ament_index_get_resource var resource_type resource_name)
       "ament_index_get_resource() called without a 'resource_name'")
   endif()
 
-  if(NOT "${ARGN} " STREQUAL " ")
+  cmake_parse_arguments(ARG "" "PREFIX_PATH" "" ${ARGN})
+  if(ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "ament_index_get_resource() called with unused "
-      "arguments: ${ARGN}")
+      "arguments: ${ARG_UNPARSED_ARGUMENTS}")
   endif()
 
-  ament_index_get_prefix_path(paths_to_search)
-  foreach(path IN LISTS paths_to_search)
+  if(ARG_PREFIX_PATH)
+    set(prefix_path "${ARG_PREFIX_PATH}")
+  else()
+    ament_index_get_prefix_path(prefix_path)
+  endif()
+
+  foreach(path IN LISTS prefix_path)
     set(filename
       "${path}/share/ament_index/resource_index/${resource_type}/${resource_name}")
     if(EXISTS "${filename}")

@@ -19,6 +19,9 @@
 # :type var: list of resource names
 # :param resource_type: the type of the resource
 # :type resource_type: string
+# :param PREFIX_PATH: the prefix path to search for (default
+#   ``ament_index_get_prefix_path()``).
+# :type PREFIX_PATH: list of strings
 #
 # @public
 #
@@ -28,15 +31,21 @@ function(ament_index_get_resources var resource_type)
       "ament_index_get_resources() called without a 'resource_type'")
   endif()
 
-  if(NOT "${ARGN} " STREQUAL " ")
+  cmake_parse_arguments(ARG "" "PREFIX_PATH" "" ${ARGN})
+  if(ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "ament_index_get_resources() called with unused "
-      "arguments: ${ARGN}")
+      "arguments: ${ARG_UNPARSED_ARGUMENTS}")
   endif()
 
-  ament_index_get_prefix_path(raw_paths_to_search)
+  if(ARG_PREFIX_PATH)
+    set(prefix_path "${ARG_PREFIX_PATH}")
+  else()
+    ament_index_get_prefix_path(prefix_path)
+  endif()
+
   # Remove any empty strings and make sure slashes are consistent
   set(paths_to_search)
-  foreach(path IN LISTS raw_paths_to_search)
+  foreach(path IN LISTS prefix_path)
     if(NOT "${path} " STREQUAL " ")
       string(REPLACE "\\" "/" normalized_path "${path}")
       list_append_unique(paths_to_search "${normalized_path}")
