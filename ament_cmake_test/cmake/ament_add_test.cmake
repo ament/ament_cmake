@@ -88,6 +88,15 @@ function(ament_add_test testname)
   if(ARG_ENV)
     list(APPEND cmd_wrapper "--env")
     foreach(_env ${ARG_ENV})
+      # TODO(wjwwood): remove this when we have a better way to pass PATH lists
+      #   to environment variables on Windows.
+      if(WIN32)
+        # In order to pass a ;-separated list of paths into this function on
+        # Windows, the calling code may have had to replace ;'s to avoid it
+        # them from being interpreted as a CMake list, so undo that
+        # substitution here.
+        string(REPLACE "\;" ";" _env "${_env}")
+      endif()
       list(APPEND cmd_wrapper "${_env}")
     endforeach()
   endif()
@@ -108,6 +117,15 @@ function(ament_add_test testname)
   if(ARG_APPEND_ENV)
     list(APPEND cmd_wrapper "--append-env")
     foreach(_env ${ARG_APPEND_ENV})
+      # TODO(wjwwood): remove this when we have a better way to pass PATH lists
+      #   to environment variables on Windows.
+      if(WIN32)
+        # In order to pass a ;-separated list of paths into this function on
+        # Windows, the calling code may have had to replace ;'s to avoid it
+        # them from being interpreted as a CMake list, so undo that
+        # substitution here.
+        string(REPLACE "\;" ";" _env "${_env}")
+      endif()
       list(APPEND cmd_wrapper "${_env}")
     endforeach()
   endif()
