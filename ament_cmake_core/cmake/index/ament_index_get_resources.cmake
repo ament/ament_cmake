@@ -52,10 +52,19 @@ function(ament_index_get_resources var resource_type)
   list(INSERT paths_to_search 0 "${CMAKE_INSTALL_PREFIX}")
   set(all_resources "")
   foreach(path IN LISTS paths_to_search)
+    set(resource_index_path "${path}/share/ament_index/resource_index")
+    # TODO use LIST_DIRECTORIES false in GLOB call when available in CMake 3.5
     file(GLOB resources
-      RELATIVE "${path}/share/ament_index/resource_index/${resource_type}"
-      "${path}/share/ament_index/resource_index/${resource_type}/*")
-    list_append_unique(all_resources ${resources})
+      RELATIVE "${resource_index_path}/${resource_type}"
+      "${resource_index_path}/${resource_type}/*")
+    foreach(resource IN LISTS resources)
+      string(SUBSTRING "${resource}" 0 1 resource_char0)
+      # Ignore all subdirectories, and any files starting with a dot
+      if((NOT IS_DIRECTORY "${resource_index_path}/${resource_type}/${resource}") 
+        AND (NOT "${resource_char0} " STREQUAL ". "))
+        list_append_unique(all_resources ${resource})
+      endif()
+    endforeach()
   endforeach()
   set(${var} "${all_resources}" PARENT_SCOPE)
 endfunction()
