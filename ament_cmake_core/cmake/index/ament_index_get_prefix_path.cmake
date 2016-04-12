@@ -34,7 +34,12 @@ function(ament_index_get_prefix_path var)
   endif()
 
   if(NOT ARG_SKIP_AMENT_PREFIX_PATH)
-    string(REPLACE ":" ";" prefix_path "$ENV{AMENT_PREFIX_PATH}")
+    set(prefix_path $ENV{AMENT_PREFIX_PATH})
+    if(NOT WIN32)
+      # Convert it to a list if not on Windows.
+      # On Windows, it is already separated by ; and is a list in CMake.
+      string(REPLACE ":" ";" prefix_path "${prefix_path}")
+    endif()
   else()
     set(prefix_path "")
   endif()
