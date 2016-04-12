@@ -73,7 +73,7 @@ function(ament_index_register_resource resource_type)
 
   set(destination "share/ament_index/resource_index/${resource_type}")
   set(marker_file
-    "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_index/${resource_type}/${ARG_PACKAGE_NAME}")
+    "${CMAKE_BINARY_DIR}/ament_cmake_index/${destination}/${ARG_PACKAGE_NAME}")
 
   if(ARG_CONTENT OR NOT ARG_CONTENT_FILE)
     # use the CONTENT argument to create the marker file
