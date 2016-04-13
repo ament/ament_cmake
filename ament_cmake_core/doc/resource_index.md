@@ -49,7 +49,7 @@ We'll call this the "resource index".
 In this "resource index" is a file system structure which is setup as a set of folders, each of which represent a "resource type".
 In each of those "resource type" folders every package which provides a resource of that type can install a file named for the package, called a "marker file".
 
-Lets look at an example.
+Let's look at an example.
 The simplest case is that each package (`foo`, `bar`, and `baz`) should register that it is installed. That would look like this:
 
 ```
@@ -95,7 +95,7 @@ return os.listdir(os.path.join(prefix, 'share', 'ament_index', 'resource_index',
 ```
 
 Currently in ROS, this requires that all packages are discovered first and then each manifest file for each package must be parsed (`package.xml` or `manifest.xml`) and then for each package zero to many `plugin.xml` files must be parsed.
-For this example system, the `package.xml` file and `plugin.xml` files may still need to be parsed, but instead of discovering all packages, and parsing all `package.xml`'s this system can already narrow down the package's which need to be considered.
+For this example system, the `package.xml` file and `plugin.xml` files may still need to be parsed, but instead of discovering all packages, and parsing all `package.xml` files this system can already narrow down the packages which need to be considered.
 In the above example that only saves us from parsing two out of three packages, but in the presence of hundreds of packages, this could be parsing one or two package manifests versus parsing hundreds.
 It also prevents us from parsing additional, unrelated, `plugin.xml` files, so the win for this type of system with respect to plugin discovery is potentially huge.
 For other resources, the speed up at this point is probably minimal, but other examples might include "Which packages have defined message files?" or "Which packages have launch files?".
@@ -121,7 +121,7 @@ Then consider the possible answers to the query "List the location of rviz plugi
 ['/usr/share/foo/plugin.xml']  # This is bad!
 ```
 
-Where possible the implementation should give the user the option to get multiple response to a question if multiple locations are available, but when the user is asking for one answer, then the first matched prefix, according to the prefix path ordering, should be returned.
+Where possible the implementation should give the user the option to get multiple responses to a question if multiple locations are available, but when the user is asking for one answer, then the first matched prefix, according to the prefix path ordering, should be returned.
 Note that when returning the multiple results, that they should be organized by package so that it is clear that they are overlaying each other.
 Also note that when returning multiple results the prefix based ordering should be preserved.
 Other data structures are possible, but in any case make sure that overlaid results are not presented as peers and that prefix based ordering is preserved in all cases.
@@ -144,7 +144,7 @@ Spaces in the resource type names are allowed, but underscores should be preferr
 
 The contents of these files will remain unspecified, but may be used by other systems which utilize this convention to make them more efficient.
 
-Consider the plugin example, for each marker file discovered, you must parse a `package.xml` to get the location of one or more `plugin.xml` files and then parse them.
+Consider the plugin example, for each marker file discovered, you must parse a `package.xml` file to get the location of one or more `plugin.xml` files and then parse them.
 You could conceivably put the locations of the those `plugin.xml` files into the marker files to prevent the need for parsing the `package.xml` at runtime, potentially saving you some time.
 The nice thing about this is that if you don't want to parse the marker file, then you can still parse the `package.xml` file and find the `plugin.xml` files that way.
 This is a good model to follow, feel free to optimize by placing domain specific information into the marker files, but you should avoid making it required to get the information.
@@ -154,7 +154,7 @@ Implementations should consider that spaces are allowed in marker file names, bu
 ### Integration with Other Systems
 
 You should strive to avoid having other systems depend on this system.
-By that I mean that rather than describing your plugins in the marker file you place in the resource index, have the existence of that marker file imply the existence of another file in the share folder for your package.
+That is to say, rather than describing your plugins in the marker file you place in the resource index, have the existence of that marker file imply the existence of another file in the share folder for your package.
 To make that concrete you could do this:
 
 ```
@@ -173,7 +173,7 @@ To make that concrete you could do this:
                     `-- foo  # Contains XML describing the rqt plugin
 ```
 
-But in that case if I just look at the share folder for `foo` and don't have knowledge of this system, then I don't see that you have any plugins.
+But in that case if someone just looks at the share folder for `foo` and doesn't have knowledge of this system, then they don't see that you have any plugins.
 Instead you should do it like this:
 
 ```
@@ -194,7 +194,7 @@ Instead you should do it like this:
                     `-- foo  # Contains nothing, or the relative path `../../../foo/rqt_plugins.xml`
 ```
 
-That way your package has all it's required information in its `share` folder and the files in `share/ament_index/resource_index` are simply used as an optimization.
+That way your package has all its required information in its `share` folder and the files in `share/ament_index/resource_index` are simply used as an optimization.
 
 While there are no restrictions about content or format of the marker files, you should try to keep them simple.
 
@@ -234,7 +234,7 @@ Querying the resource index should be relatively simple, only requiring the list
 Optionally, the marker files can have information in the content, but at most an implementation of this would only need to return the content of this file and at least just return the path to the file.
 
 There are some obvious queries which any implementation should provide.
-First consider this function (I'll use Python as a demonstration since it is simple):
+First consider this function (in Python as a demonstration since it is simple):
 
 ```python
 def list_prefix_of_packages_by_resource(resource_type, prefixes):
@@ -311,7 +311,7 @@ def list_all_prefixes_of_packages(prefixes):
     return list_all_prefixes_of_packages_by_resource('packages', prefixes)
 ```
 
-Additionally, functions which find the prefix(es) for a particular package is probably useful:
+Additionally, functions which find the prefix(es) for a particular package are probably useful:
 
 ```python
 def get_prefix_for_package(package_name, prefixes):
@@ -326,10 +326,10 @@ These functions should have some error state (raise or throw or return None/NULL
 ### Locating Resources
 
 This project does not aim to index all resources for every package, but simply index meta information about what kinds of resources packages have, in order to narrow down searches and prevent recursive crawling.
-So, if you wanted to locate a particular file, lets say a particular launch for a given package, then you would need to know where that file is installed to, with respect to the install prefix.
+So, if you wanted to locate a particular file, let's say a particular launch for a given package, then you would need to know where that file is installed to, with respect to the install prefix.
 In this case, this project is only useful in finding which prefix to find it in.
 So first, you would find which prefix the given package is in by calling the `get_prefix_for_package` function and from there you can append the FHS defined folders like `bin`, `lib`, `share/<package name>`, etc...
-Lets say you know that the launch file is in the `share/<package name>` folder because it is not architecture specific and further more that it is in the `launch` folder in the `share/<package name>` folder and finally that the name of the launch file is `demo.launch`.
+Let's say you know that the launch file is in the `share/<package name>` folder because it is not architecture specific and furthermore that it is in the `launch` folder in the `share/<package name>` folder and finally that the name of the launch file is `demo.launch`.
 From that information, and the prefix you got from `get_prefix_for_package`, you can construct the path to the launch file.
 
 Let's take another example, you are looking for the location of a shared library for a particular plugin, called `llama_display` of resource type `plugin.rviz.display`, so that you can call `dlopen` on it, but you don't know which package it is (weird case, but instructional):
