@@ -130,6 +130,7 @@ Other data structures are possible, but in any case make sure that overlaid resu
 
 Resource types are represented as folders in the resource index and should be shallow, i.e. there should only be marker files within the resource type folders.
 This means that there is no nesting of resource types, which keeps the file system flat, and makes answering "What resource types are in this `<prefix>`?" as easy as simply listing the directories in the resource index folder.
+Any folders within the resource type folders, and any folders/files starting with a dot (`.`), should be ignored while listing the directories in the resource index folder.
 Instead of nesting resource type folders, the convention of using prefixes and suffixes separated by periods should be used.
 
 Resource type names should be agreed on a priori by the packages utilizing them.
