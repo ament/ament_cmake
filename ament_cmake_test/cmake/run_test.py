@@ -33,7 +33,7 @@ def separate_env_vars(env_str, env_argument_name, parser):
     try:
         index = env_str.index('=')
     except ValueError:
-        parser.error("--%s argument '%s' contains no equal sign", env_argument_name, env_str)
+        parser.error("--%s argument '%s' contains no equal sign" % (env_argument_name, env_str))
     key = env_str[0:index]
     value = env_str[index + 1:]
     return key, value
