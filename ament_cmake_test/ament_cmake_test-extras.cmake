@@ -14,16 +14,15 @@
 
 # copied from ament_cmake_test/ament_cmake_test-extras.cmake
 
-# register environment hook for libraries once
-option(AMENT_ENABLE_TESTING "Enable testing" OFF)
+include(CTest)
+
 # option()
 set(
   AMENT_TEST_RESULTS_DIR "${CMAKE_BINARY_DIR}/test_results"
   CACHE STRING "The path where test results are generated"
 )
 
-if(AMENT_ENABLE_TESTING)
-  enable_testing()
+if(BUILD_TESTING)
   # configure ctest not to truncate the dashboard summary
   file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/CTestCustom.ctest"
     "set(CTEST_CUSTOM_MAXIMUM_PASSED_TEST_OUTPUT_SIZE 0)\n"
