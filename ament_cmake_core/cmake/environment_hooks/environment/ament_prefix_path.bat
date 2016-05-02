@@ -1,5 +1,5 @@
 :: copied from
-:: ament_cmake_core/cmake/environment_hooks/environment/ament_prefix_path.sh
+:: ament_cmake_core/cmake/environment_hooks/environment/ament_prefix_path.bat
 @echo off
 
 call:ament_prepend_unique_value AMENT_PREFIX_PATH "%AMENT_CURRENT_PREFIX%"
