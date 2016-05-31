@@ -69,6 +69,15 @@ function(_ament_add_nose_test testname path)
   endif()
 
   set(result_file "${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/${testname}.xunit.xml")
+  # Invoke ${NOSETESTS} explicitly with the ${PYTHON_EXECUTABLE} because on
+  # some systems, like OS X, the ${NOSETESTS} binay may have a #! which points
+  # to the Python2 on the system, rather than the Python3 which is what we want
+  # most of the time.
+  # This "misalignment" can occur when you do `pip install -U nose` after doing
+  # `pip3 install -U nose` because both install the `nose` binary.
+  # Basically the last Python system to install nose will determine what the
+  # ${NOSETESTS} executable references.
+  # See: https://github.com/ament/ament_cmake/pull/70
   set(cmd
     "${PYTHON_EXECUTABLE}" "${NOSETESTS}" "${path}" "--with-xunit"
     "--xunit-file=${result_file}")
