@@ -18,7 +18,8 @@
 #
 # Each package name must have been find_package()-ed before.
 # Additionally the exported variables must have a prefix with the same case
-# and the suffixes must be _DEFINITIONS, _INCLUDE_DIRS and _LIBRARIES.
+# and the suffixes must be _DEFINITIONS, _INCLUDE_DIRS, _LIBRARIES, and
+# _LINK_FLAGS.
 #
 # :param target: the target name
 # :type target: string
@@ -35,6 +36,7 @@ function(ament_target_dependencies target)
     set(definitions "")
     set(include_dirs "")
     set(libraries "")
+    set(link_flags "")
     foreach(package_name ${ARGN})
       if(NOT ${${package_name}_FOUND})
         message(FATAL_ERROR "ament_target_dependencies() the passed package name '${package_name}' was not found before")
@@ -42,6 +44,7 @@ function(ament_target_dependencies target)
       list_append_unique(definitions ${${package_name}_DEFINITIONS})
       list_append_unique(include_dirs ${${package_name}_INCLUDE_DIRS})
       list(APPEND libraries ${${package_name}_LIBRARIES})
+      list_append_unique(link_flags ${${package_name}_LINK_FLAGS})
     endforeach()
     target_compile_definitions(${target}
       PUBLIC ${definitions})
@@ -51,5 +54,8 @@ function(ament_target_dependencies target)
     ament_libraries_deduplicate(unique_libraries ${libraries})
     target_link_libraries(${target}
       ${unique_libraries})
+    foreach(link_flag IN LISTS link_flags)
+      set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS " ${link_flag} ")
+    endforeach()
   endif()
 endfunction()
