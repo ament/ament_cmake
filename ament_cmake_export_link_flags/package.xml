@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>ament_cmake_export_definitions</name>
+  <name>ament_cmake_export_link_flags</name>
   <version>0.0.0</version>
-  <description>The ability to export definitions to downstream packages in the ament buildsystem.</description>
+  <description>The ability to export link flags to downstream packages in the ament buildsystem.</description>
   <maintainer email="dthomas@osrfoundation.org">Dirk Thomas</maintainer>
   <license>Apache License 2.0</license>
 
