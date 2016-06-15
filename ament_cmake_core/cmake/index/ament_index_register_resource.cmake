@@ -35,7 +35,7 @@ include(CMakeParseArguments)
 # @public
 #
 function(ament_index_register_resource resource_type)
-  if("${resource_type} " STREQUAL " ")
+  if(resource_type STREQUAL "")
     message(FATAL_ERROR
       "ament_index_register_resource() called without a 'resource_type'")
   endif()
@@ -51,7 +51,7 @@ function(ament_index_register_resource resource_type)
       "'CONTENT' and 'CONTENT_FILE', only one is allowed")
   endif()
 
-  if("${ARG_PACKAGE_NAME} " STREQUAL " ")
+  if(NOT ARG_PACKAGE_NAME)
     set(ARG_PACKAGE_NAME "${PROJECT_NAME}")
   endif()
 

@@ -28,11 +28,11 @@
 # @public
 #
 function(ament_index_has_resource var resource_type resource_name)
-  if("${resource_type} " STREQUAL " ")
+  if(resource_type STREQUAL "")
     message(FATAL_ERROR
       "ament_index_has_resource() called without a 'resource_type'")
   endif()
-  if("${resource_name} " STREQUAL " ")
+  if(resource_name STREQUAL "")
     message(FATAL_ERROR
       "ament_index_has_resource() called without a 'resource_name'")
   endif()

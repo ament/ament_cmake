@@ -74,7 +74,7 @@ macro(ament_auto_add_executable target)
       "${CMAKE_CURRENT_SOURCE_DIR}/include")
   endif()
   # link against other libraries of this package
-  if(NOT "${${PROJECT_NAME}_LIBRARIES} " STREQUAL " " AND
+  if(NOT ${PROJECT_NAME}_LIBRARIES STREQUAL "" AND
       NOT ARG_NO_TARGET_LINK_LIBRARIES)
     target_link_libraries("${target}" ${${PROJECT_NAME}_LIBRARIES})
   endif()
