@@ -20,7 +20,7 @@
 # :type ARGN: various
 #
 function(ament_cmake_symlink_install_directory directory_keyword)
-  if(NOT "${directory_keyword} " STREQUAL "DIRECTORY ")
+  if(NOT directory_keyword STREQUAL "DIRECTORY")
     message(FATAL_ERROR "ament_cmake_symlink_install_directory() first "
       "argument must be 'DIRECTORY', not '${directory_keyword}'")
   endif()
@@ -52,11 +52,11 @@ function(ament_cmake_symlink_install_directory directory_keyword)
     set(i 0)
     while(i LESS length)
       list(GET argn ${i} arg)
-      if("${arg}" STREQUAL "PATTERN")
+      if(arg STREQUAL "PATTERN")
         math(EXPR j "${i} + 2")
         if(j LESS length)
           list(GET argn ${j} arg)
-          if("${arg}" STREQUAL "EXCLUDE")
+          if(arg STREQUAL "EXCLUDE")
             # replace "PATTERN" with "PATTERN_EXCLUDE"
             list(REMOVE_AT argn ${i})
             list(INSERT argn ${i} "PATTERN_EXCLUDE")

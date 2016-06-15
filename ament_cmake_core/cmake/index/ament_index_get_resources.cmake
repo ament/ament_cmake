@@ -26,7 +26,7 @@
 # @public
 #
 function(ament_index_get_resources var resource_type)
-  if("${resource_type} " STREQUAL " ")
+  if(resource_type STREQUAL "")
     message(FATAL_ERROR
       "ament_index_get_resources() called without a 'resource_type'")
   endif()
@@ -46,7 +46,7 @@ function(ament_index_get_resources var resource_type)
   # Remove any empty strings and make sure slashes are consistent
   set(paths_to_search)
   foreach(path IN LISTS prefix_path)
-    if(NOT "${path} " STREQUAL " ")
+    if(NOT path STREQUAL "")
       string(REPLACE "\\" "/" normalized_path "${path}")
       list_append_unique(paths_to_search "${normalized_path}")
     endif()
@@ -62,7 +62,7 @@ function(ament_index_get_resources var resource_type)
       string(SUBSTRING "${resource}" 0 1 resource_char0)
       # Ignore all subdirectories, and any files starting with a dot
       if((NOT IS_DIRECTORY "${resource_index_path}/${resource_type}/${resource}") 
-        AND (NOT "${resource_char0} " STREQUAL ". "))
+        AND (NOT resource_char0 STREQUAL "."))
         list_append_unique(all_resources ${resource})
       endif()
     endforeach()

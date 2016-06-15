@@ -4,7 +4,7 @@ set(_exported_include_dirs "@_AMENT_CMAKE_EXPORT_INCLUDE_DIRECTORIES@")
 
 # append include directories to @PROJECT_NAME@_INCLUDE_DIRS
 # warn about not existing paths
-if(NOT "${_exported_include_dirs} " STREQUAL " ")
+if(NOT _exported_include_dirs STREQUAL "")
   find_package(ament_cmake_core QUIET REQUIRED)
   foreach(_exported_include_dir ${_exported_include_dirs})
     if(NOT IS_DIRECTORY "${_exported_include_dir}")

@@ -29,7 +29,7 @@ macro(_ament_cmake_gmock_find_gmock)
       set(_search_path_src "")
 
       # option() consider environment variable to find gmock
-      if(NOT "$ENV{GMOCK_DIR} " STREQUAL " ")
+      if(NOT $ENV{GMOCK_DIR} STREQUAL "")
         list(APPEND _search_path_include "$ENV{GMOCK_DIR}/include/gmock")
         list(APPEND _search_path_src "$ENV{GMOCK_DIR}/src")
       endif()
@@ -94,7 +94,7 @@ macro(_ament_cmake_gmock_find_gmock)
       set(GMOCK_LIBRARIES ${GMOCK_FROM_SOURCE_LIBRARIES})
       set(GMOCK_MAIN_LIBRARIES ${GMOCK_FROM_SOURCE_MAIN_LIBRARIES})
 
-      if("${GMOCK_FROM_SOURCE_BASE_DIR} " STREQUAL "${gmock_vendor_BASE_DIR} ")
+      if(GMOCK_FROM_SOURCE_BASE_DIR STREQUAL gmock_vendor_BASE_DIR)
         # if gmock_vendor is being used it should not be used for gtests
         # instead gtest_vendor should be used directly
       else()

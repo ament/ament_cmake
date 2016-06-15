@@ -20,7 +20,7 @@
 # :type ARGN: various
 #
 function(ament_cmake_symlink_install_files files_keyword)
-  if(NOT "${files_keyword} " STREQUAL "FILES ")
+  if(NOT files_keyword STREQUAL "FILES")
     message(FATAL_ERROR "ament_cmake_symlink_install_files() first argument "
       "must be 'FILES', not '${files_keyword}'")
   endif()

@@ -20,7 +20,7 @@
 # :type ARGN: various
 #
 function(ament_cmake_symlink_install_programs programs_keyword)
-  if(NOT "${programs_keyword} " STREQUAL "PROGRAMS ")
+  if(NOT programs_keyword STREQUAL "PROGRAMS")
     message(FATAL_ERROR "ament_cmake_symlink_install_programs() first argument "
       "must be 'PROGRAMS', not '${programs_keyword}'")
   endif()
