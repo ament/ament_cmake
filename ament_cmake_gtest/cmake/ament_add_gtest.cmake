@@ -75,14 +75,7 @@ function(_ament_add_gtest target)
     target_link_libraries("${target}" ${GTEST_MAIN_LIBRARIES})
   endif()
 
-  # TODO consider using a generator expression instead
-  # $<TARGET_FILE:target>
-  # until then set the policy explicitly in order to avoid warning with newer CMake versions.
-  if(POLICY CMP0026)
-    cmake_policy(SET CMP0026 OLD)
-  endif()
-  get_target_property(executable "${target}" LOCATION)
-  string(REPLACE "$(Configuration)" "$<CONFIGURATION>" executable "${executable}")
+  set(executable "$<TARGET_FILE:${target}>")
   set(result_file "${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/${target}.gtest.xml")
   set(cmd
     "${executable}"
