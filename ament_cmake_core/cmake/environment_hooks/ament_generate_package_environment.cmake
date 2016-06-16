@@ -49,7 +49,7 @@ function(ament_generate_package_environment)
 
       # collect package hooks to be sourced for this extension
       set(ENVIRONMENT_HOOKS "")
-      if(NOT "${_AMENT_CMAKE_ENVIRONMENT_HOOKS_${extension}} " STREQUAL " ")
+      if(NOT "${_AMENT_CMAKE_ENVIRONMENT_HOOKS_${extension}}" STREQUAL "")
         list(SORT _AMENT_CMAKE_ENVIRONMENT_HOOKS_${extension})
         foreach(hook ${_AMENT_CMAKE_ENVIRONMENT_HOOKS_${extension}})
           set(native_hook "/${hook}")

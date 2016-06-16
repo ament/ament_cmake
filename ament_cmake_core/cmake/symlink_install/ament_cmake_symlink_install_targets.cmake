@@ -12,6 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+set(__AMENT_CMAKE_SYMLINK_INSTALL_TARGETS_INDEX "0"
+  CACHE INTERNAL "Index for unique symlink install targets")
+
 #
 # Reimplement CMake install(TARGETS) command to use symlinks instead of copying
 # resources.
@@ -20,7 +23,7 @@
 # :type ARGN: various
 #
 function(ament_cmake_symlink_install_targets)
-  if(NOT "${ARGV0} " STREQUAL "TARGETS ")
+  if(NOT "${ARGV0}" STREQUAL "TARGETS")
     message(FATAL_ERROR "ament_cmake_symlink_install_targets() first argument "
       "must be 'TARGETS', not '${ARGV0}'")
   endif()
@@ -69,14 +72,7 @@ function(ament_cmake_symlink_install_targets)
         message(FATAL_ERROR "ament_cmake_symlink_install_targets() "
           "'${target}' is an imported target")
       endif()
-      # TODO consider using a generator expression instead
-      # $<TARGET_FILE:target>
-      # until then set the policy explicitly in order to avoid warning with newer CMake versions.
-      if(POLICY CMP0026)
-        cmake_policy(SET CMP0026 OLD)
-      endif()
-      get_property(location TARGET ${target} PROPERTY LOCATION)
-      list(APPEND target_files "${location}")
+      list(APPEND target_files "$<TARGET_FILE:${target}>")
     endforeach()
 
     string(REPLACE ";" "\" \"" target_files_quoted
@@ -89,8 +85,19 @@ function(ament_cmake_symlink_install_targets)
     string(REPLACE "\"LIBRARY\" \"DESTINATION\"" "\"LIBRARY_DESTINATION\"" argn_quoted "${argn_quoted}")
     string(REPLACE "\"RUNTIME\" \"DESTINATION\"" "\"RUNTIME_DESTINATION\"" argn_quoted "${argn_quoted}")
 
+    # generate unique files
+    set(generated_file
+      "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_symlink_install_targets_${__AMENT_CMAKE_SYMLINK_INSTALL_TARGETS_INDEX}.cmake")
+    math(EXPR __AMENT_CMAKE_SYMLINK_INSTALL_TARGETS_INDEX
+      "${__AMENT_CMAKE_SYMLINK_INSTALL_TARGETS_INDEX} + 1")
+    set(__AMENT_CMAKE_SYMLINK_INSTALL_TARGETS_INDEX "${__AMENT_CMAKE_SYMLINK_INSTALL_TARGETS_INDEX}"
+      CACHE INTERNAL "Index for unique symlink install targets")
+
+    file(GENERATE OUTPUT "${generated_file}"
+      CONTENT
+      "ament_cmake_symlink_install_targets(${target_files_quoted} ${argn_quoted})")
     ament_cmake_symlink_install_append_install_code(
-      "ament_cmake_symlink_install_targets(${target_files_quoted};${argn_quoted})"
+      "include(\"${generated_file}\")"
       COMMENTS "install(${argn_quoted})"
     )
   endif()

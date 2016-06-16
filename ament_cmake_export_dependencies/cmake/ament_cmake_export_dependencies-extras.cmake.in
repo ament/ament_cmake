@@ -11,7 +11,7 @@ find_package(ament_cmake_libraries QUIET REQUIRED)
 # Additionally collect the direct dependency names in
 # @PROJECT_NAME@_DEPENDENCIES as well as the recursive dependency names
 # in @PROJECT_NAME@_RECURSIVE_DEPENDENCIES.
-if(NOT "${_exported_dependencies} " STREQUAL " ")
+if(NOT _exported_dependencies STREQUAL "")
   find_package(ament_cmake_core QUIET REQUIRED)
   set(@PROJECT_NAME@_DEPENDENCIES ${_exported_dependencies})
   set(@PROJECT_NAME@_RECURSIVE_DEPENDENCIES ${_exported_dependencies})

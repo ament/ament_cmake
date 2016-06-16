@@ -50,7 +50,7 @@ macro(ament_auto_package)
   endif()
 
   # export and install all libraries
-  if(NOT "${${PROJECT_NAME}_LIBRARIES} " STREQUAL " ")
+  if(NOT ${PROJECT_NAME}_LIBRARIES STREQUAL "")
     ament_export_libraries(${${PROJECT_NAME}_LIBRARIES})
     install(
       TARGETS ${${PROJECT_NAME}_LIBRARIES}
@@ -61,7 +61,7 @@ macro(ament_auto_package)
   endif()
 
   # install all executables
-  if(NOT "${${PROJECT_NAME}_EXECUTABLES} " STREQUAL " ")
+  if(NOT ${PROJECT_NAME}_EXECUTABLES STREQUAL "")
     install(
       TARGETS ${${PROJECT_NAME}_EXECUTABLES}
       ARCHIVE DESTINATION lib

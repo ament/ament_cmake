@@ -35,7 +35,7 @@ function(normalize_path var path)
   _normalize_path__collapse_uplevel_reference(parts "${parts}")
 
   # check if path has completely collapsed
-  if("${parts} " STREQUAL " ")
+  if(parts STREQUAL "")
     set(parts ".")
   endif()
 
@@ -56,7 +56,7 @@ function(_normalize_path__collapse_redundant var)
     endif()
     list(GET parts ${index} part)
     # remove empty parts as well as current directory references
-    if("${part} " STREQUAL " " OR "${part} " STREQUAL ". ")
+    if(part STREQUAL "" OR part STREQUAL ".")
       list(REMOVE_AT parts ${index})
     else()
       math(EXPR index "${index} + 1")
@@ -85,11 +85,11 @@ function(_normalize_path__collapse_uplevel_reference var)
     # get current element
     list(GET parts ${index} current)
 
-    if("${current} " STREQUAL ".. " AND NOT "${previous} " STREQUAL ".. ")
+    if(current STREQUAL ".." AND NOT previous STREQUAL "..")
       # collapse the '..'
       list(REMOVE_AT parts ${index})
       set(index ${previous_index})
-      if("${previous} " STREQUAL " ")
+      if(previous STREQUAL "")
         # only collapse the '..' when starting with '/../'
         if(previous_index GREATER 0)
           string(REPLACE ";" "/" path "${parts}")

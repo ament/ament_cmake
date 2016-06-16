@@ -6,7 +6,7 @@ set(_exported_library_names "@_AMENT_EXPORT_LIBRARY_NAMES@")
 
 # find_library() targets relative to this CMake file
 # and add the libraries to @PROJECT_NAME@_LIBRARIES
-if(NOT "${_exported_library_targets} " STREQUAL " ")
+if(NOT _exported_library_targets STREQUAL "")
   # loop over library targets
   # but remember related build configuration keyword if available
   list(LENGTH _exported_library_targets _length)
@@ -53,7 +53,7 @@ if(NOT "${_exported_library_targets} " STREQUAL " ")
 endif()
 
 # append absolute libraries to @PROJECT_NAME@_LIBRARIES
-if(NOT "${_exported_absolute_libraries} " STREQUAL " ")
+if(NOT _exported_absolute_libraries STREQUAL "")
   # loop over absolute libraries
   # but remember related build configuration keyword if available
   list(LENGTH _exported_absolute_libraries _length)
@@ -87,7 +87,7 @@ endif()
 
 # find_library() library names with optional LIBRARY_DIRS
 # and add the libraries to @PROJECT_NAME@_LIBRARIES
-if(NOT "${_exported_library_names} " STREQUAL " ")
+if(NOT _exported_library_names STREQUAL "")
   # loop over library names
   # but remember related build configuration keyword if available
   list(LENGTH _exported_library_names _length)
