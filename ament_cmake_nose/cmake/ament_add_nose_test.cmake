@@ -50,7 +50,7 @@ endmacro()
 function(_ament_add_nose_test testname path)
   cmake_parse_arguments(ARG
     ""
-    "TIMEOUT;WORKING_DIRECTORY"
+    "TIMEOUT;WORKING_DIRECTORY;PYTHON_INTERPRETER"
     "APPEND_ENV;APPEND_LIBRARY_DIRS;ENV"
     ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
@@ -67,6 +67,9 @@ function(_ament_add_nose_test testname path)
     message(FATAL_ERROR
       "ament_add_nose_test() the path '${path}' does not exist")
   endif()
+  if(NOT ARG_PYTHON_INTERPRETER)
+    set(ARG_PYTHON_INTERPRETER "${PYTHON_EXECUTABLE}")
+  endif()
 
   set(result_file "${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/${testname}.xunit.xml")
   # Invoke ${NOSETESTS} explicitly with the ${PYTHON_EXECUTABLE} because on
@@ -79,7 +82,7 @@ function(_ament_add_nose_test testname path)
   # ${NOSETESTS} executable references.
   # See: https://github.com/ament/ament_cmake/pull/70
   set(cmd
-    "${PYTHON_EXECUTABLE}" "${NOSETESTS}" "${path}" "--with-xunit"
+    "${ARG_PYTHON_INTERPRETER}" "${NOSETESTS}" "${path}" "--with-xunit"
     "--xunit-file=${result_file}")
   if(NOT "${NOSETESTS_VERSION}" VERSION_LESS "1.3.5")
     list(APPEND cmd "--xunit-testsuite-name=${PROJECT_NAME}.nosetests")
