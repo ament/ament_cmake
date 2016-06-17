@@ -23,8 +23,8 @@ include(CMakeParseArguments)
 # :param path: the path to a file or folder where ``nosetests``
 #   should be invoked on
 # :type path: string
-# :param PYTHON_EXECUTABLE: absolute path to the executable used to run the test
-#   default PYTHON_EXECUTABLE cmake variable returned by FindPythonInterp
+# :param PYTHON_EXECUTABLE: absolute path to the executable used to run the test,
+#   default to the CMake variable with the same name returned by FindPythonInterp 
 # :type PYTHON_EXECUTABLE: string
 # :param TIMEOUT: the test timeout in seconds,
 #   default defined by ``ament_add_test()``
