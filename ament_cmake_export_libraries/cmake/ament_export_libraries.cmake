@@ -39,6 +39,14 @@ macro(ament_export_libraries)
     set(_i 0)
     while(_i LESS ${ARGC})
       list(GET _argn ${_i} _arg)
+
+      # pass linker flags along
+      if("${_arg}" MATCHES "^-" AND NOT "${_arg}" MATCHES "^-[l|framework]")
+        list(APPEND _AMENT_EXPORT_LIBRARIES "${_arg}")
+        math(EXPR _i "${_i} + 1")
+        continue()
+      endif()
+
       if("${_arg}" MATCHES "^debug|optimized|general$")
         # remember build configuration keyword
         # and get following library
@@ -64,7 +72,7 @@ macro(ament_export_libraries)
             "ament_export_libraries() package '${PROJECT_NAME}' exports the "
             "library '${_lib}' which doesn't exist")
         endif()
-        list(APPEND _AMENT_EXPORT_ABSOLUTE_LIBRARIES ${_cfg} "${_lib}")
+        list(APPEND _AMENT_EXPORT_LIBRARIES ${_cfg} "${_lib}")
       elseif(TARGET "${_lib}")
         # sometimes cmake dependencies define imported targets
         # in which case the imported library information is not the target name
@@ -98,7 +106,7 @@ macro(ament_export_libraries)
                 "'${PROJECT_NAME}' exports the imported library "
                 "'${_imported_library}' which doesn't exist")
             endif()
-            list(APPEND _AMENT_EXPORT_ABSOLUTE_LIBRARIES
+            list(APPEND _AMENT_EXPORT_LIBRARIES
               ${_cfg} "${_imported_library}")
           endforeach()
         else()
@@ -106,7 +114,7 @@ macro(ament_export_libraries)
           # they will be resolved via find_library()
           # relative to the CMAKE_INSTALL_PREFIX
           # when find_package() is invoked from a downstream package
-          list(APPEND _AMENT_EXPORT_LIBRARY_TARGETS ${_cfg} "${_lib}")
+          list(APPEND _AMENT_EXPORT_LIBRARIES ${_cfg} "${_lib}")
         endif()
       else()
         # keep plain library names as-is

@@ -1,86 +1,68 @@
 # generated from ament_cmake_export_libraries/cmake/template/ament_cmake_export_libraries.cmake.in
 
-set(_exported_library_targets "@_AMENT_EXPORT_LIBRARY_TARGETS@")
-set(_exported_absolute_libraries "@_AMENT_EXPORT_ABSOLUTE_LIBRARIES@")
+set(_exported_libraries "@_AMENT_EXPORT_LIBRARIES@")
 set(_exported_library_names "@_AMENT_EXPORT_LIBRARY_NAMES@")
 
-# find_library() targets relative to this CMake file
-# and add the libraries to @PROJECT_NAME@_LIBRARIES
-if(NOT _exported_library_targets STREQUAL "")
-  # loop over library targets
-  # but remember related build configuration keyword if available
-  list(LENGTH _exported_library_targets _length)
+# populate @PROJECT_NAME@_LIBRARIES
+if(NOT _exported_libraries STREQUAL "")
+  # loop over libraries, either target names or absolute paths
+  list(LENGTH _exported_libraries _length)
   set(_i 0)
   while(_i LESS _length)
-    list(GET _exported_library_targets ${_i} _arg)
+    list(GET _exported_libraries ${_i} _arg)
+
+    # pass linker flags along
+    if("${_arg}" MATCHES "^-" AND NOT "${_arg}" MATCHES "^-[l|framework]")
+      list(APPEND @PROJECT_NAME@_LIBRARIES "${_arg}")
+      math(EXPR _i "${_i} + 1")
+      continue()
+    endif()
+
     if("${_arg}" MATCHES "^debug|optimized|general$")
       # remember build configuration keyword
-      # and get following library target
+      # and get following library
       set(_cfg "${_arg}")
       math(EXPR _i "${_i} + 1")
       if(_i EQUAL _length)
-        message(FATAL_ERROR "Package '@PROJECT_NAME@' passes the build configuration keyword '${_cfg}' as the last exported target")
+        message(FATAL_ERROR "Package '@PROJECT_NAME@' passes the build configuration keyword '${_cfg}' as the last exported library")
       endif()
-      list(GET _exported_library_targets ${_i} _library_target)
+      list(GET _exported_libraries ${_i} _library)
     else()
-      # the value is a library target without a build configuration keyword
+      # the value is a library without a build configuration keyword
       set(_cfg "")
-      set(_library_target "${_arg}")
+      set(_library "${_arg}")
     endif()
     math(EXPR _i "${_i} + 1")
 
-    # search for library relative to this CMake file
-    set(_lib "NOTFOUND")
-    find_library(
-      _lib NAMES "${_library_target}"
-      PATHS "${@PROJECT_NAME@_DIR}/../../../lib"
-      NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH
-    )
+    if(NOT IS_ABSOLUTE "${_library}")
+      # search for library target relative to this CMake file
+      set(_lib "NOTFOUND")
+      find_library(
+        _lib NAMES "${_library}"
+        PATHS "${@PROJECT_NAME@_DIR}/../../../lib"
+        NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH
+      )
 
-    if(NOT _lib)
-      # warn about not existing library and ignore it
-      message(FATAL_ERROR "Package '@PROJECT_NAME@' exports the library '${_library_target}' which couldn't be found")
-    elseif(NOT IS_ABSOLUTE "${_lib}")
-      # the found library must be an absolute path
-      message(FATAL_ERROR "Package '@PROJECT_NAME@' found the library '${_library_target}' at '${_lib}' which is not an absolute path")
-    elseif(NOT EXISTS "${_lib}")
-      # the found library must exist
-      message(FATAL_ERROR "Package '@PROJECT_NAME@' found the library '${_lib}' which doesn't exist")
-    else()
-      list(APPEND @PROJECT_NAME@_LIBRARIES ${_cfg} "${_lib}")
-    endif()
-  endwhile()
-endif()
-
-# append absolute libraries to @PROJECT_NAME@_LIBRARIES
-if(NOT _exported_absolute_libraries STREQUAL "")
-  # loop over absolute libraries
-  # but remember related build configuration keyword if available
-  list(LENGTH _exported_absolute_libraries _length)
-  set(_i 0)
-  while(_i LESS _length)
-    list(GET _exported_absolute_libraries ${_i} _arg)
-    if("${_arg}" MATCHES "^debug|optimized|general$")
-      # remember build configuration keyword
-      # and get following absolute library
-      set(_cfg "${_arg}")
-      math(EXPR _i "${_i} + 1")
-      if(_i EQUAL _length)
-        message(FATAL_ERROR "Package '@PROJECT_NAME@' passes the build configuration keyword '${_cfg}' as the last exported target")
+      if(NOT _lib)
+        # warn about not existing library and ignore it
+        message(FATAL_ERROR "Package '@PROJECT_NAME@' exports the library '${_library}' which couldn't be found")
+      elseif(NOT IS_ABSOLUTE "${_lib}")
+        # the found library must be an absolute path
+        message(FATAL_ERROR "Package '@PROJECT_NAME@' found the library '${_library}' at '${_lib}' which is not an absolute path")
+      elseif(NOT EXISTS "${_lib}")
+        # the found library must exist
+        message(FATAL_ERROR "Package '@PROJECT_NAME@' found the library '${_lib}' which doesn't exist")
+      else()
+        list(APPEND @PROJECT_NAME@_LIBRARIES ${_cfg} "${_lib}")
       endif()
-      list(GET _exported_absolute_libraries ${_i} _absolute_library)
-    else()
-      # the value is an absolute library without a build configuration keyword
-      set(_cfg "")
-      set(_absolute_library "${_arg}")
-    endif()
-    math(EXPR _i "${_i} + 1")
 
-    if(NOT EXISTS "${_absolute_library}")
-      # the found library must exist
-      message(WARNING "Package '@PROJECT_NAME@' exports the library '${_absolute_library}' which doesn't exist")
     else()
-      list(APPEND @PROJECT_NAME@_LIBRARIES ${_cfg} "${_absolute_library}")
+      if(NOT EXISTS "${_library}")
+        # the found library must exist
+        message(WARNING "Package '@PROJECT_NAME@' exports the library '${_library}' which doesn't exist")
+      else()
+        list(APPEND @PROJECT_NAME@_LIBRARIES ${_cfg} "${_library}")
+      endif()
     endif()
   endwhile()
 endif()
@@ -94,6 +76,13 @@ if(NOT _exported_library_names STREQUAL "")
   set(_i 0)
   while(_i LESS _length)
     list(GET _exported_library_names ${_i} _arg)
+    # pass linker flags along
+    if("${_arg}" MATCHES "^-" AND NOT "${_arg}" MATCHES "^-[l|framework]")
+      list(APPEND @PROJECT_NAME@_LIBRARIES "${_arg}")
+      math(EXPR _i "${_i} + 1")
+      continue()
+    endif()
+
     if("${_arg}" MATCHES "^debug|optimized|general$")
       # remember build configuration keyword
       # and get following library name
@@ -148,4 +137,5 @@ endif()
 # deduplicate @PROJECT_NAME@_LIBRARIES
 # while maintaining library order
 # as well as build configuration keywords
+# as well as linker flags
 # TODO
