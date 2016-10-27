@@ -30,7 +30,17 @@ function(ament_cmake_environment_generate_package_run_dependencies_marker)
 endfunction()
 
 function(ament_cmake_environment_generate_parent_prefix_path_marker)
-  ament_index_register_resource("parent_prefix_path" CONTENT "$ENV{AMENT_PREFIX_PATH}")
+  set(prefix_path "$ENV{AMENT_PREFIX_PATH}")
+  while(TRUE)
+    # replace install prefix with placeholder to avoid embedding absolute paths
+    list(FIND prefix_path "${CMAKE_INSTALL_PREFIX}" index)
+    if(index EQUAL -1)
+      break()
+    endif()
+    list(REMOVE_AT prefix_path ${index})
+    list(INSERT prefix_path ${index} "{prefix}")
+  endwhile()
+  ament_index_register_resource("parent_prefix_path" CONTENT "${prefix_path}")
 endfunction()
 
 if(AMENT_CMAKE_ENVIRONMENT_PARENT_PREFIX_PATH_GENERATION)
