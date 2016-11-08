@@ -70,10 +70,12 @@ function(_ament_add_gtest target)
   # to add this target as a dependency to the "test" target
   add_executable("${target}" ${ARG_UNPARSED_ARGUMENTS})
   target_include_directories("${target}" PUBLIC "${GTEST_INCLUDE_DIRS}")
+  set(THREADS_PREFER_PTHREAD_FLAG ON)
+  find_package(Threads REQUIRED)
 if(WIN32)
 	  target_link_libraries("${target}" ${GTEST_LIBRARIES})
 else()
-	  target_link_libraries("${target}" ${GTEST_LIBRARIES} -pthread)
+	  target_link_libraries("${target}" ${GTEST_LIBRARIES} Threads::Threads)
 endif()
 
   if(NOT ARG_SKIP_LINKING_MAIN_LIBRARIES)
