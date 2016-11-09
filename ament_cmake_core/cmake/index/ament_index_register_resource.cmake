@@ -18,6 +18,9 @@ include(CMakeParseArguments)
 #
 # Register a package resource of a specific type with the index.
 #
+# For both CONTENT as well as CONTENT_FILE CMake generator expressions are
+# supported.
+#
 # :param resource_type: the type of the resource
 # :type resource_type: string
 # :param CONTENT: the content of the marker file being installed
@@ -76,15 +79,15 @@ function(ament_index_register_resource resource_type)
     "${CMAKE_BINARY_DIR}/ament_cmake_index/${destination}/${ARG_PACKAGE_NAME}")
 
   if(ARG_CONTENT OR NOT ARG_CONTENT_FILE)
-    # use the CONTENT argument to create the marker file
-    file(WRITE "${marker_file}" "${ARG_CONTENT}")
+    file(GENERATE OUTPUT "${marker_file}" CONTENT "${ARG_CONTENT}")
   else()
-    # expand template
+    # content file is a  .in template
     configure_file(
       "${ARG_CONTENT_FILE}"
-      "${marker_file}"
+      "${marker_file}.genexp"
       @ONLY
     )
+    file(GENERATE OUTPUT "${marker_file}" INPUT "${marker_file}.genexp")
   endif()
 
   install(
