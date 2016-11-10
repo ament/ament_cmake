@@ -24,7 +24,7 @@ include(CMakeParseArguments)
 #   should be invoked on
 # :type path: string
 # :param PYTHON_EXECUTABLE: absolute path to the executable used to run the test,
-#   default to the CMake variable with the same name returned by FindPythonInterp 
+#   default to the CMake variable with the same name returned by FindPythonInterp
 # :type PYTHON_EXECUTABLE: string
 # :param TIMEOUT: the test timeout in seconds,
 #   default defined by ``ament_add_test()``
