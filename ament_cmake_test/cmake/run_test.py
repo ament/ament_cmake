@@ -258,7 +258,7 @@ def _generate_result(result_file, failure_message=None, skip=False):
         '<skipped type="skip" message="">![CDATA[Test Skipped by developer]]</skipped>' \
         if skip else ''
     return '''<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="%s" tests="1" failures="%d" time="0" errors="0" skip="%d" disabled="%d">
+<testsuite name="%s" tests="1" failures="%d" time="0" errors="0" skip="%d">
   <testcase classname="%s" name="%s.missing_result" status="%s" time="0">
     %s%s
   </testcase>
@@ -266,7 +266,6 @@ def _generate_result(result_file, failure_message=None, skip=False):
         (
             pkgname,
             1 if failure_message else 0,
-            1 if skip else 0,
             1 if skip else 0,
             pkgname, testname,
             'notrun' if skip else 'run',
