@@ -109,33 +109,27 @@ function(_ament_add_nose_test testname path)
   if(ARG_WORKING_DIRECTORY)
     set(ARG_WORKING_DIRECTORY "WORKING_DIRECTORY" "${ARG_WORKING_DIRECTORY}")
   endif()
-
   if(ARG_SKIP_TEST)
-    ament_add_test(
-      "${testname}"
-      COMMAND ${cmd}
-      OUTPUT_FILE "${CMAKE_BINARY_DIR}/ament_cmake_nose/${testname}.txt"
-      RESULT_FILE "${result_file}"
-      SKIP_TEST
-    )
-  else()
-    ament_add_test(
-      "${testname}"
-      COMMAND ${cmd}
-      OUTPUT_FILE "${CMAKE_BINARY_DIR}/ament_cmake_nose/${testname}.txt"
-      RESULT_FILE "${result_file}"
-      ${ARG_ENV}
-      ${ARG_APPEND_ENV}
-      ${ARG_APPEND_LIBRARY_DIRS}
-      ${ARG_TIMEOUT}
-      ${ARG_WORKING_DIRECTORY}
-    )
-    set_tests_properties(
-      "${testname}"
-      PROPERTIES
-      LABELS "nose"
-    )
+    set(ARG_SKIP_TEST "SKIP_TEST")
   endif()
+
+  ament_add_test(
+    "${testname}"
+    COMMAND ${cmd}
+    OUTPUT_FILE "${CMAKE_BINARY_DIR}/ament_cmake_nose/${testname}.txt"
+    RESULT_FILE "${result_file}"
+    ${ARG_SKIP_TEST}
+    ${ARG_ENV}
+    ${ARG_APPEND_ENV}
+    ${ARG_APPEND_LIBRARY_DIRS}
+    ${ARG_TIMEOUT}
+    ${ARG_WORKING_DIRECTORY}
+  )
+  set_tests_properties(
+    "${testname}"
+    PROPERTIES
+    LABELS "nose"
+  )
 endfunction()
 
 # TODO provide function to register all found tests separately
