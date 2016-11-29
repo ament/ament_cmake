@@ -246,7 +246,7 @@ def main(argv=sys.argv[1:]):
     return rc
 
 
-def _generate_result(result_file, failure_message=None, skip=False):
+def _generate_result(result_file, *, failure_message=None, skip=False):
     # the generated result file must be readable
     # by any of the Jenkins test result report publishers
     pkgname = os.path.basename(os.path.dirname(result_file))
