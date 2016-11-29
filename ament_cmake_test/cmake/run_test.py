@@ -96,8 +96,7 @@ def main(argv=sys.argv[1:]):
         # generate a skipped test result file
         skipped_result_file = _generate_result(
             args.result_file,
-            None,
-            True
+            skip=True
         )
         with open(args.result_file, 'w') as h:
             h.write(skipped_result_file)
@@ -107,7 +106,7 @@ def main(argv=sys.argv[1:]):
     # in case the command segfaults or timeouts and does not generate one
     failure_result_file = _generate_result(
         args.result_file,
-        'The test did not generate a result file.'
+        failure_message='The test did not generate a result file.'
     )
     with open(args.result_file, 'w') as h:
         h.write(failure_result_file)
@@ -203,7 +202,7 @@ def main(argv=sys.argv[1:]):
             # regenerate result file to include output / exception of the invoked command
             failure_result_file = _generate_result(
                 args.result_file,
-                'The test did not generate a result file:\n\n' + output
+                failure_message='The test did not generate a result file:\n\n' + output
             )
             with open(args.result_file, 'w') as h:
                 h.write(failure_result_file)
