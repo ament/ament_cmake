@@ -67,6 +67,11 @@ def main(argv=sys.argv[1:]):
         action='store_true',
         default=False,
         help='Generate a result file if the command returns with code zero')
+    parser.add_argument(
+        '--skip-test',
+        action='store_true',
+        default=False,
+        help='Skip the test')
 
     if '--command' in argv:
         index = argv.index('--command')
@@ -87,11 +92,21 @@ def main(argv=sys.argv[1:]):
             if e.errno != errno.EEXIST:
                 raise
 
+    if args.skip_test:
+        # generate a skipped test result file
+        skipped_result_file = _generate_result(
+            args.result_file,
+            skip=True
+        )
+        with open(args.result_file, 'w') as h:
+            h.write(skipped_result_file)
+        return 0
+
     # generate result file with one failed test
     # in case the command segfaults or timeouts and does not generate one
     failure_result_file = _generate_result(
         args.result_file,
-        'The test did not generate a result file.'
+        failure_message='The test did not generate a result file.'
     )
     with open(args.result_file, 'w') as h:
         h.write(failure_result_file)
@@ -187,7 +202,7 @@ def main(argv=sys.argv[1:]):
             # regenerate result file to include output / exception of the invoked command
             failure_result_file = _generate_result(
                 args.result_file,
-                'The test did not generate a result file:\n\n' + output
+                failure_message='The test did not generate a result file:\n\n' + output
             )
             with open(args.result_file, 'w') as h:
                 h.write(failure_result_file)
@@ -231,20 +246,30 @@ def main(argv=sys.argv[1:]):
     return rc
 
 
-def _generate_result(result_file, failure_message=None):
+def _generate_result(result_file, *, failure_message=None, skip=False):
     # the generated result file must be readable
     # by any of the Jenkins test result report publishers
     pkgname = os.path.basename(os.path.dirname(result_file))
     testname = os.path.splitext(os.path.basename(result_file))[0]
     failure_message = '<failure message=%s/>' % quoteattr(failure_message) \
         if failure_message else ''
+    skipped_message = \
+        '<skipped type="skip" message="">![CDATA[Test Skipped by developer]]</skipped>' \
+        if skip else ''
     return '''<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="%s" tests="1" failures="%d" time="0" errors="0">
-  <testcase classname="%s" name="%s.missing_result" status="run" time="0">
-    %s
+<testsuite name="%s" tests="1" failures="%d" time="0" errors="0" skip="%d">
+  <testcase classname="%s" name="%s.missing_result" status="%s" time="0">
+    %s%s
   </testcase>
 </testsuite>\n''' % \
-        (pkgname, 1 if failure_message else 0, pkgname, testname, failure_message)
+        (
+            pkgname,
+            1 if failure_message else 0,
+            1 if skip else 0,
+            pkgname, testname,
+            'notrun' if skip else 'run',
+            failure_message, skipped_message
+        )
 
 
 def _tidy_xml(filename):

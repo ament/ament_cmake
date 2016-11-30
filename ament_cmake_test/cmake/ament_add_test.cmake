@@ -50,7 +50,7 @@ include(CMakeParseArguments)
 #
 function(ament_add_test testname)
   cmake_parse_arguments(ARG
-    "GENERATE_RESULT_FOR_RETURN_CODE_ZERO"
+    "GENERATE_RESULT_FOR_RETURN_CODE_ZERO;SKIP_TEST"
     "OUTPUT_FILE;RESULT_FILE;TIMEOUT;WORKING_DIRECTORY"
     "APPEND_ENV;APPEND_LIBRARY_DIRS;COMMAND;ENV"
     ${ARGN})
@@ -79,6 +79,9 @@ function(ament_add_test testname)
   # wrap command with run_test script to ensure test result generation
   set(cmd_wrapper "${PYTHON_EXECUTABLE}" "-u" "${ament_cmake_test_DIR}/run_test.py"
     "${ARG_RESULT_FILE}")
+  if(ARG_SKIP_TEST)
+    list(APPEND cmd_wrapper "--skip-test")
+  endif()
   if(ARG_GENERATE_RESULT_FOR_RETURN_CODE_ZERO)
     list(APPEND cmd_wrapper "--generate-result-on-success")
   endif()

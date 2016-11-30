@@ -52,7 +52,7 @@ endmacro()
 
 function(_ament_add_nose_test testname path)
   cmake_parse_arguments(ARG
-    ""
+    "SKIP_TEST"
     "PYTHON_EXECUTABLE;TIMEOUT;WORKING_DIRECTORY"
     "APPEND_ENV;APPEND_LIBRARY_DIRS;ENV"
     ${ARGN})
@@ -109,12 +109,16 @@ function(_ament_add_nose_test testname path)
   if(ARG_WORKING_DIRECTORY)
     set(ARG_WORKING_DIRECTORY "WORKING_DIRECTORY" "${ARG_WORKING_DIRECTORY}")
   endif()
+  if(ARG_SKIP_TEST)
+    set(ARG_SKIP_TEST "SKIP_TEST")
+  endif()
 
   ament_add_test(
     "${testname}"
     COMMAND ${cmd}
     OUTPUT_FILE "${CMAKE_BINARY_DIR}/ament_cmake_nose/${testname}.txt"
     RESULT_FILE "${result_file}"
+    ${ARG_SKIP_TEST}
     ${ARG_ENV}
     ${ARG_APPEND_ENV}
     ${ARG_APPEND_LIBRARY_DIRS}

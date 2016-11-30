@@ -57,7 +57,7 @@ endmacro()
 
 function(_ament_add_gtest target)
   cmake_parse_arguments(ARG
-    "SKIP_LINKING_MAIN_LIBRARIES"
+    "SKIP_LINKING_MAIN_LIBRARIES;SKIP_TEST"
     "TIMEOUT;WORKING_DIRECTORY"
     "APPEND_ENV;APPEND_LIBRARY_DIRS;ENV"
     ${ARGN})
@@ -95,12 +95,16 @@ function(_ament_add_gtest target)
   if(ARG_WORKING_DIRECTORY)
     set(ARG_WORKING_DIRECTORY "WORKING_DIRECTORY" "${ARG_WORKING_DIRECTORY}")
   endif()
+  if(ARG_SKIP_TEST)
+    set(ARG_SKIP_TEST "SKIP_TEST")
+  endif()
 
   ament_add_test(
     "${target}"
     COMMAND ${cmd}
     OUTPUT_FILE "${CMAKE_BINARY_DIR}/ament_cmake_gtest/${target}.txt"
     RESULT_FILE "${result_file}"
+    ${ARG_SKIP_TEST}
     ${ARG_ENV}
     ${ARG_APPEND_ENV}
     ${ARG_APPEND_LIBRARY_DIRS}
