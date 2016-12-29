@@ -37,8 +37,7 @@ macro(ament_auto_package)
   foreach(_dep
       ${${PROJECT_NAME}_FOUND_BUILD_DEPENDS}
       ${${PROJECT_NAME}_FOUND_BUILDTOOL_DEPENDS})
-    list(FIND _run_depends "${_dep}" _index)
-    if(NOT _index EQUAL -1)
+    if(_dep IN_LIST _run_depends)
       ament_export_dependencies("${_dep}")
     endif()
   endforeach()

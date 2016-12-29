@@ -57,9 +57,7 @@ function(_ament_cmake_python_install_module module_file)
   )
   # TODO optionally compile Python file
 
-  get_filename_component(name "${module_file}" NAME_WE)
-  list(FIND AMENT_CMAKE_PYTHON_INSTALL_INSTALLED_NAMES "${destination}" index)
-  if(NOT index EQUAL -1)
+  if(destination IN_LIST AMENT_CMAKE_PYTHON_INSTALL_INSTALLED_NAMES)
     message(FATAL_ERROR "ament_python_install_module() a Python module file "
       "or package with the same name '${destination}' has been installed before")
   endif()

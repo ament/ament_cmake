@@ -27,8 +27,7 @@
 #
 function(list_append_unique list)
   foreach(element ${ARGN})
-    list(FIND ${list} "${element}" index)
-    if(index EQUAL -1)
+    if(NOT element IN_LIST ${list})
       list(APPEND ${list} "${element}")
     endif()
   endforeach()
