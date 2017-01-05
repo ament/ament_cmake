@@ -120,4 +120,6 @@ macro(_ament_cmake_gtest_find_gtest)
 endmacro()
 
 include("${ament_cmake_gtest_DIR}/ament_add_gtest.cmake")
+include("${ament_cmake_gtest_DIR}/ament_add_gtest_executable.cmake")
+include("${ament_cmake_gtest_DIR}/ament_add_gtest_test.cmake")
 include("${ament_cmake_gtest_DIR}/ament_find_gtest.cmake")

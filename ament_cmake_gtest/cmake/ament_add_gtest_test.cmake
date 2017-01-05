@@ -1,4 +1,4 @@
-# Copyright 2014-2015 Open Source Robotics Foundation, Inc.
+# Copyright 2014-2016 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,27 +16,19 @@
 include(CMakeParseArguments)
 
 #
-# Add a gtest.
+# Add an existing executable using gtest as a test.
 #
-# Call add_executable(target ARGN), link it against the gtest libraries
-# and register the executable as a test.
-#
-# If gtest is not available the specified target is not being created and
-# therefore the target existence should be checked before being used.
+# Register an executable created with ament_add_gtest_executable() as a test.
+# If the specified target does not exist the registration is skipped.
 #
 # :param target: the target name which will also be used as the test name
 # :type target: string
-# :param ARGN: the list of source files
-# :type ARGN: list of strings
 # :param TIMEOUT: the test timeout in seconds,
 #   default defined by ``ament_add_test()``
 # :type TIMEOUT: integer
 # :param WORKING_DIRECTORY: the working directory for invoking the
 #   executable in, default defined by ``ament_add_test()``
 # :type WORKING_DIRECTORY: string
-# :param SKIP_LINKING_MAIN_LIBRARIES: if set skip linking against the gtest
-#   main libraries
-# :type SKIP_LINKING_MAIN_LIBRARIES: option
 # :param SKIP_TEST: if set mark the test as being skipped
 # :type SKIP_TEST: option
 # :param ENV: list of env vars to set; listed as ``VAR=value``
@@ -50,36 +42,19 @@ include(CMakeParseArguments)
 #
 # @public
 #
-macro(ament_add_gtest target)
-  _ament_cmake_gtest_find_gtest()
-  if(GTEST_FOUND)
-    _ament_add_gtest("${target}" ${ARGN})
+function(ament_add_gtest_test target)
+  if(NOT TARGET ${target})
+    return()
   endif()
-endmacro()
 
-function(_ament_add_gtest target)
   cmake_parse_arguments(ARG
-    "SKIP_LINKING_MAIN_LIBRARIES;SKIP_TEST"
+    "SKIP_TEST"
     "TIMEOUT;WORKING_DIRECTORY"
     "APPEND_ENV;APPEND_LIBRARY_DIRS;ENV"
     ${ARGN})
-  if(NOT ARG_UNPARSED_ARGUMENTS)
+  if(ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR
-      "ament_add_gtest() must be invoked with at least one source file")
-  endif()
-
-  # should be EXCLUDE_FROM_ALL if it would be possible
-  # to add this target as a dependency to the "test" target
-  add_executable("${target}" ${ARG_UNPARSED_ARGUMENTS})
-  target_include_directories("${target}" PUBLIC "${GTEST_INCLUDE_DIRS}")
-  target_link_libraries("${target}" ${GTEST_LIBRARIES})
-  if(NOT WIN32)
-    set(THREADS_PREFER_PTHREAD_FLAG ON)
-    find_package(Threads REQUIRED)
-    target_link_libraries("${target}" Threads::Threads)
-  endif()
-  if(NOT ARG_SKIP_LINKING_MAIN_LIBRARIES)
-    target_link_libraries("${target}" ${GTEST_MAIN_LIBRARIES})
+      "ament_add_gtest_test() called with unused arguments: ${ARGN}")
   endif()
 
   set(executable "$<TARGET_FILE:${target}>")

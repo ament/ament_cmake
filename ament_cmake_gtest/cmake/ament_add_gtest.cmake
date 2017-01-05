@@ -51,77 +51,42 @@ include(CMakeParseArguments)
 # @public
 #
 macro(ament_add_gtest target)
-  _ament_cmake_gtest_find_gtest()
-  if(GTEST_FOUND)
-    _ament_add_gtest("${target}" ${ARGN})
-  endif()
-endmacro()
-
-function(_ament_add_gtest target)
-  cmake_parse_arguments(ARG
+  cmake_parse_arguments(_ARG
     "SKIP_LINKING_MAIN_LIBRARIES;SKIP_TEST"
     "TIMEOUT;WORKING_DIRECTORY"
     "APPEND_ENV;APPEND_LIBRARY_DIRS;ENV"
     ${ARGN})
-  if(NOT ARG_UNPARSED_ARGUMENTS)
+  if(NOT _ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR
       "ament_add_gtest() must be invoked with at least one source file")
   endif()
 
-  # should be EXCLUDE_FROM_ALL if it would be possible
-  # to add this target as a dependency to the "test" target
-  add_executable("${target}" ${ARG_UNPARSED_ARGUMENTS})
-  target_include_directories("${target}" PUBLIC "${GTEST_INCLUDE_DIRS}")
-  target_link_libraries("${target}" ${GTEST_LIBRARIES})
-  if(NOT WIN32)
-    set(THREADS_PREFER_PTHREAD_FLAG ON)
-    find_package(Threads REQUIRED)
-    target_link_libraries("${target}" Threads::Threads)
+  # add executable
+  set(_argn_executable ${_ARG_UNPARSED_ARGUMENTS})
+  if(_ARG_SKIP_LINKING_MAIN_LIBRARIES)
+    list(APPEND _argn_executable "SKIP_LINKING_MAIN_LIBRARIES")
   endif()
-  if(NOT ARG_SKIP_LINKING_MAIN_LIBRARIES)
-    target_link_libraries("${target}" ${GTEST_MAIN_LIBRARIES})
-  endif()
+  ament_add_gtest_executable("${target}" ${_argn_executable})
 
-  set(executable "$<TARGET_FILE:${target}>")
-  set(result_file "${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/${target}.gtest.xml")
-  set(cmd
-    "${executable}"
-    "--gtest_output=xml:${result_file}")
-  if(ARG_ENV)
-    set(ARG_ENV "ENV" ${ARG_ENV})
+  # add test
+  set(_argn_test "")
+  if(_ARG_TIMEOUT)
+    list(APPEND _argn_test "TIMEOUT" "${_ARG_TIMEOUT}")
   endif()
-  if(ARG_APPEND_ENV)
-    set(ARG_APPEND_ENV "APPEND_ENV" ${ARG_APPEND_ENV})
+  if(_ARG_WORKING_DIRECTORY)
+    list(APPEND _argn_test "WORKING_DIRECTORY" "${_ARG_WORKING_DIRECTORY}")
   endif()
-  if(ARG_APPEND_LIBRARY_DIRS)
-    set(ARG_APPEND_LIBRARY_DIRS "APPEND_LIBRARY_DIRS" ${ARG_APPEND_LIBRARY_DIRS})
+  if(_ARG_SKIP_TEST)
+    list(APPEND _argn_test "SKIP_TEST")
   endif()
-  if(ARG_TIMEOUT)
-    set(ARG_TIMEOUT "TIMEOUT" ${ARG_TIMEOUT})
+  if(_ARG_ENV)
+    list(APPEND _argn_test "ENV" ${_ARG_ENV})
   endif()
-  if(ARG_WORKING_DIRECTORY)
-    set(ARG_WORKING_DIRECTORY "WORKING_DIRECTORY" "${ARG_WORKING_DIRECTORY}")
+  if(_ARG_APPEND_ENV)
+    list(APPEND _argn_test "APPEND_ENV" ${_ARG_APPEND_ENV})
   endif()
-  if(ARG_SKIP_TEST)
-    set(ARG_SKIP_TEST "SKIP_TEST")
+  if(_ARG_APPEND_LIBRARY_DIRS)
+    list(APPEND _argn_test "APPEND_LIBRARY_DIRS" ${_ARG_APPEND_LIBRARY_DIRS})
   endif()
-
-  ament_add_test(
-    "${target}"
-    COMMAND ${cmd}
-    OUTPUT_FILE "${CMAKE_BINARY_DIR}/ament_cmake_gtest/${target}.txt"
-    RESULT_FILE "${result_file}"
-    ${ARG_SKIP_TEST}
-    ${ARG_ENV}
-    ${ARG_APPEND_ENV}
-    ${ARG_APPEND_LIBRARY_DIRS}
-    ${ARG_TIMEOUT}
-    ${ARG_WORKING_DIRECTORY}
-  )
-  set_tests_properties(
-    "${target}"
-    PROPERTIES
-    REQUIRED_FILES "${executable}"
-    LABELS "gtest"
-  )
-endfunction()
+  ament_add_gtest_test("${target}" ${_argn_test})
+endmacro()
