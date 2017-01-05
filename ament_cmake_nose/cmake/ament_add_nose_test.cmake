@@ -23,6 +23,8 @@ include(CMakeParseArguments)
 # :param path: the path to a file or folder where ``nosetests``
 #   should be invoked on
 # :type path: string
+# :param SKIP_TEST: if set mark the test as being skipped
+# :type SKIP_TEST: option
 # :param PYTHON_EXECUTABLE: absolute path to the executable used to run the test,
 #   default to the CMake variable with the same name returned by FindPythonInterp
 # :type PYTHON_EXECUTABLE: string
