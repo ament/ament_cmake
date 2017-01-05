@@ -37,6 +37,8 @@ include(CMakeParseArguments)
 # :param SKIP_LINKING_MAIN_LIBRARIES: if set skip linking against the gtest
 #   main libraries
 # :type SKIP_LINKING_MAIN_LIBRARIES: option
+# :param SKIP_TEST: if set mark the test as being skipped
+# :type SKIP_TEST: option
 # :param ENV: list of env vars to set; listed as ``VAR=value``
 # :type ENV: list of strings
 # :param APPEND_ENV: list of env vars to append if already set, otherwise set;
