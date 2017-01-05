@@ -37,6 +37,8 @@ include(CMakeParseArguments)
 #   file when the command invocation returns with code zero
 #   command in, default: CMAKE_SOURCE_DIR
 # :type GENERATE_RESULT_FOR_RETURN_CODE_ZERO: option
+# :param SKIP_TEST: if set mark the test as being skipped
+# :type SKIP_TEST: option
 # :param ENV: list of env vars to set; listed as ``VAR=value``
 # :type ENV: list of strings
 # :param APPEND_ENV: list of env vars to append if already set, otherwise set;
