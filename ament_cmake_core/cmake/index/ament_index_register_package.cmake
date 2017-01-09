@@ -12,9 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# include CMake functions
-include(CMakeParseArguments)
-
 #
 # Register a package name with the resource index.
 #
