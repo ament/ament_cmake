@@ -37,9 +37,6 @@ endif()
 if(DEFINED BUILD_TESTING AND BUILD_TESTING)
 endif()
 
-# include CMake functions
-include(CMakeParseArguments)
-
 # various functions / macros
 foreach(filename
   "ament_execute_extensions"

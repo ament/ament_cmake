@@ -12,9 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# include CMake functions
-include(CMakeParseArguments)
-
 #
 # Register a CMake script for execution at install time.
 #
