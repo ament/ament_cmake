@@ -19,6 +19,7 @@
   <build_export_depend>ament_cmake_export_dependencies</build_export_depend>
   <build_export_depend>ament_cmake_export_include_directories</build_export_depend>
   <build_export_depend>ament_cmake_export_interfaces</build_export_depend>
+  <build_export_depend>ament_cmake_export_jars</build_export_depend>
   <build_export_depend>ament_cmake_export_libraries</build_export_depend>
   <build_export_depend>ament_cmake_export_link_flags</build_export_depend>
   <build_export_depend>ament_cmake_libraries</build_export_depend>
