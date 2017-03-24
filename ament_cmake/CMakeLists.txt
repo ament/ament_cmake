@@ -13,6 +13,7 @@ ament_export_dependencies(
   "ament_cmake_export_interfaces"
   "ament_cmake_export_libraries"
   "ament_cmake_export_link_flags"
+  "ament_cmake_export_targets"
   "ament_cmake_libraries"
   "ament_cmake_python"
   "ament_cmake_target_dependencies"
