@@ -1,0 +1,7 @@
+# generated from ament_cmake_export_targets/cmake/ament_cmake_export_targets-extras.cmake.in
+
+set(@PROJECT_NAME@_EXPORTED_TARGET_NAMES "@_AMENT_CMAKE_EXPORT_TARGETS@")
+
+foreach(_target IN LISTS @PROJECT_NAME@_EXPORTED_TARGET_NAMES)
+  include("${@PROJECT_NAME@_DIR}/ament_cmake_export_targets-target_${_target}.cmake")
+endforeach()
