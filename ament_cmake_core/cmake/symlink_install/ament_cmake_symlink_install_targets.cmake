@@ -86,18 +86,20 @@ function(ament_cmake_symlink_install_targets)
     string(REPLACE "\"RUNTIME\" \"DESTINATION\"" "\"RUNTIME_DESTINATION\"" argn_quoted "${argn_quoted}")
 
     # generate unique files
-    set(generated_file
-      "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_symlink_install_targets_${__AMENT_CMAKE_SYMLINK_INSTALL_TARGETS_INDEX}.cmake")
+    set(generated_file_base
+      "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_symlink_install_targets_${__AMENT_CMAKE_SYMLINK_INSTALL_TARGETS_INDEX}")
+    set(generated_file_generator_suffix "${generated_file_base}_$<CONFIG>.cmake")
+    set(generated_file_variable_suffix "${generated_file_base}_\${CMAKE_INSTALL_CONFIG_NAME}.cmake")
     math(EXPR __AMENT_CMAKE_SYMLINK_INSTALL_TARGETS_INDEX
       "${__AMENT_CMAKE_SYMLINK_INSTALL_TARGETS_INDEX} + 1")
     set(__AMENT_CMAKE_SYMLINK_INSTALL_TARGETS_INDEX "${__AMENT_CMAKE_SYMLINK_INSTALL_TARGETS_INDEX}"
       CACHE INTERNAL "Index for unique symlink install targets")
 
-    file(GENERATE OUTPUT "${generated_file}"
+    file(GENERATE OUTPUT "${generated_file_generator_suffix}"
       CONTENT
-      "ament_cmake_symlink_install_targets(${target_files_quoted} ${argn_quoted})")
+      "ament_cmake_symlink_install_targets(${target_files_quoted} ${argn_quoted})\n")
     ament_cmake_symlink_install_append_install_code(
-      "include(\"${generated_file}\")"
+      "include(\"${generated_file_variable_suffix}\")"
       COMMENTS "install(${argn_quoted})"
     )
   endif()
