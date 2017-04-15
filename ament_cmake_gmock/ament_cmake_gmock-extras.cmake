@@ -78,12 +78,16 @@ macro(_ament_cmake_gmock_find_gmock)
       message(STATUS "Found gmock sources under '${GMOCK_FROM_SOURCE_BASE_DIR}': "
         "C++ tests using 'Google Mock' will be built")
 
-      # add CMakeLists.txt from gmock dir
-      add_subdirectory("${GMOCK_FROM_SOURCE_BASE_DIR}" "${CMAKE_BINARY_DIR}/gmock")
+      # if gmock is already a target, do not add again
+      # this can happen when ament_add_gmock() is called from a subdirectory
+      if(NOT TARGET gmock)
+        # add CMakeLists.txt from gmock dir
+        add_subdirectory("${GMOCK_FROM_SOURCE_BASE_DIR}" "${CMAKE_BINARY_DIR}/gmock")
 
-      # mark gmock targets with EXCLUDE_FROM_ALL to only build
-      # when tests are built which depend on them
-      set_target_properties(gmock gmock_main PROPERTIES EXCLUDE_FROM_ALL 1)
+        # mark gmock targets with EXCLUDE_FROM_ALL to only build
+        # when tests are built which depend on them
+        set_target_properties(gmock gmock_main PROPERTIES EXCLUDE_FROM_ALL 1)
+      endif()
 
       # set the same variables as find_package() would set
       # but do NOT set GMOCK_FOUND in the cache when using gmock from source
