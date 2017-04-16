@@ -18,7 +18,7 @@
 # :param REQUIRED_PACKAGES: an optional list of package names that are known
 # required CMake dependencies. For these dependencies, find_package() will be
 # invoked with REQUIRED instead of the default of QUIET.
-# :type REQUIRED_PACKAGES: list of string
+# :type REQUIRED_PACKAGES: list of strings
 #
 # All found package names are appended to the
 # ``${PROJECT_NAME}_FOUND_BUILD_DEPENDS`` /
@@ -32,10 +32,10 @@
 # @public
 #
 macro(ament_auto_find_build_dependencies)
-  cmake_parse_arguments(ARG "" "" "REQUIRED_PACKAGES" ${ARGN})
-  if(ARG_UNPARSED_ARGUMENTS)
+  cmake_parse_arguments(_ARG "" "" "REQUIRED_PACKAGES" ${ARGN})
+  if(_ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "ament_auto_find_build_dependencies() called with "
-      "unused arguments: ${ARG_UNPARSED_ARGUMENTS}")
+      "unused arguments: ${_ARG_UNPARSED_ARGUMENTS}")
   endif()
 
   if(NOT _AMENT_PACKAGE_NAME)
@@ -46,17 +46,17 @@ macro(ament_auto_find_build_dependencies)
   set(_build_and_buildtool_depends
     ${${PROJECT_NAME}_BUILD_DEPENDS}
     ${${PROJECT_NAME}_BUILDTOOL_DEPENDS})
-  foreach(_package_name ${ARG_REQUIRED_PACKAGES})
+  foreach(_package_name ${_ARG_REQUIRED_PACKAGES})
     if(NOT _package_name IN_LIST _build_and_buildtool_depends)
       message(FATAL_ERROR "ament_auto_find_build_dependencies() called with "
-      "required package that is not listed as a build/buildtool dependency in "
-      "the package.xml: ${_package_name}")
+        "required package that is not listed as a build/buildtool dependency in "
+        "the package.xml: ${_package_name}")
     endif()
   endforeach()
 
   # try to find_package() all build dependencies
   foreach(_dep ${${PROJECT_NAME}_BUILD_DEPENDS})
-    if(_dep IN_LIST ARG_REQUIRED_PACKAGES)
+    if(_dep IN_LIST _ARG_REQUIRED_PACKAGES)
       find_package(${_dep} REQUIRED)
     else()
       find_package(${_dep} QUIET)
@@ -72,7 +72,7 @@ macro(ament_auto_find_build_dependencies)
 
   # try to find_package() all buildtool dependencies
   foreach(_dep ${${PROJECT_NAME}_BUILDTOOL_DEPENDS})
-    if(_dep IN_LIST ARG_REQUIRED_PACKAGES)
+    if(_dep IN_LIST _ARG_REQUIRED_PACKAGES)
       find_package(${_dep} REQUIRED)
     else()
       find_package(${_dep} QUIET)
