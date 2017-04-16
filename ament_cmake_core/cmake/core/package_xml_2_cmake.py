@@ -39,7 +39,7 @@ def main(argv=sys.argv[1:]):
     )
     parser.add_argument(
         'package_xml',
-        type=argparse.FileType('r'),
+        type=argparse.FileType('r', encoding='utf-8'),
         help='The path to a package.xml file',
     )
     parser.add_argument(
