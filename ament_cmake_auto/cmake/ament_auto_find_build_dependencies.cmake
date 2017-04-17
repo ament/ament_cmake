@@ -45,14 +45,19 @@ macro(ament_auto_find_build_dependencies)
   # ensure that the caller isn't expecting additional packages to be found
   set(_build_and_buildtool_depends
     ${${PROJECT_NAME}_BUILD_DEPENDS}
-    ${${PROJECT_NAME}_BUILDTOOL_DEPENDS})
+    ${${PROJECT_NAME}_BUILDTOOL_DEPENDS}
+  )
+  set(_ignored_packages "")
   foreach(_package_name ${_ARG_REQUIRED})
     if(NOT _package_name IN_LIST _build_and_buildtool_depends)
-      message(FATAL_ERROR "ament_auto_find_build_dependencies() called with "
-        "required package that is not listed as a build/buildtool dependency in "
-        "the package.xml: ${_package_name}")
+      list(APPEND _ignored_packages ${_package_name})
     endif()
   endforeach()
+  if(_ignored_packages)
+    message(FATAL_ERROR "ament_auto_find_build_dependencies() called with "
+      "required packages that are not listed as a build/buildtool dependency in "
+      "the package.xml: ${_ignored_packages}")
+  endif()
 
   # try to find_package() all build dependencies
   foreach(_dep ${${PROJECT_NAME}_BUILD_DEPENDS})
