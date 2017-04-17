@@ -17,7 +17,7 @@
 #
 # :param REQUIRED: an optional list of package names that are known
 # required CMake dependencies. For these dependencies, find_package() will be
-# invoked with REQUIRED instead of the default of QUIET.
+# invoked with REQUIRED.
 # :type REQUIRED: list of strings
 #
 # All found package names are appended to the
@@ -62,7 +62,7 @@ macro(ament_auto_find_build_dependencies)
   # try to find_package() all build dependencies
   foreach(_dep ${${PROJECT_NAME}_BUILD_DEPENDS})
     if(_dep IN_LIST _ARG_REQUIRED)
-      find_package(${_dep} REQUIRED)
+      find_package(${_dep} REQUIRED QUIET)
     else()
       find_package(${_dep} QUIET)
     endif()
@@ -78,7 +78,7 @@ macro(ament_auto_find_build_dependencies)
   # try to find_package() all buildtool dependencies
   foreach(_dep ${${PROJECT_NAME}_BUILDTOOL_DEPENDS})
     if(_dep IN_LIST _ARG_REQUIRED)
-      find_package(${_dep} REQUIRED)
+      find_package(${_dep} REQUIRED QUIET)
     else()
       find_package(${_dep} QUIET)
     endif()
