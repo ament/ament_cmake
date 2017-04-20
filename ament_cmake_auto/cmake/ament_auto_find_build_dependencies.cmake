@@ -42,21 +42,20 @@ macro(ament_auto_find_build_dependencies)
     ament_package_xml()
   endif()
 
-  # ensure that the caller isn't expecting additional packages to be found
-  set(_build_and_buildtool_depends
-    ${${PROJECT_NAME}_BUILD_DEPENDS}
-    ${${PROJECT_NAME}_BUILDTOOL_DEPENDS}
-  )
-  set(_additional_packages "")
+  # ensure that the caller isn't expecting packages not listed in the manifest
+  set(_unknown_packages "")
   foreach(_package_name ${_ARG_REQUIRED})
-    if(NOT _package_name IN_LIST _build_and_buildtool_depends)
-      list(APPEND _additional_packages ${_package_name})
+    if(NOT _package_name IN_LIST ${PROJECT_NAME}_BUILD_DEPENDS AND
+      NOT _package_name IN_LIST ${PROJECT_NAME}_BUILDTOOL_DEPENDS
+    )
+      list(APPEND _unknown_packages ${_package_name})
     endif()
   endforeach()
-  if(_additional_packages)
+  if(_unknown_packages)
+    string(REPLACE ";" ", " _unknown_packages_str "${_unknown_packages}")
     message(FATAL_ERROR "ament_auto_find_build_dependencies() called with "
       "required packages that are not listed as a build/buildtool dependency in "
-      "the package.xml: ${_additional_packages}")
+      "the package.xml: ${_unknown_packages_str}")
   endif()
 
   # try to find_package() all build dependencies
