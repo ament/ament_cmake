@@ -18,7 +18,7 @@
 # :param ARGN: the list of CMake code lines
 # :type ARGN: list of strings
 # :param COMMENTS: an optional list of comments
-# :type COMMENTS: list of string
+# :type COMMENTS: list of strings
 #
 function(ament_cmake_symlink_install_append_install_code)
   cmake_parse_arguments(ARG "" "" "COMMENTS" ${ARGN})
