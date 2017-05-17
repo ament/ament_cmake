@@ -84,6 +84,14 @@ macro(_ament_cmake_gmock_find_gmock)
         # add CMakeLists.txt from gmock dir
         add_subdirectory("${GMOCK_FROM_SOURCE_BASE_DIR}" "${CMAKE_BINARY_DIR}/gmock")
 
+        if(NOT WIN32)
+          set(_gmock_compile_flags "-Wno-missing-field-initializers")
+          if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+            set(_gmock_compile_flags "${_gmock_compile_flags} -Wno-unused-const-variable")
+          endif()
+          set_target_properties(gmock gmock_main PROPERTIES COMPILE_FLAGS "${_gmock_compile_flags}")
+        endif()
+
         # mark gmock targets with EXCLUDE_FROM_ALL to only build
         # when tests are built which depend on them
         set_target_properties(gmock gmock_main PROPERTIES EXCLUDE_FROM_ALL 1)
