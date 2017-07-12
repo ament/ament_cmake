@@ -17,6 +17,12 @@
 # extension point ``ament_auto_package`` and invoke
 # ``ament_package()``.
 #
+# :param INSTALL_TO_PATH: if set, install targets so that they are
+# on the path. Runtime targets are installed to bin; archive and
+# and library are targets installed to lib. Default is to install
+# all targets to lib/<package_name>.
+# :type INSTALL_TO_PATH: option
+#
 # Export all found build dependencies which are also run
 # dependencies.
 # If the package has an include directory install all recursively
@@ -29,6 +35,12 @@
 #
 
 macro(ament_auto_package)
+  cmake_parse_arguments(_ARG "INSTALL_TO_PATH" "" "" ${ARGN})
+  if(_ARG_UNPARSED_ARGUMENTS)
+    message(FATAL_ERROR "ament_auto_find_build_dependencies() called with "
+      "unused arguments: ${_ARG_UNPARSED_ARGUMENTS}")
+  endif()
+
   # export all found build dependencies which are also run dependencies
   set(_run_depends
     ${${PROJECT_NAME}_BUILD_EXPORT_DEPENDS}
@@ -61,12 +73,19 @@ macro(ament_auto_package)
 
   # install all executables
   if(NOT ${PROJECT_NAME}_EXECUTABLES STREQUAL "")
-    install(
-      TARGETS ${${PROJECT_NAME}_EXECUTABLES}
-      ARCHIVE DESTINATION lib
-      LIBRARY DESTINATION lib
-      RUNTIME DESTINATION bin
-    )
+    if(_ARG_INSTALL_TO_PATH)
+      install(
+        TARGETS ${${PROJECT_NAME}_EXECUTABLES}
+        ARCHIVE DESTINATION lib
+        LIBRARY DESTINATION lib
+        RUNTIME DESTINATION bin
+      )
+    else()
+      install(
+        TARGETS ${${PROJECT_NAME}_EXECUTABLES}
+        DESTINATION lib/${PROJECT_NAME}
+      )
+    endif()
   endif()
 
   ament_execute_extensions(ament_auto_package)
