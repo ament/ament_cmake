@@ -17,10 +17,13 @@
 # extension point ``ament_auto_package`` and invoke
 # ``ament_package()``.
 #
-# :param INSTALL_TO_PATH: if set, install targets so that they are
-# on the path. Runtime targets are installed to bin; archive and
-# and library are targets installed to lib. Default is to install
-# all targets to lib/<package_name>.
+# :param INSTALL_TO_PATH: if set, install executables to `bin` so that
+#   they are available on the `PATH`.
+#   By default they are being installed into `lib/${PROJECT_NAME}`.
+#   It is currently not possible to install some executable into `bin`
+#   and some into `lib/${PROJECT_NAME}`.
+#   Libraries are not affected by this option.
+#   They are always installed into `lib` and `dll`s into `bin`.
 # :type INSTALL_TO_PATH: option
 #
 # Export all found build dependencies which are also run
