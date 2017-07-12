@@ -77,18 +77,14 @@ macro(ament_auto_package)
   # install all executables
   if(NOT ${PROJECT_NAME}_EXECUTABLES STREQUAL "")
     if(_ARG_INSTALL_TO_PATH)
-      install(
-        TARGETS ${${PROJECT_NAME}_EXECUTABLES}
-        ARCHIVE DESTINATION lib
-        LIBRARY DESTINATION lib
-        RUNTIME DESTINATION bin
-      )
+      set(_destination "bin")
     else()
-      install(
-        TARGETS ${${PROJECT_NAME}_EXECUTABLES}
-        DESTINATION lib/${PROJECT_NAME}
-      )
+      set(_destination "lib/${PROJECT_NAME}")
     endif()
+    install(
+      TARGETS ${${PROJECT_NAME}_EXECUTABLES}
+      DESTINATION ${_destination}
+    )
   endif()
 
   ament_execute_extensions(ament_auto_package)
