@@ -84,8 +84,11 @@ function(_ament_add_nose_test testname path)
   # ${NOSETESTS} executable references.
   # See: https://github.com/ament/ament_cmake/pull/70
   set(cmd
-    "${ARG_PYTHON_EXECUTABLE}" "${NOSETESTS}" "${path}" "--with-xunit"
-    "--xunit-file=${result_file}")
+    "${ARG_PYTHON_EXECUTABLE}"
+    "-u"  # unbuffered stdout and stderr
+    "${NOSETESTS}" "${path}"
+    "--nocapture"  # stdout will be printed immediately
+    "--with-xunit" "--xunit-file=${result_file}")
   if(NOT "${NOSETESTS_VERSION}" VERSION_LESS "1.3.5")
     list(APPEND cmd "--xunit-testsuite-name=${PROJECT_NAME}.nosetests")
     if(NOT "${NOSETESTS_VERSION}" VERSION_LESS "1.3.8")
