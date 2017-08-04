@@ -129,20 +129,36 @@ def main(argv=sys.argv[1:]):
         env = dict(os.environ)
         if args.env:
             log('-- run_test.py: extra environment variables:')
+            previous_key = None
             for env_str in args.env:
-                key, value = separate_env_vars(env_str, 'env', parser)
+                # if CMake has split a single value containing semicolons
+                # into multiple arguments they are put back together here
+                if previous_key and '=' not in env_str:
+                    key = previous_key
+                    value = env[key] + ';' + env_str
+                else:
+                    key, value = separate_env_vars(env_str, 'env', parser)
                 log(' - {0}={1}'.format(key, value))
                 env[key] = value
+                previous_key = key
         if args.append_env:
             log('-- run_test.py: extra environment variables to append:')
+            previous_key = None
             for env_str in args.append_env:
-                key, value = separate_env_vars(env_str, 'append-env', parser)
+                # if CMake has split a single value containing semicolons
+                # into multiple arguments they are put back together here
+                if previous_key and '=' not in env_str:
+                    key = previous_key
+                    value = env[key] + ';' + env_str
+                else:
+                    key, value = separate_env_vars(env_str, 'append-env', parser)
                 log(' - {0}={1}'.format(key, value))
                 if key not in env:
                     env[key] = ''
                 if not env[key].endswith(os.pathsep):
                     env[key] += os.pathsep
                 env[key] += value
+                previous_key = key
 
     log("-- run_test.py: invoking following command in '%s':\n - %s" %
         (os.getcwd(), ' '.join(args.command)))
