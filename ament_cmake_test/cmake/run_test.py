@@ -130,7 +130,7 @@ def main(argv=sys.argv[1:]):
         if args.env:
             log('-- run_test.py: extra environment variables:')
             previous_key = None
-            updated_env_keys = set([])
+            updated_env_keys = set()
             for env_str in args.env:
                 # if CMake has split a single value containing semicolons
                 # into multiple arguments they are put back together here
@@ -153,9 +153,10 @@ def main(argv=sys.argv[1:]):
                 if previous_key and '=' not in env_str:
                     key = previous_key
                     value = env[key] + ';' + env_str
+                    log(' - {0}+={1}'.format(key, env_str))
                 else:
                     key, value = separate_env_vars(env_str, 'append-env', parser)
-                log(' - {0}+={1}'.format(key, value))
+                    log(' - {0}+={1}'.format(key, value))
                 if key not in env:
                     env[key] = ''
                 if not env[key].endswith(os.pathsep):
