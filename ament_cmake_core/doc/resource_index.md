@@ -51,10 +51,10 @@ In this "resource index" is a file system structure which is setup as a set of f
 In each of those "resource type" folders every package which provides a resource of that type can install a file named for the package, called a "marker file".
 
 Let's look at an example.
-Each packages wants to make the fact that is is installed available to others.
+Each package wants to make the fact that it is installed available to others.
 In this case the resource is rather a piece of information than a specific asset or functionality.
 The resource type `packages` is being used to indicate that a package with the name of the resource is installed.
-The simplest case is that each package (`foo`, `bar`, and `baz`) provide an empty file with their package name within the resource type subfolder.
+The simplest case is that each package (`foo`, `bar`, and `baz`) provides an empty file with its package name within the resource type subfolder.
 That would look like this:
 
 ```
