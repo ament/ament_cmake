@@ -102,7 +102,7 @@ return os.listdir(os.path.join(prefix, 'share', 'ament_index', 'resource_index',
 In both examples the resource was just an empty file.
 But each resource could also store arbitrary content.
 This could e.g. be used to store a list of messages and services a package does provide.
-Please read below for recommendations how to store information in each resource / how to use the information within a resource to reference additional external information.
+Please read below for recommendations on how to store information in each resource / how to use the information within a resource to reference additional external information.
 
 Currently in ROS, this requires that all packages are discovered first and then each manifest file for each package must be parsed (`package.xml` or `manifest.xml`) and then for each package zero to many `plugin.xml` files must be parsed.
 For this example system, the `package.xml` file and `plugin.xml` files may still need to be parsed, but instead of discovering all packages, and parsing all `package.xml` files this system can already narrow down the packages which need to be considered.
