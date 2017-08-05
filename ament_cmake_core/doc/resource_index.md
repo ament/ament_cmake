@@ -7,7 +7,8 @@ Conceptual Overview
 -------------------
 
 This project provides two main things, the ability for packages to register types of resources they install and the ability to make queries about those resources at runtime.
-The queries might be anything from "Which packages are installed?" to "Which packages provide plugins of a certain type?".
+A resource can represent any kind of asset or functionality provided by a package.
+The queries might be anything from "Which packages are installed?" over "Which packages provide plugins of a certain type?" to "What messages and services does a specific package provide?".
 This project does not aim to catalog and explicitly reference all individual resources, but rather to provide meta information about what resources are provided by what packages and then providing absolute paths to the prefix containing the package.
 These are the design requirements:
 
@@ -50,7 +51,11 @@ In this "resource index" is a file system structure which is setup as a set of f
 In each of those "resource type" folders every package which provides a resource of that type can install a file named for the package, called a "marker file".
 
 Let's look at an example.
-The simplest case is that each package (`foo`, `bar`, and `baz`) should register that it is installed. That would look like this:
+Each package wants to make the fact that it is installed available to others.
+In this case the resource is rather a piece of information than a specific asset or functionality.
+The resource type `packages` is being used to indicate that a package with the name of the resource is installed.
+The simplest case is that each package (`foo`, `bar`, and `baz`) provides an empty file with its package name within the resource type subfolder.
+That would look like this:
 
 ```
 <prefix>
@@ -58,9 +63,9 @@ The simplest case is that each package (`foo`, `bar`, and `baz`) should register
         `-- ament_index
             `-- resource_index
                 `-- packages
-                    `-- foo
-                    `-- bar
-                    `-- baz
+                    `-- foo  # empty file
+                    `-- bar  # empty file
+                    `-- baz  # empty file
 ```
 
 So now the operations to answer "Which packages are installed?" is just (Python):
@@ -93,6 +98,11 @@ Answering the question "Which packages have plugins for rviz's display system?" 
 import os
 return os.listdir(os.path.join(prefix, 'share', 'ament_index', 'resource_index', 'plugins.rviz.display'))
 ```
+
+In both examples the resource was just an empty file.
+But each resource could also store arbitrary content.
+This could e.g. be used to store a list of messages and services a package does provide.
+Please read below for recommendations on how to store information in each resource / how to use the information within a resource to reference additional external information.
 
 Currently in ROS, this requires that all packages are discovered first and then each manifest file for each package must be parsed (`package.xml` or `manifest.xml`) and then for each package zero to many `plugin.xml` files must be parsed.
 For this example system, the `package.xml` file and `plugin.xml` files may still need to be parsed, but instead of discovering all packages, and parsing all `package.xml` files this system can already narrow down the packages which need to be considered.
