@@ -20,6 +20,8 @@
 # :param PACKAGE_DIR: the path to the Python package directory (default:
 #   <package_name> folder relative to the CMAKE_CURRENT_LIST_DIR)
 # :type PACKAGE_DIR: string
+# :param SKIP_COMPILE: if set do not compile the installed package
+# :type SKIP_COMPILE: option
 #
 macro(ament_python_install_package)
   _ament_cmake_python_register_environment_hook()
@@ -27,7 +29,7 @@ macro(ament_python_install_package)
 endmacro()
 
 function(_ament_cmake_python_install_package package_name)
-  cmake_parse_arguments(ARG "" "PACKAGE_DIR" "" ${ARGN})
+  cmake_parse_arguments(ARG "SKIP_COMPILE" "PACKAGE_DIR" "" ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "ament_python_install_package() called with unused "
       "arguments: ${ARG_UNPARSED_ARGUMENTS}")
@@ -57,7 +59,16 @@ function(_ament_cmake_python_install_package package_name)
     PATTERN "*.pyc" EXCLUDE
     PATTERN "__pycache__" EXCLUDE
   )
-  # TODO(dirk-thomas): optionally compile Python files
+  if(NOT ARG_SKIP_COMPILE)
+    # compile Python files
+    install(CODE
+      "execute_process(
+        COMMAND
+        \"${PYTHON_EXECUTABLE}\" \"-m\" \"compileall\"
+        \"${CMAKE_INSTALL_PREFIX}/${PYTHON_INSTALL_DIR}/${package_name}\"
+      )"
+    )
+  endif()
 
   if(package_name IN_LIST AMENT_CMAKE_PYTHON_INSTALL_INSTALLED_NAMES)
     message(FATAL_ERROR
