@@ -134,8 +134,7 @@ if(NOT _exported_library_names STREQUAL "")
   endwhile()
 endif()
 
-# deduplicate @PROJECT_NAME@_LIBRARIES
+# TODO(dirk-thomas) deduplicate @PROJECT_NAME@_LIBRARIES
 # while maintaining library order
 # as well as build configuration keywords
 # as well as linker flags
-# TODO

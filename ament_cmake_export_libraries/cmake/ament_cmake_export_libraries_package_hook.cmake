@@ -12,11 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# deduplicate _AMENT_EXPORT_LIBRARIES and _AMENT_EXPORT_LIBRARY_NAMES
+# TODO(dirk-thomas) deduplicate _AMENT_EXPORT_LIBRARIES and _AMENT_EXPORT_LIBRARY_NAMES
 # while maintaining library order
 # as well as build configuration keywords
 # as well as linker flags
-# TODO
 
 # generate and register extra file for libraries
 set(_generated_extra_file
