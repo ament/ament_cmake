@@ -46,7 +46,6 @@ function(ament_index_get_prefix_path var)
 
   # Remove CMAKE_INSTALL_PREFIX if it is in the list of paths to search,
   # and add it to the list at the front
-  # TODO(dirk-thomas) check if this can be removed or the insert can be done
   list(REMOVE_ITEM prefix_path "${CMAKE_INSTALL_PREFIX}")
   list(INSERT prefix_path 0 "${CMAKE_INSTALL_PREFIX}")
 

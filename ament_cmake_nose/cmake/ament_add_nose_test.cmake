@@ -133,5 +133,3 @@ function(_ament_add_nose_test testname path)
     LABELS "nose"
   )
 endfunction()
-
-# TODO provide function to register all found tests separately

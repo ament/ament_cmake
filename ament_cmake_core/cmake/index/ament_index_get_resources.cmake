@@ -54,15 +54,14 @@ function(ament_index_get_resources var resource_type)
   set(all_resources "")
   foreach(path IN LISTS paths_to_search)
     set(resource_index_path "${path}/share/ament_index/resource_index")
-    # TODO use LIST_DIRECTORIES false in GLOB call when available in CMake 3.5
     file(GLOB resources
+      LIST_DIRECTORIES FALSE
       RELATIVE "${resource_index_path}/${resource_type}"
       "${resource_index_path}/${resource_type}/*")
     foreach(resource IN LISTS resources)
       string(SUBSTRING "${resource}" 0 1 resource_char0)
-      # Ignore all subdirectories, and any files starting with a dot
-      if((NOT IS_DIRECTORY "${resource_index_path}/${resource_type}/${resource}") 
-        AND (NOT resource_char0 STREQUAL "."))
+      # Ignore any files starting with a dot
+      if(NOT resource_char0 STREQUAL ".")
         list_append_unique(all_resources ${resource})
       endif()
     endforeach()

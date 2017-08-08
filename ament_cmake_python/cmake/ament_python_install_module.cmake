@@ -20,6 +20,8 @@
 # :param DESTINATION_SUFFIX: the base package to install the module to
 #   (default: empty, install as a top level module)
 # :type DESTINATION_SUFFIX: string
+# :param SKIP_COMPILE: if set do not compile the installed module
+# :type SKIP_COMPILE: option
 #
 macro(ament_python_install_module)
   _ament_cmake_python_register_environment_hook()
@@ -27,7 +29,7 @@ macro(ament_python_install_module)
 endmacro()
 
 function(_ament_cmake_python_install_module module_file)
-  cmake_parse_arguments(ARG "" "DESTINATION_SUFFIX" "" ${ARGN})
+  cmake_parse_arguments(ARG "SKIP_COMPILE" "DESTINATION_SUFFIX" "" ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "ament_python_install_module() called with unused "
       "arguments: ${ARG_UNPARSED_ARGUMENTS}")
@@ -55,7 +57,16 @@ function(_ament_cmake_python_install_module module_file)
     FILES "${module_file}"
     DESTINATION "${destination}"
   )
-  # TODO optionally compile Python file
+  if(NOT ARG_SKIP_COMPILE)
+    # compile Python files
+    install(CODE
+      "execute_process(
+        COMMAND
+        \"${PYTHON_EXECUTABLE}\" \"-m\" \"compileall\"
+        \"${CMAKE_INSTALL_PREFIX}/${destination}/${module_file}\"
+      )"
+    )
+  endif()
 
   if(destination IN_LIST AMENT_CMAKE_PYTHON_INSTALL_INSTALLED_NAMES)
     message(FATAL_ERROR "ament_python_install_module() a Python module file "
