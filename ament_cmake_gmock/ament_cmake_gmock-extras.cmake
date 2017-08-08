@@ -38,10 +38,10 @@ macro(_ament_cmake_gmock_find_gmock)
       set(_search_path_include "/usr/include/gmock")
       set(_search_path_src "/usr/src/gmock/src")
 
-      # check gmock_vendor path
+      # check gmock_vendor path, prefer this version over a system installed
       if(gmock_vendor_FOUND AND gmock_vendor_BASE_DIR)
-        list(APPEND _search_path_include "${gmock_vendor_BASE_DIR}/include/gmock")
-        list(APPEND _search_path_src "${gmock_vendor_BASE_DIR}/src")
+        list(INSERT _search_path_include 0 "${gmock_vendor_BASE_DIR}/include/gmock")
+        list(INSERT _search_path_src 0 "${gmock_vendor_BASE_DIR}/src")
       endif()
 
       find_file(_gmock_header_file "gmock.h"
@@ -50,7 +50,7 @@ macro(_ament_cmake_gmock_find_gmock)
       )
       find_file(_gmock_src_file
         "gmock.cc"
-        "gmock-gtest-all.cc"  # alternative when using "fused" sources
+        "gmock-all.cc"
         PATHS ${_search_path_src}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH
       )
@@ -107,17 +107,10 @@ macro(_ament_cmake_gmock_find_gmock)
       set(GMOCK_MAIN_LIBRARIES ${GMOCK_FROM_SOURCE_MAIN_LIBRARIES})
 
       if(GMOCK_FROM_SOURCE_BASE_DIR STREQUAL gmock_vendor_BASE_DIR)
-        # if gmock_vendor is being used it should not be used for gtests
-        # instead gtest_vendor should be used directly
-      else()
-        set(_gtest_base_dir "${GMOCK_FROM_SOURCE_BASE_DIR}/gtest")
-        # set from-source variables for embedded gtest
-        set(GTEST_FROM_SOURCE_FOUND TRUE CACHE INTERNAL "")
-        set(GTEST_FROM_SOURCE_BASE_DIR "${_gtest_base_dir}" CACHE INTERNAL "")
-        set(GTEST_FROM_SOURCE_INCLUDE_DIRS "${_gtest_base_dir}/include" CACHE INTERNAL "")
-        set(GTEST_FROM_SOURCE_LIBRARY_DIRS "${_gmock_binary_dir}/gtest" CACHE INTERNAL "")
-        set(GTEST_FROM_SOURCE_LIBRARIES "gtest" CACHE INTERNAL "")
-        set(GTEST_FROM_SOURCE_MAIN_LIBRARIES "gtest_main" CACHE INTERNAL "")
+        # the GMock headers require the GTest headers
+        find_package(ament_cmake_gtest REQUIRED)
+        ament_find_gtest()
+        list(APPEND GMOCK_INCLUDE_DIRS ${GTEST_INCLUDE_DIRS})
       endif()
     endif()
 
@@ -133,7 +126,3 @@ endmacro()
 
 include("${ament_cmake_gmock_DIR}/ament_add_gmock.cmake")
 include("${ament_cmake_gmock_DIR}/ament_find_gmock.cmake")
-
-find_package(ament_cmake_core QUIET REQUIRED)
-ament_register_extension("ament_cmake_gtest_find_gtest" "ament_cmake_gmock"
-  "ament_cmake_gmock_find_gtest_hook.cmake")

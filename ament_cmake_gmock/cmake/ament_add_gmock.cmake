@@ -64,10 +64,10 @@ function(_ament_add_gmock target)
   # to add this target as a dependency to the "test" target
   add_executable("${target}" ${ARG_UNPARSED_ARGUMENTS})
   target_include_directories("${target}" PUBLIC "${GMOCK_INCLUDE_DIRS}")
-  target_link_libraries("${target}" ${GMOCK_LIBRARIES})
   if(NOT ARG_SKIP_LINKING_MAIN_LIBRARIES)
     target_link_libraries("${target}" ${GMOCK_MAIN_LIBRARIES})
   endif()
+  target_link_libraries("${target}" ${GMOCK_LIBRARIES})
 
   set(executable "$<TARGET_FILE:${target}>")
   set(result_file "${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/${target}.gtest.xml")
