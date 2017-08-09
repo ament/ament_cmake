@@ -21,65 +21,56 @@ macro(_ament_cmake_gtest_find_gtest)
 
     find_package(ament_cmake_test QUIET REQUIRED)
 
-    # allow other packages to find gtest instead
-    ament_execute_extensions(ament_cmake_gtest_find_gtest)
-
     # if gtest sources were not found in a previous run
     if(NOT GTEST_FROM_SOURCE_FOUND)
-      # try to find built versions of gtest
-      find_package(GTest QUIET)
+      # search path for gtest includes and sources
+      set(_search_path_include "")
+      set(_search_path_src "")
 
-      # otherwise search for sources
-      if(NOT GTEST_FOUND)
-        # search path for gtest includes and sources
-        set(_search_path_include "")
-        set(_search_path_src "")
+      # option() consider environment variable to find gtest
+      if(NOT $ENV{GTEST_DIR} STREQUAL "")
+        list(APPEND _search_path_include "$ENV{GTEST_DIR}/include/gtest")
+        list(APPEND _search_path_src "$ENV{GTEST_DIR}/src")
+      endif()
 
-        # option() consider environment variable to find gtest
-        if(NOT $ENV{GTEST_DIR} STREQUAL "")
-          list(APPEND _search_path_include "$ENV{GTEST_DIR}/include/gtest")
-          list(APPEND _search_path_src "$ENV{GTEST_DIR}/src")
-        endif()
+      # check to system installed path (i.e. on Ubuntu)
+      set(_search_path_include "/usr/include/gtest")
+      set(_search_path_src "/usr/src/gtest/src")
 
-        # check to system installed path (i.e. on Ubuntu)
-        set(_search_path_include "/usr/include/gtest")
-        set(_search_path_src "/usr/src/gtest/src")
+      # check gtest_vendor path, prefer this version over a system installed
+      find_package(gtest_vendor QUIET)
+      if(gtest_vendor_FOUND AND gtest_vendor_BASE_DIR)
+        list(INSERT _search_path_include 0 "${gtest_vendor_BASE_DIR}/include/gtest")
+        list(INSERT _search_path_src 0 "${gtest_vendor_BASE_DIR}/src")
+      endif()
 
-        # check gtest_vendor path
-        find_package(gtest_vendor QUIET)
-        if(gtest_vendor_FOUND AND gtest_vendor_BASE_DIR)
-          list(APPEND _search_path_include "${gtest_vendor_BASE_DIR}/include/gtest")
-          list(APPEND _search_path_src "${gtest_vendor_BASE_DIR}/src")
-        endif()
+      find_file(_gtest_header_file "gtest.h"
+        PATHS ${_search_path_include}
+        NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH
+      )
+      find_file(_gtest_src_file
+        "gtest.cc"
+        "gtest-all.cc"
+        PATHS ${_search_path_src}
+        NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH
+      )
 
-        find_file(_gtest_header_file "gtest.h"
-          PATHS ${_search_path_include}
-          NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH
-        )
-        find_file(_gtest_src_file
-          "gtest.cc"
-          "gtest-all.cc"  # alternative when using "fused" sources
-          PATHS ${_search_path_src}
-          NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH
-        )
+      if(_gtest_header_file AND _gtest_src_file)
+        # set from-source variables
+        set(GTEST_FROM_SOURCE_FOUND TRUE CACHE INTERNAL "")
 
-        if(_gtest_header_file AND _gtest_src_file)
-          # set from-source variables
-          set(GTEST_FROM_SOURCE_FOUND TRUE CACHE INTERNAL "")
+        get_filename_component(_gtest_base_dir "${_gtest_src_file}" PATH)
+        get_filename_component(_gtest_base_dir "${_gtest_base_dir}" PATH)
+        set(GTEST_FROM_SOURCE_BASE_DIR "${_gtest_base_dir}" CACHE INTERNAL "")
 
-          get_filename_component(_gtest_base_dir "${_gtest_src_file}" PATH)
-          get_filename_component(_gtest_base_dir "${_gtest_base_dir}" PATH)
-          set(GTEST_FROM_SOURCE_BASE_DIR "${_gtest_base_dir}" CACHE INTERNAL "")
+        get_filename_component(_gtest_include_dir "${_gtest_header_file}" PATH)
+        get_filename_component(_gtest_include_dir ${_gtest_include_dir} PATH)
+        set(GTEST_FROM_SOURCE_INCLUDE_DIRS "${_gtest_include_dir}" CACHE INTERNAL "")
 
-          get_filename_component(_gtest_include_dir "${_gtest_header_file}" PATH)
-          get_filename_component(_gtest_include_dir ${_gtest_include_dir} PATH)
-          set(GTEST_FROM_SOURCE_INCLUDE_DIRS "${_gtest_include_dir}" CACHE INTERNAL "")
+        set(GTEST_FROM_SOURCE_LIBRARY_DIRS "${CMAKE_BINARY_DIR}/gtest" CACHE INTERNAL "")
 
-          set(GTEST_FROM_SOURCE_LIBRARY_DIRS "${CMAKE_BINARY_DIR}/gtest" CACHE INTERNAL "")
-
-          set(GTEST_FROM_SOURCE_LIBRARIES "gtest" CACHE INTERNAL "")
-          set(GTEST_FROM_SOURCE_MAIN_LIBRARIES "gtest_main" CACHE INTERNAL "")
-        endif()
+        set(GTEST_FROM_SOURCE_LIBRARIES "gtest" CACHE INTERNAL "")
+        set(GTEST_FROM_SOURCE_MAIN_LIBRARIES "gtest_main" CACHE INTERNAL "")
       endif()
     endif()
 
