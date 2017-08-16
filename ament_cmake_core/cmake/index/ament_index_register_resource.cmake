@@ -31,6 +31,8 @@
 # :type CONTENT_FILE: string
 # :param PACKAGE_NAME: the package name (default: ${PROJECT_NAME})
 # :type PACKAGE_NAME: string
+# :param SKIP_INSTALL: if set skip installing the marker file
+# :type SKIP_INSTALL: option
 #
 # @public
 #
@@ -40,7 +42,7 @@ function(ament_index_register_resource resource_type)
       "ament_index_register_resource() called without a 'resource_type'")
   endif()
 
-  cmake_parse_arguments(ARG "" "PACKAGE_NAME;CONTENT_FILE" "CONTENT" ${ARGN})
+  cmake_parse_arguments(ARG "SKIP_INSTALL" "PACKAGE_NAME;CONTENT_FILE" "CONTENT" ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "ament_index_register_resource() called with unused "
       "arguments: ${ARG_UNPARSED_ARGUMENTS}")
@@ -87,8 +89,10 @@ function(ament_index_register_resource resource_type)
     file(GENERATE OUTPUT "${marker_file}" INPUT "${marker_file}.genexp")
   endif()
 
-  install(
-    FILES "${marker_file}"
-    DESTINATION "${destination}"
-  )
+  if (NOT ARG_SKIP_INSTALL)
+    install(
+      FILES "${marker_file}"
+      DESTINATION "${destination}"
+    )
+  endif()
 endfunction()
