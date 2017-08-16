@@ -43,6 +43,10 @@ function(ament_index_register_resource resource_type)
   endif()
 
   cmake_parse_arguments(ARG "SKIP_INSTALL" "PACKAGE_NAME;CONTENT_FILE" "CONTENT" ${ARGN})
+  if(ARG_UNPARSED_ARGUMENTS)
+    message(FATAL_ERROR "ament_index_register_resource() called with unused "
+      "arguments: ${ARG_UNPARSED_ARGUMENTS}")
+  endif()
 
   if(ARG_CONTENT AND ARG_CONTENT_FILE)
     message(FATAL_ERROR "ament_index_register_resource() called with both "
