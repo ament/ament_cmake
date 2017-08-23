@@ -31,6 +31,9 @@
 # :type CONTENT_FILE: string
 # :param PACKAGE_NAME: the package name (default: ${PROJECT_NAME})
 # :type PACKAGE_NAME: string
+# :param AMENT_INDEX_BINARY_DIR: the base path of the generated ament
+#   index (default: ${CMAKE_BINARY_DIR}/ament_cmake_index)
+# :type AMENT_INDEX_BINARY_DIR: string
 # :param SKIP_INSTALL: if set skip installing the marker file
 # :type SKIP_INSTALL: option
 #
@@ -42,7 +45,12 @@ function(ament_index_register_resource resource_type)
       "ament_index_register_resource() called without a 'resource_type'")
   endif()
 
-  cmake_parse_arguments(ARG "SKIP_INSTALL" "PACKAGE_NAME;CONTENT_FILE" "CONTENT" ${ARGN})
+  cmake_parse_arguments(
+    ARG
+    "SKIP_INSTALL"
+    "PACKAGE_NAME;CONTENT_FILE;AMENT_INDEX_BINARY_DIR"
+    "CONTENT"
+    ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "ament_index_register_resource() called with unused "
       "arguments: ${ARG_UNPARSED_ARGUMENTS}")
@@ -73,9 +81,13 @@ function(ament_index_register_resource resource_type)
     endif()
   endif()
 
+  if(NOT ARG_AMENT_INDEX_BINARY_DIR)
+    set(ARG_AMENT_INDEX_BINARY_DIR "${CMAKE_BINARY_DIR}/ament_cmake_index")
+  endif()
+
   set(destination "share/ament_index/resource_index/${resource_type}")
   set(marker_file
-    "${CMAKE_BINARY_DIR}/ament_cmake_index/${destination}/${ARG_PACKAGE_NAME}")
+    "${ARG_AMENT_INDEX_BINARY_DIR}/${destination}/${ARG_PACKAGE_NAME}")
 
   if(ARG_CONTENT OR NOT ARG_CONTENT_FILE)
     file(GENERATE OUTPUT "${marker_file}" CONTENT "${ARG_CONTENT}")
