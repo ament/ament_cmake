@@ -57,6 +57,7 @@ function(_ament_cmake_python_install_module module_file)
     FILES "${module_file}"
     DESTINATION "${destination}"
   )
+  get_filename_component(module_file "${module_file}" NAME)
   if(NOT ARG_SKIP_COMPILE)
     # compile Python files
     install(CODE
