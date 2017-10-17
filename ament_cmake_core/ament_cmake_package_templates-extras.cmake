@@ -43,4 +43,8 @@ if(NOT _res EQUAL 0)
 endif()
 
 # load extracted variables into cmake
+# for each environment hook defined in `ament_package`
+# (e.g. `library_path.bat|sh`) a CMake variable is defined starting with
+# `ament_cmake_package_templates_ENVIRONMENT_HOOK_`
+# (e.g. `ament_cmake_package_templates_ENVIRONMENT_HOOK_LIBRARY_PATH`)
 include("${_generated_file}")
