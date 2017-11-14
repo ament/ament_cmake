@@ -17,7 +17,8 @@
 #
 # :param var: the output variable name
 # :type var: string
-# :param QUIET: suppress the CMake warning if pytest is not found, if not set and pytest was not found a CMake warning is printed
+# :param QUIET: suppress the CMake warning if pytest is not found, if not set
+#   and pytest was not found a CMake warning is printed
 # :type QUIET: option
 # :param PYTHON_EXECUTABLE: absolute path to the Python interpreter to be used,
 #   default to the CMake variable with the same name returned by
