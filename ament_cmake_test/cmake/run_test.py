@@ -43,6 +43,10 @@ def main(argv=sys.argv[1:]):
     parser.add_argument(
         'result_file', help='The path to the xunit result file')
     parser.add_argument(
+        '--package-name',
+        help="The package name to be used as a prefix for the 'classname' "
+             'attributes in gtest result files')
+    parser.add_argument(
         '--command',
         nargs='+',
         help='The test command to execute. '
@@ -206,9 +210,9 @@ def main(argv=sys.argv[1:]):
     elif os.path.exists(args.result_file):
         # check if content of result file has actually changed
         with open(args.result_file, 'r') as h:
-            not_changed = h.read() == failure_result_file
+            content = h.read()
 
-        if not_changed:
+        if content == failure_result_file:
             log("-- run_test.py: generate result file '%s' with failed test" % args.result_file,
                 file=sys.stderr)
             # regenerate result file to include output / exception of the invoked command
@@ -217,6 +221,19 @@ def main(argv=sys.argv[1:]):
                 failure_message='The test did not generate a result file:\n\n' + output)
             with open(args.result_file, 'w') as h:
                 h.write(failure_result_file)
+        else:
+            # prefix classname attributes
+            if args.result_file.endswith('.gtest.xml') and args.package_name:
+                prefix = ' classname="'
+                pattern = '%s(?!%s)' % (prefix, args.package_name)
+                new_content = re.sub(
+                    pattern, prefix + args.package_name + '.', content)
+                if new_content != content:
+                    log(
+                        '-- run_test.py: inject classname prefix into gtest '
+                        "result file '%s'" % args.result_file)
+                    with open(args.result_file, 'w') as h:
+                        h.write(new_content)
 
         log("-- run_test.py: verify result file '%s'" % args.result_file)
         # if result file exists ensure that it contains valid xml

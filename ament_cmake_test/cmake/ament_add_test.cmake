@@ -77,7 +77,8 @@ function(ament_add_test testname)
 
   # wrap command with run_test script to ensure test result generation
   set(cmd_wrapper "${PYTHON_EXECUTABLE}" "-u" "${ament_cmake_test_DIR}/run_test.py"
-    "${ARG_RESULT_FILE}")
+    "${ARG_RESULT_FILE}"
+    "--package-name" "${PROJECT_NAME}")
   if(ARG_SKIP_TEST)
     list(APPEND cmd_wrapper "--skip-test")
   endif()
