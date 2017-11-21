@@ -82,6 +82,7 @@ function(ament_add_pytest_test testname path)
     "-u"  # unbuffered stdout and stderr
     "-m" "pytest"
     "${path}"
+    "--capture=no"  # display console output
     # store last failed tests
     "-o" "cache_dir=${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_pytest/${testname}/.cache"
     # junit arguments
