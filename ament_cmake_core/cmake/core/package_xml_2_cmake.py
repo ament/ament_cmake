@@ -109,6 +109,10 @@ def generate_cmake_code(package):
                                            package.exec_depends))
     variables.extend(get_dependency_values('TEST_DEPENDS',
                                            package.test_depends))
+    variables.extend(get_dependency_values('GROUP_DEPENDS',
+                                           package.group_depends))
+    variables.extend(get_dependency_values('MEMBER_OF_GROUPS',
+                                           package.member_of_groups))
 
     deprecated = [e.content for e in package.exports
                   if e.tagname == 'deprecated']
