@@ -28,8 +28,17 @@
 #   a template which is expanded using configure_file() (ending in
 #   '.cmake.in') with @ONLY.
 #   If the global variable ${PROJECT_NAME}_CONFIG_EXTRAS is set it
-#   will be prepended to the explicitly passed argument.
+#   will be appended to the explicitly passed argument.
 # :type CONFIG_EXTRAS: list of files
+# :param CONFIG_EXTRAS_POST: a list of CMake files containing extra
+#   stuff that should be accessible to users of this package after
+#   ``find_package``\ -ing it.
+#   The file can either be a plain CMake file (ending in '.cmake') or
+#   a template which is expanded using configure_file() (ending in
+#   '.cmake.in') with @ONLY.
+#   If the global variable ${PROJECT_NAME}_CONFIG_EXTRAS_POST is set it
+#   will be prepended to the explicitly passed argument.
+# :type CONFIG_EXTRAS_POST: list of files
 #
 # @public
 #
@@ -60,7 +69,7 @@ macro(ament_package)
 endmacro()
 
 function(_ament_package)
-  cmake_parse_arguments(PACKAGE "" "" "CONFIG_EXTRAS" ${ARGN})
+  cmake_parse_arguments(PACKAGE "" "" "CONFIG_EXTRAS;CONFIG_EXTRAS_POST" ${ARGN})
   if(PACKAGE_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "ament_package() called with unused arguments: "
       "${PACKAGE_UNPARSED_ARGUMENTS}")
@@ -72,7 +81,12 @@ function(_ament_package)
 
   # expand and install config extras
   set(PACKAGE_CONFIG_EXTRA_FILES "")
-  foreach(extra ${PACKAGE_CONFIG_EXTRAS} ${${PROJECT_NAME}_CONFIG_EXTRAS})
+  foreach(
+    extra
+    ${PACKAGE_CONFIG_EXTRAS}
+    ${${PROJECT_NAME}_CONFIG_EXTRAS}
+    ${PACKAGE_CONFIG_EXTRAS_POST}
+  )
     assert_file_exists("${extra}"
       "ament_package() called with extra file '${extra}' which does not exist")
     stamp("${extra}")
