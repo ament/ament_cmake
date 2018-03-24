@@ -14,7 +14,7 @@
 
 # copied from ament_cmake_test/ament_cmake_test-extras.cmake
 
-include(CTest)
+enable_testing()
 
 # option()
 set(
