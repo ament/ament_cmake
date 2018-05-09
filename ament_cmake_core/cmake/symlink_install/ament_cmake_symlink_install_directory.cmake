@@ -72,7 +72,7 @@ function(ament_cmake_symlink_install_directory directory_keyword)
 
     string(REPLACE ";" "\" \"" argn_quoted "\"${argn}\"")
     ament_cmake_symlink_install_append_install_code(
-      "ament_cmake_symlink_install_directory(DIRECTORY ${argn_quoted})"
+      "ament_cmake_symlink_install_directory(\"${CMAKE_CURRENT_SOURCE_DIR}\" DIRECTORY ${argn_quoted})"
       COMMENTS "install(DIRECTORY ${argn_quoted})"
     )
   endif()
