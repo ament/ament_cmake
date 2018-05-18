@@ -19,6 +19,9 @@
 # ``install(TARGETS ... EXPORT name ...)``.
 # The ``install(EXPORT ...)`` invocation is handled by this macros.
 #
+# :param HAS_LIBRARY_TARGET: if set, an environment variable will be defined
+#   so that the library can be found at runtime
+# :type HAS_LIBRARY_TARGET: option
 # :param ARGN: a list of export names
 # :type ARGN: list of strings
 #
@@ -29,11 +32,19 @@ macro(ament_export_interfaces)
     message(FATAL_ERROR
       "ament_export_interfaces() must be called before ament_package()")
   endif()
+  cmake_parse_arguments(_ARG "HAS_LIBRARY_TARGET" "" "" ${ARGN})
 
   if(${ARGC} GREATER 0)
     _ament_cmake_export_interfaces_register_package_hook()
-    foreach(_arg ${ARGN})
+    foreach(_arg ${_ARG_UNPARSED_ARGUMENTS})
       list(APPEND _AMENT_CMAKE_EXPORT_INTERFACES "${_arg}")
     endforeach()
+
+    # if the export name contains is a library target
+    # make sure to register an environment hook
+    if(${_ARG_HAS_LIBRARY_TARGET})
+      find_package(ament_cmake_export_libraries QUIET REQUIRED)
+      _ament_cmake_export_libraries_register_environment_hook()
+    endif()
   endif()
 endmacro()
