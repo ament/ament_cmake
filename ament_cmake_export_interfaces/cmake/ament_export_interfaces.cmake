@@ -19,8 +19,8 @@
 # ``install(TARGETS ... EXPORT name ...)``.
 # The ``install(EXPORT ...)`` invocation is handled by this macros.
 #
-# :param HAS_LIBRARY_TARGET: if set, an environment variable is being defined
-#   to find the library at runtime executables
+# :param HAS_LIBRARY_TARGET: if set, an environment variable will be defined
+#   so that the library can be found at runtime
 # :type HAS_LIBRARY_TARGET: option
 # :param ARGN: a list of export names
 # :type ARGN: list of strings
