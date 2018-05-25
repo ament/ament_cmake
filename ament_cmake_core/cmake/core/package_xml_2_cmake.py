@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-# Copyright 2014-2015 Open Source Robotics Foundation, Inc.
+# Copyright 2014-2015 
+Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -57,7 +58,7 @@ def main(argv=sys.argv[1:]):
 
     lines = generate_cmake_code(package)
     if args.outfile:
-        with open(args.outfile, 'w') as f:
+        with open(args.outfile, 'w', encoding='UTF-8') as f:
             for line in lines:
                 f.write('%s\n' % line)
     else:
