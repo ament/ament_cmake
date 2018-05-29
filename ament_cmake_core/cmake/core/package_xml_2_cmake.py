@@ -57,7 +57,7 @@ def main(argv=sys.argv[1:]):
 
     lines = generate_cmake_code(package)
     if args.outfile:
-        with open(args.outfile, 'w', encoding='UTF-8') as f:
+        with open(args.outfile, 'w', encoding='utf-8') as f:
             for line in lines:
                 f.write('%s\n' % line)
     else:
