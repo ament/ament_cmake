@@ -18,12 +18,7 @@ import argparse
 from collections import OrderedDict
 import sys
 
-try:
-    from ament_package import parse_package_string
-except ImportError as e:
-    sys.exit("ImportError: 'from ament_package import parse_package_string' "
-             "failed: %s\nMake sure that you have installed 'ament_package', "
-             'it is up to date and on the PYTHONPATH.' % e)
+from catkin_pkg.package import parse_package_string
 
 
 def main(argv=sys.argv[1:]):
@@ -50,7 +45,8 @@ def main(argv=sys.argv[1:]):
     args = parser.parse_args(argv)
 
     try:
-        package = parse_package_string(args.package_xml.read())
+        package = parse_package_string(
+            args.package_xml.read(), filename=args.package_xml.name)
     except Exception as e:
         print("Error parsing '%s':" % args.package_xml.name, file=sys.stderr)
         raise e
@@ -87,7 +83,7 @@ def generate_cmake_code(package):
     """
     Return a list of CMake set() commands containing the manifest information.
 
-    :param package: ament_package.Package
+    :param package: catkin_pkg.package.Package
     :returns: list of str
     """
     variables = []
