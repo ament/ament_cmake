@@ -34,7 +34,7 @@ def main(argv=sys.argv[1:]):
     )
     parser.add_argument(
         'package_xml',
-        type=argparse.FileType('r'),
+        type=argparse.FileType('r', encoding='utf-8'),
         help='The path to a package.xml file',
     )
     parser.add_argument(
@@ -53,7 +53,7 @@ def main(argv=sys.argv[1:]):
 
     lines = generate_cmake_code(package)
     if args.outfile:
-        with open(args.outfile, 'w') as f:
+        with open(args.outfile, 'w', encoding='utf-8') as f:
             for line in lines:
                 f.write('%s\n' % line)
     else:
