@@ -1,4 +1,4 @@
-# generated from ament/cmake/core/template/nameConfig.cmake.in
+# generated from ament/cmake/core/templates/nameConfig.cmake.in
 
 # prevent multiple inclusion
 if(_@PROJECT_NAME@_CONFIG_INCLUDED)
