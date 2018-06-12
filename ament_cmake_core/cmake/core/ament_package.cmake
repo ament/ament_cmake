@@ -86,6 +86,7 @@ function(_ament_package)
     ${PACKAGE_CONFIG_EXTRAS}
     ${${PROJECT_NAME}_CONFIG_EXTRAS}
     ${PACKAGE_CONFIG_EXTRAS_POST}
+    ${${PROJECT_NAME}_CONFIG_EXTRAS_POST}
   )
     assert_file_exists("${extra}"
       "ament_package() called with extra file '${extra}' which does not exist")
