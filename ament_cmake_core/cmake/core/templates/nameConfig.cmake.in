@@ -2,6 +2,15 @@
 
 # prevent multiple inclusion
 if(_@PROJECT_NAME@_CONFIG_INCLUDED)
+  # ensure to keep the found flag the same
+  if(NOT DEFINED @PROJECT_NAME@_FOUND)
+    message(FATAL_ERROR
+      "@PROJECT_NAME@_FOUND is undefined even though the config has been included before")
+  endif()
+  if(NOT @PROJECT_NAME@_FOUND)
+    # explicitly set it to FALSE, otherwise CMake will set it to TRUE
+    set(@PROJECT_NAME@_FOUND FALSE)
+  endif()
   return()
 endif()
 set(_@PROJECT_NAME@_CONFIG_INCLUDED TRUE)
