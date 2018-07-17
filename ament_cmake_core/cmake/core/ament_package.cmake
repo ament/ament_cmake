@@ -81,13 +81,20 @@ function(_ament_package)
 
   # expand and install config extras
   set(PACKAGE_CONFIG_EXTRA_FILES "")
-  foreach(
-    extra
-    ${PACKAGE_CONFIG_EXTRAS}
-    ${${PROJECT_NAME}_CONFIG_EXTRAS}
-    ${${PROJECT_NAME}_CONFIG_EXTRAS_POST}
-    ${PACKAGE_CONFIG_EXTRAS_POST}
-  )
+  set(extras)
+  if(DEFINED PACKAGE_CONFIG_EXTRAS)
+    list(APPEND extras ${PACKAGE_CONFIG_EXTRAS})
+  endif()
+  if(DEFINED ${PROJECT_NAME}_CONFIG_EXTRAS)
+    list(APPEND extras ${${PROJECT_NAME}_CONFIG_EXTRAS})
+  endif()
+  if(DEFINED ${PROJECT_NAME}_CONFIG_EXTRAS_POST)
+    list(APPEND extras ${${PROJECT_NAME}_CONFIG_EXTRAS_POST})
+  endif()
+  if(DEFINED PACKAGE_CONFIG_EXTRAS_POST)
+    list(APPEND extras ${PACKAGE_CONFIG_EXTRAS_POST})
+  endif()
+  foreach(extra ${extras})
     assert_file_exists("${extra}"
       "ament_package() called with extra file '${extra}' which does not exist")
     stamp("${extra}")

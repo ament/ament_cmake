@@ -31,6 +31,8 @@
 # :param SKIP_LINKING_MAIN_LIBRARIES: if set skip linking against the gmock
 #   main libraries
 # :type SKIP_LINKING_MAIN_LIBRARIES: option
+# :param SKIP_TEST: if set mark the test as being skipped
+# :type SKIP_TEST: option
 # :param ENV: list of env vars to set; listed as ``VAR=value``
 # :type ENV: list of strings
 # :param APPEND_ENV: list of env vars to append if already set, otherwise set;
@@ -51,7 +53,7 @@ endmacro()
 
 function(_ament_add_gmock target)
   cmake_parse_arguments(ARG
-    "SKIP_LINKING_MAIN_LIBRARIES"
+    "SKIP_LINKING_MAIN_LIBRARIES;SKIP_TEST"
     "TIMEOUT;WORKING_DIRECTORY"
     "APPEND_ENV;APPEND_LIBRARY_DIRS;ENV"
     ${ARGN})
@@ -83,6 +85,9 @@ function(_ament_add_gmock target)
   if(ARG_APPEND_LIBRARY_DIRS)
     set(ARG_APPEND_LIBRARY_DIRS "APPEND_LIBRARY_DIRS" ${ARG_APPEND_LIBRARY_DIRS})
   endif()
+  if(ARG_SKIP_TEST)
+    set(ARG_SKIP_TEST "SKIP_TEST")
+  endif()
   if(ARG_TIMEOUT)
     set(ARG_TIMEOUT "TIMEOUT" ${ARG_TIMEOUT})
   endif()
@@ -98,6 +103,7 @@ function(_ament_add_gmock target)
     ${ARG_ENV}
     ${ARG_APPEND_ENV}
     ${ARG_APPEND_LIBRARY_DIRS}
+    ${ARG_SKIP_TEST}
     ${ARG_TIMEOUT}
     ${ARG_WORKING_DIRECTORY}
   )
