@@ -47,7 +47,7 @@ macro(ament_export_libraries)
         continue()
       endif()
 
-      if("${_arg}" MATCHES "^debug|optimized|general$")
+      if("${_arg}" MATCHES "^(debug|optimized|general)$")
         # remember build configuration keyword
         # and get following library
         set(_cfg "${_arg}")

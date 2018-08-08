@@ -42,7 +42,7 @@ macro(ament_export_library_names)
     endif()
 
     foreach(_library_name ${_ARG_UNPARSED_ARGUMENTS})
-      if("${_library_name}" MATCHES "^debug|optimized|general$")
+      if("${_library_name}" MATCHES "^(debug|optimized|general)$")
         # keep build configuration keyword as-is
         list(APPEND _AMENT_EXPORT_LIBRARY_NAMES "${_library_name}")
       else()
