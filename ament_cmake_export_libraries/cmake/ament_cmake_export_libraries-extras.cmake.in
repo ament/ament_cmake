@@ -18,7 +18,7 @@ if(NOT _exported_libraries STREQUAL "")
       continue()
     endif()
 
-    if("${_arg}" MATCHES "^debug|optimized|general$")
+    if("${_arg}" MATCHES "^(debug|optimized|general)$")
       # remember build configuration keyword
       # and get following library
       set(_cfg "${_arg}")
@@ -83,7 +83,7 @@ if(NOT _exported_library_names STREQUAL "")
       continue()
     endif()
 
-    if("${_arg}" MATCHES "^debug|optimized|general$")
+    if("${_arg}" MATCHES "^(debug|optimized|general)$")
       # remember build configuration keyword
       # and get following library name
       set(_cfg "${_arg}")
