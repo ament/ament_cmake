@@ -14,7 +14,9 @@
 
 # copied from ament_cmake_test/ament_cmake_test-extras.cmake
 
-include(CTest)
+enable_testing()
+# same option as in the CTest module
+option(BUILD_TESTING "Build the testing tree." ON)
 
 # option()
 set(
@@ -24,9 +26,14 @@ set(
 
 if(BUILD_TESTING)
   # configure ctest not to truncate the dashboard summary
-  file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/CTestCustom.ctest"
+  file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/CTestCustom.cmake"
     "set(CTEST_CUSTOM_MAXIMUM_PASSED_TEST_OUTPUT_SIZE 0)\n"
     "set(CTEST_CUSTOM_MAXIMUM_FAILED_TEST_OUTPUT_SIZE 0)\n")
+  # create dart configuration from template
+  site_name(SITE)
+  configure_file(
+    ${CMAKE_ROOT}/Modules/DartConfiguration.tcl.in
+    ${PROJECT_BINARY_DIR}/CTestConfiguration.ini )
 endif()
 
 find_package(ament_cmake_core QUIET REQUIRED)
