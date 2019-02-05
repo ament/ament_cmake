@@ -15,8 +15,8 @@
 #
 # Check if the index contains a specific resource.
 #
-# :param var: the flag if the requested resource exists
-# :type var: boolean flag
+# :param var: the prefix path if the resource exists, FALSE otherwise
+# :type var: string or FALSE
 # :param resource_type: the type of the resource
 # :type resource_type: string
 # :param resource_name: the name of the resource
@@ -53,7 +53,7 @@ function(ament_index_has_resource var resource_type resource_name)
   foreach(path IN LISTS prefix_path)
     if(EXISTS
         "${path}/share/ament_index/resource_index/${resource_type}/${resource_name}")
-      set(retval TRUE)
+      set(retval "${path}")
       break()
     endif()
   endforeach()
