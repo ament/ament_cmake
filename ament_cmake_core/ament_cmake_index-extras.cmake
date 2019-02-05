@@ -17,6 +17,7 @@
 include("${ament_cmake_core_DIR}/index/ament_index_get_prefix_path.cmake")
 include("${ament_cmake_core_DIR}/index/ament_index_get_resource.cmake")
 include("${ament_cmake_core_DIR}/index/ament_index_get_resources.cmake")
+include("${ament_cmake_core_DIR}/index/ament_index_get_resource_prefix_path.cmake")
 include("${ament_cmake_core_DIR}/index/ament_index_has_resource.cmake")
 include("${ament_cmake_core_DIR}/index/ament_index_register_package.cmake")
 include("${ament_cmake_core_DIR}/index/ament_index_register_resource.cmake")
