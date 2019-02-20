@@ -23,7 +23,11 @@
 # @public
 #
 macro(ament_include_directories_order var)
-  _ament_include_directories_order(${var} "$ENV{AMENT_PREFIX_PATH}" ${ARGN})
+  set(_ament_prefix_path_list "$ENV{AMENT_PREFIX_PATH}")
+  if(NOT WIN32)
+    string(REPLACE ":" ";" _ament_prefix_path_list "${_ament_prefix_path_list}")
+  endif()
+  _ament_include_directories_order(${var} "${_ament_prefix_path_list}" ${ARGN})
 endmacro()
 
 
