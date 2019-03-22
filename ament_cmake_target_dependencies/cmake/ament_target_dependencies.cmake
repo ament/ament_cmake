@@ -23,7 +23,9 @@
 #
 # :param target: the target name
 # :type target: string
-# :param ARGN: a list of package names
+# :param ARGN: a list of package names, which could start with PUBLIC keyword.
+#   If it starts with PUBLIC, this keyword is used in the target_link_libraries call.
+#   If not, the non-keyword target_link_libraries call is used.
 # :type ARGN: list of strings
 #
 # @public
@@ -45,10 +47,14 @@ function(ament_target_dependencies target)
     set(include_dirs "")
     set(libraries "")
     set(link_flags "")
+    set(TARGET_LINK_LIBRARIES_VISIBILITY)
     if(AMENT_TARGET_DEPENDENCIES_PUBLIC)
-      list(REMOVE_ITEM ARGN ${options})
+      if(NOT ${ARGV1} STREQUAL PUBLIC)
+        message(FATAL_ERROR "ament_target_dependencies() PUBLIC keyword is only allowed before the package names list")
+      endif()
+      set(TARGET_LINK_LIBRARIES_VISIBILITY PUBLIC)
     endif()
-    foreach(package_name ${ARGN})
+    foreach(package_name ${AMENT_TARGET_DEPENDENCIES_UNPARSED_ARGUMENTS})
       if(NOT ${${package_name}_FOUND})
         message(FATAL_ERROR "ament_target_dependencies() the passed package name '${package_name}' was not found before")
       endif()
@@ -63,13 +69,8 @@ function(ament_target_dependencies target)
     target_include_directories(${target}
       PUBLIC ${ordered_include_dirs})
     ament_libraries_deduplicate(unique_libraries ${libraries})
-    if(AMENT_TARGET_DEPENDENCIES_PUBLIC)
-      target_link_libraries(${target}
-        PUBLIC ${unique_libraries})
-    else()
-      target_link_libraries(${target}
-        ${unique_libraries})
-    endif()
+    target_link_libraries(${target}
+      ${TARGET_LINK_LIBRARIES_VISIBILITY} ${unique_libraries})
     foreach(link_flag IN LISTS link_flags)
       set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS " ${link_flag} ")
     endforeach()
