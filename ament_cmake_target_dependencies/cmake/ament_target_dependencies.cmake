@@ -33,10 +33,21 @@ function(ament_target_dependencies target)
     message(FATAL_ERROR "ament_target_dependencies() the first argument must be a valid target name")
   endif()
   if(${ARGC} GREATER 0)
+    set(options PUBLIC)
+    set(oneValueArgs)
+    set(multiValueArgs)
+    cmake_parse_arguments(AMENT_TARGET_DEPENDENCIES
+      "${options}"
+      "${oneValueArgs}"
+      "${multiValueArgs}"
+      ${ARGN})
     set(definitions "")
     set(include_dirs "")
     set(libraries "")
     set(link_flags "")
+    if(AMENT_TARGET_DEPENDENCIES_PUBLIC)
+      list(REMOVE_ITEM ARGN ${options})
+    endif()
     foreach(package_name ${ARGN})
       if(NOT ${${package_name}_FOUND})
         message(FATAL_ERROR "ament_target_dependencies() the passed package name '${package_name}' was not found before")
@@ -52,8 +63,13 @@ function(ament_target_dependencies target)
     target_include_directories(${target}
       PUBLIC ${ordered_include_dirs})
     ament_libraries_deduplicate(unique_libraries ${libraries})
-    target_link_libraries(${target}
-      ${unique_libraries})
+    if(AMENT_TARGET_DEPENDENCIES_PUBLIC)
+      target_link_libraries(${target}
+        PUBLIC ${unique_libraries})
+    else()
+      target_link_libraries(${target}
+        ${unique_libraries})
+    endif()
     foreach(link_flag IN LISTS link_flags)
       set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS " ${link_flag} ")
     endforeach()
