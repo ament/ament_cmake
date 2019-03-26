@@ -23,7 +23,9 @@
 #
 # :param target: the target name
 # :type target: string
-# :param ARGN: a list of package names
+# :param ARGN: a list of package names, which could start with PUBLIC keyword.
+#   If it starts with PUBLIC, this keyword is used in the target_link_libraries call.
+#   If not, the non-keyword target_link_libraries call is used.
 # :type ARGN: list of strings
 #
 # @public
@@ -33,11 +35,19 @@ function(ament_target_dependencies target)
     message(FATAL_ERROR "ament_target_dependencies() the first argument must be a valid target name")
   endif()
   if(${ARGC} GREATER 0)
+    cmake_parse_arguments(ARG "PUBLIC" "" "" ${ARGN})
+    set(TARGET_LINK_LIBRARIES_VISIBILITY)
+    if(ARG_PUBLIC)
+      if(NOT "${ARGV1}" STREQUAL "PUBLIC")
+        message(FATAL_ERROR "ament_target_dependencies() PUBLIC keyword is only allowed before the package names")
+      endif()
+      set(TARGET_LINK_LIBRARIES_VISIBILITY PUBLIC)
+    endif()
     set(definitions "")
     set(include_dirs "")
     set(libraries "")
     set(link_flags "")
-    foreach(package_name ${ARGN})
+    foreach(package_name ${ARG_UNPARSED_ARGUMENTS})
       if(NOT ${${package_name}_FOUND})
         message(FATAL_ERROR "ament_target_dependencies() the passed package name '${package_name}' was not found before")
       endif()
@@ -53,7 +63,7 @@ function(ament_target_dependencies target)
       PUBLIC ${ordered_include_dirs})
     ament_libraries_deduplicate(unique_libraries ${libraries})
     target_link_libraries(${target}
-      ${unique_libraries})
+      ${TARGET_LINK_LIBRARIES_VISIBILITY} ${unique_libraries})
     foreach(link_flag IN LISTS link_flags)
       set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS " ${link_flag} ")
     endforeach()
