@@ -15,7 +15,7 @@
 #
 # Add a test.
 #
-# A test is expected to generated a JUnit result file
+# A test is expected to generate a JUnit result file
 # ${AMENT_TEST_RESULTS_DIR}/$PROJECT_NAME}/${testname}.xml.
 # Failing to do so is considered a failed test.
 #
