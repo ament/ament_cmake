@@ -25,6 +25,9 @@
 #   Libraries are not affected by this option.
 #   They are always installed into `lib` and `dll`s into `bin`.
 # :type INSTALL_TO_PATH: option
+# :param INSTALL_TO_SHARE: a list of directories to be installed to the
+#   package's share directory
+# :type INSTALL_TO_SHARE: list of strings
 #
 # Export all found build dependencies which are also run
 # dependencies.
@@ -38,7 +41,7 @@
 #
 
 macro(ament_auto_package)
-  cmake_parse_arguments(_ARG "INSTALL_TO_PATH" "" "" ${ARGN})
+  cmake_parse_arguments(_ARG "INSTALL_TO_PATH" "" "INSTALL_TO_SHARE" ${ARGN})
   if(_ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "ament_auto_find_build_dependencies() called with "
       "unused arguments: ${_ARG_UNPARSED_ARGUMENTS}")
@@ -86,6 +89,14 @@ macro(ament_auto_package)
       DESTINATION ${_destination}
     )
   endif()
+
+  # install directories to share
+  foreach(_dir ${_ARG_INSTALL_TO_SHARE})
+    install(
+      DIRECTORY "${_dir}"
+      DESTINATION "share/${PROJECT_NAME}"
+    )
+  endforeach()
 
   ament_execute_extensions(ament_auto_package)
 
