@@ -17,10 +17,17 @@
 #
 # :param extension_point: the name of the extension point
 # :type extension_point: string
+# :param EXCLUDE: List of packages that should be skipped
+# :type EXCLUDE: list of strings
 #
 # @public
 #
 macro(ament_execute_extensions extension_point)
+  cmake_parse_arguments(_ARG "" "" "EXCLUDE" ${ARGN})
+  if(_ARG_UNPARSED_ARGUMENTS)
+    message(FATAL_ERROR "ament_execute_extensions() called with "
+      "unused arguments: ${_ARG_UNPARSED_ARGUMENTS}")
+  endif()
   if(AMENT_EXTENSIONS_${extension_point})
     foreach(_extension ${AMENT_EXTENSIONS_${extension_point}})
       string(REPLACE ":" ";" _extension_list "${_extension}")
@@ -31,6 +38,9 @@ macro(ament_execute_extensions extension_point)
           "name and cmake filename")
       endif()
       list(GET _extension_list 0 _pkg_name)
+      if("${_pkg_name}" IN_LIST _ARG_EXCLUDE)
+        continue()
+      endif()
       list(GET _extension_list 1 _cmake_filename)
       set(_extension_file "${${_pkg_name}_DIR}/${_cmake_filename}")
       assert_file_exists("${_extension_file}"
