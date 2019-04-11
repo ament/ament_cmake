@@ -24,9 +24,10 @@
 # @public
 #
 macro(ament_find_gmock)
-  if(ARGN)
+  set(_ARGN "${ARGN}")
+  if(_ARGN)
     message(FATAL_ERROR
-      "ament_find_gmock() called with unused arguments: ${ARGN}")
+      "ament_find_gmock() called with unused arguments: ${_ARGN}")
   endif()
   _ament_cmake_gmock_find_gmock()
 endmacro()
