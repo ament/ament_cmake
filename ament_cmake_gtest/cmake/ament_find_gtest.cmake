@@ -25,9 +25,10 @@
 # @public
 #
 macro(ament_find_gtest)
-  if(ARGN)
+  set(_ARGN "${ARGN}")
+  if(_ARGN)
     message(FATAL_ERROR
-      "ament_find_gtest() called with unused arguments: ${ARGN}")
+      "ament_find_gtest() called with unused arguments: ${_ARGN}")
   endif()
   _ament_cmake_gtest_find_gtest()
 endmacro()
