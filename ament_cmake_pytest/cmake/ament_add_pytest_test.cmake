@@ -87,6 +87,8 @@ function(ament_add_pytest_test testname path)
     # junit arguments
     "--junit-xml=${result_file}"
     "--junit-prefix=${PROJECT_NAME}"
+    # treat warnings as errors
+    "-We"
   )
 
   if(ARG_ENV)
