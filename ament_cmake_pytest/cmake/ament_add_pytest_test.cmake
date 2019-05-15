@@ -28,7 +28,7 @@
 # :param TIMEOUT: the test timeout in seconds,
 #   default defined by ``ament_add_test()``
 # :type TIMEOUT: integer
-# :param WERROR: If ON, then treat warnings as errors. Default: ON.
+# :param WERROR: If ON, then treat warnings as errors. Default: OFF.
 # :type WERROR: bool
 # :param WORKING_DIRECTORY: the working directory for invoking the
 #   command in, default defined by ``ament_add_test()``
@@ -78,10 +78,6 @@ function(ament_add_pytest_test testname path)
     return()
   endif()
 
-  if(NOT DEFINED ARG_WERROR)
-    set(ARG_WERROR ON)
-  endif()
-
   set(result_file "${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/${testname}.xunit.xml")
   set(cmd
     "${ARG_PYTHON_EXECUTABLE}"
@@ -95,7 +91,7 @@ function(ament_add_pytest_test testname path)
     "--junit-prefix=${PROJECT_NAME}"
   )
 
-  if(ARG_WERROR)
+  if(DEFINED ARG_WERROR AND ARG_WERROR)
     # treat warnings as errors
     list(APPEND cmd "-We")
   endif()
