@@ -50,6 +50,8 @@ def main(argv=sys.argv[1:]):
     except Exception as e:
         print("Error parsing '%s':" % args.package_xml.name, file=sys.stderr)
         raise e
+    finally:
+        args.package_xml.close()
 
     lines = generate_cmake_code(package)
     if args.outfile:
