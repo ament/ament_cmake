@@ -110,13 +110,22 @@ def main(argv=sys.argv[1:]):
 
     # collect output / exception to generate more detailed result file
     # if the command fails to generate it
-    output = ''
     output_handle = None
     if args.output_file:
         output_path = os.path.dirname(args.output_file)
         if not os.path.exists(output_path):
             os.makedirs(output_path)
         output_handle = open(args.output_file, 'wb')
+
+    try:
+        return _run_test(parser, args, failure_result_file, output_handle)
+    finally:
+        if output_handle:
+            output_handle.close()
+
+
+def _run_test(parser, args, failure_result_file, output_handle):
+    output = ''
 
     def log(msg, **kwargs):
         print(msg, **kwargs)
