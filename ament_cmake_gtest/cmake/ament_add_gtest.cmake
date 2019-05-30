@@ -25,6 +25,8 @@
 # :type target: string
 # :param ARGN: the list of source files
 # :type ARGN: list of strings
+# :param RUNNER: the path to the test runner script (default: see ament_add_test).
+# :type RUNNER: string
 # :param TIMEOUT: the test timeout in seconds,
 #   default defined by ``ament_add_test()``
 # :type TIMEOUT: integer
@@ -50,7 +52,7 @@
 macro(ament_add_gtest target)
   cmake_parse_arguments(_ARG
     "SKIP_LINKING_MAIN_LIBRARIES;SKIP_TEST"
-    "TIMEOUT;WORKING_DIRECTORY"
+    "RUNNER;TIMEOUT;WORKING_DIRECTORY"
     "APPEND_ENV;APPEND_LIBRARY_DIRS;ENV"
     ${ARGN})
   if(NOT _ARG_UNPARSED_ARGUMENTS)
@@ -67,6 +69,9 @@ macro(ament_add_gtest target)
 
   # add test
   set(_argn_test "")
+  if(_ARG_RUNNER)
+    list(APPEND _argn_test "RUNNER" "${_ARG_RUNNER}")
+  endif()
   if(_ARG_TIMEOUT)
     list(APPEND _argn_test "TIMEOUT" "${_ARG_TIMEOUT}")
   endif()

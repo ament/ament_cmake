@@ -20,6 +20,8 @@
 #
 # :param target: the target name which will also be used as the test name
 # :type target: string
+# :param RUNNER: the path to the test runner script (default: see ament_add_test).
+# :type RUNNER: string
 # :param TIMEOUT: the test timeout in seconds,
 #   default defined by ``ament_add_test()``
 # :type TIMEOUT: integer
@@ -46,7 +48,7 @@ function(ament_add_gtest_test target)
 
   cmake_parse_arguments(ARG
     "SKIP_TEST"
-    "TIMEOUT;WORKING_DIRECTORY"
+    "RUNNER;TIMEOUT;WORKING_DIRECTORY"
     "APPEND_ENV;APPEND_LIBRARY_DIRS;ENV"
     ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
@@ -68,6 +70,9 @@ function(ament_add_gtest_test target)
   if(ARG_APPEND_LIBRARY_DIRS)
     set(ARG_APPEND_LIBRARY_DIRS "APPEND_LIBRARY_DIRS" ${ARG_APPEND_LIBRARY_DIRS})
   endif()
+  if(ARG_RUNNER)
+    set(ARG_RUNNER "RUNNER" ${ARG_RUNNER})
+  endif()
   if(ARG_TIMEOUT)
     set(ARG_TIMEOUT "TIMEOUT" ${ARG_TIMEOUT})
   endif()
@@ -83,6 +88,7 @@ function(ament_add_gtest_test target)
     COMMAND ${cmd}
     OUTPUT_FILE "${CMAKE_BINARY_DIR}/ament_cmake_gtest/${target}.txt"
     RESULT_FILE "${result_file}"
+    ${ARG_RUNNER}
     ${ARG_SKIP_TEST}
     ${ARG_ENV}
     ${ARG_APPEND_ENV}
