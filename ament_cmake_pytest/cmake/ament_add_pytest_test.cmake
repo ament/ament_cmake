@@ -91,7 +91,7 @@ function(ament_add_pytest_test testname path)
     "--junit-prefix=${PROJECT_NAME}"
   )
 
-  if(DEFINED ARG_WERROR AND ARG_WERROR)
+  if(ARG_WERROR)
     # treat warnings as errors
     list(APPEND cmd "-We")
   endif()
