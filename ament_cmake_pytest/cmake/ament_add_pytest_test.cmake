@@ -28,6 +28,8 @@
 # :param TIMEOUT: the test timeout in seconds,
 #   default defined by ``ament_add_test()``
 # :type TIMEOUT: integer
+# :param WERROR: If ON, then treat warnings as errors. Default: OFF.
+# :type WERROR: bool
 # :param WORKING_DIRECTORY: the working directory for invoking the
 #   command in, default defined by ``ament_add_test()``
 # :type WORKING_DIRECTORY: string
@@ -45,7 +47,7 @@
 function(ament_add_pytest_test testname path)
   cmake_parse_arguments(ARG
     "SKIP_TEST"
-    "PYTHON_EXECUTABLE;TIMEOUT;WORKING_DIRECTORY"
+    "PYTHON_EXECUTABLE;TIMEOUT;WERROR;WORKING_DIRECTORY"
     "APPEND_ENV;APPEND_LIBRARY_DIRS;ENV"
     ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
@@ -88,6 +90,11 @@ function(ament_add_pytest_test testname path)
     "--junit-xml=${result_file}"
     "--junit-prefix=${PROJECT_NAME}"
   )
+
+  if(ARG_WERROR)
+    # treat warnings as errors
+    list(APPEND cmd "-We")
+  endif()
 
   if(ARG_ENV)
     set(ARG_ENV "ENV" ${ARG_ENV})
