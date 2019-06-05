@@ -65,7 +65,7 @@ function(_ament_add_gmock target)
   # should be EXCLUDE_FROM_ALL if it would be possible
   # to add this target as a dependency to the "test" target
   add_executable("${target}" ${ARG_UNPARSED_ARGUMENTS})
-  target_include_directories("${target}" PUBLIC "${GMOCK_INCLUDE_DIRS}")
+  target_include_directories("${target}" SYSTEM PUBLIC "${GMOCK_INCLUDE_DIRS}")
   if(NOT ARG_SKIP_LINKING_MAIN_LIBRARIES)
     target_link_libraries("${target}" ${GMOCK_MAIN_LIBRARIES})
   endif()
