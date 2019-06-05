@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 # Copyright 2014-2015 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -351,7 +349,3 @@ def _tidy_xml(filename):
     with open(filename, 'w') as h:
         h.write(data)
     return True
-
-
-if __name__ == '__main__':
-    sys.exit(main())
