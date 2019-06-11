@@ -25,6 +25,8 @@
 # :param PYTHON_EXECUTABLE: absolute path to the executable used to run the test,
 #   default to the CMake variable with the same name returned by FindPythonInterp
 # :type PYTHON_EXECUTABLE: string
+# :param RUNNER: the path to the test runner script (default: see ament_add_test).
+# :type RUNNER: string
 # :param TIMEOUT: the test timeout in seconds,
 #   default defined by ``ament_add_test()``
 # :type TIMEOUT: integer
@@ -52,7 +54,7 @@ endmacro()
 function(_ament_add_nose_test testname path)
   cmake_parse_arguments(ARG
     "SKIP_TEST"
-    "PYTHON_EXECUTABLE;TIMEOUT;WORKING_DIRECTORY"
+    "PYTHON_EXECUTABLE;RUNNER;TIMEOUT;WORKING_DIRECTORY"
     "APPEND_ENV;APPEND_LIBRARY_DIRS;ENV"
     ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
@@ -105,6 +107,9 @@ function(_ament_add_nose_test testname path)
   if(ARG_APPEND_LIBRARY_DIRS)
     set(ARG_APPEND_LIBRARY_DIRS "APPEND_LIBRARY_DIRS" ${ARG_APPEND_LIBRARY_DIRS})
   endif()
+  if(ARG_RUNNER)
+    set(ARG_RUNNER "RUNNER" ${ARG_RUNNER})
+  endif()
   if(ARG_TIMEOUT)
     set(ARG_TIMEOUT "TIMEOUT" "${ARG_TIMEOUT}")
   endif()
@@ -120,6 +125,7 @@ function(_ament_add_nose_test testname path)
     COMMAND ${cmd}
     OUTPUT_FILE "${CMAKE_BINARY_DIR}/ament_cmake_nose/${testname}.txt"
     RESULT_FILE "${result_file}"
+    ${ARG_RUNNER}
     ${ARG_SKIP_TEST}
     ${ARG_ENV}
     ${ARG_APPEND_ENV}

@@ -22,6 +22,8 @@
 # :type target: string
 # :param ARGN: the list of source files
 # :type ARGN: list of strings
+# :param RUNNER: the path to the test runner script (default: see ament_add_test).
+# :type RUNNER: string
 # :param TIMEOUT: the test timeout in seconds,
 #   default defined by ``ament_add_test()``
 # :type TIMEOUT: integer
@@ -54,7 +56,7 @@ endmacro()
 function(_ament_add_gmock target)
   cmake_parse_arguments(ARG
     "SKIP_LINKING_MAIN_LIBRARIES;SKIP_TEST"
-    "TIMEOUT;WORKING_DIRECTORY"
+    "RUNNER;TIMEOUT;WORKING_DIRECTORY"
     "APPEND_ENV;APPEND_LIBRARY_DIRS;ENV"
     ${ARGN})
   if(NOT ARG_UNPARSED_ARGUMENTS)
@@ -88,6 +90,9 @@ function(_ament_add_gmock target)
   if(ARG_SKIP_TEST)
     set(ARG_SKIP_TEST "SKIP_TEST")
   endif()
+  if(ARG_RUNNER)
+    set(ARG_RUNNER "RUNNER" ${ARG_RUNNER})
+  endif()
   if(ARG_TIMEOUT)
     set(ARG_TIMEOUT "TIMEOUT" ${ARG_TIMEOUT})
   endif()
@@ -100,6 +105,7 @@ function(_ament_add_gmock target)
     COMMAND ${cmd}
     OUTPUT_FILE "${CMAKE_BINARY_DIR}/ament_cmake_gmock/${target}.txt"
     RESULT_FILE "${result_file}"
+    ${ARG_RUNNER}
     ${ARG_ENV}
     ${ARG_APPEND_ENV}
     ${ARG_APPEND_LIBRARY_DIRS}
