@@ -54,6 +54,7 @@ function(ament_target_dependencies target)
       list_append_unique(definitions ${${package_name}_DEFINITIONS})
       list_append_unique(include_dirs ${${package_name}_INCLUDE_DIRS})
       list(APPEND libraries ${${package_name}_LIBRARIES})
+      list(APPEND libraries ${${package_name}_INTERFACES})
       list_append_unique(link_flags ${${package_name}_LINK_FLAGS})
     endforeach()
     target_compile_definitions(${target}
