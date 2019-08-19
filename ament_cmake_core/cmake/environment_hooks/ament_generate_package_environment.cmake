@@ -27,6 +27,8 @@ function(ament_generate_package_environment)
   # in order to detect wrong order of calling
   set(_${PROJECT_NAME}_AMENT_GENERATE_PACKAGE_ENVIRONMENT TRUE PARENT_SCOPE)
 
+  set(all_hooks "")
+
   # configure and install setup files for the package
   foreach(file ${ament_cmake_package_templates_PACKAGE_LEVEL})
     # check if the file is a template
@@ -52,6 +54,7 @@ function(ament_generate_package_environment)
       if(DEFINED _AMENT_CMAKE_ENVIRONMENT_HOOKS_${extension})
         list(SORT _AMENT_CMAKE_ENVIRONMENT_HOOKS_${extension})
         foreach(hook ${_AMENT_CMAKE_ENVIRONMENT_HOOKS_${extension}})
+          set(all_hooks "${all_hooks}source;${hook}\n")
           set(native_hook "/${hook}")
           file(TO_NATIVE_PATH "${native_hook}" native_hook)
           if(WIN32)
@@ -78,4 +81,11 @@ function(ament_generate_package_environment)
       DESTINATION "share/${PROJECT_NAME}"
     )
   endforeach()
+
+  set(dsv_file "${CMAKE_BINARY_DIR}/ament_cmake_environment_hooks/local_setup.dsv")
+  file(WRITE "${dsv_file}" "${all_hooks}")
+  install(
+    FILES "${dsv_file}"
+    DESTINATION "share/${PROJECT_NAME}"
+  )
 endfunction()
