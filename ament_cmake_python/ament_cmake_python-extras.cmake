@@ -21,6 +21,11 @@ macro(_ament_cmake_python_register_environment_hook)
 
     _ament_cmake_python_get_python_install_dir()
 
+    # register information for .dsv generation
+    set(
+      AMENT_CMAKE_ENVIRONMENT_HOOKS_DESC_pythonpath
+      "prepend-non-duplicate;PYTHONPATH;${PYTHON_INSTALL_DIR}")
+
     find_package(ament_cmake_core QUIET REQUIRED)
 
     # backup variable
