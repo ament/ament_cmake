@@ -27,6 +27,12 @@ macro(_ament_cmake_python_register_environment_hook)
     set(_PYTHON_INSTALL_DIR "${PYTHON_INSTALL_DIR}")
     # use native separators in environment hook to match what pure Python packages do
     file(TO_NATIVE_PATH "${PYTHON_INSTALL_DIR}" PYTHON_INSTALL_DIR)
+
+    # register information for .dsv generation
+    set(
+      AMENT_CMAKE_ENVIRONMENT_HOOKS_DESC_pythonpath
+      "prepend-non-duplicate;PYTHONPATH;${PYTHON_INSTALL_DIR}")
+
     ament_environment_hooks(
       "${ament_cmake_package_templates_ENVIRONMENT_HOOK_PYTHONPATH}")
     # restore variable

@@ -56,9 +56,6 @@ set(
 set(
   AMENT_CMAKE_ENVIRONMENT_HOOKS_DESC_pkg_config_path
   "prepend-non-duplicate;PKG_CONFIG_PATH;lib/pkgconfig")
-set(
-  AMENT_CMAKE_ENVIRONMENT_HOOKS_DESC_pythonpath
-  "prepend-non-duplicate;PYTHONPATH;${PYTHON_INSTALL_DIR}")
 
 include(
   "${ament_cmake_core_DIR}/environment_hooks/ament_environment_hooks.cmake")
