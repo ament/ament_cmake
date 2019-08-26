@@ -59,7 +59,7 @@ function(ament_target_dependencies target)
     target_compile_definitions(${target}
       PUBLIC ${definitions})
     ament_include_directories_order(ordered_include_dirs ${include_dirs})
-    target_include_directories(${target}
+    target_include_directories(${target} SYSTEM
       PUBLIC ${ordered_include_dirs})
     ament_libraries_deduplicate(unique_libraries ${libraries})
     target_link_libraries(${target}
