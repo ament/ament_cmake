@@ -28,6 +28,8 @@
 # :param INSTALL_TO_SHARE: a list of directories to be installed to the
 #   package's share directory
 # :type INSTALL_TO_SHARE: list of strings
+# :param ARGN: any other arguments are passed through to ament_package()
+# :type ARGN: list of strings
 #
 # Export all found build dependencies which are also run
 # dependencies.
@@ -42,10 +44,7 @@
 
 macro(ament_auto_package)
   cmake_parse_arguments(_ARG "INSTALL_TO_PATH" "" "INSTALL_TO_SHARE" ${ARGN})
-  if(_ARG_UNPARSED_ARGUMENTS)
-    message(FATAL_ERROR "ament_auto_find_build_dependencies() called with "
-      "unused arguments: ${_ARG_UNPARSED_ARGUMENTS}")
-  endif()
+  # passing all unparsed arguments to ament_package()
 
   # export all found build dependencies which are also run dependencies
   set(_run_depends
@@ -100,5 +99,5 @@ macro(ament_auto_package)
 
   ament_execute_extensions(ament_auto_package)
 
-  ament_package()
+  ament_package(${_ARG_UNPARSED_ARGUMENTS})
 endmacro()
