@@ -150,7 +150,7 @@ def _run_test(parser, args, failure_result_file, output_handle):
                 env[key] = value
                 updated_env_keys.add(key)
                 previous_key = key
-            for key in updated_env_keys:
+            for key in sorted(updated_env_keys):
                 log(' - {0}={1}'.format(key, env[key]))
         if args.append_env:
             log('-- run_test.py: extra environment variables to append:')
