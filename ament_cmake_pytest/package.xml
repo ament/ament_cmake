@@ -12,6 +12,7 @@
   <buildtool_export_depend>ament_cmake_core</buildtool_export_depend>
   <buildtool_export_depend>ament_cmake_test</buildtool_export_depend>
   <buildtool_export_depend>python3-pytest</buildtool_export_depend>
+  <buildtool_export_depend>python_cmake_module</buildtool_export_depend>
 
   <export>
     <build_type>ament_cmake</build_type>

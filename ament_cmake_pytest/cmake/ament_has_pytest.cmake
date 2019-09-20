@@ -36,6 +36,10 @@ function(ament_has_pytest var)
 
   if(NOT ARG_PYTHON_EXECUTABLE)
     if (WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Debug")
+      # Needed to get PythonExtra
+      find_package(python_cmake_module REQUIRED)
+      # Defines PYTHON_EXECUTABLE_DEBUG
+      find_package(PythonExtra REQUIRED)
       set(ARG_PYTHON_EXECUTABLE "${PYTHON_EXECUTABLE_DEBUG}")
     else()
       set(ARG_PYTHON_EXECUTABLE "${PYTHON_EXECUTABLE}")
