@@ -68,7 +68,11 @@ function(ament_add_pytest_test testname path)
       "ament_add_pytest_test() the path '${path}' does not exist")
   endif()
   if(NOT ARG_PYTHON_EXECUTABLE)
-    set(ARG_PYTHON_EXECUTABLE "${PYTHON_EXECUTABLE}")
+    if (WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Debug")
+      set(ARG_PYTHON_EXECUTABLE "${PYTHON_EXECUTABLE_DEBUG}")
+    else()
+      set(ARG_PYTHON_EXECUTABLE "${PYTHON_EXECUTABLE}")
+    endif()
   endif()
 
   # ensure pytest is available

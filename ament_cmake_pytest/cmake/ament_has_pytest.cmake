@@ -35,7 +35,11 @@ function(ament_has_pytest var)
   endif()
 
   if(NOT ARG_PYTHON_EXECUTABLE)
-    set(ARG_PYTHON_EXECUTABLE "${PYTHON_EXECUTABLE}")
+    if (WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Debug")
+      set(ARG_PYTHON_EXECUTABLE "${PYTHON_EXECUTABLE_DEBUG}")
+    else()
+      set(ARG_PYTHON_EXECUTABLE "${PYTHON_EXECUTABLE}")
+    endif()
   endif()
 
   set(cmd "${ARG_PYTHON_EXECUTABLE}" "-m" "pytest" "--version")
