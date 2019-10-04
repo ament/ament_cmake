@@ -28,6 +28,7 @@ function(ament_generate_package_environment)
   set(_${PROJECT_NAME}_AMENT_GENERATE_PACKAGE_ENVIRONMENT TRUE PARENT_SCOPE)
 
   set(all_hooks "")
+  set(all_package_level_extensions "")
 
   # configure and install setup files for the package
   foreach(file ${ament_cmake_package_templates_PACKAGE_LEVEL})
@@ -48,6 +49,7 @@ function(ament_generate_package_environment)
       endif()
       math(EXPR index "${index} + 1")
       string(SUBSTRING "${name}" ${index} -1 extension)
+      list(APPEND all_package_level_extensions "${extension}")
 
       # collect package hooks to be sourced for this extension
       set(ENVIRONMENT_HOOKS "")
@@ -74,6 +76,16 @@ function(ament_generate_package_environment)
         @ONLY
       )
       set(file "${CMAKE_BINARY_DIR}/ament_cmake_environment_hooks/${name}")
+    else()
+      # extract the extension of a non-template file
+      string(FIND "${file}" "." index REVERSE)
+      if(index EQUAL -1)
+        message(FATAL_ERROR "ament_generate_package_environment() called with "
+          "the non-template '${file}' which doesn't have a file extension")
+      endif()
+      math(EXPR index "${index} + 1")
+      string(SUBSTRING "${file}" ${index} -1 extension)
+      list(APPEND all_package_level_extensions "${extension}")
     endif()
 
     install(
@@ -82,8 +94,22 @@ function(ament_generate_package_environment)
     )
   endforeach()
 
+  # generate local_setup.dsv file
+  list(APPEND all_package_level_extensions "dsv")
   set(dsv_file "${CMAKE_BINARY_DIR}/ament_cmake_environment_hooks/local_setup.dsv")
   file(WRITE "${dsv_file}" "${all_hooks}")
+  install(
+    FILES "${dsv_file}"
+    DESTINATION "share/${PROJECT_NAME}"
+  )
+
+  # generate package.dsv file
+  list(SORT all_package_level_extensions)
+  set(dsv_file "${CMAKE_BINARY_DIR}/ament_cmake_environment_hooks/package.dsv")
+  file(WRITE "${dsv_file}" "")
+  foreach(ext ${all_package_level_extensions})
+    file(APPEND "${dsv_file}" "source;share/${PROJECT_NAME}/local_setup.${ext}\n")
+  endforeach()
   install(
     FILES "${dsv_file}"
     DESTINATION "share/${PROJECT_NAME}"
