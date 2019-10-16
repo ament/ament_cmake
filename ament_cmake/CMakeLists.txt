@@ -17,6 +17,7 @@ ament_export_dependencies(
   "ament_cmake_python"
   "ament_cmake_target_dependencies"
   "ament_cmake_test"
+  "ament_cmake_version"
 )
 
 ament_package()
