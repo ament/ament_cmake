@@ -48,7 +48,7 @@ macro(ament_bump_development_version_if_necessary development_version)
 
   if("${${PROJECT_NAME}_VERSION}" VERSION_LESS "${development_version}")
     message(STATUS
-      "Override exported package version ${${PROJECT_NAME}_VERSION} with "
+      "Overriding exported package version ${${PROJECT_NAME}_VERSION} with "
       "development version ${development_version}")
     set(${PROJECT_NAME}_VERSION "${development_version}")
   endif()
