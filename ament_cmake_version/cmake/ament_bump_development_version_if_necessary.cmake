@@ -32,7 +32,7 @@
 macro(ament_bump_development_version_if_necessary development_version)
   if(ARGN)
     message(FATAL_ERROR
-      "ament_generate_environment() called with unused arguments: ${ARGN}")
+      "ament_bump_development_version_if_necessary() called with unused arguments: ${ARGN}")
   endif()
 
   if(DEFINED _${PROJECT_NAME}_AMENT_PACKAGE)
