@@ -19,7 +19,7 @@
 # It is recommended to append the suffix ``-dev`` to the passed upcoming
 # version number.
 # If the package version in the manifest is equal or newer than the passed
-# development version this function call becomes a no op.
+# development version this function call becomes a no-op.
 #
 # .. note:: It is indirectly calling``ament_package_xml()`` if that hasn't
 #   happened already.
