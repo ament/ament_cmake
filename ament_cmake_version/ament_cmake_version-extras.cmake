@@ -18,4 +18,4 @@
 find_package(ament_cmake_core QUIET REQUIRED)
 
 include(
-  "${ament_cmake_version_DIR}/ament_bump_development_version_if_necessary.cmake")
+  "${ament_cmake_version_DIR}/ament_export_development_version_if_higher_than_manifest.cmake")

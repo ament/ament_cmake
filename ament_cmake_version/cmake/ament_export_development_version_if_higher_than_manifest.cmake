@@ -13,13 +13,15 @@
 # limitations under the License.
 
 #
-# Bump the exported package version to the passed version if the package
+# Set the exported package version to the passed value if the package
 # version in the manifest is lower.
 #
 # It is recommended to append the suffix ``-dev`` to the passed upcoming
 # version number.
 # If the package version in the manifest is equal or newer than the passed
 # development version this function call becomes a no-op.
+# If the function is called multiple times only the higher version number will
+# be used.
 #
 # .. note:: It is indirectly calling``ament_package_xml()`` if that hasn't
 #   happened already.
@@ -29,15 +31,15 @@
 #
 # @public
 #
-macro(ament_bump_development_version_if_necessary development_version)
+macro(ament_export_development_version_if_higher_than_manifest development_version)
   if(ARGN)
     message(FATAL_ERROR
-      "ament_bump_development_version_if_necessary() called with unused arguments: ${ARGN}")
+      "ament_export_development_version_if_higher_than_manifest() called with unused arguments: ${ARGN}")
   endif()
 
   if(DEFINED _${PROJECT_NAME}_AMENT_PACKAGE)
     message(FATAL_ERROR
-      "ament_bump_development_version_if_necessary() must be called before "
+      "ament_export_development_version_if_higher_than_manifest() must be called before "
       "ament_package()")
   endif()
 
