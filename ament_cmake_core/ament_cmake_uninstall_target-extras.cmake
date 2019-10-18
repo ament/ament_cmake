@@ -15,7 +15,7 @@
 # copied from ament_cmake_core/ament_cmake_uninstall_target-extras.cmake
 
 option(AMENT_CMAKE_UNINSTALL_TARGET
-  "Generate an uninstall target to revert the effects of the install step" ON)
+  "Generate an uninstall target to revert the effects of the install step" OFF)
 
 if(AMENT_CMAKE_UNINSTALL_TARGET)
   include(
