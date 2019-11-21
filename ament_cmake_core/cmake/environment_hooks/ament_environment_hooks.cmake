@@ -39,22 +39,21 @@ function(ament_environment_hooks)
     get_filename_component(hook_filename "${hook}" NAME)
 
     # check if the file is a template
-    string_ends_with("${hook_filename}" ".in" is_template)
-    if(is_template)
-      # cut of .in extension
-      string(LENGTH "${hook_filename}" length)
-      math(EXPR offset "${length} - 3")
-      string(SUBSTRING "${hook_filename}" 0 ${offset} hook_filename)
+    if(hook_filename MATCHES "^(.*)\\.in$")
+      set(is_template TRUE)
+      # cut off .in extension
+      set(hook_filename "${CMAKE_MATCH_1}")
+    else()
+      set(is_template FALSE)
     endif()
 
-    # extract the extension
-    string(FIND "${hook_filename}" "." index REVERSE)
-    if(index EQUAL -1)
+    if(hook_filename MATCHES "^.*\\.([^\\.]+)$")
+      # extract the extension
+      set(hook_extension "${CMAKE_MATCH_1}")
+    else()
       message(FATAL_ERROR "ament_environment_hooks() called with the hook "
         "'${hook}' which doesn't have a file extension")
     endif()
-    math(EXPR index "${index} + 1")
-    string(SUBSTRING "${hook_filename}" ${index} -1 hook_extension)
 
     if(is_template)
       # expand template
