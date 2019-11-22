@@ -30,11 +30,11 @@
 # :param TIMEOUT: the test timeout in seconds, default: 60
 # :type TIMEOUT: integer
 # :param WORKING_DIRECTORY: the working directory for invoking the
-#   command in, default: CMAKE_SOURCE_DIR
+#   command in, default: CMAKE_CURRENT_BINARY_DIR
 # :type WORKING_DIRECTORY: string
 # :param GENERATE_RESULT_FOR_RETURN_CODE_ZERO: generate a test result
 #   file when the command invocation returns with code zero
-#   command in, default: CMAKE_SOURCE_DIR
+#   command in, default: FALSE
 # :type GENERATE_RESULT_FOR_RETURN_CODE_ZERO: option
 # :param SKIP_TEST: if set mark the test as being skipped
 # :type SKIP_TEST: option
@@ -77,7 +77,7 @@ function(ament_add_test testname)
       "valid number and greater than zero")
   endif()
   if(NOT ARG_WORKING_DIRECTORY)
-    set(ARG_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
+    set(ARG_WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
   endif()
 
   # wrap command with run_test script to ensure test result generation
