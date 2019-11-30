@@ -26,6 +26,7 @@ endif()
 # set RPATH to ON for OS X
 if(APPLE)
   set(CMAKE_MACOSX_RPATH ON)
+  set(CMAKE_INSTALL_RPATH_USE_LINK_PATH ON)
 endif()
 
 # the following operations must be performed inside a project context
