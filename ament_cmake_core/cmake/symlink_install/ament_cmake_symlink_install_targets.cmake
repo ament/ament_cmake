@@ -73,6 +73,9 @@ function(ament_cmake_symlink_install_targets)
           "'${target}' is an imported target")
       endif()
       list(APPEND target_files "$<TARGET_FILE:${target}>")
+      if(NOT "$<TARGET_FILE:${target}>" STREQUAL "$<TARGET_LINKER_FILE:${target}>")
+        list(APPEND target_files "$<TARGET_LINKER_FILE:${target}>")
+      endif()
     endforeach()
 
     string(REPLACE ";" "\" \"" target_files_quoted
