@@ -32,7 +32,7 @@
 # @public
 #
 macro(ament_export_development_version_if_higher_than_manifest development_version)
-  if(ARGN)
+  if(${ARGN})
     message(FATAL_ERROR
       "ament_export_development_version_if_higher_than_manifest() called with unused arguments: ${ARGN}")
   endif()
