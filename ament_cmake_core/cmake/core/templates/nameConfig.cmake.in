@@ -26,7 +26,7 @@ if(NOT "@PACKAGE_DEPRECATED@" STREQUAL "")
   if(NOT "@PACKAGE_DEPRECATED@" STREQUAL "TRUE")
     set(_msg "${_msg} (@PACKAGE_DEPRECATED@)")
   endif()
-  message(WARNING "${_msg}")
+  message(DEPRECATION "${_msg}")
 endif()
 
 # flag package as ament-based to distinguish it after being find_package()-ed
