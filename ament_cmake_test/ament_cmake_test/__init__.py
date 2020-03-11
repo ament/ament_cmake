@@ -304,7 +304,7 @@ def _generate_result(result_file, *, failure_message=None, skip=False):
         '<skipped type="skip" message="">![CDATA[Test Skipped by developer]]</skipped>' \
         if skip else ''
     return """<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="%s" tests="1" failures="%d" time="0" errors="0" skip="%d">
+<testsuite name="%s" tests="1" failures="%d" time="0" errors="0" skipped="%d">
   <testcase classname="%s" name="%s.missing_result" time="0">
     %s%s%s
   </testcase>
