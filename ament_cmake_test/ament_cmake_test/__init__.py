@@ -199,6 +199,8 @@ def _run_test(parser, args, failure_result_file, output_handle):
                         '--cov-report=xml:' + os.path.join(build_base, 'coverage.xml'),
                         '--cov-append',
                     ]
+                    # use --cov-branch option only when available
+                    # https://github.com/pytest-dev/pytest-cov/blob/v2.5.0/CHANGELOG.rst
                     if parse_version(pytest_cov_version) >= parse_version('2.5.0'):
                         pytest_coverage_args += [
                             '--cov-branch',
