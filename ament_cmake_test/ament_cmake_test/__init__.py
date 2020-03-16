@@ -79,7 +79,7 @@ def main(argv=sys.argv[1:]):
         action='store_true',
         default=False,
         help='Generate coverage information for Python tests (alternatively,
-             'set AMENT_CMAKE_TEST_PYTEST_COVERAGE_ENABLED to any value)')
+             'set AMENT_CMAKE_TEST_PYTEST_WITH_COVERAGE to any value)')
 
     if '--command' in argv:
         index = argv.index('--command')
@@ -180,7 +180,7 @@ def _run_test(parser, args, failure_result_file, output_handle):
                 env[key] += value
                 previous_key = key
 
-        if args.pytest_with_coverage or 'AMENT_CMAKE_TEST_PYTEST_COVERAGE_ENABLED' in env:
+        if args.pytest_with_coverage or 'AMENT_CMAKE_TEST_PYTEST_WITH_COVERAGE' in env:
             try:
                 from pytest_cov import __version__ as pytest_cov_version
             except ImportError:
