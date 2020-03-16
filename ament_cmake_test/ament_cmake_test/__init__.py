@@ -78,7 +78,7 @@ def main(argv=sys.argv[1:]):
         '--pytest-with-coverage',
         action='store_true',
         default=False,
-        help='Generate coverage information for Python tests (alternatively,
+        help='Generate coverage information for Python tests (alternatively, '
              'set AMENT_CMAKE_TEST_PYTEST_WITH_COVERAGE to any value)')
 
     if '--command' in argv:
