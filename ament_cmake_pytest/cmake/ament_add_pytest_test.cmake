@@ -98,6 +98,9 @@ function(ament_add_pytest_test testname path)
     list(APPEND cmd "-We")
   endif()
 
+  # provide source directory
+  list(APPEND ARG_ENV "AMENT_CMAKE_CURRENT_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}")
+
   if(ARG_ENV)
     set(ARG_ENV "ENV" ${ARG_ENV})
   endif()

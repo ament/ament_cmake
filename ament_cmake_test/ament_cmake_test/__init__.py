@@ -24,6 +24,8 @@ from xml.etree.ElementTree import ElementTree
 from xml.etree.ElementTree import ParseError
 from xml.sax.saxutils import quoteattr
 
+from pkg_resources import parse_version
+
 
 def separate_env_vars(env_str, env_argument_name, parser):
     try:
@@ -171,6 +173,45 @@ def _run_test(parser, args, failure_result_file, output_handle):
                     env[key] += os.pathsep
                 env[key] += value
                 previous_key = key
+
+        if 'AMENT_CMAKE_TEST_PYTEST_COVERAGE_ENABLED' in env:
+            try:
+                from pytest_cov import __version__ as pytest_cov_version
+            except ImportError:
+                log(
+                    '-- run_test.py: '
+                    'Test coverage will not be produced since '
+                    "the pytest extension 'cov' was not found")
+            else:
+                package_source_dir = env.get('AMENT_CMAKE_CURRENT_SOURCE_DIR', None)
+                if package_source_dir is None:
+                    log(
+                        '-- run_test.py: '
+                        'Test coverage will not be produced since '
+                        'AMENT_CMAKE_CURRENT_SOURCE_DIR was not found')
+                else:
+                    log('-- run_test.py: pytest coverage enabled')
+                    # assuming that the build base path is at the end
+                    build_base = env['PYTHONPATH'].split(':')[-1]
+                    pytest_coverage_args = [
+                        '--cov=' + package_source_dir,
+                        '--cov-report=html:' + os.path.join(build_base, 'coverage.html'),
+                        '--cov-report=xml:' + os.path.join(build_base, 'coverage.xml'),
+                        '--cov-append',
+                    ]
+                    if parse_version(pytest_cov_version) >= parse_version('2.5.0'):
+                        pytest_coverage_args += [
+                            '--cov-branch',
+                        ]
+                    else:
+                        log(
+                            '-- run_test.py: '
+                            'Test coverage will be produced but will not contain '
+                            'branch coverage information because the pytest '
+                            "extension 'cov' does not support it (need 2.5.0, "
+                            f'have {pytest_cov_version})')
+                    args.command += pytest_coverage_args
+                    env['COVERAGE_FILE'] = os.path.join(build_base, '.coverage')
 
     log("-- run_test.py: invoking following command in '%s':\n - %s" %
         (os.getcwd(), ' '.join(args.command)))
