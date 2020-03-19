@@ -237,7 +237,7 @@ def _run_test(parser, args, failure_result_file, output_handle):
             # regenerate result file to include output / exception of the invoked command
             failure_result_file = _generate_result(
                 args.result_file,
-                failure_message='The test did not generate a result file:\n\n' + output)
+                error_message='The test did not generate a result file:\n\n' + output)
             with open(args.result_file, 'w') as h:
                 h.write(failure_result_file)
         else:
