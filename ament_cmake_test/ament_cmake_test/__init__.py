@@ -15,6 +15,7 @@
 import argparse
 import codecs
 import errno
+import locale
 import os
 import re
 import subprocess
@@ -177,6 +178,10 @@ def _run_test(parser, args, failure_result_file, output_handle):
         output_handle.write('\n'.encode())
         output_handle.flush()
 
+    encodings = ['utf-8']
+    if locale.getpreferredencoding(False) not in encodings:
+        encodings.append(locale.getpreferredencoding(False))
+
     try:
         proc = subprocess.Popen(
             args.command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
@@ -185,11 +190,18 @@ def _run_test(parser, args, failure_result_file, output_handle):
             line = proc.stdout.readline()
             if not line:
                 break
-            decoded_line = line.decode()
+            for i, encoding in enumerate(encodings):
+                try:
+                    decoded_line = line.decode(encoding)
+                except UnicodeDecodeError:
+                    if i == len(encodings) - 1:
+                        raise
+                else:
+                    break
             print(decoded_line, end='')
             output += decoded_line
             if output_handle:
-                output_handle.write(line)
+                output_handle.write(decoded_line.encode())
                 output_handle.flush()
         proc.wait()
         rc = proc.returncode
@@ -216,7 +228,7 @@ def _run_test(parser, args, failure_result_file, output_handle):
 
     elif os.path.exists(args.result_file):
         # check if content of result file has actually changed
-        with open(args.result_file, 'r') as h:
+        with open(args.result_file, 'r', encoding='utf-8') as h:
             content = h.read()
 
         if content == failure_result_file:
@@ -346,6 +358,6 @@ def _tidy_xml(filename):
     for match in safe_xml_regex.finditer(data):
         data = data[:match.start()] + '?' + data[match.end():]
 
-    with open(filename, 'w') as h:
+    with open(filename, 'w', encoding='utf-8') as h:
         h.write(data)
     return True
