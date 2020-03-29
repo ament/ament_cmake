@@ -13,13 +13,13 @@
 # limitations under the License.
 
 #
-# Check if the Python module `pytest-cov` was found and get version if it is.
+# Check if the Python module `pytest-cov` was found and get its version if it is.
 #
 # :param var: the output variable name
 # :type var: string
-# :param version_var: the variable name for the version of pytest-cov found, only set
-#  if it was found
-# :type var: string
+# :param version_var: the variable name for the version of pytest-cov found, only
+#   set if it was found
+# :type version_var: string
 # :param QUIET: suppress the CMake warning if pytest-cov is not found, if not set
 #   and pytest-cov was not found a CMake warning is printed
 # :type QUIET: option
@@ -41,21 +41,33 @@ function(ament_has_pytest_cov var version_var)
     set(ARG_PYTHON_EXECUTABLE "${PYTHON_EXECUTABLE}")
   endif()
 
-  set(cmd "${ARG_PYTHON_EXECUTABLE}" "-c" "\"print(__import__('pytest_cov').__version__)\"")
+  set(cmd "${ARG_PYTHON_EXECUTABLE}" "-m" "pytest" "--version")
   execute_process(
     COMMAND ${cmd}
     RESULT_VARIABLE res
     OUTPUT_VARIABLE output
     ERROR_VARIABLE error)
   if(res EQUAL 0)
-    set(${var} TRUE PARENT_SCOPE)
-    set(${version_var} ${output} PARENT_SCOPE)
+    # check if pytest-cov is in the list of plugins
+    # (actual output of the command is in ${error} and not ${output})
+    string(REGEX MATCH "pytest-cov-[0-9]\.[0-9]\.[0-9]" pytest_cov_full_version "${error}")
+    if(pytest_cov_full_version)
+      # extract version
+      string(REGEX MATCH "[0-9]\.[0-9]\.[0-9]" pytest_cov_version "${pytest_cov_full_version}")
+      set(${var} TRUE PARENT_SCOPE)
+      set(${version_var} ${pytest_cov_version} PARENT_SCOPE)
+    else()
+      if(NOT ARG_QUIET)
+        message(WARNING "Failed to find `pytest` plugin `pytest-cov`")
+      endif()
+      set(${var} FALSE PARENT_SCOPE)
+    endif()
   else()
     if(NOT ARG_QUIET)
       string(REPLACE ";" " " cmd_str "${cmd}")
       message(WARNING
-        "Failed to find Python module `pytest-cov`: "
-        "'${cmd_str}' returned error code ${res}")
+        "Failed to find Python module `pytest` which is needed "
+        "for `pytest-cov`: '${cmd_str}' returned error code ${res}")
     endif()
     set(${var} FALSE PARENT_SCOPE)
   endif()
