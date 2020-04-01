@@ -109,11 +109,11 @@ function(ament_add_pytest_test testname path)
     ${coverage_default})
 
   if(AMENT_CMAKE_PYTEST_WITH_COVERAGE)
-    # check if pytest-cov is available
-    ament_has_pytest_cov(has_pytest_cov pytest_cov_version
+    # get pytest-cov version, if available
+    ament_get_pytest_cov_version(pytest_cov_version
       PYTHON_EXECUTABLE "${ARG_PYTHON_EXECUTABLE}"
     )
-    if(NOT has_pytest_cov)
+    if(NOT pytest_cov_version)
       message(WARNING
         "The Python module 'pytest-cov' was not found, test coverage will not be produced "
         "(e.g. on Ubuntu/Debian install the package 'python3-pytest-cov')")

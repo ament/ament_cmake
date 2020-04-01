@@ -17,9 +17,6 @@
 #
 # :param var: the output variable name
 # :type var: string
-# :param version_var: the variable name for the version of pytest-cov found, only
-#   set if it was found
-# :type version_var: string
 # :param PYTHON_EXECUTABLE: absolute path to the Python interpreter to be used,
 #   default to the CMake variable with the same name returned by
 #   FindPythonInterp
@@ -27,10 +24,10 @@
 #
 # @public
 #
-function(ament_has_pytest_cov var version_var)
+function(ament_get_pytest_cov_version var)
   cmake_parse_arguments(ARG "PYTHON_EXECUTABLE" "" ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
-    message(FATAL_ERROR "ament_has_pytest_cov() called with unused arguments: "
+    message(FATAL_ERROR "ament_get_pytest_cov_version() called with unused arguments: "
       "${ARG_UNPARSED_ARGUMENTS}")
   endif()
 
@@ -51,8 +48,7 @@ function(ament_has_pytest_cov var version_var)
     if(pytest_cov_full_version)
       # extract version
       string(REGEX MATCH "[0-9]\.[0-9]\.[0-9]" pytest_cov_version "${pytest_cov_full_version}")
-      set(${var} TRUE PARENT_SCOPE)
-      set(${version_var} ${pytest_cov_version} PARENT_SCOPE)
+      set(${var} ${pytest_cov_version} PARENT_SCOPE)
     else()
       set(${var} FALSE PARENT_SCOPE)
     endif()
