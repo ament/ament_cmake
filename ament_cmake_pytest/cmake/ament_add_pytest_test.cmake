@@ -117,25 +117,24 @@ function(ament_add_pytest_test testname path)
       message(WARNING
         "The Python module 'pytest-cov' was not found, test coverage will not be produced "
         "(e.g. on Ubuntu/Debian install the package 'python3-pytest-cov')")
-      return()
-    endif()
-
-    list(APPEND cmd
-      "--cov=${CMAKE_CURRENT_SOURCE_DIR}"
-      "--cov-report=html:${CMAKE_CURRENT_BINARY_DIR}/coverage.html"
-      "--cov-report=xml:${CMAKE_CURRENT_BINARY_DIR}/coverage.xml"
-    )
-
-    if(pytest_cov_version VERSION_LESS "2.5.0")
-      message(WARNING
-        "Test coverage will be produced, but will not contain branch coverage information, "
-        "because the pytest extension 'cov' does not support it "
-        "(need 2.5.0, found '${pytest_cov_version}').")
     else()
-      list(APPEND cmd "--cov-branch")
-    endif()
+      list(APPEND cmd
+        "--cov=${CMAKE_CURRENT_SOURCE_DIR}"
+        "--cov-report=html:${CMAKE_CURRENT_BINARY_DIR}/coverage.html"
+        "--cov-report=xml:${CMAKE_CURRENT_BINARY_DIR}/coverage.xml"
+      )
 
-    list(APPEND ARG_ENV "COVERAGE_FILE=${CMAKE_CURRENT_BINARY_DIR}/.coverage")
+      if(pytest_cov_version VERSION_LESS "2.5.0")
+        message(WARNING
+          "Test coverage will be produced, but will not contain branch coverage information, "
+          "because the pytest extension 'cov' does not support it "
+          "(need 2.5.0, found '${pytest_cov_version}').")
+      else()
+        list(APPEND cmd "--cov-branch")
+      endif()
+
+      list(APPEND ARG_ENV "COVERAGE_FILE=${CMAKE_CURRENT_BINARY_DIR}/.coverage")
+    endif()
   endif()
 
   if(ARG_ENV)
