@@ -98,14 +98,15 @@ function(ament_add_pytest_test testname path)
     list(APPEND cmd "-We")
   endif()
 
+  # enable pytest coverage by default if the package test_depends on pytest_cov
+  if("python3-pytest-cov" IN_LIST ${PROJECT_NAME}_TEST_DEPENDS)
+    set(coverage_default ON)
+  else()
+    set(coverage_default OFF)
+  endif()
   option(AMENT_CMAKE_PYTEST_WITH_COVERAGE
     "Generate coverage information for Python tests"
-    OFF)
-
-  # enable pytest coverage automatically if the package test_depends on pytest_cov
-  if("python3-pytest-cov" IN_LIST ${PROJECT_NAME}_TEST_DEPENDS)
-    set(AMENT_CMAKE_PYTEST_WITH_COVERAGE ON)
-  endif()
+    ${coverage_default})
 
   if(AMENT_CMAKE_PYTEST_WITH_COVERAGE)
     # check if pytest-cov is available
