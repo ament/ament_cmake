@@ -111,7 +111,7 @@ function(ament_add_pytest_test testname path)
   if(AMENT_CMAKE_PYTEST_WITH_COVERAGE)
     # check if pytest-cov is available
     ament_has_pytest_cov(has_pytest_cov pytest_cov_version
-      QUIET PYTHON_EXECUTABLE "${ARG_PYTHON_EXECUTABLE}"
+      PYTHON_EXECUTABLE "${ARG_PYTHON_EXECUTABLE}"
     )
     if(NOT has_pytest_cov)
       message(WARNING

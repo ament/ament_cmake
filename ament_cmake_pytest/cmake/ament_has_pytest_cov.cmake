@@ -20,9 +20,6 @@
 # :param version_var: the variable name for the version of pytest-cov found, only
 #   set if it was found
 # :type version_var: string
-# :param QUIET: suppress the CMake warning if pytest-cov is not found, if not set
-#   and pytest-cov was not found a CMake warning is printed
-# :type QUIET: option
 # :param PYTHON_EXECUTABLE: absolute path to the Python interpreter to be used,
 #   default to the CMake variable with the same name returned by
 #   FindPythonInterp
@@ -31,7 +28,7 @@
 # @public
 #
 function(ament_has_pytest_cov var version_var)
-  cmake_parse_arguments(ARG "QUIET" "PYTHON_EXECUTABLE" "" ${ARGN})
+  cmake_parse_arguments(ARG "PYTHON_EXECUTABLE" "" ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "ament_has_pytest_cov() called with unused arguments: "
       "${ARG_UNPARSED_ARGUMENTS}")
@@ -57,18 +54,9 @@ function(ament_has_pytest_cov var version_var)
       set(${var} TRUE PARENT_SCOPE)
       set(${version_var} ${pytest_cov_version} PARENT_SCOPE)
     else()
-      if(NOT ARG_QUIET)
-        message(WARNING "Failed to find `pytest` plugin `pytest-cov`")
-      endif()
       set(${var} FALSE PARENT_SCOPE)
     endif()
   else()
-    if(NOT ARG_QUIET)
-      string(REPLACE ";" " " cmd_str "${cmd}")
-      message(WARNING
-        "Failed to find Python module `pytest` which is needed "
-        "for `pytest-cov`: '${cmd_str}' returned error code ${res}")
-    endif()
     set(${var} FALSE PARENT_SCOPE)
   endif()
 endfunction()
