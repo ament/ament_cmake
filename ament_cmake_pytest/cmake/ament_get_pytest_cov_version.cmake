@@ -25,7 +25,7 @@
 # @public
 #
 function(ament_get_pytest_cov_version var)
-  cmake_parse_arguments(ARG "PYTHON_EXECUTABLE" "" ${ARGN})
+  cmake_parse_arguments(ARG "" "PYTHON_EXECUTABLE" "" ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "ament_get_pytest_cov_version() called with unused arguments: "
       "${ARG_UNPARSED_ARGUMENTS}")
