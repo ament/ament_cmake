@@ -123,7 +123,6 @@ function(ament_add_pytest_test testname path)
         "--cov=${CMAKE_CURRENT_SOURCE_DIR}"
         "--cov-report=html:${CMAKE_CURRENT_BINARY_DIR}/coverage.html"
         "--cov-report=xml:${CMAKE_CURRENT_BINARY_DIR}/coverage.xml"
-        "--cov-append"
       )
 
       if(pytest_cov_version VERSION_LESS "2.5.0")
