@@ -118,10 +118,12 @@ function(ament_add_pytest_test testname path)
         "The Python module 'pytest-cov' was not found, test coverage will not be produced "
         "(e.g. on Ubuntu/Debian install the package 'python3-pytest-cov')")
     else()
+      set(coverage_directory "${CMAKE_CURRENT_BINARY_DIR}/pytest_cov/${testname}")
+
       list(APPEND cmd
         "--cov=${CMAKE_CURRENT_SOURCE_DIR}"
-        "--cov-report=html:${CMAKE_CURRENT_BINARY_DIR}/coverage.html"
-        "--cov-report=xml:${CMAKE_CURRENT_BINARY_DIR}/coverage.xml"
+        "--cov-report=html:${coverage_directory}/coverage.html"
+        "--cov-report=xml:${coverage_directory}/coverage.xml"
       )
 
       if(pytest_cov_version VERSION_LESS "2.5.0")
@@ -133,7 +135,7 @@ function(ament_add_pytest_test testname path)
         list(APPEND cmd "--cov-branch")
       endif()
 
-      list(APPEND ARG_ENV "COVERAGE_FILE=${CMAKE_CURRENT_BINARY_DIR}/.coverage")
+      list(APPEND ARG_ENV "COVERAGE_FILE=${coverage_directory}/.coverage")
     endif()
   endif()
 
