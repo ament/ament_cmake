@@ -119,6 +119,7 @@ function(ament_add_pytest_test testname path)
         "(e.g. on Ubuntu/Debian install the package 'python3-pytest-cov')")
     else()
       set(coverage_directory "${CMAKE_CURRENT_BINARY_DIR}/pytest_cov/${testname}")
+      file(MAKE_DIRECTORY "${coverage_directory}")
 
       list(APPEND cmd
         "--cov=${CMAKE_CURRENT_SOURCE_DIR}"
