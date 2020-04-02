@@ -44,11 +44,9 @@ function(ament_get_pytest_cov_version var)
   if(res EQUAL 0)
     # check if pytest-cov is in the list of plugins
     # (actual output of the command is in ${error} and not ${output})
-    string(REGEX MATCH "pytest-cov-[0-9]\.[0-9]\.[0-9]" pytest_cov_full_version "${error}")
+    string(REGEX MATCH "pytest-cov-([0-9]\.[0-9]\.[0-9])" pytest_cov_full_version "${error}")
     if(pytest_cov_full_version)
-      # extract version
-      string(REGEX MATCH "[0-9]\.[0-9]\.[0-9]" pytest_cov_version "${pytest_cov_full_version}")
-      set(${var} ${pytest_cov_version} PARENT_SCOPE)
+      set(${var} ${CMAKE_MATCH_1} PARENT_SCOPE)
     else()
       set(${var} FALSE PARENT_SCOPE)
     endif()
