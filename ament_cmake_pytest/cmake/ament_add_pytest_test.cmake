@@ -98,6 +98,48 @@ function(ament_add_pytest_test testname path)
     list(APPEND cmd "-We")
   endif()
 
+  # enable pytest coverage by default if the package test_depends on pytest_cov
+  if("python3-pytest-cov" IN_LIST ${PROJECT_NAME}_TEST_DEPENDS)
+    set(coverage_default ON)
+  else()
+    set(coverage_default OFF)
+  endif()
+  option(AMENT_CMAKE_PYTEST_WITH_COVERAGE
+    "Generate coverage information for Python tests"
+    ${coverage_default})
+
+  if(AMENT_CMAKE_PYTEST_WITH_COVERAGE)
+    # get pytest-cov version, if available
+    ament_get_pytest_cov_version(pytest_cov_version
+      PYTHON_EXECUTABLE "${ARG_PYTHON_EXECUTABLE}"
+    )
+    if(NOT pytest_cov_version)
+      message(WARNING
+        "The Python module 'pytest-cov' was not found, test coverage will not be produced "
+        "(e.g. on Ubuntu/Debian install the package 'python3-pytest-cov')")
+    else()
+      set(coverage_directory "${CMAKE_CURRENT_BINARY_DIR}/pytest_cov/${testname}")
+      file(MAKE_DIRECTORY "${coverage_directory}")
+
+      list(APPEND cmd
+        "--cov=${CMAKE_CURRENT_SOURCE_DIR}"
+        "--cov-report=html:${coverage_directory}/coverage.html"
+        "--cov-report=xml:${coverage_directory}/coverage.xml"
+      )
+
+      if(pytest_cov_version VERSION_LESS "2.5.0")
+        message(WARNING
+          "Test coverage will be produced, but will not contain branch coverage information, "
+          "because the pytest extension 'cov' does not support it "
+          "(need 2.5.0, found '${pytest_cov_version}').")
+      else()
+        list(APPEND cmd "--cov-branch")
+      endif()
+
+      list(APPEND ARG_ENV "COVERAGE_FILE=${coverage_directory}/.coverage")
+    endif()
+  endif()
+
   if(ARG_ENV)
     set(ARG_ENV "ENV" ${ARG_ENV})
   endif()
