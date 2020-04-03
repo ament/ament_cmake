@@ -18,3 +18,4 @@ find_package(ament_cmake_test QUIET REQUIRED)
 
 include("${ament_cmake_pytest_DIR}/ament_add_pytest_test.cmake")
 include("${ament_cmake_pytest_DIR}/ament_has_pytest.cmake")
+include("${ament_cmake_pytest_DIR}/ament_get_pytest_cov_version.cmake")
