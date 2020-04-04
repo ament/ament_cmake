@@ -25,10 +25,8 @@
 #
 # :param target: the target name
 # :type target: string
-# :param ARGN: a list of package names, which could start with an INTERFACE or
-#   PUBLIC keyword.
-#   If it starts with INTERFACE or PUBLIC, this keyword is used in the
-#   target_link_libraries call.
+# :param ARGN: a list of package names, which could start with PUBLIC keyword.
+#   If it starts with PUBLIC, this keyword is used in the target_link_libraries call.
 #   If not, the non-keyword target_link_libraries call is used.
 # :type ARGN: list of strings
 #
@@ -39,14 +37,8 @@ function(ament_target_dependencies target)
     message(FATAL_ERROR "ament_target_dependencies() the first argument must be a valid target name")
   endif()
   if(${ARGC} GREATER 0)
-    cmake_parse_arguments(ARG "INTERFACE;PUBLIC" "" "" ${ARGN})
+    cmake_parse_arguments(ARG "PUBLIC" "" "" ${ARGN})
     set(TARGET_LINK_LIBRARIES_VISIBILITY)
-    if(ARG_INTERFACE)
-      if(NOT "${ARGV1}" STREQUAL "INTERFACE")
-        message(FATAL_ERROR "ament_target_dependencies() INTERFACE keyword is only allowed before the package names")
-      endif()
-      set(TARGET_LINK_LIBRARIES_VISIBILITY INTERFACE)
-    endif()
     if(ARG_PUBLIC)
       if(NOT "${ARGV1}" STREQUAL "PUBLIC")
         message(FATAL_ERROR "ament_target_dependencies() PUBLIC keyword is only allowed before the package names")
@@ -75,22 +67,18 @@ function(ament_target_dependencies target)
         list_append_unique(link_flags ${${package_name}_LINK_FLAGS})
       endif()
     endforeach()
-    if(NOT ARG_INTERFACE)
-      target_compile_definitions(${target}
-        PUBLIC ${definitions})
-      ament_include_directories_order(ordered_include_dirs ${include_dirs})
-    endif()
+    target_compile_definitions(${target}
+      PUBLIC ${definitions})
+    ament_include_directories_order(ordered_include_dirs ${include_dirs})
     target_link_libraries(${target}
       ${TARGET_LINK_LIBRARIES_VISIBILITY} ${interfaces})
     target_include_directories(${target}
       PUBLIC ${ordered_include_dirs})
-    if(NOT ARG_INTERFACE)
-      ament_libraries_deduplicate(unique_libraries ${libraries})
-      target_link_libraries(${target}
-        ${TARGET_LINK_LIBRARIES_VISIBILITY} ${unique_libraries})
-      foreach(link_flag IN LISTS link_flags)
-        set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS " ${link_flag} ")
-      endforeach()
-    endif()
+    ament_libraries_deduplicate(unique_libraries ${libraries})
+    target_link_libraries(${target}
+      ${TARGET_LINK_LIBRARIES_VISIBILITY} ${unique_libraries})
+    foreach(link_flag IN LISTS link_flags)
+      set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS " ${link_flag} ")
+    endforeach()
   endif()
 endfunction()
