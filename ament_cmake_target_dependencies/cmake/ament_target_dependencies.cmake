@@ -1,4 +1,4 @@
-# Copyright 2014 Open Source Robotics Foundation, Inc.
+# Copyright 2014-2020 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,13 +13,15 @@
 # limitations under the License.
 
 #
-# Add the definitions, include directories and libraries of packages to a
-# target.
+# Add the interface targets or definitions, include directories and libraries
+# of packages to a target.
 #
 # Each package name must have been find_package()-ed before.
 # Additionally the exported variables must have a prefix with the same case
-# and the suffixes must be _DEFINITIONS, _INCLUDE_DIRS, _LIBRARIES, and
-# _LINK_FLAGS.
+# and the suffixes must be either _INTERFACES or _DEFINITIONS, _INCLUDE_DIRS,
+# _LIBRARIES, and _LINK_FLAGS.
+# If _INTERFACES is not empty it will be used exclusively, otherwise the other
+# variables are being used.
 #
 # :param target: the target name
 # :type target: string
@@ -52,11 +54,18 @@ function(ament_target_dependencies target)
       if(NOT "${${package_name}_FOUND}")
         message(FATAL_ERROR "ament_target_dependencies() the passed package name '${package_name}' was not found before")
       endif()
-      list_append_unique(definitions ${${package_name}_DEFINITIONS})
-      list_append_unique(include_dirs ${${package_name}_INCLUDE_DIRS})
-      list_append_unique(interfaces ${${package_name}_INTERFACES})
-      list(APPEND libraries ${${package_name}_LIBRARIES})
-      list_append_unique(link_flags ${${package_name}_LINK_FLAGS})
+      if(NOT "${${package_name}_INTERFACES}" STREQUAL "")
+        # if a package provides modern CMake interface targets use them
+        # exclusively assuming the classic CMake variables only exist for
+        # backward compatibility
+        list_append_unique(interfaces ${${package_name}_INTERFACES})
+      else()
+        # otherwise use the classic CMake variables
+        list_append_unique(definitions ${${package_name}_DEFINITIONS})
+        list_append_unique(include_dirs ${${package_name}_INCLUDE_DIRS})
+        list(APPEND libraries ${${package_name}_LIBRARIES})
+        list_append_unique(link_flags ${${package_name}_LINK_FLAGS})
+      endif()
     endforeach()
     target_compile_definitions(${target}
       PUBLIC ${definitions})
