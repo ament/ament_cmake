@@ -13,9 +13,9 @@
 # limitations under the License.
 
 #
-# Export interfaces to downstream packages.
+# Export targets to downstream packages.
 #
-# Each interface name must have been used to install targets using
+# Each export name must have been used to install targets using
 # ``install(TARGETS ... EXPORT name ...)``.
 # The ``install(EXPORT ...)`` invocation is handled by this macros.
 #
@@ -27,17 +27,17 @@
 #
 # @public
 #
-macro(ament_export_interfaces)
+macro(ament_export_targets)
   if(_${PROJECT_NAME}_AMENT_PACKAGE)
     message(FATAL_ERROR
-      "ament_export_interfaces() must be called before ament_package()")
+      "ament_export_targets() must be called before ament_package()")
   endif()
   cmake_parse_arguments(_ARG "HAS_LIBRARY_TARGET" "" "" ${ARGN})
 
   if(${ARGC} GREATER 0)
-    _ament_cmake_export_interfaces_register_package_hook()
+    _ament_cmake_export_targets_register_package_hook()
     foreach(_arg ${_ARG_UNPARSED_ARGUMENTS})
-      list(APPEND _AMENT_CMAKE_EXPORT_INTERFACES "${_arg}")
+      list(APPEND _AMENT_CMAKE_EXPORT_TARGETS "${_arg}")
     endforeach()
 
     # if the export name contains is a library target

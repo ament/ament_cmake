@@ -34,6 +34,10 @@ macro(ament_export_interfaces)
   endif()
   cmake_parse_arguments(_ARG "HAS_LIBRARY_TARGET" "" "" ${ARGN})
 
+  message(DEPRECATION
+    "ament_export_interfaces() is deprecated, use ament_export_targets() "
+    "instead")
+
   if(${ARGC} GREATER 0)
     _ament_cmake_export_interfaces_register_package_hook()
     foreach(_arg ${_ARG_UNPARSED_ARGUMENTS})

@@ -1,11 +1,11 @@
-# generated from ament_cmake_export_interfaces/cmake/ament_cmake_export_interfaces-extras.cmake.in
+# generated from ament_cmake_export_targets/cmake/ament_cmake_export_targets-extras.cmake.in
 
-set(_exported_interfaces "@_AMENT_CMAKE_EXPORT_INTERFACES@")
+set(_exported_targets "@_AMENT_CMAKE_EXPORT_TARGETS@")
 
-# include all exported interfaces
-if(NOT _exported_interfaces STREQUAL "")
-  foreach(_interface ${_exported_interfaces})
-    set(_export_file "${@PROJECT_NAME@_DIR}/${_interface}Export.cmake")
+# include all exported targets
+if(NOT _exported_targets STREQUAL "")
+  foreach(_target ${_exported_targets})
+    set(_export_file "${@PROJECT_NAME@_DIR}/${_target}Export.cmake")
     include("${_export_file}")
 
     # extract the target names associated with the export
@@ -22,6 +22,6 @@ if(NOT _exported_interfaces STREQUAL "")
     string(REPLACE " " ";" _targets "${_targets}")
     list(LENGTH _targets _length)
 
-    list(APPEND @PROJECT_NAME@_INTERFACES ${_targets})
+    list(APPEND @PROJECT_NAME@_TARGETS ${_targets})
   endforeach()
 endif()

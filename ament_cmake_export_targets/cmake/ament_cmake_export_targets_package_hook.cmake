@@ -12,24 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# generate and register extra file for interfaces
+# generate and register extra file for targets
 set(_generated_extra_file
-  "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_export_interfaces/ament_cmake_export_interfaces-extras.cmake")
+  "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_export_targets/ament_cmake_export_targets-extras.cmake")
 configure_file(
-  "${ament_cmake_export_interfaces_DIR}/ament_cmake_export_interfaces-extras.cmake.in"
+  "${ament_cmake_export_targets_DIR}/ament_cmake_export_targets-extras.cmake.in"
   "${_generated_extra_file}"
   @ONLY
 )
 list(APPEND ${PROJECT_NAME}_CONFIG_EXTRAS "${_generated_extra_file}")
 
-# install export files for interfaces
-if(NOT _AMENT_CMAKE_EXPORT_INTERFACES STREQUAL "")
-  foreach(_interface ${_AMENT_CMAKE_EXPORT_INTERFACES})
+# install export files for targets
+if(NOT _AMENT_CMAKE_EXPORT_TARGETS STREQUAL "")
+  foreach(_target ${_AMENT_CMAKE_EXPORT_TARGETS})
     install(
-      EXPORT "${_interface}"
+      EXPORT "${_target}"
       DESTINATION share/${PROJECT_NAME}/cmake
       NAMESPACE "${PROJECT_NAME}::"
-      FILE "${_interface}Export.cmake"
+      FILE "${_target}Export.cmake"
     )
   endforeach()
 endif()
