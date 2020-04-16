@@ -39,3 +39,4 @@ endif()
 find_package(ament_cmake_core QUIET REQUIRED)
 
 include("${ament_cmake_test_DIR}/ament_add_test.cmake")
+include("${ament_cmake_test_DIR}/ament_add_test_label.cmake")
