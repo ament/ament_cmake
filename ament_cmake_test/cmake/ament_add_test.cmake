@@ -124,4 +124,10 @@ function(ament_add_test testname)
     "${testname}"
     PROPERTIES TIMEOUT ${ARG_TIMEOUT}
   )
+  if(ARG_SKIP_TEST)
+    set_tests_properties(
+      "${testname}"
+      PROPERTIES SKIP_RETURN_CODE 0
+    )
+  endif()
 endfunction()
