@@ -22,6 +22,9 @@
 # _LIBRARIES, and _LINK_FLAGS.
 # If _INTERFACES is not empty it will be used exclusively, otherwise the other
 # variables are being used.
+# Packages exporting libraries in non-standard directories cannot rely on a
+# _LIBRARY_DIRS variable -- an absolute path to each library must be provided
+# instead.
 #
 # :param target: the target name
 # :type target: string
