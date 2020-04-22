@@ -20,10 +20,10 @@
 # Additionally the exported variables must have a prefix with the same case
 # and the suffixes must be either _INTERFACES or _DEFINITIONS, _INCLUDE_DIRS,
 # _LIBRARIES, _LIBRARY_DIRS, and _LINK_FLAGS.
-# If _INTERFACES is not empty it will be used exclusively, otherwise the otherwil
+# If _INTERFACES is not empty it will be used exclusively, otherwise the other
 # variables are being used.
-# If _LIBRARY_DIRS is not empty, _LIBRARIES will be searched in those directories
-# and their absolute paths will be used instead.
+# If _LIBRARY_DIRS is not empty, _LIBRARIES which are not absolute paths already
+# will be searched in those directories and their absolute paths will be used instead.
 #
 # :param target: the target name
 # :type target: string
@@ -70,7 +70,7 @@ function(ament_target_dependencies target)
             if (NOT IS_ABSOLUTE ${library} OR NOT EXISTS ${library})
               find_library(lib NAMES ${library} PATHS ${${package_name}_LIBRARY_DIRS} NO_DEFAULT_PATH)
               if(NOT lib)
-                message(FATAL_ERROR "ament_target_dependencies() ${library} library not found in ${package_name}_LIBRARY_DIRS")
+                message(FATAL_ERROR "ament_target_dependencies() ${library} library not found in ${${package_name}_LIBRARY_DIRS}")
               endif()
               set(library ${lib})
             endif()
