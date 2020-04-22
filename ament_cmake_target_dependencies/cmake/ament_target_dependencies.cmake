@@ -19,9 +19,11 @@
 # Each package name must have been find_package()-ed before.
 # Additionally the exported variables must have a prefix with the same case
 # and the suffixes must be either _INTERFACES or _DEFINITIONS, _INCLUDE_DIRS,
-# _LIBRARIES, and _LINK_FLAGS.
-# If _INTERFACES is not empty it will be used exclusively, otherwise the other
+# _LIBRARIES, _LIBRARY_DIRS, and _LINK_FLAGS.
+# If _INTERFACES is not empty it will be used exclusively, otherwise the otherwil
 # variables are being used.
+# If _LIBRARY_DIRS is not empty, _LIBRARIES will be searched in those directories
+# and their absolute paths will be used instead.
 #
 # :param target: the target name
 # :type target: string
@@ -63,7 +65,20 @@ function(ament_target_dependencies target)
         # otherwise use the classic CMake variables
         list_append_unique(definitions ${${package_name}_DEFINITIONS})
         list_append_unique(include_dirs ${${package_name}_INCLUDE_DIRS})
-        list(APPEND libraries ${${package_name}_LIBRARIES})
+        if(NOT "${${package_name}_LIBRARY_DIRS}" STREQUAL "")
+          foreach(library ${${package_name}_LIBRARIES})
+            if (NOT IS_ABSOLUTE ${library} OR NOT EXISTS ${library})
+              find_library(lib NAMES ${library} PATHS ${${package_name}_LIBRARY_DIRS} NO_DEFAULT_PATH)
+              if(NOT lib)
+                message(FATAL_ERROR "ament_target_dependencies() ${library} library not found in ${package_name}_LIBRARY_DIRS")
+              endif()
+              set(library ${lib})
+            endif()
+            list(APPEND libraries ${library})
+          endforeach()
+        else()
+          list(APPEND libraries ${${package_name}_LIBRARIES})
+        endif()
         list_append_unique(link_flags ${${package_name}_LINK_FLAGS})
       endif()
     endforeach()
