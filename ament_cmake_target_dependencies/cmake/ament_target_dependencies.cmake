@@ -88,18 +88,22 @@ function(ament_target_dependencies target)
         list_append_unique(link_flags ${${package_name}_LINK_FLAGS})
       endif()
     endforeach()
-    target_compile_definitions(${target}
-      ${required_keyword} ${definitions})
+    if(NOT ARG_INTERFACE)
+      target_compile_definitions(${target}
+        ${required_keyword} ${definitions})
+    endif()
     ament_include_directories_order(ordered_include_dirs ${include_dirs})
     target_link_libraries(${target}
       ${optional_keyword} ${interfaces})
     target_include_directories(${target}
       ${required_keyword} ${ordered_include_dirs})
-    ament_libraries_deduplicate(unique_libraries ${libraries})
-    target_link_libraries(${target}
-      ${optional_keyword} ${unique_libraries})
-    foreach(link_flag IN LISTS link_flags)
-      set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS " ${link_flag} ")
-    endforeach()
+    if(NOT ARG_INTERFACE)
+      ament_libraries_deduplicate(unique_libraries ${libraries})
+      target_link_libraries(${target}
+        ${optional_keyword} ${unique_libraries})
+      foreach(link_flag IN LISTS link_flags)
+        set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS " ${link_flag} ")
+      endforeach()
+    endif()
   endif()
 endfunction()
