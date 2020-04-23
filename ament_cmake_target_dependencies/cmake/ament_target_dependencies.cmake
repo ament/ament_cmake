@@ -25,9 +25,10 @@
 #
 # :param target: the target name
 # :type target: string
-# :param ARGN: a list of package names, which could start with PUBLIC keyword.
-#   If it starts with PUBLIC, this keyword is used in the target_link_libraries call.
-#   If not, the non-keyword target_link_libraries call is used.
+# :param ARGN: a list of package names, which can optionally start with an
+#   INTERFACE or PUBLIC keyword.
+#   If it starts with INTERFACE or PUBLIC, this keyword is used in the
+#   target_* calls.
 # :type ARGN: list of strings
 #
 # @public
@@ -37,13 +38,21 @@ function(ament_target_dependencies target)
     message(FATAL_ERROR "ament_target_dependencies() the first argument must be a valid target name")
   endif()
   if(${ARGC} GREATER 0)
-    cmake_parse_arguments(ARG "PUBLIC" "" "" ${ARGN})
-    set(TARGET_LINK_LIBRARIES_VISIBILITY)
+    cmake_parse_arguments(ARG "INTERFACE;PUBLIC" "" "" ${ARGN})
+    set(optional_keyword "")
+    set(required_keyword "PUBLIC")
+    if(ARG_INTERFACE)
+      if(NOT "${ARGV1}" STREQUAL "INTERFACE")
+        message(FATAL_ERROR "ament_target_dependencies() INTERFACE keyword is only allowed before the package names")
+      endif()
+      set(optional_keyword INTERFACE)
+      set(required_keyword INTERFACE)
+    endif()
     if(ARG_PUBLIC)
       if(NOT "${ARGV1}" STREQUAL "PUBLIC")
         message(FATAL_ERROR "ament_target_dependencies() PUBLIC keyword is only allowed before the package names")
       endif()
-      set(TARGET_LINK_LIBRARIES_VISIBILITY PUBLIC)
+      set(optional_keyword PUBLIC)
     endif()
     set(definitions "")
     set(include_dirs "")
@@ -68,15 +77,15 @@ function(ament_target_dependencies target)
       endif()
     endforeach()
     target_compile_definitions(${target}
-      PUBLIC ${definitions})
+      ${required_keyword} ${definitions})
     ament_include_directories_order(ordered_include_dirs ${include_dirs})
     target_link_libraries(${target}
-      ${TARGET_LINK_LIBRARIES_VISIBILITY} ${interfaces})
+      ${optional_keyword} ${interfaces})
     target_include_directories(${target}
-      PUBLIC ${ordered_include_dirs})
+      ${required_keyword} ${ordered_include_dirs})
     ament_libraries_deduplicate(unique_libraries ${libraries})
     target_link_libraries(${target}
-      ${TARGET_LINK_LIBRARIES_VISIBILITY} ${unique_libraries})
+      ${optional_keyword} ${unique_libraries})
     foreach(link_flag IN LISTS link_flags)
       set_property(TARGET ${target} APPEND_STRING PROPERTY LINK_FLAGS " ${link_flag} ")
     endforeach()
