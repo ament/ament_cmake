@@ -69,7 +69,7 @@ function(ament_target_dependencies target)
       # exclusively assuming the classic CMake variables only exist for
       # backward compatibility
       set(use_modern_cmake FALSE)
-      if(NOT "${${packag_ename}_TARGETS}" STREQUAL "")
+      if(NOT "${${package_name}_TARGETS}" STREQUAL "")
         foreach(_target ${${package_name}_TARGETS})
           # only use actual targets
           # in case a package uses this variable for other content
