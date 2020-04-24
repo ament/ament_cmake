@@ -65,12 +65,37 @@ function(ament_target_dependencies target)
       if(NOT "${${package_name}_FOUND}")
         message(FATAL_ERROR "ament_target_dependencies() the passed package name '${package_name}' was not found before")
       endif()
-      if(NOT "${${package_name}_INTERFACES}" STREQUAL "")
-        # if a package provides modern CMake interface targets use them
-        # exclusively assuming the classic CMake variables only exist for
-        # backward compatibility
-        list_append_unique(interfaces ${${package_name}_INTERFACES})
-      else()
+      # if a package provides modern CMake interface targets use them
+      # exclusively assuming the classic CMake variables only exist for
+      # backward compatibility
+      set(use_modern_cmake FALSE)
+      if(NOT "${${package_name}_TARGETS}" STREQUAL "")
+        foreach(_target ${${package_name}_TARGETS})
+          # only use actual targets
+          # in case a package uses this variable for other content
+          if(TARGET "${_target}")
+            list_append_unique(interfaces ${_target})
+            set(use_modern_cmake TRUE)
+          endif()
+        endforeach()
+      endif()
+      if(NOT use_modern_cmake AND NOT "${${package_name}_INTERFACES}" STREQUAL "")
+        foreach(_interface ${${package_name}_INTERFACES})
+          # only use actual targets
+          # in case a package uses this variable for other content
+          if(TARGET "${_interface}")
+            list_append_unique(interfaces ${_interface})
+            set(use_modern_cmake TRUE)
+          endif()
+        endforeach()
+        if(use_modern_cmake)
+          message(DEPRECATION
+            "Package ${package_name} is exporting the variable "
+            "${package_name}_INTERFACES which is deprecated, it should export
+            ${package_name}_TARGETS instead")
+        endif()
+      endif()
+      if(NOT use_modern_cmake)
         # otherwise use the classic CMake variables
         list_append_unique(definitions ${${package_name}_DEFINITIONS})
         list_append_unique(include_dirs ${${package_name}_INCLUDE_DIRS})
