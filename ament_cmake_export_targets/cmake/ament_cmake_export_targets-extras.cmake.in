@@ -4,7 +4,9 @@ set(_exported_targets "@_AMENT_CMAKE_EXPORT_TARGETS@")
 
 # include all exported targets
 if(NOT _exported_targets STREQUAL "")
-  foreach(_target ${_exported_targets})
+  set(_exported_targets_reversed ${_exported_targets})
+  list(REVERSE _exported_targets_reversed)
+  foreach(_target ${_exported_targets_reversed})
     set(_export_file "${@PROJECT_NAME@_DIR}/${_target}Export.cmake")
     include("${_export_file}")
 
