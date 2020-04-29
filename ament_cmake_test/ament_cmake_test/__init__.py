@@ -113,7 +113,7 @@ def main(argv=sys.argv[1:]):
     if args.output_file:
         output_path = os.path.dirname(args.output_file)
         if not os.path.exists(output_path):
-            os.makedirs(output_path)
+            os.makedirs(output_path, exist_ok=True)
         output_handle = open(args.output_file, 'wb')
 
     try:
