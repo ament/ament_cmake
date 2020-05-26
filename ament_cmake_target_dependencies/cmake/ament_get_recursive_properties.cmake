@@ -13,7 +13,7 @@
 # limitations under the License.
 
 #
-# Get the recrusive include directories and libraries from interface targets.
+# Get the recursive include directories and libraries from interface targets.
 #
 # :param var_include_dirs: the output variable name
 # :type var_include_dirs: string
