@@ -298,6 +298,8 @@ def _generate_result(result_file, *, failure_message=None, skip=False, error_mes
     # by any of the Jenkins test result report publishers
     pkgname = os.path.basename(os.path.dirname(result_file))
     testname = os.path.splitext(os.path.basename(result_file))[0]
+    error_message = '<error message=%s/>' % quoteattr(error_message) \
+        if error_message else ''
     failure_message = '<failure message=%s/>' % quoteattr(failure_message) \
         if failure_message else ''
     skipped_message = \
