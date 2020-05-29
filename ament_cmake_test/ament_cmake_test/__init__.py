@@ -103,7 +103,7 @@ def main(argv=sys.argv[1:]):
     # in case the command segfaults or timeouts and does not generate one
     failure_result_file = _generate_result(
         args.result_file,
-        failure_message='The test did not generate a result file.')
+        error_message='The test did not generate a result file.')
     with open(args.result_file, 'w') as h:
         h.write(failure_result_file)
 
@@ -236,7 +236,7 @@ def _run_test(parser, args, failure_result_file, output_handle):
             # regenerate result file to include output / exception of the invoked command
             failure_result_file = _generate_result(
                 args.result_file,
-                failure_message='The test did not generate a result file:\n\n' + output)
+                error_message='The test did not generate a result file:\n\n' + output)
             with open(args.result_file, 'w') as h:
                 h.write(failure_result_file)
         else:
@@ -292,28 +292,31 @@ def _run_test(parser, args, failure_result_file, output_handle):
     return rc
 
 
-def _generate_result(result_file, *, failure_message=None, skip=False):
+def _generate_result(result_file, *, failure_message=None, skip=False, error_message=None):
     # the generated result file must be readable
     # by any of the Jenkins test result report publishers
     pkgname = os.path.basename(os.path.dirname(result_file))
     testname = os.path.splitext(os.path.basename(result_file))[0]
+    error_message = '<error message=%s/>' % quoteattr(error_message) \
+        if error_message else ''
     failure_message = '<failure message=%s/>' % quoteattr(failure_message) \
         if failure_message else ''
     skipped_message = \
         '<skipped type="skip" message="">![CDATA[Test Skipped by developer]]</skipped>' \
         if skip else ''
     return """<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="%s" tests="1" failures="%d" time="0" errors="0" skipped="%d">
+<testsuite name="%s" tests="1" failures="%d" time="0" errors="%d" skipped="%d">
   <testcase classname="%s" name="%s.missing_result" time="0">
-    %s%s
+    %s%s%s
   </testcase>
 </testsuite>\n""" % \
         (
             pkgname,
             1 if failure_message else 0,
+            1 if error_message else 0,
             1 if skip else 0,
             pkgname, testname,
-            failure_message, skipped_message
+            failure_message, skipped_message, error_message
         )
 
 
