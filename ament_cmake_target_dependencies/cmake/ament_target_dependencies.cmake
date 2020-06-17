@@ -116,6 +116,19 @@ function(ament_target_dependencies target)
     if(NOT ARG_INTERFACE)
       target_compile_definitions(${target}
         ${required_keyword} ${definitions})
+      # the interface include dirs must be ordered
+      set(interface_include_dirs)
+      foreach(interface ${interfaces})
+        get_target_property(_include_dirs ${interface} INTERFACE_INCLUDE_DIRECTORIES)
+        if(_include_dirs)
+          list_append_unique(interface_include_dirs ${_include_dirs})
+        endif()
+      endforeach()
+      ament_include_directories_order(ordered_interface_include_dirs ${interface_include_dirs})
+      # the interface include dirs are used privately to ensure proper order
+      # and the interfaces cover the public case
+      target_include_directories(${target}
+        PRIVATE ${ordered_interface_include_dirs})
     endif()
     ament_include_directories_order(ordered_include_dirs ${include_dirs})
     target_link_libraries(${target}
