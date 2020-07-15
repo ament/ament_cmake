@@ -72,6 +72,11 @@ def main(argv=sys.argv[1:]):
         action='store_true',
         default=False,
         help='Skip the test')
+    parser.add_argument(
+        '--skip-return-code',
+        type=int,
+        help="If the test returns this value and doesn't generate a result file, "
+             'create one stating that the test was skipped.')
 
     if '--command' in argv:
         index = argv.index('--command')
@@ -231,14 +236,19 @@ def _run_test(parser, args, failure_result_file, output_handle):
             content = h.read()
 
         if content == failure_result_file:
-            log("-- run_test.py: generate result file '%s' with failed test" % args.result_file,
-                file=sys.stderr)
-            # regenerate result file to include output / exception of the invoked command
-            failure_result_file = _generate_result(
-                args.result_file,
-                error_message='The test did not generate a result file:\n\n' + output)
+            if args.skip_return_code is not None and args.skip_return_code == rc:
+                log("-- run_test.py: generate result file '%s' with skipped test" % args.result_file)
+                # regenerate result file to indicate that the test was skipped
+                result_file = _generate_result(args.result_file, skip=True)
+            else:
+                log("-- run_test.py: generate result file '%s' with failed test" % args.result_file,
+                    file=sys.stderr)
+                # regenerate result file to include output / exception of the invoked command
+                result_file = _generate_result(
+                    args.result_file,
+                    error_message='The test did not generate a result file:\n\n' + output)
             with open(args.result_file, 'w') as h:
-                h.write(failure_result_file)
+                h.write(result_file)
         else:
             # prefix classname attributes
             if args.result_file.endswith('.gtest.xml') and args.package_name:
