@@ -35,6 +35,14 @@ def separate_env_vars(env_str, env_argument_name, parser):
     return key, value
 
 
+def return_code(value):
+    value = int(value)
+    if value < 0 or value > 255:
+        raise argparse.ArgumentTypeError(
+            'Return code must be less than 256 and greater or equal to 0')
+    return value
+
+
 def main(argv=sys.argv[1:]):
     parser = argparse.ArgumentParser(
         description='Run the test command passed as an argument and ensures'
@@ -74,7 +82,7 @@ def main(argv=sys.argv[1:]):
         help='Skip the test')
     parser.add_argument(
         '--skip-return-code',
-        type=int,
+        type=return_code,
         help="If the test returns this value and doesn't generate a result file, "
              'create one stating that the test was skipped.')
 
