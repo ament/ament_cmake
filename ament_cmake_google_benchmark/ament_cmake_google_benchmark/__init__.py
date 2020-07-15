@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import argparse
+import os
 import subprocess
 import sys
 
@@ -38,6 +39,11 @@ def main(argv=sys.argv[1:]):
     args = parser.parse_args(argv)
     args.command = command
 
+    if os.environ.get('AMENT_RUN_PERFORMANCE_TESTS') not in (
+        '1', 'true', 'True', 'TRUE', 'yes', 'Yes', 'YES', 'y', 'Y'
+    ):
+        return 127
+
     res = subprocess.run(args.command)
 
     with open(args.result_file_in, 'r') as in_file:
@@ -45,4 +51,4 @@ def main(argv=sys.argv[1:]):
             # TODO(cottsay): Convert the results file
             pass
 
-    return res.returncode
+    return res.returncode if res.returncode != 127 else 1

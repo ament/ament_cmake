@@ -93,6 +93,7 @@ function(ament_add_google_benchmark_test target)
     COMMAND ${cmd}
     OUTPUT_FILE "${CMAKE_BINARY_DIR}/ament_cmake_google_benchmark/${target}.txt"
     GENERATE_RESULT_FOR_RETURN_CODE_ZERO
+    SKIP_RETURN_CODE 127
     ${ARG_SKIP_TEST}
     ${ARG_ENV}
     ${ARG_APPEND_ENV}
@@ -104,6 +105,6 @@ function(ament_add_google_benchmark_test target)
     "${target}"
     PROPERTIES
     REQUIRED_FILES "${executable}"
-    LABELS "performance"
+    LABELS "google_benchmark;performance"
   )
 endfunction()
