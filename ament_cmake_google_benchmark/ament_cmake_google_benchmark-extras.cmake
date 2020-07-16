@@ -26,6 +26,17 @@ macro(_ament_cmake_google_benchmark_find_benchmark)
         "package 'libbenchmark-dev') or get the ament package "
         "'google_benchmark_vendor'")
     endif()
+
+    find_package(Threads QUIET)
+
+    if(NOT Threads_FOUND)
+      message(WARNING
+        "An appropriate thread library was not found, C++ tests using 'Google "
+	"Benchmark' can not be built. Please install thread headers globally in "
+        "your system to enable these tests (e.g. on Ubuntu/Debian install the "
+        "package 'libc-dev')")
+    endif()
+
   endif()
 endmacro()
 

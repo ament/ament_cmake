@@ -34,7 +34,7 @@
 #
 macro(ament_add_google_benchmark_executable target)
   _ament_cmake_google_benchmark_find_benchmark()
-  if(benchmark_FOUND)
+  if(benchmark_FOUND AND Threads_FOUND)
     _ament_add_google_benchmark_executable("${target}" ${ARGN})
   endif()
 endmacro()
@@ -51,7 +51,9 @@ function(_ament_add_google_benchmark_executable target)
   # to add this target as a dependency to the "test" target
   add_executable("${target}" ${ARG_UNPARSED_ARGUMENTS})
   if(NOT ARG_SKIP_LINKING_MAIN_LIBRARIES)
-    target_link_libraries("${target}" benchmark::benchmark_main)
+    target_link_libraries("${target}"
+      benchmark::benchmark_main
+      Threads::Threads)
   endif()
   target_link_libraries("${target}" benchmark::benchmark)
 endfunction()
