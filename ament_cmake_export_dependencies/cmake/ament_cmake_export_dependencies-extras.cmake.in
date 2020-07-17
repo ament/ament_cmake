@@ -35,7 +35,7 @@ if(NOT _exported_dependencies STREQUAL "")
           endif()
 
           get_target_property(_imported_configurations ${_target} IMPORTED_CONFIGURATIONS)
-          if("$<CONFIG>" IN_LIST _imported_configurations)
+          if(_imported_configurations)
             get_target_property(_imported_implib ${_target} IMPORTED_IMPLIB_$<CONFIG>)
             if(_imported_implib)
               list(APPEND _libraries "${_imported_implib}")
