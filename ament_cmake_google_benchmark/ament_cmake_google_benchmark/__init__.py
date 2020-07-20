@@ -40,9 +40,14 @@ def main(argv=sys.argv[1:]):
 
     res = subprocess.run(args.command)
 
-    with open(args.result_file_in, 'r') as in_file:
-        with open(args.result_file_out, 'w') as out_file:
-            # TODO(cottsay): Convert the results file
-            pass
+    try:
+        with open(args.result_file_in, 'r') as in_file:
+            with open(args.result_file_out, 'w') as out_file:
+                # TODO(cottsay): Convert the results file
+                pass
+    except FileNotFoundError:
+        print('ERROR: No performance test results were found at: %s' % args.result_file_in, file=sys.stderr)
+        if res.returncode == 0:
+            res.returncode = 1
 
     return res.returncode
