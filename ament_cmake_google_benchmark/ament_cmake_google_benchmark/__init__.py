@@ -46,7 +46,9 @@ def main(argv=sys.argv[1:]):
                 # TODO(cottsay): Convert the results file
                 pass
     except FileNotFoundError:
-        print('ERROR: No performance test results were found at: %s' % args.result_file_in, file=sys.stderr)
+        print(
+            'ERROR: No performance test results were found at: %s' % args.result_file_in,
+            file=sys.stderr)
         if res.returncode == 0:
             res.returncode = 1
 
