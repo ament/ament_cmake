@@ -20,6 +20,7 @@ import os
 import re
 import subprocess
 import sys
+import time
 from xml.etree.ElementTree import ElementTree
 from xml.etree.ElementTree import ParseError
 from xml.sax.saxutils import quoteattr
@@ -193,6 +194,8 @@ def _run_test(parser, args, failure_result_file, output_handle):
     encodings = ['utf-8']
     if locale.getpreferredencoding(False) not in encodings:
         encodings.append(locale.getpreferredencoding(False))
+    
+    start_time = time.monotonic()
 
     try:
         proc = subprocess.Popen(
@@ -229,12 +232,14 @@ def _run_test(parser, args, failure_result_file, output_handle):
         output += str(e)
         rc = 1
 
+    test_time = time.monotonic() - start_time
+
     if not rc and args.generate_result_on_success:
         # generate result file with one passed test
         # if it was expected that no result file was generated
         # and the command returned with code zero
         log("-- run_test.py: generate result file '%s' with successful test" % args.result_file)
-        success_result_file = _generate_result(args.result_file)
+        success_result_file = _generate_result(args.result_file, test_time=test_time)
         with open(args.result_file, 'w') as h:
             h.write(success_result_file)
 
@@ -254,7 +259,8 @@ def _run_test(parser, args, failure_result_file, output_handle):
                 # regenerate result file to include output / exception of the invoked command
                 result_file = _generate_result(
                     args.result_file,
-                    error_message='The test did not generate a result file:\n\n' + output)
+                    error_message='The test did not generate a result file:\n\n' + output,
+                    test_time=test_time)
             with open(args.result_file, 'w') as h:
                 h.write(result_file)
         else:
@@ -310,7 +316,7 @@ def _run_test(parser, args, failure_result_file, output_handle):
     return rc
 
 
-def _generate_result(result_file, *, failure_message=None, skip=False, error_message=None):
+def _generate_result(result_file, *, failure_message=None, skip=False, error_message=None, test_time=0):
     # the generated result file must be readable
     # by any of the Jenkins test result report publishers
     pkgname = os.path.basename(os.path.dirname(result_file))
@@ -323,7 +329,7 @@ def _generate_result(result_file, *, failure_message=None, skip=False, error_mes
         '<skipped type="skip" message="">![CDATA[Test Skipped by developer]]</skipped>' \
         if skip else ''
     return """<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="%s" tests="1" failures="%d" time="0" errors="%d" skipped="%d">
+<testsuite name="%s" tests="1" failures="%d" time="%f" errors="%d" skipped="%d">
   <testcase classname="%s" name="%s.missing_result" time="0">
     %s%s%s
   </testcase>
@@ -331,6 +337,7 @@ def _generate_result(result_file, *, failure_message=None, skip=False, error_mes
         (
             pkgname,
             1 if failure_message else 0,
+            test_time,
             1 if error_message else 0,
             1 if skip else 0,
             pkgname, testname,
