@@ -252,7 +252,7 @@ def _run_test(parser, args, failure_result_file, output_handle):
             if args.skip_return_code is not None and args.skip_return_code == rc:
                 log("-- run_test.py: generate result file '%s' with skipped test" % args.result_file)
                 # regenerate result file to indicate that the test was skipped
-                result_file = _generate_result(args.result_file, skip=True)
+                result_file = _generate_result(args.result_file, skip=True, test_time=test_time)
             else:
                 log("-- run_test.py: generate result file '%s' with failed test" % args.result_file,
                     file=sys.stderr)
