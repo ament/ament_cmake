@@ -330,7 +330,7 @@ def _generate_result(result_file, *, failure_message=None, skip=False, error_mes
         if skip else ''
     return """<?xml version="1.0" encoding="UTF-8"?>
 <testsuite name="%s" tests="1" failures="%d" time="%f" errors="%d" skipped="%d">
-  <testcase classname="%s" name="%s.missing_result" time="0">
+  <testcase classname="%s" name="%s.missing_result" time="%f">
     %s%s%s
   </testcase>
 </testsuite>\n""" % \
@@ -340,7 +340,7 @@ def _generate_result(result_file, *, failure_message=None, skip=False, error_mes
             test_time,
             1 if error_message else 0,
             1 if skip else 0,
-            pkgname, testname,
+            pkgname, testname, test_time,
             failure_message, skipped_message, error_message
         )
 
