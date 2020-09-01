@@ -60,6 +60,7 @@ function(ament_add_google_benchmark_test target)
 
   if(AMENT_CMAKE_GOOGLE_BENCHMARK_OVERLAY AND NOT IS_ABSOLUTE ${AMENT_CMAKE_GOOGLE_BENCHMARK_OVERLAY})
     get_filename_component(AMENT_CMAKE_GOOGLE_BENCHMARK_OVERLAY ${CMAKE_CURRENT_SOURCE_DIR}/${AMENT_CMAKE_GOOGLE_BENCHMARK_OVERLAY} ABSOLUTE)
+    set(OVERLAY_ARG "--result-file-overlay" "${AMENT_CMAKE_GOOGLE_BENCHMARK_OVERLAY}")
   endif()
 
   set(executable "$<TARGET_FILE:${target}>")
@@ -68,7 +69,7 @@ function(ament_add_google_benchmark_test target)
   set(cmd
     "${PYTHON_EXECUTABLE}" "-u" "${ament_cmake_google_benchmark_DIR}/run_and_convert.py"
     "${benchmark_out}" "${common_out}" "--package-name" "${PROJECT_NAME}"
-    "--result-file-overlay" "${AMENT_CMAKE_GOOGLE_BENCHMARK_OVERLAY}"
+    ${OVERLAY_ARG}
     "--command" "${executable}"
     "--benchmark_out_format=json" "--benchmark_out=${benchmark_out}")
   if(ARG_ENV)

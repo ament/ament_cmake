@@ -69,26 +69,40 @@ def main(argv=sys.argv[1:]):
 
     try:
         with open(args.result_file_in, 'r') as in_file:
-            with open(args.result_file_out, 'w') as out_file:
-                convert_google_benchark_to_jenkins_benchmark(
-                    in_file, out_file, args.package_name, args.result_file_overlay)
+            in_text = in_file.read()
     except FileNotFoundError:
         if res.returncode == 0:
             print(
                 'ERROR: No performance test results were found at: %s' % args.result_file_in,
                 file=sys.stderr)
             res.returncode = 1
+        return res.returncode
+
+    if not in_text and res.returncode == 0:
+        print(
+            'NOTE: Performance test results file was empty at: %s' % args.result_file_in,
+            file=sys.stderr)
+        open(args.result_file_out, 'w').close()
+        return res.returncode
+
+    in_data = json.loads(in_text)
+    overlay_data = None
+    if args.result_file_overlay:
+        with open(args.result_file_overlay, 'r') as overlay_file:
+            overlay_data = json.load(overlay_file)
+    out_data = convert_google_benchark_to_jenkins_benchmark(
+        in_data, overlay_data, args.package_name)
+    with open(args.result_file_out, 'w') as out_file:
+        json.dump(out_data, out_file)
 
     return res.returncode
 
 
 def convert_google_benchark_to_jenkins_benchmark(
-    in_file,
-    out_file,
+    in_data,
+    overlay_data=None,
     package_name=None,
-    overlay_path=None
 ):
-    in_data = json.load(in_file)
     group_name = os.path.basename(in_data['context']['executable'])
     if package_name:
         group_name = '%s.%s' % (package_name, group_name)
@@ -121,20 +135,18 @@ def convert_google_benchark_to_jenkins_benchmark(
 
     if not out_data[group_name]:
         print(
-            'WARNING: The perfromance test results file contained no results',
+            'WARNING: The performance test results file contained no results',
             file=sys.stderr)
 
-    if overlay_path:
-        with open(overlay_path, 'r') as overlay_file:
-            overlay_data = json.load(overlay_file)
+    if overlay_data:
         _merge_results(out_data[group_name], overlay_data.get(group_name, {}))
 
-    json.dump(out_data, out_file, indent=2)
+    return out_data
 
 
 def _merge_results(target, overlay):
     for k, v in overlay.items():
         if isinstance(v, dict) and isinstance(target.get(k), dict):
-            merge_results(target[k], v)
+            _merge_results(target[k], v)
         else:
             target[k] = v
