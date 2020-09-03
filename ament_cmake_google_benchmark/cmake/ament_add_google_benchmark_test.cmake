@@ -58,13 +58,19 @@ function(ament_add_google_benchmark_test target)
       "ament_add_google_benchmark_test() called with unused arguments: ${ARGN}")
   endif()
 
+  if(AMENT_CMAKE_GOOGLE_BENCHMARK_OVERLAY AND NOT IS_ABSOLUTE ${AMENT_CMAKE_GOOGLE_BENCHMARK_OVERLAY})
+    get_filename_component(AMENT_CMAKE_GOOGLE_BENCHMARK_OVERLAY ${CMAKE_CURRENT_SOURCE_DIR}/${AMENT_CMAKE_GOOGLE_BENCHMARK_OVERLAY} ABSOLUTE)
+    set(OVERLAY_ARG "--result-file-overlay" "${AMENT_CMAKE_GOOGLE_BENCHMARK_OVERLAY}")
+  endif()
+
   set(executable "$<TARGET_FILE:${target}>")
   set(benchmark_out "${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/${target}.google_benchmark.json")
   set(common_out "${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/${target}.benchmark.json")
   set(cmd
     "${PYTHON_EXECUTABLE}" "-u" "${ament_cmake_google_benchmark_DIR}/run_and_convert.py"
-    "${benchmark_out}" "${common_out}" "--command"
-    "${executable}"
+    "${benchmark_out}" "${common_out}" "--package-name" "${PROJECT_NAME}"
+    ${OVERLAY_ARG}
+    "--command" "${executable}"
     "--benchmark_out_format=json" "--benchmark_out=${benchmark_out}")
   if(ARG_ENV)
     set(ARG_ENV "ENV" ${ARG_ENV})
