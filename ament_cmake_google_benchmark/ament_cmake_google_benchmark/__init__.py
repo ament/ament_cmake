@@ -19,18 +19,27 @@ import subprocess
 import sys
 
 
-extra_metric_exclusions = {
-  'name',
-  'run_name',
-  'run_type',
-  'repetitions',
-  'repetition_index',
-  'threads',
-  'iterations',
-  'real_time',
-  'cpu_time',
-  'time_unit',
-  }
+common_test_properties = {
+    'name',
+    'run_name',
+    'run_type',
+    'repetitions',
+    'repetition_index',
+    'threads',
+    'time_unit',
+}
+
+
+common_aggregate_test_properties = common_test_properties | {
+    'aggregate_name',
+}
+
+
+common_iteration_test_properties = common_test_properties | {
+    'iterations',
+    'real_time',
+    'cpu_time',
+}
 
 
 def main(argv=sys.argv[1:]):
@@ -111,27 +120,13 @@ def convert_google_benchark_to_jenkins_benchmark(
         group_name: {},
     }
     for benchmark in in_data.get('benchmarks', []):
-        out_data[group_name][benchmark['name']] = {
-            'parameters': {
-                'iterations': {
-                    'value': benchmark['iterations'],
-                },
-            },
-            'cpu_time': {
-                'dblValue': benchmark['cpu_time'],
-                'unit': benchmark['time_unit'],
-            },
-            'real_time': {
-                'dblValue': benchmark['real_time'],
-                'unit': benchmark['time_unit'],
-            },
-        }
-
-        # Add any "additional" metrics besides cpu_time and real_time
-        out_data[group_name][benchmark['name']].update({
-            extra_name: {
-                'value': benchmark[extra_name],
-            } for extra_name in set(benchmark.keys()) - extra_metric_exclusions})
+        benchmark_type = benchmark['run_type']
+        if benchmark_type == 'aggregate':
+            out_data[group_name][benchmark['name']] = convert_aggregate_benchmark(benchmark)
+        elif benchmark_type == 'iteration':
+            out_data[group_name][benchmark['name']] = convert_iteration_benchmark(benchmark)
+        else:
+            print("WARNING: Unsupported benchmark type '%s'" % benchmark_type, file=sys.stderr)
 
     if not out_data[group_name]:
         print(
@@ -142,6 +137,63 @@ def convert_google_benchark_to_jenkins_benchmark(
         _merge_results(out_data[group_name], overlay_data.get(group_name, {}))
 
     return out_data
+
+
+def convert_aggregate_benchmark(in_data):
+    out_data = {
+        'parameters': {
+            'repetitions': {
+                'value': in_data['repetitions'],
+            },
+        },
+    }
+
+    out_data.update(convert_extra_metrics(in_data, common_aggregate_test_properties))
+
+    return out_data
+
+
+def convert_iteration_benchmark(in_data):
+    out_data = {
+        'parameters': {
+            'iterations': {
+                'value': in_data['iterations'],
+            },
+            'repetitions': {
+                'value': in_data['repetitions'],
+            },
+        },
+        'cpu_time': {
+            'dblValue': in_data['cpu_time'],
+            'unit': in_data['time_unit'],
+        },
+        'real_time': {
+            'dblValue': in_data['real_time'],
+            'unit': in_data['time_unit'],
+        },
+    }
+
+    out_data.update(convert_extra_metrics(in_data, common_iteration_test_properties))
+
+    return out_data
+
+
+def convert_extra_metrics(in_data, common_properties):
+    for k, v in in_data.items():
+        if k in common_properties:
+            continue
+        if isinstance(v, bool):
+            yield k, {
+                'boolValue': 'true' if v else 'false',
+            }
+        elif isinstance(v, (int, float)):
+            yield k, {
+                'dblValue': v,
+            }
+        else:
+            yield k, {
+                'value': v,
+            }
 
 
 def _merge_results(target, overlay):
