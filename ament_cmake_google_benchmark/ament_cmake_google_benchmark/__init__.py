@@ -178,9 +178,9 @@ def convert_iteration_benchmark(in_data):
     return out_data
 
 
-def convert_extra_metrics(in_data, common_properties):
+def convert_extra_metrics(in_data, properties_to_ignore):
     for k, v in in_data.items():
-        if k in common_properties:
+        if k in properties_to_ignore:
             continue
         if isinstance(v, bool):
             yield k, {
