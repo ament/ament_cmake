@@ -90,7 +90,7 @@ function(ament_add_google_benchmark_test target)
   if(ARG_WORKING_DIRECTORY)
     set(ARG_WORKING_DIRECTORY "WORKING_DIRECTORY" "${ARG_WORKING_DIRECTORY}")
   endif()
-  if(ARG_SKIP_TEST)
+  if(ARG_SKIP_TEST OR NOT AMENT_RUN_PERFORMANCE_TESTS)
     set(ARG_SKIP_TEST "SKIP_TEST")
   endif()
 
