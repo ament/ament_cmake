@@ -17,7 +17,7 @@ macro(_ament_cmake_google_benchmark_find_benchmark)
     set(_AMENT_CMAKE_GOOGLE_BENCHMARK_FIND_BENCHMARK TRUE)
 
     option(AMENT_RUN_PERFORMANCE_TESTS
-      "When not set to true, performance tests are unconditionally skipped" OFF)
+      "When disabled, performance tests are unconditionally skipped" OFF)
 
     find_package(benchmark QUIET)
 
