@@ -5,6 +5,7 @@
   <version>1.0.1</version>
   <description>The ability to export definitions to downstream packages in the ament buildsystem.</description>
   <maintainer email="dthomas@osrfoundation.org">Dirk Thomas</maintainer>
+  <maintainer email="michel@ekumenlabs.com">Michel Hidalgo</maintainer>
   <license>Apache License 2.0</license>
 
   <buildtool_depend>ament_cmake_core</buildtool_depend>
