@@ -14,6 +14,7 @@
     * symlink_install: use symlinks for CMake install commands
   </description>
   <maintainer email="dthomas@osrfoundation.org">Dirk Thomas</maintainer>
+  <maintainer email="michel@ekumenlabs.com">Michel Hidalgo</maintainer>
   <license>Apache License 2.0</license>
 
   <buildtool_depend>cmake</buildtool_depend>
