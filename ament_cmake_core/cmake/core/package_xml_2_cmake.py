@@ -16,8 +16,10 @@
 
 import argparse
 from collections import OrderedDict
+from os import environ
 import sys
 
+from catkin_pkg.package import evaluate_condition
 from catkin_pkg.package import parse_package_string
 
 
@@ -64,8 +66,14 @@ def main(argv=sys.argv[1:]):
 
 
 def get_dependency_values(key, depends):
+    # Filter the incoming dependencies to check for any conditions they might have
+    filtered_depends = []
+    for d in depends:
+        if d.condition is None or d.evaluate_condition(environ):
+            filtered_depends.append(d)
+
     dependencies = []
-    dependencies.append((key, ' '.join(['"%s"' % str(d) for d in depends])))
+    dependencies.append((key, ' '.join(['"%s"' % str(d) for d in filtered_depends])))
     for d in depends:
         comparisons = [
             'version_lt',
