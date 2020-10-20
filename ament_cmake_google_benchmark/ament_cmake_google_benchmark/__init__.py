@@ -74,7 +74,9 @@ def main(argv=sys.argv[1:]):
     args = parser.parse_args(argv)
     args.command = command
 
+    print("Executing benchmark test command: %s\n\n" % ' '.join(args.command))
     res = subprocess.run(args.command)
+    print("\n\nTest command returned result status {}".format(res.returncode))
 
     try:
         with open(args.result_file_in, 'r') as in_file:
@@ -94,7 +96,17 @@ def main(argv=sys.argv[1:]):
         open(args.result_file_out, 'w').close()
         return res.returncode
 
-    in_data = json.loads(in_text)
+    try:
+        in_data = json.loads(in_text)
+    except json.decoder.JSONDecodeError as e:
+        print(
+            'Failure parsing performance results file at: %s' % args.result_file_in,
+            file=sys.stderr)
+        print(e)
+        if res.returncode == 0:
+            res.returncode = 1
+        return res.returncode
+
     overlay_data = None
     if args.result_file_overlay:
         with open(args.result_file_overlay, 'r') as overlay_file:
