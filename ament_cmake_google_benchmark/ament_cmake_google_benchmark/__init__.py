@@ -103,7 +103,8 @@ def main(argv=sys.argv[1:]):
             'Failure parsing performance results file at: %s' % args.result_file_in,
             file=sys.stderr)
         print(e)
-        res.returncode = 1
+        if res.returncode == 0:
+            res.returncode = 1
         return res.returncode
 
     overlay_data = None
