@@ -10,6 +10,7 @@
   <author>Scott K Logan</author>
 
   <buildtool_depend>ament_cmake_core</buildtool_depend>
+  <buildtool_depend>ament_cmake_export_dependencies</buildtool_depend>
   <buildtool_depend>ament_cmake_python</buildtool_depend>
 
   <exec_depend>ament_cmake_test</exec_depend>
