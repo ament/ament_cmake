@@ -74,9 +74,9 @@ def main(argv=sys.argv[1:]):
     args = parser.parse_args(argv)
     args.command = command
 
-    print("Executing benchmark test command: %s\n\n" % ' '.join(args.command))
+    print('Executing benchmark test command: %s\n\n' % ' '.join(args.command))
     res = subprocess.run(args.command)
-    print("\n\nTest command returned result status {}".format(res.returncode))
+    print('\n\nTest command returned result status %d' % res.returncode)
 
     try:
         with open(args.result_file_in, 'r') as in_file:
