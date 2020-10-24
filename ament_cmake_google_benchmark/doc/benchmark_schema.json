@@ -1,7 +1,7 @@
 {
   "description": "Jenkins Benchmark schema for ROS performance test results",
   "failure": {
-    "value": true
+    "value": "failure"
   },
   "type": "object",
   "additionalProperties": {
