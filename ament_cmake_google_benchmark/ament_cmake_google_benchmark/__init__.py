@@ -116,6 +116,10 @@ def main(argv=sys.argv[1:]):
     with open(args.result_file_out, 'w') as out_file:
         json.dump(out_data, out_file)
 
+    if res.returncode == 0 and any(
+            b.get('error_occurred') for b in in_data.get('benchmarks', [])):
+        res.returncode = 1
+
     return res.returncode
 
 
@@ -160,7 +164,12 @@ def convert_aggregate_benchmark(in_data):
         },
     }
 
-    out_data.update(convert_extra_metrics(in_data, common_aggregate_test_properties))
+    value_override = None
+    if in_data.get('error_occurred', False):
+        value_override = 'failure'
+
+    out_data.update(convert_extra_metrics(
+        in_data, common_aggregate_test_properties, value_override))
 
     return out_data
 
@@ -176,25 +185,37 @@ def convert_iteration_benchmark(in_data):
             },
         },
         'cpu_time': {
-            'dblValue': in_data['cpu_time'],
             'unit': in_data['time_unit'],
         },
         'real_time': {
-            'dblValue': in_data['real_time'],
             'unit': in_data['time_unit'],
         },
     }
 
-    out_data.update(convert_extra_metrics(in_data, common_iteration_test_properties))
+    value_override = None
+    if in_data.get('error_occurred', False):
+        value_override = 'failure'
+        out_data['cpu_time']['value'] = value_override
+        out_data['real_time']['value'] = value_override
+    else:
+        out_data['cpu_time']['dblValue'] = in_data['cpu_time']
+        out_data['real_time']['dblValue'] = in_data['real_time']
+
+    out_data.update(convert_extra_metrics(
+        in_data, common_iteration_test_properties, value_override))
 
     return out_data
 
 
-def convert_extra_metrics(in_data, properties_to_ignore):
+def convert_extra_metrics(in_data, properties_to_ignore, value_override=None):
     for k, v in in_data.items():
         if k in properties_to_ignore:
             continue
-        if isinstance(v, bool):
+        if value_override:
+            yield k, {
+                'value': value_override,
+            }
+        elif isinstance(v, bool):
             yield k, {
                 'boolValue': 'true' if v else 'false',
             }
