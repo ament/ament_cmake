@@ -31,6 +31,9 @@
 #   INTERFACE or PUBLIC keyword.
 #   If it starts with INTERFACE or PUBLIC, this keyword is used in the
 #   target_* calls.
+#   SYSTEM keyword.
+#   If the SYSTEM keyword is specified, it will be added to the
+#   target_include_directories calls.
 # :type ARGN: list of strings
 #
 # @public
