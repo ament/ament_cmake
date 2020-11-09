@@ -31,6 +31,9 @@
 #   INTERFACE or PUBLIC keyword.
 #   If it starts with INTERFACE or PUBLIC, this keyword is used in the
 #   target_* calls.
+#   SYSTEM keyword.
+#   If the SYSTEM keyword is specified, it will be added to the
+#   target_include_directories calls.
 # :type ARGN: list of strings
 #
 # @public
@@ -40,7 +43,7 @@ function(ament_target_dependencies target)
     message(FATAL_ERROR "ament_target_dependencies() the first argument must be a valid target name")
   endif()
   if(${ARGC} GREATER 0)
-    cmake_parse_arguments(ARG "INTERFACE;PUBLIC" "" "" ${ARGN})
+    cmake_parse_arguments(ARG "INTERFACE;PUBLIC;SYSTEM" "" "" ${ARGN})
     set(optional_keyword "")
     set(required_keyword "PUBLIC")
     if(ARG_INTERFACE)
@@ -55,6 +58,10 @@ function(ament_target_dependencies target)
         message(FATAL_ERROR "ament_target_dependencies() PUBLIC keyword is only allowed before the package names")
       endif()
       set(optional_keyword PUBLIC)
+    endif()
+    set(system_keyword "")
+    if(ARG_SYSTEM)
+      set(system_keyword SYSTEM)
     endif()
     set(definitions "")
     set(include_dirs "")
@@ -127,13 +134,13 @@ function(ament_target_dependencies target)
       ament_include_directories_order(ordered_interface_include_dirs ${interface_include_dirs})
       # the interface include dirs are used privately to ensure proper order
       # and the interfaces cover the public case
-      target_include_directories(${target}
+      target_include_directories(${target} ${system_keyword}
         PRIVATE ${ordered_interface_include_dirs})
     endif()
     ament_include_directories_order(ordered_include_dirs ${include_dirs})
     target_link_libraries(${target}
       ${optional_keyword} ${interfaces})
-    target_include_directories(${target}
+    target_include_directories(${target} ${system_keyword}
       ${required_keyword} ${ordered_include_dirs})
     if(NOT ARG_INTERFACE)
       ament_libraries_deduplicate(unique_libraries ${libraries})
