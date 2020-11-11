@@ -27,13 +27,12 @@
 #
 # :param target: the target name
 # :type target: string
-# :param ARGN: a list of package names, which can optionally start with an
-#   INTERFACE or PUBLIC keyword.
-#   If it starts with INTERFACE or PUBLIC, this keyword is used in the
-#   target_* calls.
-#   SYSTEM keyword.
-#   If the SYSTEM keyword is specified, it will be added to the
-#   target_include_directories calls.
+# :param ARGN: a list of package names, which can optionally start
+#   with a SYSTEM keyword, followed by an INTERFACE or PUBLIC keyword.
+#   If it starts with a SYSTEM keyword, it will be used in
+#   target_include_directories() calls.
+#   If it starts (or follows) with an INTERFACE or PUBLIC keyword,
+#   this keyword will be used in the target_*() calls.
 # :type ARGN: list of strings
 #
 # @public
@@ -44,24 +43,29 @@ function(ament_target_dependencies target)
   endif()
   if(${ARGC} GREATER 0)
     cmake_parse_arguments(ARG "INTERFACE;PUBLIC;SYSTEM" "" "" ${ARGN})
+    set(ARGVIND 1)
+    set(system_keyword "")
     set(optional_keyword "")
     set(required_keyword "PUBLIC")
+    if(ARG_SYSTEM)
+      if(NOT "${ARGV${ARGVIND}}" STREQUAL "SYSTEM")
+        message(FATAL_ERROR "ament_target_dependencies() SYSTEM keyword is only allowed before the package names and other keywords")
+      endif()
+      set(system_keyword SYSTEM)
+      math(EXPR ARGVIND "${ARGVIND} + 1")
+    endif()
     if(ARG_INTERFACE)
-      if(NOT "${ARGV1}" STREQUAL "INTERFACE")
+      if(NOT "${ARGV${ARGVIND}}" STREQUAL "INTERFACE")
         message(FATAL_ERROR "ament_target_dependencies() INTERFACE keyword is only allowed before the package names")
       endif()
       set(optional_keyword INTERFACE)
       set(required_keyword INTERFACE)
     endif()
     if(ARG_PUBLIC)
-      if(NOT "${ARGV1}" STREQUAL "PUBLIC")
+      if(NOT "${ARGV${ARGVIND}}" STREQUAL "PUBLIC")
         message(FATAL_ERROR "ament_target_dependencies() PUBLIC keyword is only allowed before the package names")
       endif()
       set(optional_keyword PUBLIC)
-    endif()
-    set(system_keyword "")
-    if(ARG_SYSTEM)
-      set(system_keyword SYSTEM)
     endif()
     set(definitions "")
     set(include_dirs "")
