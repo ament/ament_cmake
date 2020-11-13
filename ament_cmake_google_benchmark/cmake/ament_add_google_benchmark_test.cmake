@@ -111,5 +111,6 @@ function(ament_add_google_benchmark_test target)
     PROPERTIES
     REQUIRED_FILES "${executable}"
     LABELS "google_benchmark;performance"
+    RUN_SERIAL TRUE
   )
 endfunction()
