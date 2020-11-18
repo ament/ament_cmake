@@ -23,8 +23,9 @@
 #
 # :param target: the target name
 # :type target: string
-# :param ARGN: a list of package names, which could start with PUBLIC keyword.
-#   If it starts with PUBLIC, this keyword is used in the target_link_libraries call.
+# :param ARGN: a list of package names, which could start with SYSTEM and/or PUBLIC keywords.
+#   If it starts with SYSTEM, this keyword is used in the target_include_directories call.
+#   If it starts (or follows) with PUBLIC, this keyword is used in the target_link_libraries call.
 #   If not, the non-keyword target_link_libraries call is used.
 # :type ARGN: list of strings
 #
@@ -35,11 +36,20 @@ function(ament_target_dependencies target)
     message(FATAL_ERROR "ament_target_dependencies() the first argument must be a valid target name")
   endif()
   if(${ARGC} GREATER 0)
-    cmake_parse_arguments(ARG "PUBLIC" "" "" ${ARGN})
+    cmake_parse_arguments(ARG "SYSTEM;PUBLIC" "" "" ${ARGN})
+    set(ARGVIND 1)
+    set(TARGET_INCLUDE_DIRECTORIES_ORIGIN)
+    if(ARG_SYSTEM)
+      if(NOT "${ARGV${ARGVIND}}" STREQUAL "SYSTEM")
+        message(FATAL_ERROR "ament_target_dependencies() SYSTEM keyword is only allowed before package names and other keywords")
+      endif()
+      set(TARGET_INCLUDE_DIRECTORIES_ORIGIN SYSTEM)
+      math(EXPR ARGVIND "${ARGVIND} + 1")
+    endif()
     set(TARGET_LINK_LIBRARIES_VISIBILITY)
     if(ARG_PUBLIC)
-      if(NOT "${ARGV1}" STREQUAL "PUBLIC")
-        message(FATAL_ERROR "ament_target_dependencies() PUBLIC keyword is only allowed before the package names")
+      if(NOT "${ARGV${ARGVIND}}" STREQUAL "PUBLIC")
+        message(FATAL_ERROR "ament_target_dependencies() PUBLIC keyword is only allowed before package names")
       endif()
       set(TARGET_LINK_LIBRARIES_VISIBILITY PUBLIC)
     endif()
@@ -59,7 +69,7 @@ function(ament_target_dependencies target)
     target_compile_definitions(${target}
       PUBLIC ${definitions})
     ament_include_directories_order(ordered_include_dirs ${include_dirs})
-    target_include_directories(${target}
+    target_include_directories(${target} ${TARGET_INCLUDE_DIRECTORIES_ORIGIN}
       PUBLIC ${ordered_include_dirs})
     ament_libraries_deduplicate(unique_libraries ${libraries})
     target_link_libraries(${target}
