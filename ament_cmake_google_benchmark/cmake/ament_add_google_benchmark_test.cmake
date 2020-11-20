@@ -30,6 +30,9 @@
 # :param WORKING_DIRECTORY: the working directory for invoking the
 #   executable in, default defined by ``ament_add_test()``
 # :type WORKING_DIRECTORY: string
+# :param RUN_PARALLEL: if set allow the test to be run in parallel
+#   with other tests
+# :type RUN_PARALLEL: option
 # :param SKIP_TEST: if set mark the test as being skipped
 # :type SKIP_TEST: option
 # :param ENV: list of env vars to set; listed as ``VAR=value``
@@ -49,7 +52,7 @@ function(ament_add_google_benchmark_test target)
   endif()
 
   cmake_parse_arguments(ARG
-    "SKIP_TEST"
+    "RUN_PARALLEL;SKIP_TEST"
     "RUNNER;TIMEOUT;WORKING_DIRECTORY"
     "APPEND_ENV;APPEND_LIBRARY_DIRS;ENV"
     ${ARGN})
@@ -90,6 +93,9 @@ function(ament_add_google_benchmark_test target)
   if(ARG_WORKING_DIRECTORY)
     set(ARG_WORKING_DIRECTORY "WORKING_DIRECTORY" "${ARG_WORKING_DIRECTORY}")
   endif()
+  if(NOT ARG_RUN_PARALLEL)
+    set(PROP_RUN_SERIAL "RUN_SERIAL" "TRUE")
+  endif()
   if(ARG_SKIP_TEST OR NOT AMENT_RUN_PERFORMANCE_TESTS)
     set(ARG_SKIP_TEST "SKIP_TEST")
   endif()
@@ -111,6 +117,6 @@ function(ament_add_google_benchmark_test target)
     PROPERTIES
     REQUIRED_FILES "${executable}"
     LABELS "google_benchmark;performance"
-    RUN_SERIAL TRUE
+    ${PROP_RUN_SERIAL}
   )
 endfunction()
