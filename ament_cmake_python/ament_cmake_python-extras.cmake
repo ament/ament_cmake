@@ -19,7 +19,7 @@ macro(_ament_cmake_python_register_environment_hook)
   if(NOT DEFINED _AMENT_CMAKE_PYTHON_ENVIRONMENT_HOOK_REGISTERED)
     set(_AMENT_CMAKE_PYTHON_ENVIRONMENT_HOOK_REGISTERED TRUE)
 
-    _zament_cmake_python_get_python_install_dir()
+    _ament_cmake_python_get_python_install_dir()
 
     find_package(ament_cmake_core QUIET REQUIRED)
 
