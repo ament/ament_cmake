@@ -19,7 +19,7 @@ macro(_ament_cmake_python_register_environment_hook)
   if(NOT DEFINED _AMENT_CMAKE_PYTHON_ENVIRONMENT_HOOK_REGISTERED)
     set(_AMENT_CMAKE_PYTHON_ENVIRONMENT_HOOK_REGISTERED TRUE)
 
-    ament_cmake_python_get_python_install_dir()
+    _zament_cmake_python_get_python_install_dir()
 
     find_package(ament_cmake_core QUIET REQUIRED)
 
@@ -40,7 +40,7 @@ macro(_ament_cmake_python_register_environment_hook)
   endif()
 endmacro()
 
-macro(ament_cmake_python_get_python_install_dir)
+macro(_ament_cmake_python_get_python_install_dir)
   if(NOT DEFINED PYTHON_INSTALL_DIR)
     # avoid storing backslash in cached variable since CMake will interpret it as escape character
     set(_python_code
@@ -70,10 +70,6 @@ macro(ament_cmake_python_get_python_install_dir)
   endif()
 endmacro()
 
-macro(_ament_cmake_python_get_python_install_dir)
-    message(DEPRECATION "Prefer using the public interface 'ament_cmake_python_get_python_install_dir'.")
-    ament_cmake_python_get_python_install_dir()
-endmacro()
-
 include("${ament_cmake_python_DIR}/ament_python_install_module.cmake")
 include("${ament_cmake_python_DIR}/ament_python_install_package.cmake")
+include("${ament_cmake_python_DIR}/ament_get_python_install_dir.cmake")
