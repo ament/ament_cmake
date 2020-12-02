@@ -19,11 +19,11 @@
 #   Python installation directory.
 # :type package_name: string
 #
-macro(ament_get_python_install_dir python_install_dir_out)
+function(ament_get_python_install_dir python_install_dir_out)
   _ament_cmake_python_get_python_install_dir()
   if(NOT PYTHON_INSTALL_DIR)
     message(FATAL_ERROR "ament_get_python_install_dir() variable "
       "'PYTHON_INSTALL_DIR' must not be empty")
   endif()
-  set(${python_install_dir_out} ${PYTHON_INSTALL_DIR})
-endmacro()
+  set(${python_install_dir_out} ${PYTHON_INSTALL_DIR} PARENT_SCOPE)
+endfunction()
