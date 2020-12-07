@@ -89,7 +89,7 @@ macro(ament_export_libraries)
             foreach(_cfg ${_imported_configurations})
               get_target_property(_imported_location_${_cfg} "${_lib}"
                 IMPORTED_LOCATION_${_cfg})
-              if(_imported_location_${cfg})
+              if(_imported_location_${_cfg})
                 list(APPEND _imported_libraries ${_imported_location_${_cfg}})
               endif()
             endforeach()
