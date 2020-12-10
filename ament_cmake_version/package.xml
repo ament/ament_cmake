@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="2">
   <name>ament_cmake_version</name>
-  <version>1.0.2</version>
+  <version>1.0.3</version>
   <description>The ability to override the exported package version in the ament buildsystem.</description>
   <maintainer email="dthomas@osrfoundation.org">Dirk Thomas</maintainer>
   <maintainer email="michel@ekumenlabs.com">Michel Hidalgo</maintainer>
