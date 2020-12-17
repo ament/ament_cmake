@@ -87,6 +87,9 @@ macro(_ament_cmake_gtest_find_gtest)
         # mark gtest targets with EXCLUDE_FROM_ALL to only build
         # when tests are built which depend on them
         set_target_properties(gtest gtest_main PROPERTIES EXCLUDE_FROM_ALL 1)
+        if(NOT WIN32)
+          target_compile_options(gtest PRIVATE -Wno-null-dereference)
+        endif()
         target_include_directories(gtest BEFORE PUBLIC "${GTEST_FROM_SOURCE_INCLUDE_DIRS}")
         target_include_directories(gtest_main BEFORE PUBLIC "${GTEST_FROM_SOURCE_INCLUDE_DIRS}")
       endif()
