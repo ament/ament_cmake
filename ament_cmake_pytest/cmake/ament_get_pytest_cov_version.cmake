@@ -35,7 +35,8 @@ function(ament_get_pytest_cov_version var)
     set(ARG_PYTHON_EXECUTABLE "${PYTHON_EXECUTABLE}")
   endif()
 
-  set(cmd "${ARG_PYTHON_EXECUTABLE}" "-m" "pytest" "--version")
+  # Newer versions of pytest require providing '--version' twice to include plugin versions
+  set(cmd "${ARG_PYTHON_EXECUTABLE}" "-m" "pytest" "--version" "--version")
   execute_process(
     COMMAND ${cmd}
     RESULT_VARIABLE res
@@ -44,7 +45,7 @@ function(ament_get_pytest_cov_version var)
   if(res EQUAL 0)
     # check if pytest-cov is in the list of plugins
     # (actual output of the command is in ${error} and not ${output})
-    string(REGEX MATCH "pytest-cov-([0-9]\.[0-9]\.[0-9])" pytest_cov_full_version "${error}")
+    string(REGEX MATCH "pytest-cov-([0-9]+\.[0-9]+\.[0-9]+)" pytest_cov_full_version "${error}")
     if(pytest_cov_full_version)
       set(${var} ${CMAKE_MATCH_1} PARENT_SCOPE)
     else()
