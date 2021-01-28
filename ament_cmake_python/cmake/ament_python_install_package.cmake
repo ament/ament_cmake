@@ -13,14 +13,18 @@
 # limitations under the License.
 
 #
-# Install a Python package (and its recursive subpackages).
+# Install a Python package (and its recursive subpackages) as a flat Python .egg
 #
 # :param package_name: the Python package name
 # :type package_name: string
 # :param PACKAGE_DIR: the path to the Python package directory (default:
 #   <package_name> folder relative to the CMAKE_CURRENT_LIST_DIR)
 # :type PACKAGE_DIR: string
-# :param SKIP_COMPILE: if set do not compile the installed package
+# :param VERSION: the Python package version (default: package.xml version)
+# :param VERSION: string
+# :param SETUP_CFG: the path to a setup.cfg file, if provided
+# :param SETUP_CFG: string
+# :param SKIP_COMPILE: if set do not byte-compile the installed package
 # :type SKIP_COMPILE: option
 #
 macro(ament_python_install_package)
@@ -29,7 +33,7 @@ macro(ament_python_install_package)
 endmacro()
 
 function(_ament_cmake_python_install_package package_name)
-  cmake_parse_arguments(ARG "SKIP_COMPILE" "PACKAGE_DIR" "" ${ARGN})
+  cmake_parse_arguments(ARG "SKIP_COMPILE" "PACKAGE_DIR;VERSION;SETUP_CFG" "" ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "ament_python_install_package() called with unused "
       "arguments: ${ARG_UNPARSED_ARGUMENTS}")
@@ -42,33 +46,74 @@ function(_ament_cmake_python_install_package package_name)
     set(ARG_PACKAGE_DIR "${CMAKE_CURRENT_LIST_DIR}/${ARG_PACKAGE_DIR}")
   endif()
 
+  if(NOT ARG_VERSION)
+    # Use package.xml version
+    if(NOT _AMENT_PACKAGE_NAME)
+      ament_package_xml()
+    endif()
+    set(ARG_VERSION "${${PROJECT_NAME}_VERSION}")
+  endif()
+
   if(NOT EXISTS "${ARG_PACKAGE_DIR}/__init__.py")
     message(FATAL_ERROR "ament_python_install_package() the Python package "
       "folder '${ARG_PACKAGE_DIR}' doesn't contain an '__init__.py' file")
   endif()
 
-  _ament_cmake_python_register_environment_hook()
+  set(build_dir "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_python/${package_name}")
 
-  if(NOT PYTHON_INSTALL_DIR)
-    message(FATAL_ERROR "ament_python_install_package() variable "
-      "'PYTHON_INSTALL_DIR' must not be empty")
-  endif()
-  install(
-    DIRECTORY "${ARG_PACKAGE_DIR}/"
-    DESTINATION "${PYTHON_INSTALL_DIR}/${package_name}"
-    PATTERN "*.pyc" EXCLUDE
-    PATTERN "__pycache__" EXCLUDE
+  string(CONFIGURE "\
+from setuptools import setup
+
+setup(
+  name='${package_name}',
+  version='${ARG_VERSION}',
+  packages=['${package_name}'],
+  package_dir={'${package_name}': '${ARG_PACKAGE_DIR}'},
+)
+" setup_py_content)
+
+  file(GENERATE
+    OUTPUT "${build_dir}/setup.py"
+    CONTENT "${setup_py_content}"
   )
-  if(NOT ARG_SKIP_COMPILE)
-    # compile Python files
-    install(CODE
-      "execute_process(
-        COMMAND
-        \"${PYTHON_EXECUTABLE}\" \"-m\" \"compileall\"
-        \"${CMAKE_INSTALL_PREFIX}/${PYTHON_INSTALL_DIR}/${package_name}\"
-      )"
+
+  if(ARG_SETUP_CFG)
+    if(NOT IS_ABSOLUTE ${ARG_SETUP_CFG})
+      set(ARG_SETUP_CFG "${CMAKE_CURRENT_LIST_DIR}/${ARG_SETUP_CFG}")
+    endif()
+    add_custom_command(
+      OUTPUT "${build_dir}/setup.cfg"
+      COMMAND ${CMAKE_COMMAND} -E copy ${ARG_SETUP_CFG} ${build_dir}/setup.cfg
+      MAIN_DEPENDENCY ${ARG_SETUP_CFG}
     )
   endif()
+
+  if(NOT ARG_SKIP_COMPILE)
+    set(extra_install_args "--compile")
+  else()
+    set(extra_install_args "--no-compile")
+  endif()
+
+  # Install as flat Python .egg to mimic https://github.com/colcon/colcon-core
+  # handling of pure Python packages.
+
+  # NOTE(hidmic): Allow setup.py install to build, as there is no way to
+  # determine the Python package's source dependencies for proper build
+  # invalidation.
+  install(CODE
+    "message(STATUS \"Installing: ${package_name} as flat Python .egg \"
+                    \"to ${CMAKE_INSTALL_PREFIX}/${PYTHON_INSTALL_DIR}\")
+     execute_process(
+        COMMAND
+        \"${PYTHON_EXECUTABLE}\" setup.py install
+           --single-version-externally-managed
+           --prefix ${CMAKE_INSTALL_PREFIX}
+           --record install.log
+           ${extra_install_args}
+        WORKING_DIRECTORY \"${build_dir}\"
+        OUTPUT_QUIET
+     )"
+  )
 
   if(package_name IN_LIST AMENT_CMAKE_PYTHON_INSTALL_INSTALLED_NAMES)
     message(FATAL_ERROR
