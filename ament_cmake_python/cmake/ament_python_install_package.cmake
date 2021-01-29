@@ -13,7 +13,7 @@
 # limitations under the License.
 
 #
-# Install a Python package (and its recursive subpackages) as a flat Python .egg
+# Install a Python package (and its recursive subpackages) as a flat Python egg
 #
 # :param package_name: the Python package name
 # :type package_name: string
@@ -22,7 +22,8 @@
 # :type PACKAGE_DIR: string
 # :param VERSION: the Python package version (default: package.xml version)
 # :param VERSION: string
-# :param SETUP_CFG: the path to a setup.cfg file, if provided
+# :param SETUP_CFG: the path to a setup.cfg file (default:
+#   setup.cfg file at CMAKE_CURRENT_LIST_DIR root, if any)
 # :param SETUP_CFG: string
 # :param SKIP_COMPILE: if set do not byte-compile the installed package
 # :type SKIP_COMPILE: option
@@ -59,6 +60,14 @@ function(_ament_cmake_python_install_package package_name)
       "folder '${ARG_PACKAGE_DIR}' doesn't contain an '__init__.py' file")
   endif()
 
+  if(NOT ARG_SETUP_CFG)
+    if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/setup.cfg")
+      set(ARG_SETUP_CFG "${CMAKE_CURRENT_LIST_DIR}/setup.cfg")
+    endif()
+  elseif(NOT IS_ABSOLUTE "${ARG_SETUP_CFG}")
+    set(ARG_SETUP_CFG "${CMAKE_CURRENT_LIST_DIR}/${ARG_SETUP_CFG}")
+  endif()
+
   set(build_dir "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_python/${package_name}")
 
   string(CONFIGURE "\
@@ -78,13 +87,13 @@ setup(
   )
 
   if(ARG_SETUP_CFG)
-    if(NOT IS_ABSOLUTE ${ARG_SETUP_CFG})
-      set(ARG_SETUP_CFG "${CMAKE_CURRENT_LIST_DIR}/${ARG_SETUP_CFG}")
-    endif()
     add_custom_command(
       OUTPUT "${build_dir}/setup.cfg"
       COMMAND ${CMAKE_COMMAND} -E copy ${ARG_SETUP_CFG} ${build_dir}/setup.cfg
       MAIN_DEPENDENCY ${ARG_SETUP_CFG}
+    )
+    add_custom_target(${package_name}_setup ALL
+      DEPENDS "${build_dir}/setup.cfg"
     )
   endif()
 
@@ -101,7 +110,7 @@ setup(
   # determine the Python package's source dependencies for proper build
   # invalidation.
   install(CODE
-    "message(STATUS \"Installing: ${package_name} as flat Python .egg \"
+    "message(STATUS \"Installing: ${package_name} as flat Python egg \"
                     \"to ${CMAKE_INSTALL_PREFIX}/${PYTHON_INSTALL_DIR}\")
      execute_process(
         COMMAND
