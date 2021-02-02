@@ -80,7 +80,7 @@ setup(
   version='${ARG_VERSION}',
   packages=find_packages(
     where='${package_dir}/..',
-    include=('${package_name}*')),
+    include=('${package_name}', '${package_name}.*')),
   package_dir={'${package_name}': '${package_dir}'},
   package_data={'': ['*.*']}
 )
