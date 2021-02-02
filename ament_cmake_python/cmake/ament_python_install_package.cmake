@@ -69,15 +69,20 @@ function(_ament_cmake_python_install_package package_name)
   endif()
 
   set(build_dir "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_python/${package_name}")
+  file(RELATIVE_PATH package_dir "${build_dir}" "${ARG_PACKAGE_DIR}")
 
   string(CONFIGURE "\
+from setuptools import find_packages
 from setuptools import setup
 
 setup(
   name='${package_name}',
   version='${ARG_VERSION}',
-  packages=['${package_name}'],
-  package_dir={'${package_name}': '${ARG_PACKAGE_DIR}'},
+  packages=find_packages(
+    where='${package_dir}/..',
+    include=('${package_name}*')),
+  package_dir={'${package_name}': '${package_dir}'},
+  package_data={'': ['*.*']}
 )
 " setup_py_content)
 
