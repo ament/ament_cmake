@@ -69,7 +69,7 @@ function(_ament_cmake_python_install_package package_name)
   endif()
 
   set(build_dir "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_python/${package_name}")
-  file(RELATIVE_PATH package_dir "${build_dir}" "${ARG_PACKAGE_DIR}")
+  file(RELATIVE_PATH source_dir "${build_dir}" "${ARG_PACKAGE_DIR}")
 
   string(CONFIGURE "\
 from setuptools import find_packages
@@ -79,9 +79,9 @@ setup(
   name='${package_name}',
   version='${ARG_VERSION}',
   packages=find_packages(
-    where='${package_dir}/..',
+    where='${source_dir}/..',
     include=('${package_name}', '${package_name}.*')),
-  package_dir={'${package_name}': '${package_dir}'},
+  package_dir={'${package_name}': '${source_dir}'},
   package_data={'': ['*.*']}
 )
 " setup_py_content)
@@ -110,6 +110,7 @@ setup(
 
   # Install as flat Python .egg to mimic https://github.com/colcon/colcon-core
   # handling of pure Python packages.
+  file(RELATIVE_PATH install_dir "${build_dir}" "${CMAKE_INSTALL_PREFIX}")
 
   # NOTE(hidmic): Allow setup.py install to build, as there is no way to
   # determine the Python package's source dependencies for proper build
@@ -121,7 +122,7 @@ setup(
         COMMAND
         \"${PYTHON_EXECUTABLE}\" setup.py install
            --single-version-externally-managed
-           --prefix ${CMAKE_INSTALL_PREFIX}
+           --prefix \"${install_dir}\"
            --record install.log
            ${extra_install_args}
         WORKING_DIRECTORY \"${build_dir}\"
