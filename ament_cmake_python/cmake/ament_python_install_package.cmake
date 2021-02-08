@@ -72,6 +72,7 @@ function(_ament_cmake_python_install_package package_name)
   file(RELATIVE_PATH source_dir "${build_dir}" "${ARG_PACKAGE_DIR}")
 
   string(CONFIGURE "\
+import os
 from setuptools import find_packages
 from setuptools import setup
 
@@ -79,7 +80,7 @@ setup(
   name='${package_name}',
   version='${ARG_VERSION}',
   packages=find_packages(
-    where='${source_dir}/..',
+    where=os.path.normpath('${source_dir}/..'),
     include=('${package_name}', '${package_name}.*')),
   package_dir={'${package_name}': '${source_dir}'},
   package_data={'': ['*.*']}
