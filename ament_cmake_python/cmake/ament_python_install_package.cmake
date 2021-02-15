@@ -27,6 +27,8 @@
 # :param SETUP_CFG: string
 # :param SKIP_COMPILE: if set do not byte-compile the installed package
 # :type SKIP_COMPILE: option
+# :param NO_DATA: if set do not install any package data
+# :type NO_DATA: option
 #
 macro(ament_python_install_package)
   _ament_cmake_python_register_environment_hook()
@@ -34,7 +36,7 @@ macro(ament_python_install_package)
 endmacro()
 
 function(_ament_cmake_python_install_package package_name)
-  cmake_parse_arguments(ARG "SKIP_COMPILE" "PACKAGE_DIR;VERSION;SETUP_CFG" "" ${ARGN})
+  cmake_parse_arguments(ARG "SKIP_COMPILE;NO_DATA" "PACKAGE_DIR;VERSION;SETUP_CFG" "" ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "ament_python_install_package() called with unused "
       "arguments: ${ARG_UNPARSED_ARGUMENTS}")
@@ -71,21 +73,42 @@ function(_ament_cmake_python_install_package package_name)
   set(build_dir "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_python/${package_name}")
   file(RELATIVE_PATH source_dir "${build_dir}" "${ARG_PACKAGE_DIR}")
 
-  string(CONFIGURE "\
+  if(ARG_NO_DATA)
+    string(CONFIGURE "\
 import os
 from setuptools import find_packages
 from setuptools import setup
 
 setup(
-  name='${package_name}',
-  version='${ARG_VERSION}',
-  packages=find_packages(
-    where=os.path.normpath('${source_dir}/..'),
-    include=('${package_name}', '${package_name}.*')),
-  package_dir={'${package_name}': '${source_dir}'},
-  package_data={'': ['*.*']}
+    name='${package_name}',
+    version='${ARG_VERSION}',
+    packages=find_packages(
+        where=os.path.normpath('${source_dir}/..'),
+        include=('${package_name}', '${package_name}.*')),
+    package_dir={'${package_name}': '${source_dir}'},
 )
 " setup_py_content)
+  else()
+    string(CONFIGURE "\
+import os
+from setuptools import find_packages
+from setuptools import setup
+
+from ament_cmake_python import find_packages_data
+
+setup(
+    name='${package_name}',
+    version='${ARG_VERSION}',
+    packages=find_packages(
+        where=os.path.normpath('${source_dir}/..'),
+        include=('${package_name}', '${package_name}.*')),
+    package_dir={'${package_name}': '${source_dir}'},
+    package_data=find_packages_data(
+        where=os.path.normpath('${source_dir}/..'),
+        include=('${package_name}', '${package_name}.*'))
+)
+" setup_py_content)
+  endif()
 
   file(GENERATE
     OUTPUT "${build_dir}/setup.py"
