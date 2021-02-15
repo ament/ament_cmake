@@ -26,7 +26,7 @@ def fuzzy_lookup(key, mapping):
             yield value
 
 
-def find_packages_data(where, exclude=(), include=()):
+def find_packages_data(where='.', exclude=(), include=('*',)):
     """
     Find data in Python packages found within directory 'where'.
 
@@ -48,13 +48,9 @@ def find_packages_data(where, exclude=(), include=()):
     """
     packages = find_packages(
         where=where, include=set(include),
-        # Defer whole package exclusion (may be partial)
-        exclude=set(exclude) - set(include))
-
+        # Defer package exclusion (may be partial)
+    )
     where = pathlib.Path(urlparse(where).path)
-    if not include:
-        # Use what find_packages() found
-        include = packages
     if not isinstance(exclude, dict):
         # Exclude whole packages
         exclude = {name: ['**/*'] for name in exclude}
@@ -90,15 +86,17 @@ def find_packages_data(where, exclude=(), include=()):
             included_data.update(
                 path for pattern in patterns
                 for path in rootpath.glob(pattern)
-                if path not in excluded_data
+                if not path.is_dir() and path not in excluded_data
             )
 
-        packages_data[name] = [
-            str(path.relative_to(rootpath))
-            for path in included_data
-        ]
+        if included_data:
+            packages_data[name] = [
+                str(path.relative_to(rootpath))
+                for path in included_data
+            ]
 
         # Keep track of packages processed
         processed_data.update(rootpath.glob('**/*'))
+        processed_data.add(rootpath)
 
     return packages_data
