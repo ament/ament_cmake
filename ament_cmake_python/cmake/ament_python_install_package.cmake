@@ -95,8 +95,8 @@ setup(
   if(ARG_SETUP_CFG)
     add_custom_command(
       OUTPUT "${build_dir}/setup.cfg"
-      COMMAND ${CMAKE_COMMAND} -E copy ${ARG_SETUP_CFG} ${build_dir}/setup.cfg
-      MAIN_DEPENDENCY ${ARG_SETUP_CFG}
+      COMMAND ${CMAKE_COMMAND} -E copy "${ARG_SETUP_CFG}" "${build_dir}/setup.cfg"
+      MAIN_DEPENDENCY "${ARG_SETUP_CFG}"
     )
     add_custom_target(${package_name}_setup ALL
       DEPENDS "${build_dir}/setup.cfg"
