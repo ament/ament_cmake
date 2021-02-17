@@ -14,12 +14,14 @@ if(BUILD_TESTING)
   execute_process(
     COMMAND "${PYTHON_EXECUTABLE}" -m py_compile
       foo/__init__.py foo/bar/__init__.py baz/__init__.py
-    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/test"
+    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/test/data"
   )
   add_test(
     NAME test_find_packages_data
-    COMMAND "${PYTHON_EXECUTABLE}" test_find_packages_data.py
-    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/test"
+    COMMAND
+      "${PYTHON_EXECUTABLE}"
+      "${CMAKE_CURRENT_SOURCE_DIR}/test/test_find_packages_data.py"
+    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/test/data"
   )
   set_tests_properties(test_find_packages_data PROPERTIES
     ENVIRONMENT "PYTHONPATH=${CMAKE_CURRENT_SOURCE_DIR}"

@@ -71,6 +71,14 @@ class TestFindPackagesData(unittest.TestCase):
             os.path.join('resources', 'buzz.txt')
         }
 
+    def test_nested_packages_data_is_found(self):
+        data = find_packages_data(where='nested/pkgs')
+        assert set(data) == {'fizz', 'fizz.buzz'}
+        assert set(data['fizz']) == {
+            os.path.join('data', 'buzz.bin')
+        }
+        assert set(data['fizz.buzz']) == {'data.txt'}
+
 
 if __name__ == '__main__':
     unittest.main()
