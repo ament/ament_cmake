@@ -11,6 +11,11 @@ ament_python_install_package(${PROJECT_NAME} NO_DATA)
 include(CTest)
 
 if(BUILD_TESTING)
+  execute_process(
+    COMMAND "${PYTHON_EXECUTABLE}" -m py_compile
+      foo/__init__.py foo/bar/__init__.py baz/__init__.py
+    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/test"
+  )
   add_test(
     NAME test_find_packages_data
     COMMAND "${PYTHON_EXECUTABLE}" test_find_packages_data.py
