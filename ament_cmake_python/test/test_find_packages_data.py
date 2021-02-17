@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
 import unittest
 
 from ament_cmake_python import find_packages_data
@@ -25,8 +26,8 @@ class TestFindPackagesData(unittest.TestCase):
         assert set(data['foo']) == {'data', 'data.txt'}
         assert set(data['foo.bar']) == {
             'data.txt',
-            'resources/fizz.txt',
-            'resources/buzz.txt'
+            os.path.join('resources', 'fizz.txt'),
+            os.path.join('resources', 'buzz.txt')
         }
         assert set(data['baz']) == {'data.bin', 'data'}
 
@@ -37,8 +38,8 @@ class TestFindPackagesData(unittest.TestCase):
         assert set(data['foo']) == {'data', 'data.txt'}
         assert set(data['foo.bar']) == {
             'data.txt',
-            'resources/fizz.txt',
-            'resources/buzz.txt'
+            os.path.join('resources', 'fizz.txt'),
+            os.path.join('resources', 'buzz.txt')
         }
 
     def test_whole_package_data_is_excluded(self):
@@ -66,8 +67,8 @@ class TestFindPackagesData(unittest.TestCase):
         assert set(data) == {'foo', 'foo.bar'}
         assert set(data['foo']) == {'data.txt'}
         assert set(data['foo.bar']) == {
-            'resources/fizz.txt',
-            'resources/buzz.txt'
+            os.path.join('resources', 'fizz.txt'),
+            os.path.join('resources', 'buzz.txt')
         }
 
 
