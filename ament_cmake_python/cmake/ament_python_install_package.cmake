@@ -134,19 +134,18 @@ setup(
 
   # Install as flat Python .egg to mimic https://github.com/colcon/colcon-core
   # handling of pure Python packages.
-  file(RELATIVE_PATH install_dir "${build_dir}" "${CMAKE_INSTALL_PREFIX}")
 
   # NOTE(hidmic): Allow setup.py install to build, as there is no way to
   # determine the Python package's source dependencies for proper build
   # invalidation.
   install(CODE
     "message(STATUS \"Installing: ${package_name} as flat Python egg \"
-                    \"to ${CMAKE_INSTALL_PREFIX}/${PYTHON_INSTALL_DIR}\")
+                    \"to \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${PYTHON_INSTALL_DIR}\")
      execute_process(
         COMMAND
         \"${PYTHON_EXECUTABLE}\" setup.py install
            --single-version-externally-managed
-           --prefix \"${install_dir}\"
+           --prefix \"\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}\"
            --record install.log
            ${extra_install_args}
         WORKING_DIRECTORY \"${build_dir}\"
