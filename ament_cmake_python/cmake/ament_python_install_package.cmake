@@ -127,30 +127,38 @@ setup(
   endif()
 
   if(NOT ARG_SKIP_COMPILE)
-    set(extra_install_args "--compile")
+    set(extra_install_args --compile)
   else()
-    set(extra_install_args "--no-compile")
+    set(extra_install_args --no-compile)
   endif()
 
   # Install as flat Python .egg to mimic https://github.com/colcon/colcon-core
   # handling of pure Python packages.
-  file(RELATIVE_PATH install_dir "${build_dir}" "${CMAKE_INSTALL_PREFIX}")
 
   # NOTE(hidmic): Allow setup.py install to build, as there is no way to
   # determine the Python package's source dependencies for proper build
   # invalidation.
   install(CODE
-    "message(STATUS \"Installing: ${package_name} as flat Python egg \"
-                    \"to ${CMAKE_INSTALL_PREFIX}/${PYTHON_INSTALL_DIR}\")
+    "set(extra_install_args ${extra_install_args})
+     set(install_dir \"${CMAKE_INSTALL_PREFIX}/${PYTHON_INSTALL_DIR}\")
+     if(DEFINED ENV{DESTDIR} AND NOT \"$ENV{DESTDIR}\" STREQUAL \"\")
+       list(APPEND extra_install_args --root \$ENV{DESTDIR})
+       file(TO_CMAKE_PATH \"\$ENV{DESTDIR}/\${install_dir}\" install_dir)
+     endif()
+     message(STATUS
+       \"Installing: ${package_name} as flat Python egg under \${install_dir}\")
+     file(TO_NATIVE_PATH \"${CMAKE_INSTALL_PREFIX}\" install_prefix)
+     file(TO_NATIVE_PATH \"${CMAKE_INSTALL_PREFIX}/bin\" scripts_install_dir)
      execute_process(
-        COMMAND
-        \"${PYTHON_EXECUTABLE}\" setup.py install
+       COMMAND
+         \"${PYTHON_EXECUTABLE}\" setup.py install
            --single-version-externally-managed
-           --prefix \"${install_dir}\"
+           --install-scripts \${scripts_install_dir}
+           --prefix \${install_prefix}
            --record install.log
-           ${extra_install_args}
-        WORKING_DIRECTORY \"${build_dir}\"
-        OUTPUT_QUIET
+           \${extra_install_args}
+       WORKING_DIRECTORY \"${build_dir}\"
+       OUTPUT_QUIET
      )"
   )
 
