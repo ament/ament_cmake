@@ -141,7 +141,7 @@ setup(
   install(CODE
     "set(extra_install_args ${extra_install_args})
      set(install_dir \"${CMAKE_INSTALL_PREFIX}/${PYTHON_INSTALL_DIR}\")
-     if(DEFINED ENV{DESTDIR} AND NOT \"$ENV{DESTDIR}\" STREQUAL \"\")
+     if(DEFINED ENV{DESTDIR} AND NOT \"\$ENV{DESTDIR}\" STREQUAL \"\")
        list(APPEND extra_install_args --root \$ENV{DESTDIR})
        file(TO_CMAKE_PATH \"\$ENV{DESTDIR}/\${install_dir}\" install_dir)
      endif()
