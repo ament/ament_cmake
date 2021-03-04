@@ -33,6 +33,7 @@
 macro(ament_python_install_package)
   _ament_cmake_python_register_environment_hook()
   _ament_cmake_python_install_package(${ARGN})
+  _ament_cmake_python_install_package_hook()
 endmacro()
 
 function(_ament_cmake_python_install_package package_name)
@@ -71,7 +72,6 @@ function(_ament_cmake_python_install_package package_name)
   endif()
 
   set(build_dir "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_python/${package_name}")
-  file(RELATIVE_PATH source_dir "${build_dir}" "${ARG_PACKAGE_DIR}")
 
   if(ARG_NO_DATA)
     string(CONFIGURE "\
@@ -83,9 +83,7 @@ setup(
     name='${package_name}',
     version='${ARG_VERSION}',
     packages=find_packages(
-        where=os.path.normpath('${source_dir}/..'),
         include=('${package_name}', '${package_name}.*')),
-    package_dir={'${package_name}': '${source_dir}'},
 )
 " setup_py_content)
   else()
@@ -100,11 +98,8 @@ setup(
     name='${package_name}',
     version='${ARG_VERSION}',
     packages=find_packages(
-        where=os.path.normpath('${source_dir}/..'),
         include=('${package_name}', '${package_name}.*')),
-    package_dir={'${package_name}': '${source_dir}'},
     package_data=find_packages_data(
-        where=os.path.normpath('${source_dir}/..'),
         include=('${package_name}', '${package_name}.*'))
 )
 " setup_py_content)
@@ -116,51 +111,105 @@ setup(
   )
 
   if(ARG_SETUP_CFG)
-    add_custom_command(
-      OUTPUT "${build_dir}/setup.cfg"
-      COMMAND ${CMAKE_COMMAND} -E copy "${ARG_SETUP_CFG}" "${build_dir}/setup.cfg"
-      MAIN_DEPENDENCY "${ARG_SETUP_CFG}"
-    )
-    add_custom_target(${package_name}_setup ALL
-      DEPENDS "${build_dir}/setup.cfg"
+    add_custom_target(
+      ament_cmake_python_symlink_${package_name}_setup ALL
+      COMMAND ${CMAKE_COMMAND} -E create_symlink
+        "${ARG_SETUP_CFG}" "${build_dir}/setup.cfg"
     )
   endif()
 
-  if(NOT ARG_SKIP_COMPILE)
-    set(extra_install_args --compile)
-  else()
-    set(extra_install_args --no-compile)
-  endif()
-
-  # Install as flat Python .egg to mimic https://github.com/colcon/colcon-core
-  # handling of pure Python packages.
-
-  # NOTE(hidmic): Allow setup.py install to build, as there is no way to
-  # determine the Python package's source dependencies for proper build
-  # invalidation.
-  install(CODE
-    "set(extra_install_args ${extra_install_args})
-     set(install_dir \"${CMAKE_INSTALL_PREFIX}/${PYTHON_INSTALL_DIR}\")
-     if(DEFINED ENV{DESTDIR} AND NOT \"\$ENV{DESTDIR}\" STREQUAL \"\")
-       list(APPEND extra_install_args --root \$ENV{DESTDIR})
-       file(TO_CMAKE_PATH \"\$ENV{DESTDIR}/\${install_dir}\" install_dir)
-     endif()
-     message(STATUS
-       \"Installing: ${package_name} as flat Python egg under \${install_dir}\")
-     file(TO_NATIVE_PATH \"${CMAKE_INSTALL_PREFIX}\" install_prefix)
-     file(TO_NATIVE_PATH \"${CMAKE_INSTALL_PREFIX}/bin\" scripts_install_dir)
-     execute_process(
-       COMMAND
-         \"${PYTHON_EXECUTABLE}\" setup.py install
-           --single-version-externally-managed
-           --install-scripts \${scripts_install_dir}
-           --prefix \${install_prefix}
-           --record install.log
-           \${extra_install_args}
-       WORKING_DIRECTORY \"${build_dir}\"
-       OUTPUT_QUIET
-     )"
+  add_custom_target(
+    ament_cmake_python_symlink_${package_name} ALL
+    COMMAND ${CMAKE_COMMAND} -E create_symlink
+      "${ARG_PACKAGE_DIR}" "${build_dir}/${package_name}"
   )
+
+  set(install_dir "${CMAKE_INSTALL_PREFIX}/${PYTHON_INSTALL_DIR}")
+  file(TO_NATIVE_PATH "${CMAKE_INSTALL_PREFIX}" install_prefix)
+  file(TO_NATIVE_PATH "${CMAKE_INSTALL_PREFIX}/bin" install_scripts_dir)
+
+  if(NOT AMENT_CMAKE_SYMLINK_INSTALL)
+    # Install as flat Python egg to mimic https://github.com/colcon/colcon-core
+    # handling of pure Python packages for non-symlink installs.
+    if(NOT ARG_SKIP_COMPILE)
+      set(extra_install_args --compile)
+    else()
+      set(extra_install_args --no-compile)
+    endif()
+
+    # NOTE(hidmic): Allow setup.py install to build, as there is no way to
+    # determine the Python package's source dependencies for proper build
+    # invalidation.
+    install(CODE
+      "set(install_dir ${install_dir})
+       set(extra_install_args ${extra_install_args})
+       if(DEFINED ENV{DESTDIR} AND NOT \"\$ENV{DESTDIR}\" STREQUAL \"\")
+         list(APPEND extra_install_args --root \$ENV{DESTDIR})
+         file(TO_CMAKE_PATH \"\$ENV{DESTDIR}/\${install_dir}\" install_dir)
+       endif()
+       message(STATUS
+         \"Installing: ${package_name} as flat Python egg under \${install_dir}\")
+       execute_process(
+         COMMAND
+           \"${PYTHON_EXECUTABLE}\" setup.py install
+             --single-version-externally-managed
+             --install-scripts ${install_scripts_dir}
+             --prefix ${install_prefix}
+             --record install.log
+             \${extra_install_args}
+         WORKING_DIRECTORY \"${build_dir}\"
+         OUTPUT_QUIET
+       )"
+    )
+  else()
+    # NOTE(hidmic): Make sure build directory makes it into the PYTHONPATH.
+    # See https://github.com/colcon/colcon-core/pull/163 for further reference.
+    file(TO_NATIVE_PATH "${build_dir}" build_prefix)
+
+    if(NOT "${package_name}" STREQUAL "${PROJECT_NAME}")
+      set(hook_name "${package_name}_python_develop")
+    else()
+      set(hook_name "python_develop")
+    endif()
+
+    if(WIN32)
+      set(_ext "bat")
+    else()
+      set(_ext "sh")
+    endif()
+
+    configure_file(
+      "${ament_cmake_python_DIR}/environment_hooks/${hook_name}.${_ext}.in"
+      "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_python/environment_hooks/${hook_name}.${_ext}"
+      @ONLY
+    )
+
+    # register information for .dsv generation
+    set(_AMENT_CMAKE_PYTHON_INSTALL_HOOK_DESC
+      "prepend-non-duplicate;PYTHONPATH;${build_prefix}"
+      PARENT_SCOPE)
+
+    set(_AMENT_CMAKE_PYTHON_INSTALL_HOOK
+      "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_python/environment_hooks/${hook_name}.${_ext}"
+      PARENT_SCOPE)
+
+    # Install as Python egg link to mimic https://github.com/colcon/colcon-core
+    # handling of pure Python packages for symlink installs.
+    install(CODE
+      "message(STATUS
+         \"Symlinking: ${package_name} as flat Python egg under ${install_dir}\")
+       execute_process(
+         COMMAND
+           \"${PYTHON_EXECUTABLE}\" setup.py develop
+             --prefix ${install_prefix}
+             --script-dir ${install_scripts_dir}
+             --editable --no-deps
+             --build-directory build
+         WORKING_DIRECTORY \"${build_dir}\"
+         OUTPUT_QUIET
+       )"
+    )
+  endif()
 
   if(package_name IN_LIST AMENT_CMAKE_PYTHON_INSTALL_INSTALLED_NAMES)
     message(FATAL_ERROR
@@ -171,3 +220,15 @@ setup(
   set(AMENT_CMAKE_PYTHON_INSTALL_INSTALLED_NAMES
     "${AMENT_CMAKE_PYTHON_INSTALL_INSTALLED_NAMES}" PARENT_SCOPE)
 endfunction()
+
+macro(_ament_cmake_python_install_package_hook)
+  if(_AMENT_CMAKE_PYTHON_INSTALL_HOOK)
+    get_filename_component(hook_name "${_AMENT_CMAKE_PYTHON_INSTALL_HOOK}" NAME_WE)
+    set(AMENT_CMAKE_ENVIRONMENT_HOOKS_DESC_${hook_name}
+      "${_AMENT_CMAKE_PYTHON_INSTALL_HOOK_DESC}")
+    ament_environment_hooks("${_AMENT_CMAKE_PYTHON_INSTALL_HOOK}")
+
+    unset(_AMENT_CMAKE_PYTHON_INSTALL_HOOK_DESC)
+    unset(_AMENT_CMAKE_PYTHON_INSTALL_HOOK)
+  endif()
+endmacro()
