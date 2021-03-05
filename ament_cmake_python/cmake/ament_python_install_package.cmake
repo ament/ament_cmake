@@ -125,8 +125,6 @@ setup(
   )
 
   set(install_dir "${CMAKE_INSTALL_PREFIX}/${PYTHON_INSTALL_DIR}")
-  file(TO_NATIVE_PATH "${CMAKE_INSTALL_PREFIX}" install_prefix)
-  file(TO_NATIVE_PATH "${CMAKE_INSTALL_PREFIX}/bin" install_scripts_dir)
 
   if(NOT AMENT_CMAKE_SYMLINK_INSTALL)
     # Install as flat Python egg to mimic https://github.com/colcon/colcon-core
@@ -149,12 +147,14 @@ setup(
        endif()
        message(STATUS
          \"Installing: ${package_name} as flat Python egg under \${install_dir}\")
+       file(TO_NATIVE_PATH \"${CMAKE_INSTALL_PREFIX}\" install_prefix)
+       file(TO_NATIVE_PATH \"${CMAKE_INSTALL_PREFIX}/bin\" install_scripts_dir)
        execute_process(
          COMMAND
            \"${PYTHON_EXECUTABLE}\" setup.py install
              --single-version-externally-managed
-             --install-scripts ${install_scripts_dir}
-             --prefix ${install_prefix}
+             --install-scripts \${install_scripts_dir}
+             --prefix \${install_prefix}
              --record install.log
              \${extra_install_args}
          WORKING_DIRECTORY \"${build_dir}\"
@@ -198,11 +198,13 @@ setup(
     install(CODE
       "message(STATUS
          \"Symlinking: ${package_name} as flat Python egg under ${install_dir}\")
+       file(TO_NATIVE_PATH \"${CMAKE_INSTALL_PREFIX}\" install_prefix)
+       file(TO_NATIVE_PATH \"${CMAKE_INSTALL_PREFIX}/bin\" install_scripts_dir)
        execute_process(
          COMMAND
            \"${PYTHON_EXECUTABLE}\" setup.py develop
-             --prefix ${install_prefix}
-             --script-dir ${install_scripts_dir}
+             --prefix \${install_prefix}
+             --script-dir \${install_scripts_dir}
              --editable --no-deps
              --build-directory build
          WORKING_DIRECTORY \"${build_dir}\"
