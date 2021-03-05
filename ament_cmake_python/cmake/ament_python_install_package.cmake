@@ -179,7 +179,7 @@ setup(
     endif()
 
     configure_file(
-      "${ament_cmake_python_DIR}/environment_hooks/${hook_name}.${_ext}.in"
+      "${ament_cmake_python_DIR}/environment_hooks/python_develop.${_ext}.in"
       "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_python/environment_hooks/${hook_name}.${_ext}"
       @ONLY
     )
