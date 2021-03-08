@@ -83,6 +83,9 @@ setup(
     version='${ARG_VERSION}',
     packages=find_packages(
         include=('${package_name}', '${package_name}.*')),
+    data_files=[]  # for setup.py install_data to be a no-op
+                   # if no data_files were specified in the
+                   # setup.cfg
 )
 " setup_py_content)
   else()
@@ -99,7 +102,10 @@ setup(
     packages=find_packages(
         include=('${package_name}', '${package_name}.*')),
     package_data=find_packages_data(
-        include=('${package_name}', '${package_name}.*'))
+        include=('${package_name}', '${package_name}.*')),
+    data_files=[]  # for setup.py install_data to be a no-op
+                   # if no data_files were specified in the
+                   # setup.cfg
 )
 " setup_py_content)
   endif()
@@ -123,7 +129,9 @@ setup(
       "${ARG_PACKAGE_DIR}" "${build_dir}/${package_name}"
   )
 
-  set(install_dir "${CMAKE_INSTALL_PREFIX}/${PYTHON_INSTALL_DIR}")
+  set(install_prefix "${CMAKE_INSTALL_PREFIX}")
+  set(scripts_dir "${install_prefix}/bin")
+  set(install_dir "${install_prefix}/${PYTHON_INSTALL_DIR}")
 
   if(NOT AMENT_CMAKE_SYMLINK_INSTALL)
     # Install as flat Python egg to mimic https://github.com/colcon/colcon-core
@@ -146,19 +154,23 @@ setup(
        endif()
        message(STATUS
          \"Installing: ${package_name} as flat Python egg under \${install_dir}\")
-       file(TO_NATIVE_PATH \"${CMAKE_INSTALL_PREFIX}\" install_prefix)
-       file(TO_NATIVE_PATH \"${CMAKE_INSTALL_PREFIX}/bin\" install_scripts_dir)
+       file(TO_NATIVE_PATH \"${install_prefix}\" install_prefix)
+       file(TO_NATIVE_PATH \"${scripts_dir}\" scripts_dir)
        execute_process(
          COMMAND
            \"${PYTHON_EXECUTABLE}\" setup.py install
              --single-version-externally-managed
-             --install-scripts \${install_scripts_dir}
+             --install-scripts \${scripts_dir}
              --prefix \${install_prefix}
              --record install.log
              \${extra_install_args}
          WORKING_DIRECTORY \"${build_dir}\"
+         RESULT_VARIABLE result
          OUTPUT_QUIET
-       )"
+       )
+       if(NOT result EQUAL \"0\")
+         message(FATAL_ERROR \"Failed to install ${package_name} flat Python egg\")
+       endif()"
     )
   else()
     # Install as Python egg link to mimic https://github.com/colcon/colcon-core
@@ -166,18 +178,29 @@ setup(
     install(CODE
       "message(STATUS
          \"Symlinking: ${package_name} as flat Python egg under ${install_dir}\")
-       file(TO_NATIVE_PATH \"${CMAKE_INSTALL_PREFIX}\" install_prefix)
-       file(TO_NATIVE_PATH \"${CMAKE_INSTALL_PREFIX}/bin\" install_scripts_dir)
+       # NOTE(hidmic): recent setuptools versions expect this directory to exist
+       file(MAKE_DIRECTORY \"${install_dir}\")
+       file(TO_NATIVE_PATH \"${install_dir}\" install_dir)
+       file(TO_NATIVE_PATH \"${scripts_dir}\" scripts_dir)
+       file(TO_NATIVE_PATH \"${install_prefix}\" install_prefix)
        execute_process(
          COMMAND
-           \"${PYTHON_EXECUTABLE}\" setup.py develop
-             --prefix \${install_prefix}
-             --script-dir \${install_scripts_dir}
-             --editable --no-deps
-             --build-directory build
+           \"${PYTHON_EXECUTABLE}\" setup.py
+             develop
+               --install-dir \${install_dir}
+               --script-dir \${scripts_dir}
+               --editable --no-deps
+               --build-directory build
+             install_data
+               --install-dir \${install_prefix}
          WORKING_DIRECTORY \"${build_dir}\"
+         RESULT_VARIABLE result
          OUTPUT_QUIET
        )
+       if(NOT result EQUAL \"0\")
+         message(FATAL_ERROR \"Failed to build ${package_name} \"
+                             \"flat Python egg for development\")
+       endif()
        # NOTE(hidmic): ensure package can be found
        # in and imported from the install space
        execute_process(
@@ -185,8 +208,12 @@ setup(
            \"${CMAKE_COMMAND}\" -E create_symlink
              \"${build_dir}/${package_name}\"
              \"${install_dir}/${package_name}\"
+         RESULT_VARIABLE result
          OUTPUT_QUIET
-       )"
+       )
+       if(NOT result EQUAL \"0\")
+         message(FATAL_ERROR \"Failed to symlink ${package_name} sources\")
+       endif()"
     )
   endif()
 
