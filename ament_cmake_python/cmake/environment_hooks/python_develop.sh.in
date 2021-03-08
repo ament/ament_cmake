@@ -1,3 +1,0 @@
-# configured from ament_cmake_python/cmake/environment_hooks/python_develop.sh.in
-
-ament_prepend_unique_value PYTHONPATH @build_prefix@

@@ -33,7 +33,6 @@
 macro(ament_python_install_package)
   _ament_cmake_python_register_environment_hook()
   _ament_cmake_python_install_package(${ARGN})
-  _ament_cmake_python_install_package_hook()
 endmacro()
 
 function(_ament_cmake_python_install_package package_name)
@@ -162,37 +161,6 @@ setup(
        )"
     )
   else()
-    # NOTE(hidmic): Make sure build directory makes it into the PYTHONPATH.
-    # See https://github.com/colcon/colcon-core/pull/163 for further reference.
-    file(TO_NATIVE_PATH "${build_dir}" build_prefix)
-
-    if(NOT "${package_name}" STREQUAL "${PROJECT_NAME}")
-      set(hook_name "${package_name}_python_develop")
-    else()
-      set(hook_name "python_develop")
-    endif()
-
-    if(WIN32)
-      set(_ext "bat")
-    else()
-      set(_ext "sh")
-    endif()
-
-    configure_file(
-      "${ament_cmake_python_DIR}/environment_hooks/python_develop.${_ext}.in"
-      "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_python/environment_hooks/${hook_name}.${_ext}"
-      @ONLY
-    )
-
-    # register information for .dsv generation
-    set(_AMENT_CMAKE_PYTHON_INSTALL_HOOK_DESC
-      "prepend-non-duplicate;PYTHONPATH;${build_prefix}"
-      PARENT_SCOPE)
-
-    set(_AMENT_CMAKE_PYTHON_INSTALL_HOOK
-      "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_python/environment_hooks/${hook_name}.${_ext}"
-      PARENT_SCOPE)
-
     # Install as Python egg link to mimic https://github.com/colcon/colcon-core
     # handling of pure Python packages for symlink installs.
     install(CODE
@@ -209,6 +177,15 @@ setup(
              --build-directory build
          WORKING_DIRECTORY \"${build_dir}\"
          OUTPUT_QUIET
+       )
+       # NOTE(hidmic): ensure package can be found
+       # in and imported from the install space
+       execute_process(
+         COMMAND
+           \"${CMAKE_COMMAND}\" -E create_symlink
+             \"${build_dir}/${package_name}\"
+             \"${install_dir}/${package_name}\"
+         OUTPUT_QUIET
        )"
     )
   endif()
@@ -222,15 +199,3 @@ setup(
   set(AMENT_CMAKE_PYTHON_INSTALL_INSTALLED_NAMES
     "${AMENT_CMAKE_PYTHON_INSTALL_INSTALLED_NAMES}" PARENT_SCOPE)
 endfunction()
-
-macro(_ament_cmake_python_install_package_hook)
-  if(_AMENT_CMAKE_PYTHON_INSTALL_HOOK)
-    get_filename_component(hook_name "${_AMENT_CMAKE_PYTHON_INSTALL_HOOK}" NAME_WE)
-    set(AMENT_CMAKE_ENVIRONMENT_HOOKS_DESC_${hook_name}
-      "${_AMENT_CMAKE_PYTHON_INSTALL_HOOK_DESC}")
-    ament_environment_hooks("${_AMENT_CMAKE_PYTHON_INSTALL_HOOK}")
-
-    unset(_AMENT_CMAKE_PYTHON_INSTALL_HOOK_DESC)
-    unset(_AMENT_CMAKE_PYTHON_INSTALL_HOOK)
-  endif()
-endmacro()
