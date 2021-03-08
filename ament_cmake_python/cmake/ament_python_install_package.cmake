@@ -162,7 +162,7 @@ setup(
              --single-version-externally-managed
              --install-scripts \${scripts_dir}
              --prefix \${install_prefix}
-             --record install.log
+             --record install_manifest.txt
              \${extra_install_args}
          WORKING_DIRECTORY \"${build_dir}\"
          RESULT_VARIABLE result
@@ -173,7 +173,7 @@ setup(
        endif()"
     )
   else()
-    # Install as Python egg link to mimic https://github.com/colcon/colcon-core
+    # Install Python egg link to mimic https://github.com/colcon/colcon-core
     # handling of pure Python packages for symlink installs.
     install(CODE
       "message(STATUS
@@ -200,21 +200,25 @@ setup(
        if(NOT result EQUAL \"0\")
          message(FATAL_ERROR \"Failed to build ${package_name} \"
                              \"flat Python egg for development\")
-       endif()
-       # NOTE(hidmic): ensure package can be found
-       # in and imported from the install space
-       execute_process(
-         COMMAND
-           \"${CMAKE_COMMAND}\" -E create_symlink
-             \"${build_dir}/${package_name}\"
-             \"${install_dir}/${package_name}\"
-         RESULT_VARIABLE result
-         OUTPUT_QUIET
-       )
-       if(NOT result EQUAL \"0\")
-         message(FATAL_ERROR \"Failed to symlink ${package_name} sources\")
        endif()"
     )
+    # Ensure package can be found in and imported from the install space
+    ament_cmake_symlink_install_directory(
+      DIRECTORY "${ARG_PACKAGE_DIR}/"
+      DESTINATION "${PYTHON_INSTALL_DIR}/${package_name}"
+      PATTERN "*.pyc" EXCLUDE
+      PATTERN "__pycache__" EXCLUDE
+    )
+    if(NOT ARG_SKIP_COMPILE)
+      # Compile Python files
+      install(CODE
+        "execute_process(
+          COMMAND
+            \"${PYTHON_EXECUTABLE}\" -m compileall
+            \"${install_dir}/${package_name}\"
+        )"
+      )
+    endif()
   endif()
 
   if(package_name IN_LIST AMENT_CMAKE_PYTHON_INSTALL_INSTALLED_NAMES)
