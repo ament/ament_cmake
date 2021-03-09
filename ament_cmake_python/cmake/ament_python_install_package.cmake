@@ -13,7 +13,7 @@
 # limitations under the License.
 
 #
-# Install a Python package (and its recursive subpackages) as a flat Python egg
+# Install a Python package (and its recursive subpackages)
 #
 # :param package_name: the Python package name
 # :type package_name: string
@@ -27,8 +27,6 @@
 # :param SETUP_CFG: string
 # :param SKIP_COMPILE: if set do not byte-compile the installed package
 # :type SKIP_COMPILE: option
-# :param NO_DATA: if set do not install any package data
-# :type NO_DATA: option
 #
 macro(ament_python_install_package)
   _ament_cmake_python_register_environment_hook()
@@ -36,7 +34,7 @@ macro(ament_python_install_package)
 endmacro()
 
 function(_ament_cmake_python_install_package package_name)
-  cmake_parse_arguments(ARG "SKIP_COMPILE;NO_DATA" "PACKAGE_DIR;VERSION;SETUP_CFG" "" ${ARGN})
+  cmake_parse_arguments(ARG "SKIP_COMPILE" "PACKAGE_DIR;VERSION;SETUP_CFG" "" ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "ament_python_install_package() called with unused "
       "arguments: ${ARG_UNPARSED_ARGUMENTS}")
@@ -70,45 +68,25 @@ function(_ament_cmake_python_install_package package_name)
     set(ARG_SETUP_CFG "${CMAKE_CURRENT_LIST_DIR}/${ARG_SETUP_CFG}")
   endif()
 
-  set(build_dir "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_python/${package_name}")
-  file(RELATIVE_PATH source_dir "${build_dir}" "${ARG_PACKAGE_DIR}")
-
-  if(ARG_NO_DATA)
-    string(CONFIGURE "\
-import os
-from setuptools import find_packages
-from setuptools import setup
-
-setup(
-    name='${package_name}',
-    version='${ARG_VERSION}',
-    packages=find_packages(
-        where=os.path.normpath('${source_dir}/..'),
-        include=('${package_name}', '${package_name}.*')),
-    package_dir={'${package_name}': '${source_dir}'},
-)
-" setup_py_content)
-  else()
-    string(CONFIGURE "\
-import os
-from setuptools import find_packages
-from setuptools import setup
-
-from ament_cmake_python import find_packages_data
-
-setup(
-    name='${package_name}',
-    version='${ARG_VERSION}',
-    packages=find_packages(
-        where=os.path.normpath('${source_dir}/..'),
-        include=('${package_name}', '${package_name}.*')),
-    package_dir={'${package_name}': '${source_dir}'},
-    package_data=find_packages_data(
-        where=os.path.normpath('${source_dir}/..'),
-        include=('${package_name}', '${package_name}.*'))
-)
-" setup_py_content)
+  if(NOT PYTHON_INSTALL_DIR)
+    message(FATAL_ERROR "ament_python_install_package() variable "
+      "'PYTHON_INSTALL_DIR' must not be empty")
   endif()
+
+  set(build_dir "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_python/${package_name}")
+
+  string(CONFIGURE "\
+import os
+from setuptools import find_packages
+from setuptools import setup
+
+setup(
+    name='${package_name}',
+    version='${ARG_VERSION}',
+    packages=find_packages(
+        include=('${package_name}', '${package_name}.*')),
+)
+" setup_py_content)
 
   file(GENERATE
     OUTPUT "${build_dir}/setup.py"
@@ -116,51 +94,47 @@ setup(
   )
 
   if(ARG_SETUP_CFG)
-    add_custom_command(
-      OUTPUT "${build_dir}/setup.cfg"
-      COMMAND ${CMAKE_COMMAND} -E copy "${ARG_SETUP_CFG}" "${build_dir}/setup.cfg"
-      MAIN_DEPENDENCY "${ARG_SETUP_CFG}"
-    )
-    add_custom_target(${package_name}_setup ALL
-      DEPENDS "${build_dir}/setup.cfg"
+    add_custom_target(
+      ament_cmake_python_symlink_${package_name}_setup ALL
+      COMMAND ${CMAKE_COMMAND} -E create_symlink
+        "${ARG_SETUP_CFG}" "${build_dir}/setup.cfg"
     )
   endif()
+
+  add_custom_target(
+    ament_cmake_python_symlink_${package_name} ALL
+    COMMAND ${CMAKE_COMMAND} -E create_symlink
+      "${ARG_PACKAGE_DIR}" "${build_dir}/${package_name}"
+  )
+
+  add_custom_target(
+    ament_cmake_python_build_${package_name}_egg ALL
+    COMMAND ${PYTHON_EXECUTABLE} setup.py egg_info
+    WORKING_DIRECTORY "${build_dir}"
+  )
+
+  install(
+    DIRECTORY "${build_dir}/${package_name}.egg-info"
+    DESTINATION "${PYTHON_INSTALL_DIR}/"
+  )
+
+  install(
+    DIRECTORY "${ARG_PACKAGE_DIR}/"
+    DESTINATION "${PYTHON_INSTALL_DIR}/${package_name}"
+    PATTERN "*.pyc" EXCLUDE
+    PATTERN "__pycache__" EXCLUDE
+  )
 
   if(NOT ARG_SKIP_COMPILE)
-    set(extra_install_args --compile)
-  else()
-    set(extra_install_args --no-compile)
+    # compile Python files
+    install(CODE
+      "execute_process(
+        COMMAND
+        \"${PYTHON_EXECUTABLE}\" \"-m\" \"compileall\"
+        \"${CMAKE_INSTALL_PREFIX}/${PYTHON_INSTALL_DIR}/${package_name}\"
+      )"
+    )
   endif()
-
-  # Install as flat Python .egg to mimic https://github.com/colcon/colcon-core
-  # handling of pure Python packages.
-
-  # NOTE(hidmic): Allow setup.py install to build, as there is no way to
-  # determine the Python package's source dependencies for proper build
-  # invalidation.
-  install(CODE
-    "set(extra_install_args ${extra_install_args})
-     set(install_dir \"${CMAKE_INSTALL_PREFIX}/${PYTHON_INSTALL_DIR}\")
-     if(DEFINED ENV{DESTDIR} AND NOT \"\$ENV{DESTDIR}\" STREQUAL \"\")
-       list(APPEND extra_install_args --root \$ENV{DESTDIR})
-       file(TO_CMAKE_PATH \"\$ENV{DESTDIR}/\${install_dir}\" install_dir)
-     endif()
-     message(STATUS
-       \"Installing: ${package_name} as flat Python egg under \${install_dir}\")
-     file(TO_NATIVE_PATH \"${CMAKE_INSTALL_PREFIX}\" install_prefix)
-     file(TO_NATIVE_PATH \"${CMAKE_INSTALL_PREFIX}/bin\" scripts_install_dir)
-     execute_process(
-       COMMAND
-         \"${PYTHON_EXECUTABLE}\" setup.py install
-           --single-version-externally-managed
-           --install-scripts \${scripts_install_dir}
-           --prefix \${install_prefix}
-           --record install.log
-           \${extra_install_args}
-       WORKING_DIRECTORY \"${build_dir}\"
-       OUTPUT_QUIET
-     )"
-  )
 
   if(package_name IN_LIST AMENT_CMAKE_PYTHON_INSTALL_INSTALLED_NAMES)
     message(FATAL_ERROR
