@@ -93,24 +93,28 @@ setup(
     CONTENT "${setup_py_content}"
   )
 
+  set(egg_dependencies ament_cmake_python_symlink_${package_name})
+
+  add_custom_target(
+    ament_cmake_python_symlink_${package_name}
+    COMMAND ${CMAKE_COMMAND} -E create_symlink
+    "${ARG_PACKAGE_DIR}" "${build_dir}/${package_name}"
+  )
+
   if(ARG_SETUP_CFG)
     add_custom_target(
-      ament_cmake_python_symlink_${package_name}_setup ALL
+      ament_cmake_python_symlink_${package_name}_setup
       COMMAND ${CMAKE_COMMAND} -E create_symlink
         "${ARG_SETUP_CFG}" "${build_dir}/setup.cfg"
     )
+    list(APPEND egg_dependencies ament_cmake_python_symlink_${package_name}_setup)
   endif()
-
-  add_custom_target(
-    ament_cmake_python_symlink_${package_name} ALL
-    COMMAND ${CMAKE_COMMAND} -E create_symlink
-      "${ARG_PACKAGE_DIR}" "${build_dir}/${package_name}"
-  )
 
   add_custom_target(
     ament_cmake_python_build_${package_name}_egg ALL
     COMMAND ${PYTHON_EXECUTABLE} setup.py egg_info
     WORKING_DIRECTORY "${build_dir}"
+    DEPENDS ${egg_dependencies}
   )
 
   install(
