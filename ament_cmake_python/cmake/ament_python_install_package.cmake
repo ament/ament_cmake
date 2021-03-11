@@ -110,6 +110,8 @@ setup(
     list(APPEND egg_dependencies ament_cmake_python_symlink_${package_name}_setup)
   endif()
 
+  file(MAKE_DIRECTORY "${build_dir}/scripts")  # setup.py may or may not create it
+
   add_custom_target(
     ament_cmake_python_build_${package_name}_egg ALL
     COMMAND ${PYTHON_EXECUTABLE} setup.py
