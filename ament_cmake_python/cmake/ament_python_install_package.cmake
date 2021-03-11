@@ -25,6 +25,12 @@
 # :param SETUP_CFG: the path to a setup.cfg file (default:
 #   setup.cfg file at CMAKE_CURRENT_LIST_DIR root, if any)
 # :param SETUP_CFG: string
+# :param DESTINATION: the path to the Python package installation
+#   directory (default: PYTHON_INSTALL_DIR)
+# :type DESTINATION: string
+# :param SCRIPTS_DESTINATION: the path to the Python package scripts'
+#   installation directory, scripts (if any) will be ignored if not set
+# :type SCRIPTS_DESTINATION: string
 # :param SKIP_COMPILE: if set do not byte-compile the installed package
 # :type SKIP_COMPILE: option
 #
@@ -34,7 +40,8 @@ macro(ament_python_install_package)
 endmacro()
 
 function(_ament_cmake_python_install_package package_name)
-  cmake_parse_arguments(ARG "SKIP_COMPILE" "PACKAGE_DIR;VERSION;SETUP_CFG" "" ${ARGN})
+  cmake_parse_arguments(
+    ARG "SKIP_COMPILE" "PACKAGE_DIR;VERSION;SETUP_CFG;DESTINATION;SCRIPTS_DESTINATION" "" ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "ament_python_install_package() called with unused "
       "arguments: ${ARG_UNPARSED_ARGUMENTS}")
@@ -68,9 +75,12 @@ function(_ament_cmake_python_install_package package_name)
     set(ARG_SETUP_CFG "${CMAKE_CURRENT_LIST_DIR}/${ARG_SETUP_CFG}")
   endif()
 
-  if(NOT PYTHON_INSTALL_DIR)
-    message(FATAL_ERROR "ament_python_install_package() variable "
-      "'PYTHON_INSTALL_DIR' must not be empty")
+  if(NOT ARG_DESTINATION)
+    if(NOT PYTHON_INSTALL_DIR)
+      message(FATAL_ERROR "ament_python_install_package() variable "
+        "'PYTHON_INSTALL_DIR' must not be empty")
+    endif()
+    set(ARG_DESTINATION ${PYTHON_INSTALL_DIR})
   endif()
 
   set(build_dir "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_python/${package_name}")
@@ -110,29 +120,43 @@ setup(
     list(APPEND egg_dependencies ament_cmake_python_symlink_${package_name}_setup)
   endif()
 
-  file(MAKE_DIRECTORY "${build_dir}/scripts")  # setup.py may or may not create it
-
   add_custom_target(
     ament_cmake_python_build_${package_name}_egg ALL
-    COMMAND ${PYTHON_EXECUTABLE} setup.py
-      egg_info install_scripts -d scripts
+    COMMAND ${PYTHON_EXECUTABLE} setup.py egg_info
     WORKING_DIRECTORY "${build_dir}"
     DEPENDS ${egg_dependencies}
   )
 
   install(
     DIRECTORY "${build_dir}/${package_name}.egg-info"
-    DESTINATION "${PYTHON_INSTALL_DIR}/"
+    DESTINATION "${ARG_DESTINATION}/"
   )
 
-  install(
-    DIRECTORY "${build_dir}/scripts/"
-    DESTINATION "lib/${package_name}/"
-  )
+  if(ARG_SCRIPTS_DESTINATION)
+    file(MAKE_DIRECTORY "${build_dir}/scripts")  # setup.py may or may not create it
+
+    add_custom_target(
+      ament_cmake_python_build_${package_name}_scripts ALL
+      COMMAND ${PYTHON_EXECUTABLE} setup.py install_scripts -d scripts
+      WORKING_DIRECTORY "${build_dir}"
+      DEPENDS ${egg_dependencies}
+    )
+
+    if(NOT AMENT_CMAKE_SYMLINK_INSTALL)
+      # Not needed for nor supported by symlink installs
+      set(_extra_install_args USE_SOURCE_PERMISSIONS)
+    endif()
+
+    install(
+      DIRECTORY "${build_dir}/scripts/"
+      DESTINATION "${ARG_SCRIPTS_DESTINATION}/"
+      ${_extra_install_args}
+    )
+  endif()
 
   install(
     DIRECTORY "${ARG_PACKAGE_DIR}/"
-    DESTINATION "${PYTHON_INSTALL_DIR}/${package_name}"
+    DESTINATION "${ARG_DESTINATION}/${package_name}"
     PATTERN "*.pyc" EXCLUDE
     PATTERN "__pycache__" EXCLUDE
   )
@@ -143,7 +167,7 @@ setup(
       "execute_process(
         COMMAND
         \"${PYTHON_EXECUTABLE}\" \"-m\" \"compileall\"
-        \"${CMAKE_INSTALL_PREFIX}/${PYTHON_INSTALL_DIR}/${package_name}\"
+        \"${CMAKE_INSTALL_PREFIX}/${ARG_DESTINATION}/${package_name}\"
       )"
     )
   endif()
