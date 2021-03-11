@@ -112,7 +112,8 @@ setup(
 
   add_custom_target(
     ament_cmake_python_build_${package_name}_egg ALL
-    COMMAND ${PYTHON_EXECUTABLE} setup.py egg_info
+    COMMAND ${PYTHON_EXECUTABLE} setup.py
+      egg_info install_scripts -d scripts
     WORKING_DIRECTORY "${build_dir}"
     DEPENDS ${egg_dependencies}
   )
@@ -120,6 +121,11 @@ setup(
   install(
     DIRECTORY "${build_dir}/${package_name}.egg-info"
     DESTINATION "${PYTHON_INSTALL_DIR}/"
+  )
+
+  install(
+    DIRECTORY "${build_dir}/scripts/"
+    DESTINATION "lib/${package_name}/"
   )
 
   install(
