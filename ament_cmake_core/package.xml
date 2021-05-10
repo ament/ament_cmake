@@ -13,9 +13,10 @@
     * package_templates: templates from the ament_package Python package
     * symlink_install: use symlinks for CMake install commands
   </description>
-  <maintainer email="dthomas@osrfoundation.org">Dirk Thomas</maintainer>
   <maintainer email="michel@ekumenlabs.com">Michel Hidalgo</maintainer>
   <license>Apache License 2.0</license>
+
+  <author>Dirk Thomas</author>
 
   <buildtool_depend>cmake</buildtool_depend>
   <buildtool_depend>ament_package</buildtool_depend>
