@@ -75,8 +75,9 @@ function(ament_add_pytest_test testname path)
   ament_has_pytest(has_pytest QUIET PYTHON_EXECUTABLE "${ARG_PYTHON_EXECUTABLE}")
   if(NOT has_pytest)
     message(WARNING
-      "The Python module 'pytest' was not found, pytests can not be run (e.g. "
-      "on Ubuntu/Debian install the package 'python3-pytest')")
+      "The Python module 'pytest' was not found, pytests cannot be run. "
+      "On Ubuntu/Debian, install the 'python3-pytest' package. "
+      "On other platforms, install 'pytest' using pip.")
     return()
   endif()
 
@@ -115,8 +116,9 @@ function(ament_add_pytest_test testname path)
     )
     if(NOT pytest_cov_version)
       message(WARNING
-        "The Python module 'pytest-cov' was not found, test coverage will not be produced "
-        "(e.g. on Ubuntu/Debian install the package 'python3-pytest-cov')")
+        "The Python module 'pytest-cov' was not found, test coverage will not be produced. "
+        "On Ubuntu/Debian, install the 'python3-pytest-cov' package. "
+        "On other platforms, install 'pytest-cov' using pip.")
     else()
       set(coverage_directory "${CMAKE_CURRENT_BINARY_DIR}/pytest_cov/${testname}")
       file(MAKE_DIRECTORY "${coverage_directory}")
