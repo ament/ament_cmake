@@ -127,9 +127,15 @@ setup(
     DEPENDS ${egg_dependencies}
   )
 
+  set(python_version "py${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
+
+  set(egg_name "${package_name}")
+  set(egg_install_name "${egg_name}-${ARG_VERSION}")
+  set(egg_install_name "${egg_install_name}-${python_version}")
+
   install(
-    DIRECTORY "${build_dir}/${package_name}.egg-info"
-    DESTINATION "${ARG_DESTINATION}/"
+    DIRECTORY "${build_dir}/${egg_name}.egg-info/"
+    DESTINATION "${ARG_DESTINATION}/${egg_install_name}.egg-info"
   )
 
   if(ARG_SCRIPTS_DESTINATION)
