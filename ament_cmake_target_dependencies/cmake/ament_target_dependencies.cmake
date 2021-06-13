@@ -128,34 +128,15 @@ function(ament_target_dependencies target)
     if(NOT ARG_INTERFACE)
       target_compile_definitions(${target}
         ${required_keyword} ${definitions})
-
-      # Order interface to support workspace overlaying
-      # Interfaces built in the same workspace should appear before those in an underlay
-      # This fixes issues related to overlaying on a "merged" workspace, where includes from
-      # multiple packages appear in the same directory
-      set(_install_prefix ${CMAKE_INSTALL_PREFIX})
-      get_filename_component(_install_prefix_parent ${_install_prefix} DIRECTORY)
-      foreach(interface ${interfaces})
-        get_target_property(_include_dirs ${interface} INTERFACE_INCLUDE_DIRECTORIES)
-        # If include directory has the same parent as the target, then make sure it appears at the
-        # beginning of the list
-        if(_include_dirs)
-          # TODO: handle case that _include_dirs is a list
-          if(_include_dirs MATCHES "^${_install_prefix}.*")
-            list(PREPEND sorted_interfaces ${interface})
-          elseif(_include_dirs MATCHES "^${_install_prefix_parent}.*")
-            list(PREPEND sorted_interfaces ${interface})
-          else()
-            list(APPEND sorted_interfaces ${interface})
-          endif()
-        else()
-          list(APPEND sorted_interfaces ${interface})
-        endif()
-      endforeach()
     endif()
+    # Order interfaces to support workspace overlaying
+    # Interfaces built in the same workspace should appear before those in an underlay
+    # This fixes issues related to overlaying on a "merged" workspace, where includes from
+    # multiple packages appear in the same directory
+    ament_target_dependencies_order(ordered_interfaces ${interfaces})
     ament_include_directories_order(ordered_include_dirs ${include_dirs})
     target_link_libraries(${target}
-      ${optional_keyword} ${sorted_interfaces})
+      ${optional_keyword} ${ordered_interfaces})
     target_include_directories(${target} ${system_keyword}
       ${required_keyword} ${ordered_include_dirs})
     if(NOT ARG_INTERFACE)
