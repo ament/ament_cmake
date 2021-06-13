@@ -70,6 +70,7 @@ function(ament_target_dependencies target)
     set(definitions "")
     set(include_dirs "")
     set(interfaces "")
+    set(sorted_interfaces "")
     set(libraries "")
     set(link_flags "")
     foreach(package_name ${ARG_UNPARSED_ARGUMENTS})
@@ -127,23 +128,34 @@ function(ament_target_dependencies target)
     if(NOT ARG_INTERFACE)
       target_compile_definitions(${target}
         ${required_keyword} ${definitions})
-      # the interface include dirs must be ordered
-      set(interface_include_dirs)
+
+      # Order interface to support workspace overlaying
+      # Interfaces built in the same workspace should appear before those in an underlay
+      # This fixes issues related to overlaying on a "merged" workspace, where includes from
+      # multiple packages appear in the same directory
+      set(_install_prefix ${CMAKE_INSTALL_PREFIX})
+      get_filename_component(_install_prefix_parent ${_install_prefix} DIRECTORY)
       foreach(interface ${interfaces})
         get_target_property(_include_dirs ${interface} INTERFACE_INCLUDE_DIRECTORIES)
+        # If include directory has the same parent as the target, then make sure it appears at the
+        # beginning of the list
         if(_include_dirs)
-          list_append_unique(interface_include_dirs ${_include_dirs})
+          # TODO: handle case that _include_dirs is a list
+          if(_include_dirs MATCHES "^${_install_prefix}.*")
+            list(PREPEND sorted_interfaces ${interface})
+          elseif(_include_dirs MATCHES "^${_install_prefix_parent}.*")
+            list(PREPEND sorted_interfaces ${interface})
+          else()
+            list(APPEND sorted_interfaces ${interface})
+          endif()
+        else()
+          list(APPEND sorted_interfaces ${interface})
         endif()
       endforeach()
-      ament_include_directories_order(ordered_interface_include_dirs ${interface_include_dirs})
-      # the interface include dirs are used privately to ensure proper order
-      # and the interfaces cover the public case
-      target_include_directories(${target} ${system_keyword}
-        PRIVATE ${ordered_interface_include_dirs})
     endif()
     ament_include_directories_order(ordered_include_dirs ${include_dirs})
     target_link_libraries(${target}
-      ${optional_keyword} ${interfaces})
+      ${optional_keyword} ${sorted_interfaces})
     target_include_directories(${target} ${system_keyword}
       ${required_keyword} ${ordered_include_dirs})
     if(NOT ARG_INTERFACE)
