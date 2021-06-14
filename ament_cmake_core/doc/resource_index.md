@@ -13,21 +13,21 @@ This project does not aim to catalog and explicitly reference all individual res
 These are the design requirements:
 
 - Prevent recursive crawling
- - Resources should be cataloged in away in which no recursive crawling of directories is required
+  - Resources should be cataloged in away in which no recursive crawling of directories is required
 - Autonomous Participation
- - Packages which register resources should be able to do so without invoking some other package (like this one)
+  - Packages which register resources should be able to do so without invoking some other package (like this one)
 - Avoid installed file collisions
- - Participation should not require a package to overwrite or modify an existing file when installing
- - This is useful when packaging for Linux package managers
+  - Participation should not require a package to overwrite or modify an existing file when installing
+  - This is useful when packaging for Linux package managers
 - Do not try to capture all information
- - Many types of resources already provide mechanism for describing and referencing themselves, do not reinvent this
- - For example, if a system has plugins then it likely already has a mechanism for describing the plugins, this project should not try to capture all of that kind of meta information about individual resources
- - Stick to meta information about what resources are provided not meta information about the installed resources
+  - Many types of resources already provide mechanism for describing and referencing themselves, do not reinvent this
+  - For example, if a system has plugins then it likely already has a mechanism for describing the plugins, this project should not try to capture all of that kind of meta information about individual resources
+  - Stick to meta information about what resources are provided not meta information about the installed resources
 - Support overlaying
- - If a package is installed into multiple prefixes on the system and those prefixes are ordered, return information based on that ordering
+  - If a package is installed into multiple prefixes on the system and those prefixes are ordered, return information based on that ordering
 - Do not depend on externally defined environment variables or file formats
- - The `ROS_PACKAGE_PATH` and `CMAKE_PREFIX_PATH` environment variables
- - Parsing `package.xml`'s or `plugin.xml`'s
+  - The `ROS_PACKAGE_PATH` and `CMAKE_PREFIX_PATH` environment variables
+  - Parsing `package.xml`'s or `plugin.xml`'s
 
 These requirements come from experience with the resource discovery system in [ROS](https://wiki.ros.org/), where packages were located anywhere recursively under one of several paths in the `ROS_PACKAGE_PATH` environment variable.
 This decision has lead to things like `rospack` caching information, which can get out of date, and then lead to subtle bugs for the users.
