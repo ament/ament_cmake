@@ -18,6 +18,7 @@
 # :param ARGN: a list of libraries.
 #   Each element might either be an absolute path to a library, a
 #   CMake library target, or a CMake imported libary target.
+#   Note that this macro is not needed for interface library targets.
 #   If a plain library name is passed it will be redirected to
 #   ament_export_library_names().
 # :type ARGN: list of strings
