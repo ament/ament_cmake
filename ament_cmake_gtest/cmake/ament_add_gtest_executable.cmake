@@ -48,7 +48,7 @@ function(_ament_add_gtest_executable target)
   # should be EXCLUDE_FROM_ALL if it would be possible
   # to add this target as a dependency to the "test" target
   add_executable("${target}" ${ARG_UNPARSED_ARGUMENTS})
-  target_include_directories("${target}" BEFORE PUBLIC "${GTEST_INCLUDE_DIRS}")
+  target_include_directories("${target}" SYSTEM BEFORE PUBLIC "${GTEST_INCLUDE_DIRS}")
   if(NOT ARG_SKIP_LINKING_MAIN_LIBRARIES)
     target_link_libraries("${target}" ${GTEST_MAIN_LIBRARIES})
   endif()
