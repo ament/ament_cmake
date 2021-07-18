@@ -31,5 +31,13 @@ if(NOT _AMENT_CMAKE_EXPORT_TARGETS STREQUAL "")
       NAMESPACE "${PROJECT_NAME}::"
       FILE "${_target}Export.cmake"
     )
+    # Create namespaced alias of the target so it can be linked
+    # as ${PROJECT_NAME}::${_target} both if the project is included 
+    # via find_package or via add_subdirectory
+    # If ${PROJECT_NAME}::${_target} is already defined we do not 
+    # define it to avoid creating problems in projects that already define it
+    if(TARGET ${_target} AND NOT TARGET ${PROJECT_NAME}::${_target})
+      add_library(${PROJECT_NAME}::${_target} ALIAS ${_target})
+    endif()
   endforeach()
 endif()
