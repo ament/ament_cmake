@@ -71,6 +71,8 @@ function(ament_add_pytest_test testname path)
     set(ARG_PYTHON_EXECUTABLE "${PYTHON_EXECUTABLE}")
   endif()
 
+  get_executable_path(python_interpreter "${ARG_PYTHON_EXECUTABLE}" BUILD)
+
   # ensure pytest is available
   ament_has_pytest(has_pytest QUIET PYTHON_EXECUTABLE "${ARG_PYTHON_EXECUTABLE}")
   if(NOT has_pytest)
@@ -83,7 +85,7 @@ function(ament_add_pytest_test testname path)
 
   set(result_file "${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/${testname}.xunit.xml")
   set(cmd
-    "${ARG_PYTHON_EXECUTABLE}"
+    "${python_interpreter}"
     "-u"  # unbuffered stdout and stderr
     "-m" "pytest"
     "${path}"
