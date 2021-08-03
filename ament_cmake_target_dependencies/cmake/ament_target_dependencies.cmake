@@ -31,6 +31,10 @@
 #   with a SYSTEM keyword, followed by an INTERFACE or PUBLIC keyword.
 #   If it starts with a SYSTEM keyword, it will be used in
 #   target_include_directories() calls.
+#   Do not use the SYSTEM keyword for other ROS dependencies
+#   (targets build in a ROS workspace, to be precise),
+#   as build errors could arise when overlaying workspaces.
+#   See `here <https://github.com/ros-planning/geometric_shapes/pull/186#discussion_r623989443>`_ for details.
 #   If it starts (or follows) with an INTERFACE or PUBLIC keyword,
 #   this keyword will be used in the target_*() calls.
 # :type ARGN: list of strings
