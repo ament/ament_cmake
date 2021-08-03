@@ -35,8 +35,10 @@ function(ament_get_pytest_cov_version var)
     set(ARG_PYTHON_EXECUTABLE "${PYTHON_EXECUTABLE}")
   endif()
 
+  get_executable_path(python_interpreter "${ARG_PYTHON_EXECUTABLE}" CONFIGURE)
+
   # Newer versions of pytest require providing '--version' twice to include plugin versions
-  set(cmd "${ARG_PYTHON_EXECUTABLE}" "-m" "pytest" "--version" "--version")
+  set(cmd "${python_interpreter}" "-m" "pytest" "--version" "--version")
   execute_process(
     COMMAND ${cmd}
     RESULT_VARIABLE res

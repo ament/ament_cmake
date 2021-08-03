@@ -38,7 +38,9 @@ function(ament_has_pytest var)
     set(ARG_PYTHON_EXECUTABLE "${PYTHON_EXECUTABLE}")
   endif()
 
-  set(cmd "${ARG_PYTHON_EXECUTABLE}" "-m" "pytest" "--version")
+  get_executable_path(python_interpreter "${ARG_PYTHON_EXECUTABLE}" CONFIGURE)
+
+  set(cmd "${python_interpreter}" "-m" "pytest" "--version")
   execute_process(
     COMMAND ${cmd}
     RESULT_VARIABLE res

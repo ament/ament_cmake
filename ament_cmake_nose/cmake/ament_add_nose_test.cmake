@@ -75,6 +75,8 @@ function(_ament_add_nose_test testname path)
     set(ARG_PYTHON_EXECUTABLE "${PYTHON_EXECUTABLE}")
   endif()
 
+  get_executable_path(python_interpreter "${ARG_PYTHON_EXECUTABLE}" BUILD)
+
   set(result_file "${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/${testname}.xunit.xml")
   # Invoke ${NOSETESTS} explicitly with the ${PYTHON_EXECUTABLE} because on
   # some systems, like OS X, the ${NOSETESTS} binary may have a #! which points
@@ -86,7 +88,7 @@ function(_ament_add_nose_test testname path)
   # ${NOSETESTS} executable references.
   # See: https://github.com/ament/ament_cmake/pull/70
   set(cmd
-    "${ARG_PYTHON_EXECUTABLE}"
+    "${python_interpreter}"
     "-u"  # unbuffered stdout and stderr
     "${NOSETESTS}" "${path}"
     "--nocapture"  # stdout will be printed immediately
