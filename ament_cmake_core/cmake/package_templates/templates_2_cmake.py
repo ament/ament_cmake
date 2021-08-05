@@ -21,8 +21,6 @@ import sys
 from ament_package.templates import get_environment_hook_template_path
 from ament_package.templates import get_package_level_template_names
 from ament_package.templates import get_package_level_template_path
-from ament_package.templates import get_prefix_level_template_names
-from ament_package.templates import get_prefix_level_template_path
 
 IS_WINDOWS = os.name == 'nt'
 
@@ -85,13 +83,6 @@ def generate_cmake_code():
         templates.append('"%s"' % get_package_level_template_path(name))
     variables.append((
         'PACKAGE_LEVEL',
-        templates))
-
-    templates = []
-    for name in get_prefix_level_template_names():
-        templates.append('"%s"' % get_prefix_level_template_path(name))
-    variables.append((
-        'PREFIX_LEVEL',
         templates))
 
     lines = []
