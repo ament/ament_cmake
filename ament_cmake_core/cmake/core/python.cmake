@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set(PYTHON_VERSION "" CACHE STRING
-  "Specify specific Python version to use ('major.minor' or 'major')")
-# if not specified otherwise use Python 3
-if(NOT PYTHON_VERSION)
-  set(PYTHON_VERSION "3")
+# ament_cmake needs a Python 3 interpreter
+# If a specific Python version is required then find it before finding ament_cmake
+# Example:
+#   find_package(Python3 3.8 REQUIRED)
+#   find_package(ament_cmake REQUIRED)
+if (NOT TARGET Python3::Interpreter)
+  find_package(Python3 REQUIRED COMPONENTS Interpreter)
 endif()
-
-find_package(PythonInterp ${PYTHON_VERSION} REQUIRED)
-message(STATUS "Using PYTHON_EXECUTABLE: ${PYTHON_EXECUTABLE}")

@@ -23,15 +23,16 @@ macro(_ament_cmake_nose_find_nosetests)
     find_package(ament_cmake_test QUIET REQUIRED)
 
     find_program(NOSETESTS NAMES
-      "nosetests${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}"
-      "nosetests-${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}"
-      "nosetests${PYTHON_VERSION_MAJOR}"
-      "nosetests-${PYTHON_VERSION_MAJOR}"
+      "nosetests${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}"
+      "nosetests-${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}"
+      "nosetests${Python3_VERSION_MAJOR}"
+      "nosetests-${Python3_VERSION_MAJOR}"
       "nosetests")
     if(NOSETESTS)
       # if Python is located in a path containing spaces the shebang line of nosetests is invalid
       # to avoid using the shebang line of nosetests the script is being invoked through Python
-      set(_cmd "${PYTHON_EXECUTABLE}" "${NOSETESTS}" "--version")
+      get_executable_path(_python_interpreter Python3::Interpreter CONFIGURE)
+      set(_cmd "${_python_interpreter}" "${NOSETESTS}" "--version")
       execute_process(
         COMMAND ${_cmd}
         RESULT_VARIABLE _res
@@ -49,7 +50,7 @@ macro(_ament_cmake_nose_find_nosetests)
       list(GET _output_list 1 NOSETESTS_VERSION)
       message(STATUS "Using Python nosetests: ${NOSETESTS} (${NOSETESTS_VERSION})")
     else()
-      if(PYTHON_VERSION_MAJOR STREQUAL "3")
+      if(Python3_VERSION_MAJOR STREQUAL "3")
         set(_python_nosetests_package "python3-nose")
       else()
         set(_python_nosetests_package "python-nose")
