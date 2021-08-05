@@ -170,11 +170,12 @@ setup(
   )
 
   if(NOT ARG_SKIP_COMPILE)
+    get_executable_path(python_interpreter_config Python3::Interpreter CONFIGURE)
     # compile Python files
     install(CODE
       "execute_process(
         COMMAND
-        \"${python_interpreter}\" \"-m\" \"compileall\"
+        \"${python_interpreter_config}\" \"-m\" \"compileall\"
         \"${CMAKE_INSTALL_PREFIX}/${ARG_DESTINATION}/${package_name}\"
       )"
     )
