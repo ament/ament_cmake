@@ -17,5 +17,8 @@
 option(AMENT_CMAKE_ENVIRONMENT_PARENT_PREFIX_PATH_GENERATION
   "Generate marker file containing the parent prefix path" ON)
 
+# This is used by ros_workspace
+include("${ament_cmake_core_DIR}/environment/ament_generate_environment.cmake")
+
 ament_register_extension("ament_package" "ament_cmake_core"
   "environment/ament_cmake_environment_package_hook.cmake")
