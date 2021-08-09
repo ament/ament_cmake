@@ -24,7 +24,8 @@ function(ament_generate_environment)
   endif()
 
   if(NOT TARGET Python3::Interpreter)
-    find_package(Python3 REQUIRED COMPONENTS Interpreter)
+    message(FATAL_ERROR
+      "ament_generate_environment() target 'Python3::Interpreter' must exist")
   endif()
 
   # Default python used in local_setup.* scripts
