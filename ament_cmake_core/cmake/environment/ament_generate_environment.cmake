@@ -23,6 +23,12 @@ function(ament_generate_environment)
       "ament_generate_environment() called with unused arguments: ${ARGN}")
   endif()
 
+  if(NOT TARGET Python3::Interpreter)
+    find_package(Python3 REQUIRED COMPONENTS Interpreter)
+    # Default python used in local_setup.* scripts
+    get_executable_path(ament_package_PYTHON_EXECUTABLE Python3::Interpreter CONFIGURE)
+  endif()
+
   # configure and install setup files
   foreach(file ${ament_cmake_package_templates_PREFIX_LEVEL})
     # check if the file is a template
