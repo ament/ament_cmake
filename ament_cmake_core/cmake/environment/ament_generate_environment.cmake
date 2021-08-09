@@ -25,9 +25,10 @@ function(ament_generate_environment)
 
   if(NOT TARGET Python3::Interpreter)
     find_package(Python3 REQUIRED COMPONENTS Interpreter)
-    # Default python used in local_setup.* scripts
-    get_executable_path(ament_package_PYTHON_EXECUTABLE Python3::Interpreter CONFIGURE)
   endif()
+
+  # Default python used in local_setup.* scripts
+  get_executable_path(ament_package_PYTHON_EXECUTABLE Python3::Interpreter CONFIGURE)
 
   # configure and install setup files
   foreach(file ${ament_cmake_package_templates_PREFIX_LEVEL})
