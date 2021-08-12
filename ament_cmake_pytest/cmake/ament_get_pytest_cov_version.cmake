@@ -17,9 +17,8 @@
 #
 # :param var: the output variable name
 # :type var: string
-# :param PYTHON_EXECUTABLE: absolute path to the Python interpreter to be used,
-#   default to the CMake variable with the same name returned by
-#   FindPythonInterp
+# :param PYTHON_EXECUTABLE: Python executable used to check the version
+#   It defaults to the CMake executable target Python3::Interpreter.
 # :type PYTHON_EXECUTABLE: string
 #
 # @public
@@ -32,7 +31,7 @@ function(ament_get_pytest_cov_version var)
   endif()
 
   if(NOT ARG_PYTHON_EXECUTABLE)
-    set(ARG_PYTHON_EXECUTABLE "${PYTHON_EXECUTABLE}")
+    set(ARG_PYTHON_EXECUTABLE Python3::Interpreter)
   endif()
 
   get_executable_path(python_interpreter "${ARG_PYTHON_EXECUTABLE}" CONFIGURE)

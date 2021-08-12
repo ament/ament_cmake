@@ -20,9 +20,8 @@
 # :param QUIET: suppress the CMake warning if pytest is not found, if not set
 #   and pytest was not found a CMake warning is printed
 # :type QUIET: option
-# :param PYTHON_EXECUTABLE: absolute path to the Python interpreter to be used,
-#   default to the CMake variable with the same name returned by
-#   FindPythonInterp
+# :param PYTHON_EXECUTABLE: Python executable used to check for pytest
+#   It defaults to the CMake executable target Python3::Interpreter.
 # :type PYTHON_EXECUTABLE: string
 #
 # @public
@@ -35,7 +34,7 @@ function(ament_has_pytest var)
   endif()
 
   if(NOT ARG_PYTHON_EXECUTABLE)
-    set(ARG_PYTHON_EXECUTABLE "${PYTHON_EXECUTABLE}")
+    set(ARG_PYTHON_EXECUTABLE Python3::Interpreter)
   endif()
 
   get_executable_path(python_interpreter "${ARG_PYTHON_EXECUTABLE}" CONFIGURE)

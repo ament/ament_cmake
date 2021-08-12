@@ -120,14 +120,16 @@ setup(
     list(APPEND egg_dependencies ament_cmake_python_symlink_${package_name}_setup)
   endif()
 
+  get_executable_path(python_interpreter Python3::Interpreter BUILD)
+
   add_custom_target(
     ament_cmake_python_build_${package_name}_egg ALL
-    COMMAND ${PYTHON_EXECUTABLE} setup.py egg_info
+    COMMAND ${python_interpreter} setup.py egg_info
     WORKING_DIRECTORY "${build_dir}"
     DEPENDS ${egg_dependencies}
   )
 
-  set(python_version "py${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
+  set(python_version "py${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}")
 
   set(egg_name "${package_name}")
   set(egg_install_name "${egg_name}-${ARG_VERSION}")
@@ -143,7 +145,7 @@ setup(
 
     add_custom_target(
       ament_cmake_python_build_${package_name}_scripts ALL
-      COMMAND ${PYTHON_EXECUTABLE} setup.py install_scripts -d scripts
+      COMMAND ${python_interpreter} setup.py install_scripts -d scripts
       WORKING_DIRECTORY "${build_dir}"
       DEPENDS ${egg_dependencies}
     )
@@ -168,11 +170,12 @@ setup(
   )
 
   if(NOT ARG_SKIP_COMPILE)
+    get_executable_path(python_interpreter_config Python3::Interpreter CONFIGURE)
     # compile Python files
     install(CODE
       "execute_process(
         COMMAND
-        \"${PYTHON_EXECUTABLE}\" \"-m\" \"compileall\"
+        \"${python_interpreter_config}\" \"-m\" \"compileall\"
         \"${CMAKE_INSTALL_PREFIX}/${ARG_DESTINATION}/${package_name}\"
       )"
     )

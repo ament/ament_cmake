@@ -59,11 +59,12 @@ function(_ament_cmake_python_install_module module_file)
   )
   get_filename_component(module_file "${module_file}" NAME)
   if(NOT ARG_SKIP_COMPILE)
+    get_executable_path(python_interpreter Python3::Interpreter CONFIGURE)
     # compile Python files
     install(CODE
       "execute_process(
         COMMAND
-        \"${PYTHON_EXECUTABLE}\" \"-m\" \"compileall\"
+        \"${python_interpreter}\" \"-m\" \"compileall\"
         \"${CMAKE_INSTALL_PREFIX}/${destination}/${module_file}\"
       )"
     )
