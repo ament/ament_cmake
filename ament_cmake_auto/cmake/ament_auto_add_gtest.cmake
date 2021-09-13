@@ -78,8 +78,11 @@ macro(ament_auto_add_gtest target)
     target_link_libraries("${target}" ${${PROJECT_NAME}_LIBRARIES})
   endif()
 
-  # add exported information from found test dependencies
-  ament_target_dependencies(${target} ${${PROJECT_NAME}_FOUND_TEST_DEPENDS})
+  # add exported information from found dependencies
+  ament_target_dependencies(${target}
+    ${${PROJECT_NAME}_FOUND_BUILD_DEPENDS}
+    ${${PROJECT_NAME}_FOUND_TEST_DEPENDS}
+  )
 
   # add test
   set(_argn_test "")
