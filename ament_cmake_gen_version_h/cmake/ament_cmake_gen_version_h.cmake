@@ -27,7 +27,7 @@ function(ament_cmake_gen_version_h)
   endif()
 
   # Find myself so I can use my own cmake instalation folder `ament_cmake_gen_version_h_DIR`
-  # I can't rely on a pervious find_package call because it could be a direct call
+  # I can't rely on a previous find_package call because it could be a direct call
   find_package(ament_cmake_gen_version_h REQUIRED)
   set(TEMPLATE_FILE "${ament_cmake_gen_version_h_DIR}/version.h.in")
   if(NOT EXISTS "${TEMPLATE_FILE}")
