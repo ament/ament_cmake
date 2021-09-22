@@ -31,4 +31,16 @@
 /// Defines ${PROJECT_NAME_UPPER} version string
 #define ${PROJECT_NAME_UPPER}_VERSION_STR "${VERSION_STR}"
 
+/// \def ${PROJECT_NAME_UPPER}_VERSION_GTE
+/// Defines a macro to check whether the version of ${PROJECT_NAME_UPPER} is greater than or equal to
+/// the given version triple.
+#define ${PROJECT_NAME_UPPER}_VERSION_GTE(major, minor, patch) ( \
+     (major < ${PROJECT_NAME_UPPER}_VERSION_MAJOR) ? true \
+     : (major > ${PROJECT_NAME_UPPER}_VERSION_MAJOR) ? false \
+     : (minor < ${PROJECT_NAME_UPPER}_VERSION_MINOR) ? true \
+     : (minor > ${PROJECT_NAME_UPPER}_VERSION_MINOR) ? false \
+     : (patch < ${PROJECT_NAME_UPPER}_VERSION_PATCH) ? true \
+     : (patch > ${PROJECT_NAME_UPPER}_VERSION_PATCH) ? false \
+     : true)
+
 #endif  // ${PROJECT_NAME_UPPER}__VERSION_H_
