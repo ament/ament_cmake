@@ -24,6 +24,7 @@
   <build_export_depend>ament_cmake_export_libraries</build_export_depend>
   <build_export_depend>ament_cmake_export_link_flags</build_export_depend>
   <build_export_depend>ament_cmake_export_targets</build_export_depend>
+  <build_export_depend>ament_cmake_gen_version_h</build_export_depend>
   <build_export_depend>ament_cmake_libraries</build_export_depend>
   <build_export_depend>ament_cmake_python</build_export_depend>
   <build_export_depend>ament_cmake_target_dependencies</build_export_depend>
