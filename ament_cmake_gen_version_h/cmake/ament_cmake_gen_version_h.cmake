@@ -21,17 +21,13 @@
 # - the file does not exist
 # - the file does exists but contains a version that differs from the version in `package.xml` file
 #
-# :param DO_NOT_INSTALL: whether to autmatically install the generated version file into DESTINATION include
-# :type DO_NOT_INSTALL: BOOL
-# :default value DO_NOT_INSTALL: FALSE
-
-# :param PRJ_NAME: project name to use
-# :type PRJ_NAME: string
-# :default value PRJ_NAME: ${PROJECT_NAME}
+# :param NO_INSTALL: whether to autmatically install the generated version file into DESTINATION include
+# :type NO_INSTALL: BOOL
+# :default value NO_INSTALL: FALSE
 
 # :param INCLUDE_DIR: path to the include folder where the file will be generated
 #     ${INCLUDE_DIR} folder will be added to the include paths
-#     the file will be placed into ${INCLUDE_DIR}/${PRJ_NAME} folder according to ROS2 standard
+#     the file will be placed into ${INCLUDE_DIR}/${PROJECT_NAME} folder according to ROS2 standard
 # :type INCLUDE_DIR: string
 # :default value INCLUDE_DIR: ${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_gen_version_h/include
 
@@ -43,8 +39,8 @@
 function(ament_cmake_gen_version_h)
   cmake_parse_arguments(
     ARG # prefix of all variables
-    "DO_NOT_INSTALL" # list of names of the boolean arguments (only defined ones will be true)
-    "PRJ_NAME;INCLUDE_DIR;VERSION_FILE_NAME" # list of names of mono-valued arguments
+    "NO_INSTALL" # list of names of the boolean arguments (only defined ones will be true)
+    "INCLUDE_DIR;VERSION_FILE_NAME" # list of names of mono-valued arguments
     "" # list of names of multi-valued arguments (output variables are lists)
     ${ARGN} # arguments of the function to parse, here we take the all original ones
   )
@@ -57,15 +53,11 @@ function(ament_cmake_gen_version_h)
     message(FATAL_ERROR "Can't find ${TEMPLATE_FILE}. Reinstall ament_cmake_gen_version_h package.")
   endif()
 
-  if (NOT ARG_PRJ_NAME)
-    set(ARG_PRJ_NAME ${PROJECT_NAME})
-  endif()
-
   if (NOT ARG_INCLUDE_DIR)
     set(ARG_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_gen_version_h/include)
   endif()
   include_directories(${ARG_INCLUDE_DIR})
-  set(TMP_INCLUDE_DIR ${ARG_INCLUDE_DIR}/${PRJ_NAME})
+  set(TMP_INCLUDE_DIR ${ARG_INCLUDE_DIR}/${PROJECT_NAME})
 
   if (NOT ARG_VERSION_FILE_NAME)
     set(ARG_VERSION_FILE_NAME version.h)
@@ -79,8 +71,8 @@ function(ament_cmake_gen_version_h)
     ament_package_xml()
   endif()
 
-  string(TOUPPER ${PRJ_NAME} PROJECT_NAME_UPPER)
-  set(VERSION_STR ${${PRJ_NAME}_VERSION})
+  string(TOUPPER ${PROJECT_NAME} PROJECT_NAME_UPPER)
+  set(VERSION_STR ${${PROJECT_NAME}_VERSION})
 
   # parse version information from the version string
   string(REGEX MATCH "([0-9]+)\.([0-9]+)\.([0-9]+)" "" dummy ${VERSION_STR})
@@ -103,7 +95,7 @@ function(ament_cmake_gen_version_h)
   endif()
 
   if(${NEED_TO_CREATE_VERSION_FILE})
-    message(STATUS "Create new version file for version ${${PRJ_NAME}_VERSION}")
+    message(STATUS "Create new version file for version ${${PROJECT_NAME}_VERSION}")
     file(MAKE_DIRECTORY ${TMP_INCLUDE_DIR})
     # create the version.h file
     configure_file(${TEMPLATE_FILE} ${VERSION_FILE_NAME})
