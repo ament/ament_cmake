@@ -35,19 +35,28 @@
 # :type VERSION_FILE_NAME: string
 # :default value VERSION_FILE_NAME: version.h
 
+# :param VERSION_MAJOR: override VERSION_MAJOR
+# :type VERSION_MAJOR: string
+# :default value VERSION_MAJOR: VERSION_MAJOR from the package.xml file
+
+# :param VERSION_MINOR: file name of the generated header file
+# :type VERSION_MINOR: string
+# :default value VERSION_MINOR: VERSION_MINOR from the package.xml file
+
+# :param VERSION_PATCH: file name of the generated header file
+# :type VERSION_PATCH: string
+# :default value VERSION_PATCH: VERSION_PATCH from the package.xml file
+
 ################################################################################
 function(ament_cmake_gen_version_h)
   cmake_parse_arguments(
     ARG # prefix of all variables
     "NO_INSTALL" # list of names of the boolean arguments (only defined ones will be true)
-    "INCLUDE_DIR;VERSION_FILE_NAME" # list of names of mono-valued arguments
+    "INCLUDE_DIR;VERSION_FILE_NAME;VERSION_MAJOR;VERSION_MINOR;VERSION_PATCH" # list of mono arguments
     "" # list of names of multi-valued arguments (output variables are lists)
     ${ARGN} # arguments of the function to parse, here we take the all original ones
   )
 
-  # Find myself so I can use my own cmake instalation folder `ament_cmake_gen_version_h_DIR`
-  # I can't rely on a previous `find_package` call because it could be a direct call
-  find_package(ament_cmake_gen_version_h REQUIRED)
   set(TEMPLATE_FILE "${ament_cmake_gen_version_h_DIR}/version.h.in")
   if(NOT EXISTS "${TEMPLATE_FILE}")
     message(FATAL_ERROR "Can't find ${TEMPLATE_FILE}. Reinstall ament_cmake_gen_version_h package.")
@@ -76,9 +85,25 @@ function(ament_cmake_gen_version_h)
 
   # parse version information from the version string
   string(REGEX MATCH "([0-9]+)\.([0-9]+)\.([0-9]+)" "" dummy ${VERSION_STR})
-  set(VERSION_MAJOR ${CMAKE_MATCH_1})
-  set(VERSION_MINOR ${CMAKE_MATCH_2})
-  set(VERSION_PATCH ${CMAKE_MATCH_3})
+  if (ARG_VERSION_MAJOR)
+    set(VERSION_MAJOR ${ARG_VERSION_MAJOR})
+  else()
+    set(VERSION_MAJOR ${CMAKE_MATCH_1})
+  endif()
+
+  if (ARG_VERSION_MINOR)
+    set(VERSION_MINOR ${ARG_VERSION_MINOR})
+  else()
+    set(VERSION_MINOR ${CMAKE_MATCH_2})
+  endif()
+
+  if (ARG_VERSION_PATCH)
+    set(VERSION_PATCH ${ARG_VERSION_PATCH})
+  else()
+    set(VERSION_PATCH ${CMAKE_MATCH_3})
+  endif()
+
+  set(VERSION_STR ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
 
   # Check if the version file exist
   if(EXISTS "${VERSION_FILE_NAME}")
