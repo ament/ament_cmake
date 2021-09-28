@@ -12,49 +12,49 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-################################################################################
-# `ament_cmake_gen_version_h` function creates and installs a version header file.
+#
+# `ament_cmake_gen_version_h` call creates and installs a version header file.
 # The version is taken from `package.xml` file's `<version>` tag
 # The function uses a provided "version.h.in" template file to generate
 # the destination version file in the provided folder.
 # The generated file is being (re-)created if:
 # - the file does not exist
-# - the file does exists but contains a version that differs from the version in `package.xml` file
+# - the file does exists but contains a version that differs from the
+#   version in `package.xml` file
 #
-# :param NO_INSTALL: whether to autmatically install the generated version file into DESTINATION include
+# :param NO_INSTALL: whether to autmatically install the generated version file
+#   into DESTINATION include
+#   default value NO_INSTALL: FALSE
 # :type NO_INSTALL: BOOL
-# :default value NO_INSTALL: FALSE
-
-# :param INCLUDE_DIR: path to the include folder where the file will be generated
-#     ${INCLUDE_DIR} folder will be added to the include paths
-#     the file will be placed into ${INCLUDE_DIR}/${PROJECT_NAME} folder according to ROS2 standard
+# :param INCLUDE_DIR: path to the folder where the file will be generated
+#   ${INCLUDE_DIR} folder will be added to the include paths
+#   the file will be placed into ${INCLUDE_DIR}/${PROJECT_NAME} folder according
+#    to ROS2 standard
+#   default value INCLUDE_DIR:
+#     ${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_gen_version_h/include
 # :type INCLUDE_DIR: string
-# :default value INCLUDE_DIR: ${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_gen_version_h/include
-
 # :param VERSION_FILE_NAME: file name of the generated header file
+#   default value VERSION_FILE_NAME: version.h
 # :type VERSION_FILE_NAME: string
-# :default value VERSION_FILE_NAME: version.h
-
-# :param VERSION_MAJOR: override VERSION_MAJOR
+# :param VERSION_MAJOR: override VERSION_MAJOR, default value VERSION_MAJOR
+#   from the package.xml file
 # :type VERSION_MAJOR: string
-# :default value VERSION_MAJOR: VERSION_MAJOR from the package.xml file
-
-# :param VERSION_MINOR: file name of the generated header file
+# :param VERSION_MINOR: override VERSION_MINOR, default value VERSION_MINOR
+#   from the package.xml file
 # :type VERSION_MINOR: string
-# :default value VERSION_MINOR: VERSION_MINOR from the package.xml file
-
-# :param VERSION_PATCH: file name of the generated header file
+# :param VERSION_PATCH: override VERSION_PATCH, default value VERSION_PATCH
+#   from the package.xml file
 # :type VERSION_PATCH: string
-# :default value VERSION_PATCH: VERSION_PATCH from the package.xml file
-
-################################################################################
+#
+# @public
+#
 function(ament_cmake_gen_version_h)
   cmake_parse_arguments(
-    ARG # prefix of all variables
-    "NO_INSTALL" # list of names of the boolean arguments (only defined ones will be true)
-    "INCLUDE_DIR;VERSION_FILE_NAME;VERSION_MAJOR;VERSION_MINOR;VERSION_PATCH" # list of mono arguments
-    "" # list of names of multi-valued arguments (output variables are lists)
-    ${ARGN} # arguments of the function to parse, here we take the all original ones
+    ARG
+    "NO_INSTALL"
+    "INCLUDE_DIR;VERSION_FILE_NAME;VERSION_MAJOR;VERSION_MINOR;VERSION_PATCH"
+    ""
+    ${ARGN}
   )
 
   set(TEMPLATE_FILE "${ament_cmake_gen_version_h_DIR}/version.h.in")
@@ -62,13 +62,14 @@ function(ament_cmake_gen_version_h)
     message(FATAL_ERROR "Can't find ${TEMPLATE_FILE}. Reinstall ament_cmake_gen_version_h package.")
   endif()
 
-  if (NOT ARG_INCLUDE_DIR)
-    set(ARG_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_gen_version_h/include)
+  if(NOT ARG_INCLUDE_DIR)
+    set(ARG_INCLUDE_DIR
+      ${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_gen_version_h/include)
   endif()
   include_directories(${ARG_INCLUDE_DIR})
   set(TMP_INCLUDE_DIR ${ARG_INCLUDE_DIR}/${PROJECT_NAME})
 
-  if (NOT ARG_VERSION_FILE_NAME)
+  if(NOT ARG_VERSION_FILE_NAME)
     set(ARG_VERSION_FILE_NAME version.h)
   endif()
   set(VERSION_FILE_NAME ${TMP_INCLUDE_DIR}/${ARG_VERSION_FILE_NAME})
@@ -85,19 +86,19 @@ function(ament_cmake_gen_version_h)
 
   # parse version information from the version string
   string(REGEX MATCH "([0-9]+)\.([0-9]+)\.([0-9]+)" "" dummy ${VERSION_STR})
-  if (ARG_VERSION_MAJOR)
+  if(ARG_VERSION_MAJOR)
     set(VERSION_MAJOR ${ARG_VERSION_MAJOR})
   else()
     set(VERSION_MAJOR ${CMAKE_MATCH_1})
   endif()
 
-  if (ARG_VERSION_MINOR)
+  if(ARG_VERSION_MINOR)
     set(VERSION_MINOR ${ARG_VERSION_MINOR})
   else()
     set(VERSION_MINOR ${CMAKE_MATCH_2})
   endif()
 
-  if (ARG_VERSION_PATCH)
+  if(ARG_VERSION_PATCH)
     set(VERSION_PATCH ${ARG_VERSION_PATCH})
   else()
     set(VERSION_PATCH ${CMAKE_MATCH_3})
@@ -128,7 +129,7 @@ function(ament_cmake_gen_version_h)
     message(STATUS "Skip version file creation")
   endif()
 
-  if (NOT ARG_DO_NOT_INSTALL)
+  if(NOT ARG_DO_NOT_INSTALL)
     install(
       DIRECTORY ${TMP_INCLUDE_DIR}
       DESTINATION include)
