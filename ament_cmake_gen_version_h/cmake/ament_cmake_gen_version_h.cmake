@@ -129,7 +129,7 @@ function(ament_cmake_gen_version_h)
     message(STATUS "Skip version file creation")
   endif()
 
-  if(NOT ARG_DO_NOT_INSTALL)
+  if(NOT ARG_NO_INSTALL)
     install(
       DIRECTORY ${TMP_INCLUDE_DIR}
       DESTINATION include)
