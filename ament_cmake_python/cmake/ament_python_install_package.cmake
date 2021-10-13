@@ -93,21 +93,38 @@ setup(
     CONTENT "${setup_py_content}"
   )
 
-  set(egg_dependencies ament_cmake_python_symlink_${package_name})
-
-  add_custom_target(
-    ament_cmake_python_symlink_${package_name}
-    COMMAND ${CMAKE_COMMAND} -E create_symlink
-    "${ARG_PACKAGE_DIR}" "${build_dir}/${package_name}"
-  )
-
-  if(ARG_SETUP_CFG)
+  if(AMENT_CMAKE_SYMLINK_INSTALL)
     add_custom_target(
-      ament_cmake_python_symlink_${package_name}_setup
+      ament_cmake_python_symlink_${package_name}
       COMMAND ${CMAKE_COMMAND} -E create_symlink
-        "${ARG_SETUP_CFG}" "${build_dir}/setup.cfg"
+        "${ARG_PACKAGE_DIR}" "${build_dir}/${package_name}"
     )
-    list(APPEND egg_dependencies ament_cmake_python_symlink_${package_name}_setup)
+    set(egg_dependencies ament_cmake_python_symlink_${package_name})
+
+    if(ARG_SETUP_CFG)
+      add_custom_target(
+        ament_cmake_python_symlink_${package_name}_setup
+        COMMAND ${CMAKE_COMMAND} -E create_symlink
+          "${ARG_SETUP_CFG}" "${build_dir}/setup.cfg"
+      )
+      list(APPEND egg_dependencies ament_cmake_python_symlink_${package_name}_setup)
+    endif()
+  else()
+    add_custom_target(
+      ament_cmake_python_copy_${package_name}
+      COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${ARG_PACKAGE_DIR}" "${build_dir}/${package_name}"
+    )
+    set(egg_dependencies ament_cmake_python_copy_${package_name})
+
+    if(ARG_SETUP_CFG)
+      add_custom_target(
+        ament_cmake_python_copy_${package_name}_setup
+        COMMAND ${CMAKE_COMMAND} -E copy
+          "${ARG_SETUP_CFG}" "${build_dir}/setup.cfg"
+      )
+      list(APPEND egg_dependencies ament_cmake_python_copy_${package_name}_setup)
+    endif()
   endif()
 
   add_custom_target(
