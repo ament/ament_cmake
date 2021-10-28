@@ -33,7 +33,7 @@ if(BUILD_TESTING)
   site_name(SITE)
   configure_file(
     ${CMAKE_ROOT}/Modules/DartConfiguration.tcl.in
-    ${PROJECT_BINARY_DIR}/CTestConfiguration.ini )
+    ${PROJECT_BINARY_DIR}/CTestConfiguration.ini)
 endif()
 
 find_package(ament_cmake_core QUIET REQUIRED)

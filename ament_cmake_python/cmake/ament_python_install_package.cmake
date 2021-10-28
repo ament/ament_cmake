@@ -86,7 +86,6 @@ function(_ament_cmake_python_install_package package_name)
   set(build_dir "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_python/${package_name}")
 
   string(CONFIGURE "\
-import os
 from setuptools import find_packages
 from setuptools import setup
 

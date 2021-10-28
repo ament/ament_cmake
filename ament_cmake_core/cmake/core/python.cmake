@@ -17,6 +17,6 @@
 # Example:
 #   find_package(Python3 3.8 REQUIRED)
 #   find_package(ament_cmake REQUIRED)
-if (NOT TARGET Python3::Interpreter)
+if(NOT TARGET Python3::Interpreter)
   find_package(Python3 REQUIRED COMPONENTS Interpreter)
 endif()

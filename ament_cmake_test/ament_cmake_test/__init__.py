@@ -194,7 +194,7 @@ def _run_test(parser, args, failure_result_file, output_handle):
     encodings = ['utf-8']
     if locale.getpreferredencoding(False) not in encodings:
         encodings.append(locale.getpreferredencoding(False))
-    
+
     start_time = time.monotonic()
 
     try:
@@ -250,12 +250,15 @@ def _run_test(parser, args, failure_result_file, output_handle):
 
         if content == failure_result_file:
             if args.skip_return_code is not None and args.skip_return_code == rc:
-                log("-- run_test.py: generate result file '%s' with skipped test" % args.result_file)
+                log(
+                    '-- run_test.py: generate result file '
+                    "'%s' with skipped test" % args.result_file)
                 # regenerate result file to indicate that the test was skipped
                 result_file = _generate_result(args.result_file, skip=True, test_time=test_time)
             else:
-                log("-- run_test.py: generate result file '%s' with failed test" % args.result_file,
-                    file=sys.stderr)
+                log(
+                    '-- run_test.py: generate result file '
+                    "'%s' with failed test" % args.result_file, file=sys.stderr)
                 # regenerate result file to include output / exception of the invoked command
                 result_file = _generate_result(
                     args.result_file,
@@ -316,7 +319,8 @@ def _run_test(parser, args, failure_result_file, output_handle):
     return rc
 
 
-def _generate_result(result_file, *, failure_message=None, skip=False, error_message=None, test_time=0):
+def _generate_result(result_file, *, failure_message=None, skip=False,
+                     error_message=None, test_time=0):
     # the generated result file must be readable
     # by any of the Jenkins test result report publishers
     pkgname = os.path.basename(os.path.dirname(result_file))
