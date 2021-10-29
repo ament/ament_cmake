@@ -1,12 +1,11 @@
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Changelog for package ament_cmake_export_link_flags
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Changelog for package ament_cmake_gen_version_h
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Forthcoming
 -----------
-* Use FindPython3 instead of FindPythonInterp (`#355 <https://github.com/ament/ament_cmake/issues/355>`_)
-* Update maintainers (`#336 <https://github.com/ament/ament_cmake/issues/336>`_)
-* Contributors: Chris Lalancette, Shane Loretz
+* Add ament_cmake_gen_version_h package (`#198 <https://github.com/ament/ament_cmake/issues/198>`_)
+* Contributors: serge-nikulin
 
 1.1.4 (2021-05-06)
 ------------------
@@ -31,8 +30,6 @@ Forthcoming
 
 1.0.2 (2020-12-07)
 ------------------
-* Update package maintainers. (`#286 <https://github.com/ament/ament_cmake/issues/286>`_)
-* Contributors: Michel Hidalgo
 
 1.0.1 (2020-09-10)
 ------------------
@@ -90,12 +87,3 @@ Forthcoming
 
 0.4.0 (2017-12-08)
 ------------------
-* 0.0.3
-* 0.0.2
-* Merge pull request `#84 <https://github.com/ament/ament_cmake/issues/84>`_ from ament/use_in_list
-  use IN_LIST
-* use IN_LIST
-* Merge pull request `#71 <https://github.com/ament/ament_cmake/issues/71>`_ from ament/export_link_flags
-  add ament_cmake_export_link_flags package and use link flags in ament_target_dependencies
-* add ament_cmake_export_link_flags package and use link flags in ament_target_dependencies
-* Contributors: Dirk Thomas

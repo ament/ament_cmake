@@ -2,6 +2,13 @@
 Changelog for package ament_cmake
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add ament_cmake_gen_version_h package (`#198 <https://github.com/ament/ament_cmake/issues/198>`_)
+* Use FindPython3 instead of FindPythonInterp (`#355 <https://github.com/ament/ament_cmake/issues/355>`_)
+* Update maintainers (`#336 <https://github.com/ament/ament_cmake/issues/336>`_)
+* Contributors: Chris Lalancette, Shane Loretz, serge-nikulin
+
 1.1.4 (2021-05-06)
 ------------------
 

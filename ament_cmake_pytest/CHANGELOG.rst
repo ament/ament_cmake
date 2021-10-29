@@ -2,6 +2,14 @@
 Changelog for package ament_cmake_pytest
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Use FindPython3 instead of FindPythonInterp (`#355 <https://github.com/ament/ament_cmake/issues/355>`_)
+* Support commands with executable targets (`#352 <https://github.com/ament/ament_cmake/issues/352>`_)
+* Mention other platforms in 'pytest/pytest-cov not found' warning (`#337 <https://github.com/ament/ament_cmake/issues/337>`_)
+* Update maintainers (`#336 <https://github.com/ament/ament_cmake/issues/336>`_)
+* Contributors: Chris Lalancette, Christophe Bedard, Shane Loretz
+
 1.1.4 (2021-05-06)
 ------------------
 

@@ -2,6 +2,12 @@
 Changelog for package ament_cmake_export_dependencies
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Use FindPython3 instead of FindPythonInterp (`#355 <https://github.com/ament/ament_cmake/issues/355>`_)
+* Update maintainers (`#336 <https://github.com/ament/ament_cmake/issues/336>`_)
+* Contributors: Chris Lalancette, Shane Loretz
+
 1.1.4 (2021-05-06)
 ------------------
 

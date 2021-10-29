@@ -2,6 +2,16 @@
 Changelog for package ament_cmake_python
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Make ament_cmake_python symlink for symlink installs only (`#357 <https://github.com/ament/ament_cmake/issues/357>`_)
+* Use FindPython3 instead of FindPythonInterp (`#355 <https://github.com/ament/ament_cmake/issues/355>`_)
+* Make ament_python_install_package() match setuptools' egg names. (`#338 <https://github.com/ament/ament_cmake/issues/338>`_)
+* Drop ament_cmake_python outdated tests. (`#340 <https://github.com/ament/ament_cmake/issues/340>`_)
+* Update maintainers (`#336 <https://github.com/ament/ament_cmake/issues/336>`_)
+* Make ament_python_install_package() install console_scripts (`#328 <https://github.com/ament/ament_cmake/issues/328>`_)
+* Contributors: Chris Lalancette, Michel Hidalgo, Shane Loretz
+
 1.1.4 (2021-05-06)
 ------------------
 
