@@ -2,8 +2,8 @@
 Changelog for package ament_cmake_nose
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.2.0 (2021-10-29)
+------------------
 * Use FindPython3 instead of FindPythonInterp (`#355 <https://github.com/ament/ament_cmake/issues/355>`_)
 * Support commands with executable targets (`#352 <https://github.com/ament/ament_cmake/issues/352>`_)
 * Update maintainers (`#336 <https://github.com/ament/ament_cmake/issues/336>`_)

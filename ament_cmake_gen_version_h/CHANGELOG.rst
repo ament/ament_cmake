@@ -2,8 +2,8 @@
 Changelog for package ament_cmake_gen_version_h
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.2.0 (2021-10-29)
+------------------
 * Add ament_cmake_gen_version_h package (`#198 <https://github.com/ament/ament_cmake/issues/198>`_)
 * Contributors: serge-nikulin
 

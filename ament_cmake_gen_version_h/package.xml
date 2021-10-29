@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="2">
   <name>ament_cmake_gen_version_h</name>
-  <version>1.1.4</version>
+  <version>1.2.0</version>
   <description>Generate a C header containing the version number of the package</description>
   <maintainer email="serge@safeai.ai">Serge Nikulin</maintainer>
   <license>Apache License 2.0</license>

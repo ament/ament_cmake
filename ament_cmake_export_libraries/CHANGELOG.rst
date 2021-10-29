@@ -2,8 +2,8 @@
 Changelog for package ament_cmake_export_libraries
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.2.0 (2021-10-29)
+------------------
 * Use FindPython3 instead of FindPythonInterp (`#355 <https://github.com/ament/ament_cmake/issues/355>`_)
 * Add note regarding interface libraries (`#339 <https://github.com/ament/ament_cmake/issues/339>`_)
 * Update maintainers (`#336 <https://github.com/ament/ament_cmake/issues/336>`_)

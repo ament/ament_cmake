@@ -2,8 +2,8 @@
 Changelog for package ament_cmake_core
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.2.0 (2021-10-29)
+------------------
 * Use FindPython3 instead of FindPythonInterp (`#355 <https://github.com/ament/ament_cmake/issues/355>`_)
 * Support commands with executable targets (`#352 <https://github.com/ament/ament_cmake/issues/352>`_)
 * doc/resource_index: Indent list subitems correctly (`#342 <https://github.com/ament/ament_cmake/issues/342>`_)
