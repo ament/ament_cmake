@@ -4,7 +4,10 @@
   <name>ament_cmake_export_libraries</name>
   <version>1.2.0</version>
   <description>The ability to export libraries to downstream packages in the ament buildsystem in CMake.</description>
+
+  <maintainer email="michael.jeronimo@openrobotics.org">Michael Jeronimo</maintainer>
   <maintainer email="michel@ekumenlabs.com">Michel Hidalgo</maintainer>
+
   <license>Apache License 2.0</license>
 
   <author>Dirk Thomas</author>

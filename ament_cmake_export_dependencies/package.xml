@@ -4,7 +4,10 @@
   <name>ament_cmake_export_dependencies</name>
   <version>1.2.0</version>
   <description>The ability to export dependencies to downstream packages in the ament buildsystem in CMake.</description>
+
+  <maintainer email="michael.jeronimo@openrobotics.org">Michael Jeronimo</maintainer>
   <maintainer email="michel@ekumenlabs.com">Michel Hidalgo</maintainer>
+
   <license>Apache License 2.0</license>
 
   <author>Dirk Thomas</author>
