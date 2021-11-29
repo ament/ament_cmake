@@ -4,7 +4,10 @@
   <name>ament_cmake_gen_version_h</name>
   <version>1.2.0</version>
   <description>Generate a C header containing the version number of the package</description>
-  <maintainer email="serge@safeai.ai">Serge Nikulin</maintainer>
+
+  <maintainer email="michael.jeronimo@openrobotics.org">Michael Jeronimo</maintainer>
+  <maintainer email="michel@ekumenlabs.com">Michel Hidalgo</maintainer>
+
   <license>Apache License 2.0</license>
 
   <author>Serge Nikulin</author>

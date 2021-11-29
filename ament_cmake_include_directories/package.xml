@@ -4,7 +4,10 @@
   <name>ament_cmake_include_directories</name>
   <version>1.2.0</version>
   <description>The functionality to order include directories according to a chain of prefixes in the ament buildsystem in CMake.</description>
+
+  <maintainer email="michael.jeronimo@openrobotics.org">Michael Jeronimo</maintainer>
   <maintainer email="michel@ekumenlabs.com">Michel Hidalgo</maintainer>
+
   <license>Apache License 2.0</license>
 
   <author>Dirk Thomas</author>
