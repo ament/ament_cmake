@@ -4,8 +4,14 @@
   <name>ament_cmake_version</name>
   <version>1.1.4</version>
   <description>The ability to override the exported package version in the ament buildsystem.</description>
+<<<<<<< HEAD
   <maintainer email="dthomas@osrfoundation.org">Dirk Thomas</maintainer>
+=======
+
+  <maintainer email="michael.jeronimo@openrobotics.org">Michael Jeronimo</maintainer>
+>>>>>>> 9bcc813 (Update maintainers to Michael Jeronimo and Michel Hidalgo (#362))
   <maintainer email="michel@ekumenlabs.com">Michel Hidalgo</maintainer>
+
   <license>Apache License 2.0</license>
 
   <buildtool_depend>ament_cmake_core</buildtool_depend>
