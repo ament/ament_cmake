@@ -53,7 +53,7 @@ function(get_executable_path var target_or_path)
     # There is a target with this name
     get_target_property(type "${target_or_path}" TYPE)
     get_target_property(imported "${target_or_path}" IMPORTED)
-    if ("${type}" STREQUAL "EXECUTABLE")
+    if("${type}" STREQUAL "EXECUTABLE")
       # The target is an executable, grab its LOCATION property
       if(ARG_BUILD)
         if(imported)

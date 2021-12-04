@@ -33,7 +33,9 @@ macro(ament_libraries_pack_build_configuration VAR)
     if("${_lib}" MATCHES "^(debug|optimized|general)$")
       math(EXPR _index "${_index} + 1")
       if(${_index} EQUAL ${_count})
-        message(FATAL_ERROR "ament_libraries_pack_build_configuration() the list of libraries '${_argn}' ends with '${_lib}' which is a build configuration keyword and must be followed by a library")
+        message(FATAL_ERROR
+          "ament_libraries_pack_build_configuration() the list of libraries '${_argn}' ends with '${_lib}' "
+          "which is a build configuration keyword and must be followed by a library")
       endif()
       list(GET _argn ${_index} library)
       list(APPEND ${VAR} "${_lib}${AMENT_BUILD_CONFIGURATION_KEYWORD_SEPARATOR}${library}")
