@@ -23,7 +23,7 @@
 macro(ament_auto_find_test_dependencies)
   set(_ARGN "${ARGN}")
   if(_ARGN)
-    message(FATAL_ERROR "ament_lint_auto_find_test_dependencies() called with "
+    message(FATAL_ERROR "ament_auto_find_test_dependencies() called with "
       "unused arguments: ${_ARGN}")
   endif()
 
