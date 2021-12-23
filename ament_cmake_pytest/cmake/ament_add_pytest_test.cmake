@@ -98,7 +98,7 @@ function(ament_add_pytest_test testname path)
     list(APPEND cmd "-We")
   endif()
 
-  # enable pytest coverage by default if the package test_depends on pytest_cov
+  # enable pytest coverage by default if the package test_depends on python3-pytest-cov
   if("python3-pytest-cov" IN_LIST ${PROJECT_NAME}_TEST_DEPENDS)
     set(coverage_default ON)
   else()
