@@ -24,7 +24,11 @@
 #
 macro(ament_include_directories_order var)
   set(_ament_prefix_path_list "$ENV{AMENT_PREFIX_PATH}")
-  if(NOT WIN32)
+  if(WIN32)
+    # Paths on windows may use back-slashes c:\Python3.8\...
+    # Replace with forward-slashes so CMake doesn't treat them as escape characters below
+    string(REPLACE "\\" "/" _ament_prefix_path_list ${_ament_prefix_path_list })
+  else()
     string(REPLACE ":" ";" _ament_prefix_path_list "${_ament_prefix_path_list}")
   endif()
   _ament_include_directories_order(${var} "${_ament_prefix_path_list}" ${ARGN})
