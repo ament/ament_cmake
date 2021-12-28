@@ -24,12 +24,18 @@
 #
 macro(ament_include_directories_order var)
   set(_ament_prefix_path_list "$ENV{AMENT_PREFIX_PATH}")
-  if(WIN32)
-    # Paths on windows may use back-slashes c:\Python3.8\...
+  # Must check ARGC because ARG* in CMake macros are string replacements, not true variables.
+  # Not checking leads to string(REPLACE ...) complaining of insufficient number of arguments.
+  # Quotes can't be used because any back slashes cause CMake to look for escape characters
+  if(WIN32 AND ${ARGC} GREATER 1)
+    # Paths on windows may use back-slashes c:\Python38\...
     # Replace with forward-slashes so CMake doesn't treat them as escape characters below
     string(REPLACE "\\" "/" _ament_all_arguments  ${ARGN})
   else()
     set(_ament_all_arguments "${ARGN}")
+  endif()
+
+  if(NOT WIN32)
     string(REPLACE ":" ";" _ament_prefix_path_list "${_ament_prefix_path_list}")
   endif()
   _ament_include_directories_order(${var} "${_ament_prefix_path_list}" ${_ament_all_arguments})
