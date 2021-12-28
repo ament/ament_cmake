@@ -27,7 +27,7 @@ macro(ament_include_directories_order var)
   if(WIN32)
     # Paths on windows may use back-slashes c:\Python3.8\...
     # Replace with forward-slashes so CMake doesn't treat them as escape characters below
-    string(REPLACE "\\" "/" _ament_all_arguments "${ARGN}")
+    string(REPLACE "\\" "/" _ament_all_arguments  ${ARGN})
   else()
     set(_ament_all_arguments "${ARGN}")
     string(REPLACE ":" ";" _ament_prefix_path_list "${_ament_prefix_path_list}")
