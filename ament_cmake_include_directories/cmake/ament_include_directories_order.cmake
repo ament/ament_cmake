@@ -22,27 +22,12 @@
 #
 # @public
 #
-macro(ament_include_directories_order var)
-  set(_ament_prefix_path_list "$ENV{AMENT_PREFIX_PATH}")
-  # Must check ARGC because ARG* in CMake macros are string replacements, not true variables.
-  # Not checking leads to string(REPLACE ...) complaining of insufficient number of arguments.
-  # Quotes can't be used because any back slashes cause CMake to look for escape characters
-  if(WIN32 AND ${ARGC} GREATER 1)
-    # Paths on windows may use back-slashes c:\Python38\...
-    # Replace with forward-slashes so CMake doesn't treat them as escape characters below
-    string(REPLACE "\\" "/" _ament_all_arguments  ${ARGN})
-  else()
-    set(_ament_all_arguments "${ARGN}")
-  endif()
-
+function(ament_include_directories_order var)
+  set(prefixes "$ENV{AMENT_PREFIX_PATH}")
   if(NOT WIN32)
-    string(REPLACE ":" ";" _ament_prefix_path_list "${_ament_prefix_path_list}")
+    string(REPLACE ":" ";" prefixes "${prefixes}")
   endif()
-  _ament_include_directories_order(${var} "${_ament_prefix_path_list}" ${_ament_all_arguments})
-endmacro()
 
-
-function(_ament_include_directories_order var prefixes)
   # create list of empty slots, one per prefix and one for unknown prefixes
   list(LENGTH prefixes prefix_count)
   foreach(index RANGE ${prefix_count})
