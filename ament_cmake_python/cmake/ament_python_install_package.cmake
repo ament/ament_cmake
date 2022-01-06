@@ -160,6 +160,11 @@ setup(
     DESTINATION "${ARG_DESTINATION}/${egg_install_name}.egg-info"
   )
 
+  if(POLICY CMP0087)
+    # Allow generator expressions in install(CODE...)
+    cmake_policy(SET CMP0087 NEW)
+  endif()
+
   # generate/install entry-point console scripts
   get_filename_component(ABS_SCRIPTS_DESTINATION "${ARG_SCRIPTS_DESTINATION}" ABSOLUTE BASE_DIR "${CMAKE_INSTALL_PREFIX}")
   install(CODE "execute_process(COMMAND ${python_interpreter} setup.py install_scripts --install-dir \"${ABS_SCRIPTS_DESTINATION}\"
