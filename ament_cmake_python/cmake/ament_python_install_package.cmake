@@ -166,15 +166,10 @@ setup(
       DEPENDS ${egg_dependencies}
     )
 
-    if(NOT AMENT_CMAKE_SYMLINK_INSTALL)
-      # Not needed for nor supported by symlink installs
-      set(_extra_install_args USE_SOURCE_PERMISSIONS)
-    endif()
-
     install(
       DIRECTORY "${build_dir}/scripts/"
       DESTINATION "${ARG_SCRIPTS_DESTINATION}/"
-      ${_extra_install_args}
+      USE_SOURCE_PERMISSIONS
     )
   endif()
 
