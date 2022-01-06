@@ -29,7 +29,7 @@
 #   directory (default: PYTHON_INSTALL_DIR)
 # :type DESTINATION: string
 # :param SCRIPTS_DESTINATION: the path to the Python package scripts'
-#   installation directory, scripts (if any) will be ignored if not set
+#   installation directory (default: lib/${PROJECT_NAME})
 # :type SCRIPTS_DESTINATION: string
 # :param SKIP_COMPILE: if set do not byte-compile the installed package
 # :type SKIP_COMPILE: option
@@ -81,6 +81,10 @@ function(_ament_cmake_python_install_package package_name)
         "'PYTHON_INSTALL_DIR' must not be empty")
     endif()
     set(ARG_DESTINATION ${PYTHON_INSTALL_DIR})
+  endif()
+
+  if(NOT ARG_SCRIPTS_DESTINATION)
+    set(ARG_SCRIPTS_DESTINATION "lib/${PROJECT_NAME}")
   endif()
 
   set(build_dir "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_python/${package_name}")
@@ -156,22 +160,25 @@ setup(
     DESTINATION "${ARG_DESTINATION}/${egg_install_name}.egg-info"
   )
 
-  if(ARG_SCRIPTS_DESTINATION)
-    file(MAKE_DIRECTORY "${build_dir}/scripts")  # setup.py may or may not create it
-
-    add_custom_target(
-      ament_cmake_python_build_${package_name}_scripts ALL
-      COMMAND ${python_interpreter} setup.py install_scripts -d scripts
-      WORKING_DIRECTORY "${build_dir}"
-      DEPENDS ${egg_dependencies}
-    )
-
-    install(
-      DIRECTORY "${build_dir}/scripts/"
-      DESTINATION "${ARG_SCRIPTS_DESTINATION}/"
-      USE_SOURCE_PERMISSIONS
-    )
-  endif()
+  # generate entry-point console scripts
+  set(_scripts_dir "${build_dir}/scripts")
+  add_custom_target(
+    ament_cmake_python_build_${package_name}_scripts ALL
+    # cleanup any scripts from a previous run
+    COMMAND ${CMAKE_COMMAND} -E remove_directory "${_scripts_dir}"
+    # (re)create scripts build directory
+    COMMAND ${CMAKE_COMMAND} -E make_directory "${_scripts_dir}"
+    # generate scripts
+    COMMAND ${python_interpreter} setup.py install_scripts -d scripts
+    WORKING_DIRECTORY "${build_dir}"
+    DEPENDS ${egg_dependencies}
+    COMMENT "Generating python console scripts"
+  )
+  install(
+    DIRECTORY "${build_dir}/scripts/"
+    DESTINATION "${ARG_SCRIPTS_DESTINATION}/"
+    USE_SOURCE_PERMISSIONS
+  )
 
   install(
     DIRECTORY "${ARG_PACKAGE_DIR}/"
