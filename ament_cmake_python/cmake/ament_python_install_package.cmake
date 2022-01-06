@@ -41,7 +41,7 @@ endmacro()
 
 function(_ament_cmake_python_install_package package_name)
   cmake_parse_arguments(
-    ARG "SKIP_COMPILE" "PACKAGE_DIR;VERSION;SETUP_CFG;DESTINATION;SCRIPTS_DESTINATION" "" ${ARGN})
+    ARG "SKIP_COMPILE" "PACKAGE_DIR;VERSION;SETUP_CFG;DESTINATION" "SCRIPTS_DESTINATION" ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "ament_python_install_package() called with unused "
       "arguments: ${ARG_UNPARSED_ARGUMENTS}")
@@ -166,9 +166,11 @@ setup(
   endif()
 
   # generate/install entry-point console scripts
-  get_filename_component(ABS_SCRIPTS_DESTINATION "${ARG_SCRIPTS_DESTINATION}" ABSOLUTE BASE_DIR "${CMAKE_INSTALL_PREFIX}")
-  install(CODE "execute_process(COMMAND ${python_interpreter} setup.py install_scripts --install-dir \"${ABS_SCRIPTS_DESTINATION}\"
-                                WORKING_DIRECTORY \"${build_dir}\")")
+  foreach(_dest ${ARG_SCRIPTS_DESTINATION})
+    get_filename_component(ABS_SCRIPTS_DESTINATION "${_dest}" ABSOLUTE BASE_DIR "${CMAKE_INSTALL_PREFIX}")
+    install(CODE "execute_process(COMMAND ${python_interpreter} setup.py install_scripts --install-dir \"${ABS_SCRIPTS_DESTINATION}\"
+                                  WORKING_DIRECTORY \"${build_dir}\")")
+  endforeach()
 
   install(
     DIRECTORY "${ARG_PACKAGE_DIR}/"
