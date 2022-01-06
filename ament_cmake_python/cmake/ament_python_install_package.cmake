@@ -160,25 +160,10 @@ setup(
     DESTINATION "${ARG_DESTINATION}/${egg_install_name}.egg-info"
   )
 
-  # generate entry-point console scripts
-  set(_scripts_dir "${build_dir}/scripts")
-  add_custom_target(
-    ament_cmake_python_build_${package_name}_scripts ALL
-    # cleanup any scripts from a previous run
-    COMMAND ${CMAKE_COMMAND} -E remove_directory "${_scripts_dir}"
-    # (re)create scripts build directory
-    COMMAND ${CMAKE_COMMAND} -E make_directory "${_scripts_dir}"
-    # generate scripts
-    COMMAND ${python_interpreter} setup.py install_scripts -d scripts
-    WORKING_DIRECTORY "${build_dir}"
-    DEPENDS ${egg_dependencies}
-    COMMENT "Generating python console scripts"
-  )
-  install(
-    DIRECTORY "${build_dir}/scripts/"
-    DESTINATION "${ARG_SCRIPTS_DESTINATION}/"
-    USE_SOURCE_PERMISSIONS
-  )
+  # generate/install entry-point console scripts
+  get_filename_component(ABS_SCRIPTS_DESTINATION "${ARG_SCRIPTS_DESTINATION}" ABSOLUTE BASE_DIR "${CMAKE_INSTALL_PREFIX}")
+  install(CODE "execute_process(COMMAND ${python_interpreter} setup.py install_scripts --install-dir \"${ABS_SCRIPTS_DESTINATION}\"
+                                WORKING_DIRECTORY \"${build_dir}\")")
 
   install(
     DIRECTORY "${ARG_PACKAGE_DIR}/"
