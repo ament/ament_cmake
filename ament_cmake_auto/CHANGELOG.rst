@@ -2,6 +2,12 @@
 Changelog for package ament_cmake_auto
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Fix typo in ament_auto_find_test_dependencies (`#363 <https://github.com/ament/ament_cmake/issues/363>`_)
+* Update maintainers to Michael Jeronimo and Michel Hidalgo (`#362 <https://github.com/ament/ament_cmake/issues/362>`_)
+* Contributors: Audrow Nash, Daisuke Nishimatsu
+
 1.2.0 (2021-10-29)
 ------------------
 * Add ament_auto_add_gtest (`#344 <https://github.com/ament/ament_cmake/issues/344>`_)

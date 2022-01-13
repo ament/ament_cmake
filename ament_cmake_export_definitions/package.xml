@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="2">
   <name>ament_cmake_export_definitions</name>
-  <version>1.2.0</version>
+  <version>1.2.1</version>
   <description>The ability to export definitions to downstream packages in the ament buildsystem.</description>
 
   <maintainer email="michael.jeronimo@openrobotics.org">Michael Jeronimo</maintainer>

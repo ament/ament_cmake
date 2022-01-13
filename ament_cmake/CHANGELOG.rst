@@ -2,6 +2,11 @@
 Changelog for package ament_cmake
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Update maintainers to Michael Jeronimo and Michel Hidalgo (`#362 <https://github.com/ament/ament_cmake/issues/362>`_)
+* Contributors: Audrow Nash
+
 1.2.0 (2021-10-29)
 ------------------
 * Add ament_cmake_gen_version_h package (`#198 <https://github.com/ament/ament_cmake/issues/198>`_)

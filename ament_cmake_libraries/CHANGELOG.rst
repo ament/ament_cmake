@@ -2,6 +2,16 @@
 Changelog for package ament_cmake_libraries
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Resolve various ament_lint linter violations (`#360 <https://github.com/ament/ament_cmake/issues/360>`_)
+  We can't add ament_lint linters in ament_cmake in the traditional way
+  without creating a circular dependency between the repositories. Even
+  though we can't automatically enforce linting, it's still a good idea to
+  try to keep conformance where possible.
+* Update maintainers to Michael Jeronimo and Michel Hidalgo (`#362 <https://github.com/ament/ament_cmake/issues/362>`_)
+* Contributors: Audrow Nash, Scott K Logan
+
 1.2.0 (2021-10-29)
 ------------------
 * Use FindPython3 instead of FindPythonInterp (`#355 <https://github.com/ament/ament_cmake/issues/355>`_)
