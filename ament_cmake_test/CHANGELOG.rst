@@ -2,8 +2,8 @@
 Changelog for package ament_cmake_test
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.2.1 (2022-01-14)
+------------------
 * Resolve various ament_lint linter violations (`#360 <https://github.com/ament/ament_cmake/issues/360>`_)
   We can't add ament_lint linters in ament_cmake in the traditional way
   without creating a circular dependency between the repositories. Even

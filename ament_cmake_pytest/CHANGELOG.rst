@@ -2,8 +2,8 @@
 Changelog for package ament_cmake_pytest
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.2.1 (2022-01-14)
+------------------
 * Update maintainers to Michael Jeronimo and Michel Hidalgo (`#362 <https://github.com/ament/ament_cmake/issues/362>`_)
 * Fix misleading comment (`#361 <https://github.com/ament/ament_cmake/issues/361>`_)
 * Contributors: Audrow Nash, Tim Clephas
