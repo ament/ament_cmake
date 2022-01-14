@@ -2,6 +2,13 @@
 Changelog for package ament_cmake_python
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.1.5 (2022-01-14)
+------------------
+* Update maintainers (backport `#362 <https://github.com/ament/ament_cmake/issues/362>`_) (`#370 <https://github.com/ament/ament_cmake/issues/370>`_).
+* Make ament_python_install_package() install console_scripts (`#328 <https://github.com/ament/ament_cmake/issues/328>`_) (`#364 <https://github.com/ament/ament_cmake/issues/364>`_).
+* Make ament_cmake_python symlink for symlink installs only (`#357 <https://github.com/ament/ament_cmake/issues/357>`_) (`#359 <https://github.com/ament/ament_cmake/issues/359>`_).
+* Contributors: Audrow Nash, Daisuke Nishimatsu, G.A. vd. Hoorn, Michel Hidalgo
+
 1.1.4 (2021-05-06)
 ------------------
 

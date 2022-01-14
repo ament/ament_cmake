@@ -2,6 +2,12 @@
 Changelog for package ament_cmake_export_targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.1.5 (2022-01-14)
+------------------
+* Update maintainers (backport `#362 <https://github.com/ament/ament_cmake/issues/362>`_) (`#370 <https://github.com/ament/ament_cmake/issues/370>`_).
+* Contributors: Audrow Nash
+
+
 1.1.4 (2021-05-06)
 ------------------
 
