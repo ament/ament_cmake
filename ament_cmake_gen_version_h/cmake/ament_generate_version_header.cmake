@@ -50,16 +50,33 @@
 #   The header is installed to:
 #     ${CMAKE_INSTALL_PREFIX}/include/my_project/foobar/version.hpp
 #
+# Example with INSTALL_PATH specified
+#
+#   CMake:
+#     project(my_project)
+#     ...
+#     add_library(my_lib ...)
+#     ament_generate_version_header(my_lib
+#       INSTALL_PATH "include")
+#
+#   How to include the header:
+#     #include <my_project/version.h>
+#
+#   The header is installed to:
+#     ${CMAKE_INSTALL_PREFIX}/include/my_project/version.hpp
+#
 # :param target: A non-imported target to which the generated header will be
 #   made available from.
 #   `target_include_directories(${target} ...)` will be used such that linking
 #   against the target will allow one to include this header.
 # :type target: string
-# :param HEADER_PATH: Path of the generated header including the file name.
+# :param HEADER_PATH: Path of the generated header including the file name
+#   that describes how it should be included by downstream targets.
 #   The default is `${PROJECT_NAME}/version.h` 
 # :type HEADER_PATH: string
 # :param INSTALL_PATH: Path that the header should be installed at.
-#   The default value is "include/${PROJECT_NAME}".
+#   The default value is "include/${PROJECT_NAME}" to avoid include directory
+#   search order problems when overriding packages from merged workspaces.
 # :type INSTALL_PATH: string
 # :param SKIP_INSTALL: whether to autmatically install the generated version
 #   file.
@@ -145,7 +162,8 @@ function(ament_generate_version_header target)
     "$<INSTALL_INTERFACE:${ARG_INSTALL_PATH}>")
 
   if(NOT ARG_SKIP_INSTALL)
+    get_filename_component(HEADER_FOLDER "${ARG_HEADER_PATH}" DIRECTORY)
     install(FILES "${BUILDTIME_HEADER_DIR}/${ARG_HEADER_PATH}"
-      DESTINATION "${ARG_INSTALL_PATH}")
+      DESTINATION "${ARG_INSTALL_PATH}/${HEADER_FOLDER}")
   endif()
   endfunction()
