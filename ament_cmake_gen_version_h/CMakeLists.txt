@@ -19,6 +19,11 @@ if(BUILD_TESTING)
   include(cmake/ament_generate_version_header.cmake)
   find_package(ament_cmake_gtest REQUIRED)
 
+  if(DEFINED CMAKE_WARN_DEPRECATED)
+    set(old_deprecation_value ${CMAKE_WARN_DEPRECATED})
+  endif()
+  set(CMAKE_WARN_DEPRECATED OFF CACHE BOOL "" FORCE)
+
   # Generate version headers using different scenarios
   ament_cmake_gen_version_h(NO_INSTALL)
   ament_cmake_gen_version_h(NO_INSTALL VERSION_FILE_NAME "version1.h")
@@ -31,6 +36,11 @@ if(BUILD_TESTING)
     VERSION_MINOR 2
     VERSION_PATCH 3
   )
+  if(old_deprecation_value)
+    set(CMAKE_WARN_DEPRECATED ${old_deprecation_value} CACHE BOOL "" FORCE)
+  else()
+    unset(CMAKE_WARN_DEPRECATED CACHE)
+  endif()
 
   ament_add_gtest(test_${PROJECT_NAME}
     test/test_version_custom.cpp
