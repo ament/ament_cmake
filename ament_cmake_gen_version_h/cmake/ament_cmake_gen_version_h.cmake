@@ -49,6 +49,9 @@
 # @public
 #
 function(ament_cmake_gen_version_h)
+  message(DEPRECATION "The ament_cmake_gen_version_h() function is deprecated. \
+  Please use ament_generate_version_header(...) instead.")
+
   cmake_parse_arguments(
     ARG
     "NO_INSTALL"

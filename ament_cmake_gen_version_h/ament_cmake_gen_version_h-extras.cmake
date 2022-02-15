@@ -16,3 +16,4 @@
 # ament_cmake_version/ament_cmake_version-extras.cmake
 
 include("${ament_cmake_gen_version_h_DIR}/ament_cmake_gen_version_h.cmake")
+include("${ament_cmake_gen_version_h_DIR}/ament_generate_version_header.cmake")
