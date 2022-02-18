@@ -2,6 +2,12 @@
 Changelog for package ament_cmake_gen_version_h
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.3.0 (2022-02-17)
+------------------
+* Add ament_generate_version_header and deprecate ament_cmake_gen_version_h (`#377 <https://github.com/ament/ament_cmake/issues/377>`_)
+* Update forthcoming version in changelog
+* Contributors: Audrow Nash, Shane Loretz
+
 1.2.1 (2022-01-14)
 ------------------
 * Update maintainers to Michael Jeronimo and Michel Hidalgo (`#362 <https://github.com/ament/ament_cmake/issues/362>`_)

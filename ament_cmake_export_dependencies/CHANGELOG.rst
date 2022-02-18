@@ -2,6 +2,11 @@
 Changelog for package ament_cmake_export_dependencies
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.3.0 (2022-02-17)
+------------------
+* Update forthcoming version in changelog
+* Contributors: Audrow Nash
+
 1.2.1 (2022-01-14)
 ------------------
 * Resolve various ament_lint linter violations (`#360 <https://github.com/ament/ament_cmake/issues/360>`_)
