@@ -207,7 +207,7 @@ def _run_test(parser, args, failure_result_file, output_handle):
                 break
             for i, encoding in enumerate(encodings):
                 try:
-                    decoded_line = line.decode(encoding)
+                    decoded_line = line.decode(encoding, errors='surrogateescape')
                 except UnicodeDecodeError:
                     if i == len(encodings) - 1:
                         raise
@@ -216,7 +216,7 @@ def _run_test(parser, args, failure_result_file, output_handle):
             print(decoded_line, end='')
             output += decoded_line
             if output_handle:
-                output_handle.write(decoded_line.encode())
+                output_handle.write(decoded_line.encode(errors='surrogateescape'))
                 output_handle.flush()
         proc.wait()
         rc = proc.returncode
