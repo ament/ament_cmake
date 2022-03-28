@@ -2,8 +2,8 @@
 Changelog for package ament_cmake_python
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.3.1 (2022-03-28)
+------------------
 * Use sysconfig directly to determine python lib dir (`#378 <https://github.com/ament/ament_cmake/issues/378>`_)
 * Contributors: Scott K Logan
 
