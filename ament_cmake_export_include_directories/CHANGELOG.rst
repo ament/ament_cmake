@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_export_include_directories
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 1.3.0 (2022-02-17)
 ------------------
 * Update forthcoming version in changelog
