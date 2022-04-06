@@ -67,7 +67,7 @@ macro(ament_auto_add_library target)
 
   # add include directory of this package if it exists
   if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/include")
-    target_include_directories("${target}" SYSTEM
+    target_include_directories("${target}" PUBLIC
       "${CMAKE_CURRENT_SOURCE_DIR}/include")
   endif()
   # link against other libraries of this package
