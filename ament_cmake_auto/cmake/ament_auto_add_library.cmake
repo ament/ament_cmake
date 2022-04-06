@@ -67,13 +67,17 @@ macro(ament_auto_add_library target)
 
   # add include directory of this package if it exists
   if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/include")
-    target_include_directories("${target}" PUBLIC
+    target_include_directories("${target}" SYSTEM
       "${CMAKE_CURRENT_SOURCE_DIR}/include")
   endif()
   # link against other libraries of this package
   if(NOT ${PROJECT_NAME}_LIBRARIES STREQUAL "" AND
       NOT ARG_NO_TARGET_LINK_LIBRARIES)
-    target_link_libraries("${target}" ${${PROJECT_NAME}_LIBRARIES})
+    foreach(lib ${${PROJECT_NAME}_LIBRARIES})
+      get_target_property(lib_include_dirs ${lib} INTERFACE_INCLUDE_DIRECTORIES)
+      target_include_directories("${target}" SYSTEM PRIVATE ${lib_include_dirs})
+      target_link_libraries("${target}" ${lib})
+    endforeach(lib)
   endif()
 
   # add exported information from found build dependencies
