@@ -81,7 +81,7 @@ macro(ament_auto_add_executable target)
   endif()
 
   # add exported information from found build dependencies
-  ament_target_dependencies(${target} ${${PROJECT_NAME}_FOUND_BUILD_DEPENDS})
+  ament_target_dependencies(${target} SYSTEM ${${PROJECT_NAME}_FOUND_BUILD_DEPENDS})
 
   list(APPEND ${PROJECT_NAME}_EXECUTABLES "${target}")
 endmacro()
