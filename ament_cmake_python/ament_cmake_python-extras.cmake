@@ -46,7 +46,7 @@ macro(_ament_cmake_python_get_python_install_dir)
     set(_python_code
       "import os"
       "import sysconfig"
-      "print(os.path.relpath(sysconfig.get_path('purelib', vars={'base': '${CMAKE_INSTALL_PREFIX}'}), start='${CMAKE_INSTALL_PREFIX}', scheme='posix_prefix').replace(os.sep, '/'))"
+      "print(os.path.relpath(sysconfig.get_path('purelib', vars={'base': '${CMAKE_INSTALL_PREFIX}'}, scheme='posix_prefix'), start='${CMAKE_INSTALL_PREFIX}').replace(os.sep, '/'))"
     )
     get_executable_path(_python_interpreter Python3::Interpreter CONFIGURE)
     execute_process(
