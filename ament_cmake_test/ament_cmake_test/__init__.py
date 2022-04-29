@@ -207,16 +207,16 @@ def _run_test(parser, args, failure_result_file, output_handle):
                 break
             for i, encoding in enumerate(encodings):
                 try:
-                    decoded_line = line.decode(encoding, errors='surrogateescape')
+                    decoded_line = line.decode(encoding)
                 except UnicodeDecodeError:
                     if i == len(encodings) - 1:
-                        raise
+                        decoded_line = line.decode(encoding, errors='replace')
                 else:
                     break
             print(decoded_line, end='')
             output += decoded_line
             if output_handle:
-                output_handle.write(decoded_line.encode(errors='surrogateescape'))
+                output_handle.write(decoded_line.encode())
                 output_handle.flush()
         proc.wait()
         rc = proc.returncode
