@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="2">
   <name>ament_cmake_libraries</name>
-  <version>1.3.1</version>
+  <version>1.4.0</version>
   <description>The functionality to deduplicate libraries in the ament buildsystem in CMake.</description>
 
   <maintainer email="michael.jeronimo@openrobotics.org">Michael Jeronimo</maintainer>
