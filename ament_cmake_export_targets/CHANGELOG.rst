@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_export_targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 1.3.1 (2022-03-28)
 ------------------
 
@@ -64,7 +67,7 @@ Changelog for package ament_cmake_export_targets
 
 0.9.3 (2020-05-19)
 ------------------
-* Fix the order in which *Export.cmake files are included (`#256 <https://github.com/ament/ament_cmake/issues/256>`_)
+* Fix the order in which Export.cmake files are included (`#256 <https://github.com/ament/ament_cmake/issues/256>`_)
 * Contributors: Ivan Santiago Paunovic
 
 0.9.2 (2020-05-07)
