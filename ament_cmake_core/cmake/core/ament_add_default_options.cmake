@@ -24,11 +24,11 @@
 #
 macro(ament_add_default_options)
   # TODO(CH3): Would be good to parse args to skip options next time.
-  set(options EXCLUDE_BUILD_SHARED_LIBS)
-  set(oneValueArgs)
-  set(multiValueArgs)
+  set(aado_options EXCLUDE_BUILD_SHARED_LIBS)
+  set(aado_oneValueArgs)
+  set(aado_multiValueArgs)
   cmake_parse_arguments(ament_add_default_options
-    "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN}
+    "${aado_options}" "${aado_oneValueArgs}" "${aado_multiValueArgs}" ${ARGN}
   )
 
   if(NOT ament_add_default_options_EXCLUDE_BUILD_SHARED_LIBS)
