@@ -39,4 +39,8 @@ macro(ament_add_default_options)
     unless the library was explicitly added as a static library."
       ON)
   endif()
+
+  unset(aado_options EXCLUDE_BUILD_SHARED_LIBS)
+  unset(aado_oneValueArgs)
+  unset(aado_multiValueArgs)
 endmacro()
