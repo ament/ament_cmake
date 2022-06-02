@@ -23,7 +23,7 @@
 # @public
 #
 macro(ament_add_default_options)
-  # TODO(CH3): Would be good to parse args to skip options next time.
+  # TODO(methylDragon): Would be good to parse args to skip options next time.
   set(aado_options EXCLUDE_BUILD_SHARED_LIBS)
   set(aado_oneValueArgs)
   set(aado_multiValueArgs)
@@ -35,8 +35,8 @@ macro(ament_add_default_options)
     option(
       BUILD_SHARED_LIBS
       "Global flag to cause add_library() to create shared libraries if on. \
-    If set to true, this will cause all libraries to be built shared \
-    unless the library was explicitly added as a static library."
+       If set to true, this will cause all libraries to be built shared \
+       unless the library was explicitly added as a static library."
       ON)
   endif()
 
