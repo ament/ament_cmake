@@ -40,7 +40,7 @@ macro(ament_add_default_options)
       ON)
   endif()
 
-  unset(aado_options EXCLUDE_BUILD_SHARED_LIBS)
+  unset(aado_options)
   unset(aado_oneValueArgs)
   unset(aado_multiValueArgs)
 endmacro()
