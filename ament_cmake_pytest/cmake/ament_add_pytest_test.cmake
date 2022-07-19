@@ -20,6 +20,9 @@
 # :param path: the path to a file or folder where ``pytest`` should be invoked
 #   on
 # :type path: string
+# :param NOCAPTURE: disable pytest output capturing.
+#   Sets the pytest option '-s'.
+# :type NOCAPTURE: option
 # :param SKIP_TEST: if set mark the test as being skipped
 # :type SKIP_TEST: option
 # :param PYTHON_EXECUTABLE: Python executable used to run the test.
@@ -48,7 +51,7 @@
 #
 function(ament_add_pytest_test testname path)
   cmake_parse_arguments(ARG
-    "SKIP_TEST"
+    "NOCAPTURE;SKIP_TEST"
     "PYTHON_EXECUTABLE;RUNNER;TIMEOUT;WERROR;WORKING_DIRECTORY"
     "APPEND_ENV;APPEND_LIBRARY_DIRS;ENV"
     ${ARGN})
@@ -95,6 +98,11 @@ function(ament_add_pytest_test testname path)
     "--junit-xml=${result_file}"
     "--junit-prefix=${PROJECT_NAME}"
   )
+
+  if(ARG_NOCAPTURE)
+    # disable output capturing
+    list(APPEND cmd "-s")
+  endif()
 
   if(ARG_WERROR)
     # treat warnings as errors
