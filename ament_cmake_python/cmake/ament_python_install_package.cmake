@@ -161,9 +161,10 @@ setup(
   )
 
   # generate/install entry-point console scripts
+  get_executable_path(python_interpreter_config Python3::Interpreter CONFIGURE)
   foreach(_dest ${ARG_SCRIPTS_DESTINATION})
     get_filename_component(ABS_SCRIPTS_DESTINATION "${_dest}" ABSOLUTE BASE_DIR "${CMAKE_INSTALL_PREFIX}")
-    install(CODE "execute_process(COMMAND ${python_interpreter} setup.py install_scripts --install-dir \"${ABS_SCRIPTS_DESTINATION}\"
+    install(CODE "execute_process(COMMAND \"${python_interpreter_config}\" setup.py install_scripts --install-dir \"${ABS_SCRIPTS_DESTINATION}\"
                                   WORKING_DIRECTORY \"${build_dir}\")")
   endforeach()
 
@@ -175,7 +176,6 @@ setup(
   )
 
   if(NOT ARG_SKIP_COMPILE)
-    get_executable_path(python_interpreter_config Python3::Interpreter CONFIGURE)
     # compile Python files
     install(CODE
       "execute_process(
