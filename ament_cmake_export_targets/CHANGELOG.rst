@@ -2,6 +2,11 @@
 Changelog for package ament_cmake_export_targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Support new target export template introduced with CMake 3.24 (`#395 <https://github.com/ament/ament_cmake/issues/395>`_)
+* Contributors: Timo Röhling
+
 1.5.0 (2022-07-11)
 ------------------
 

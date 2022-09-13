@@ -2,6 +2,11 @@
 Changelog for package ament_cmake_pytest
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add NOCAPTURE option to ament_add_pytest_test (`#393 <https://github.com/ament/ament_cmake/issues/393>`_)
+* Contributors: Jacob Perron
+
 1.5.0 (2022-07-11)
 ------------------
 

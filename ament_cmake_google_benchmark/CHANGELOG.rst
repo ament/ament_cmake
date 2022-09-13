@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_google_benchmark
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 1.5.0 (2022-07-11)
 ------------------
 
