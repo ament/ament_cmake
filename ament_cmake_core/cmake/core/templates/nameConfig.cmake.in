@@ -27,7 +27,7 @@ if(NOT "@PACKAGE_DEPRECATED@" STREQUAL "")
     set(_msg "${_msg} (@PACKAGE_DEPRECATED@)")
   endif()
   # optionally quiet the deprecation message
-  if(NOT ${@PROJECT_NAME@_DEPRECATED_QUIET})
+  if(NOT @PROJECT_NAME@_DEPRECATED_QUIET)
     message(DEPRECATION "${_msg}")
   endif()
 endif()
