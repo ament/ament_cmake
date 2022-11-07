@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_python
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.3.3 (2022-11-07)
+------------------
+
 1.3.2 (2022-05-17)
 ------------------
 * Document ament_cmake_python (`#387 <https://github.com/ament/ament_cmake/issues/387>`_) (`#388 <https://github.com/ament/ament_cmake/issues/388>`_)
