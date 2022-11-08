@@ -6,11 +6,11 @@
   <description>The auto-magic functions for ease to use of the ament buildsystem in CMake.</description>
 
   <maintainer email="michael.jeronimo@openrobotics.org">Michael Jeronimo</maintainer>
-  <maintainer email="michel@ekumenlabs.com">Michel Hidalgo</maintainer>
 
   <license>Apache License 2.0</license>
 
   <author>Dirk Thomas</author>
+  <author email="michel@ekumenlabs.com">Michel Hidalgo</author>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
   <buildtool_depend>ament_cmake_gtest</buildtool_depend>

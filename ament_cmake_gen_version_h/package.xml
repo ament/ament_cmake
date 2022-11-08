@@ -6,10 +6,10 @@
   <description>Generate a C header containing the version number of the package</description>
 
   <maintainer email="michael.jeronimo@openrobotics.org">Michael Jeronimo</maintainer>
-  <maintainer email="michel@ekumenlabs.com">Michel Hidalgo</maintainer>
 
   <license>Apache License 2.0</license>
 
+  <author email="michel@ekumenlabs.com">Michel Hidalgo</author>
   <author>Serge Nikulin</author>
 
   <buildtool_depend>ament_cmake_core</buildtool_depend>
