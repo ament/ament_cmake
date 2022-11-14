@@ -183,6 +183,7 @@ setup(
     DESTINATION "${ARG_DESTINATION}/${package_name}"
     PATTERN "*.pyc" EXCLUDE
     PATTERN "__pycache__" EXCLUDE
+    PATTERN "*${CMAKE_SHARED_LIBRARY_SUFFIX}" EXCLUDE
   )
 
   if(NOT ARG_SKIP_COMPILE)
