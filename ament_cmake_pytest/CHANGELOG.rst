@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_pytest
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.1.6 (2022-12-02)
+------------------
+
 1.1.5 (2022-01-14)
 ------------------
 * Fix misleading comment (`#361 <https://github.com/ament/ament_cmake/issues/361>`_) (`#369 <https://github.com/ament/ament_cmake/issues/369>`_).
