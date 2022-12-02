@@ -20,5 +20,10 @@
 
   <export>
     <build_type>ament_cmake</build_type>
+    <deprecated>
+      Following guidance from the upstream nose maintainers, this package is
+      deprecated and will be removed. Users are encouraged to switch to
+      ament_cmake_pytest.
+    </deprecated>
   </export>
 </package>
