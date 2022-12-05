@@ -59,3 +59,8 @@ endmacro()
 
 include("${ament_cmake_nose_DIR}/ament_add_nose_test.cmake")
 include("${ament_cmake_nose_DIR}/ament_find_nosetests.cmake")
+
+message(WARNING
+  "Following guidance from the upstream nose maintainers, this package is "
+  "deprecated and will be removed. Users are encouraged to switch to "
+  "ament_cmake_pytest.")
