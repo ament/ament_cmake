@@ -77,6 +77,12 @@ function(ament_cmake_symlink_install_targets)
       if(WIN32 AND "${target_type}" STREQUAL "SHARED_LIBRARY")
         list(APPEND target_files "$<TARGET_LINKER_FILE:${target}>")
       endif()
+      if("${target_type}" STREQUAL "INTERFACE_LIBRARY")
+        message(FATAL_ERROR
+          "ament_cmake_symlink_install_targets() '${target}' is an interface "
+          "library - there's nothing to symlink install. Perhaps you forgot "
+          "to add EXPORT or INCLUDES DESTINATION?")
+      endif()
     endforeach()
 
     string(REPLACE ";" "\" \"" target_files_quoted
