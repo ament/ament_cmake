@@ -127,25 +127,24 @@ function(ament_target_dependencies target)
     if(NOT ARG_INTERFACE)
       target_compile_definitions(${target}
         ${required_keyword} ${definitions})
-      # the interface include dirs must be ordered
-      set(interface_include_dirs)
-      foreach(interface ${interfaces})
-        get_target_property(_include_dirs ${interface} INTERFACE_INCLUDE_DIRECTORIES)
-        if(_include_dirs)
-          list_append_unique(interface_include_dirs ${_include_dirs})
-        endif()
-      endforeach()
-      ament_include_directories_order(ordered_interface_include_dirs ${interface_include_dirs})
-      # the interface include dirs are used privately to ensure proper order
-      # and the interfaces cover the public case
-      target_include_directories(${target} ${system_keyword}
-        PRIVATE ${ordered_interface_include_dirs})
     endif()
-    ament_include_directories_order(ordered_include_dirs ${include_dirs})
+
+    # fetch include directories of all transitive dependencies (already sorted)
+    ament_get_recursive_properties(interface_include_dirs _ ${interfaces})
+    # combine with include_dirs
+    list_append_unique(interface_include_dirs ${include_dirs})
+    ament_include_directories_order(ordered_include_dirs ${interface_include_dirs})
+
+    # ordered inlcude dirs are used privately - just to ensure proper ordering
+    target_include_directories(${target} ${system_keyword}
+      PRIVATE ${ordered_include_dirs})
+
+    # the following statements cover transitive forwarding
     target_link_libraries(${target}
       ${optional_keyword} ${interfaces})
     target_include_directories(${target} ${system_keyword}
-      ${required_keyword} ${ordered_include_dirs})
+      ${required_keyword} ${include_dirs})
+
     if(NOT ARG_INTERFACE)
       ament_libraries_deduplicate(unique_libraries ${libraries})
       target_link_libraries(${target}
