@@ -1,0 +1,3 @@
+# generated from ament_cmake_vendor_package/cmake/templates/vendor_package_cmake_prefix.cmake.in
+
+list(PREPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_LIST_DIR}/../../../opt/@PROJECT_NAME@")
