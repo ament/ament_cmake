@@ -34,11 +34,11 @@
 #
 macro(ament_auto_add_library target)
   cmake_parse_arguments(ARG
-    "STATIC;SHARED;MODULE;EXCLUDE_FROM_ALL;NO_TARGET_LINK_LIBRARIES"
+    "STATIC;SHARED;MODULE;INTERFACE;EXCLUDE_FROM_ALL;NO_TARGET_LINK_LIBRARIES"
     "DIRECTORY"
     ""
     ${ARGN})
-  if(NOT ARG_DIRECTORY AND NOT ARG_UNPARSED_ARGUMENTS)
+  if(NOT ARG_DIRECTORY AND NOT ARG_UNPARSED_ARGUMENTS AND NOT ARG_INTERFACE)
     message(FATAL_ERROR "ament_auto_add_library() called without any source "
       "files and without a DIRECTORY argument")
   endif()
@@ -67,8 +67,15 @@ macro(ament_auto_add_library target)
 
   # add include directory of this package if it exists
   if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/include")
-    target_include_directories("${target}" PUBLIC
-      "${CMAKE_CURRENT_SOURCE_DIR}/include")
+    if (ARG_INTERFACE)
+      target_include_directories("${target}" INTERFACE
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>)
+    else()
+      target_include_directories("${target}" PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>)
+    endif()
   endif()
   # link against other libraries of this package
   if(NOT ${PROJECT_NAME}_LIBRARIES STREQUAL "" AND
@@ -77,7 +84,11 @@ macro(ament_auto_add_library target)
   endif()
 
   # add exported information from found build dependencies
-  ament_target_dependencies(${target} SYSTEM ${${PROJECT_NAME}_FOUND_BUILD_DEPENDS})
+  if (ARG_INTERFACE)
+    ament_target_dependencies(${target} INTERFACE ${${PROJECT_NAME}_FOUND_BUILD_DEPENDS})
+  else()
+    ament_target_dependencies(${target} SYSTEM ${${PROJECT_NAME}_FOUND_BUILD_DEPENDS})
+  endif()
 
   list(APPEND ${PROJECT_NAME}_LIBRARIES "${target}")
 endmacro()
