@@ -67,10 +67,10 @@ macro(ament_auto_package)
 
   # export and install all libraries
   if(NOT ${PROJECT_NAME}_LIBRARIES STREQUAL "")
-    ament_export_targets(export_${${PROJECT_NAME}_LIBRARIES} HAS_LIBRARY_TARGET)
+    ament_export_targets(export_${PROJECT_NAME}_LIBRARIES HAS_LIBRARY_TARGET)
     install(
       TARGETS ${${PROJECT_NAME}_LIBRARIES}
-      EXPORT export_${${PROJECT_NAME}_LIBRARIES}
+      EXPORT export_${PROJECT_NAME}_LIBRARIES
       ARCHIVE DESTINATION lib
       LIBRARY DESTINATION lib
       RUNTIME DESTINATION bin
