@@ -67,29 +67,15 @@ macro(ament_auto_package)
 
   # export and install all libraries
   if(NOT ${PROJECT_NAME}_LIBRARIES STREQUAL "")
-    if(NOT ${${PROJECT_NAME}_LIBRARIES} STREQUAL "")
-      get_target_property(target_type ${${PROJECT_NAME}_LIBRARIES} TYPE)
-    endif()
-    # check if the target is an INTERFACE library
-    if ("${target_type}" STREQUAL "INTERFACE_LIBRARY")
-      ament_export_targets(export_${${PROJECT_NAME}_LIBRARIES} HAS_LIBRARY_TARGET)
-      install(
-        TARGETS ${${PROJECT_NAME}_LIBRARIES}
-        EXPORT export_${${PROJECT_NAME}_LIBRARIES}
-        ARCHIVE DESTINATION lib
-        LIBRARY DESTINATION lib
-        RUNTIME DESTINATION bin
-        INCLUDES DESTINATION include
-      )
-    else()
-      ament_export_libraries(${${PROJECT_NAME}_LIBRARIES})
-      install(
-        TARGETS ${${PROJECT_NAME}_LIBRARIES}
-        ARCHIVE DESTINATION lib
-        LIBRARY DESTINATION lib
-        RUNTIME DESTINATION bin
-      )
-    endif()
+    ament_export_targets(export_${${PROJECT_NAME}_LIBRARIES} HAS_LIBRARY_TARGET)
+    install(
+      TARGETS ${${PROJECT_NAME}_LIBRARIES}
+      EXPORT export_${${PROJECT_NAME}_LIBRARIES}
+      ARCHIVE DESTINATION lib
+      LIBRARY DESTINATION lib
+      RUNTIME DESTINATION bin
+      INCLUDES DESTINATION include
+    )
   endif()
 
   # install all executables
