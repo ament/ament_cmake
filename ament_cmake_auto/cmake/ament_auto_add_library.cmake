@@ -67,24 +67,26 @@ macro(ament_auto_add_library target)
 
   # add include directory of this package if it exists
   if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/include")
-    if (ARG_INTERFACE)
+    if(ARG_INTERFACE)
       target_include_directories("${target}" INTERFACE
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<INSTALL_INTERFACE:include>)
+        "${CMAKE_CURRENT_SOURCE_DIR}/include")
     else()
       target_include_directories("${target}" PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<INSTALL_INTERFACE:include>)
+        "${CMAKE_CURRENT_SOURCE_DIR}/include")
     endif()
   endif()
   # link against other libraries of this package
   if(NOT ${PROJECT_NAME}_LIBRARIES STREQUAL "" AND
       NOT ARG_NO_TARGET_LINK_LIBRARIES)
-    target_link_libraries("${target}" ${${PROJECT_NAME}_LIBRARIES})
+    if(ARG_INTERFACE)
+      target_link_libraries("${target}" INTERFACE ${${PROJECT_NAME}_LIBRARIES})
+    else()
+      target_link_libraries("${target}" ${${PROJECT_NAME}_LIBRARIES})
+    endif()
   endif()
 
   # add exported information from found build dependencies
-  if (ARG_INTERFACE)
+  if(ARG_INTERFACE)
     ament_target_dependencies(${target} INTERFACE ${${PROJECT_NAME}_FOUND_BUILD_DEPENDS})
   else()
     ament_target_dependencies(${target} SYSTEM ${${PROJECT_NAME}_FOUND_BUILD_DEPENDS})
