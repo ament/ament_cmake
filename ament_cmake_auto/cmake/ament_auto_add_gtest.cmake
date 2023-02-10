@@ -51,22 +51,22 @@
 # @public
 #
 macro(ament_auto_add_gtest target)
-  cmake_parse_arguments(_ARGN
+  cmake_parse_arguments(_ARG
     "SKIP_LINKING_MAIN_LIBRARIES;SKIP_TEST"
     "RUNNER;TIMEOUT;WORKING_DIRECTORY"
     "APPEND_ENV;APPEND_LIBRARY_DIRS;ENV"
     ${ARGN})
-  if(NOT _ARGN_UNPARSED_ARGUMENTS)
+  if(NOT _ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR
       "ament_auto_add_gtest() must be invoked with at least one source file")
   endif()
 
   # add executable
-  set(_argn_executable ${_ARGN_UNPARSED_ARGUMENTS})
+  set(_arg_executable ${_ARG_UNPARSED_ARGUMENTS})
   if(_ARG_SKIP_LINKING_MAIN_LIBRARIES)
-    list(APPEND _argn_executable "SKIP_LINKING_MAIN_LIBRARIES")
+    list(APPEND _arg_executable "SKIP_LINKING_MAIN_LIBRARIES")
   endif()
-  ament_add_gtest_executable("${target}" ${_argn_executable})
+  ament_add_gtest_executable("${target}" ${_arg_executable})
 
   # add include directory of this package if it exists
   if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/include")
@@ -86,27 +86,27 @@ macro(ament_auto_add_gtest target)
   )
 
   # add test
-  set(_argn_test "")
+  set(_arg_test "")
   if(_ARG_RUNNER)
-    list(APPEND _argn_test "RUNNER" "${_ARG_RUNNER}")
+    list(APPEND _arg_test "RUNNER" "${_ARG_RUNNER}")
   endif()
   if(_ARG_TIMEOUT)
-    list(APPEND _argn_test "TIMEOUT" "${_ARG_TIMEOUT}")
+    list(APPEND _arg_test "TIMEOUT" "${_ARG_TIMEOUT}")
   endif()
   if(_ARG_WORKING_DIRECTORY)
-    list(APPEND _argn_test "WORKING_DIRECTORY" "${_ARG_WORKING_DIRECTORY}")
+    list(APPEND _arg_test "WORKING_DIRECTORY" "${_ARG_WORKING_DIRECTORY}")
   endif()
   if(_ARG_SKIP_TEST)
-    list(APPEND _argn_test "SKIP_TEST")
+    list(APPEND _arg_test "SKIP_TEST")
   endif()
   if(_ARG_ENV)
-    list(APPEND _argn_test "ENV" ${_ARG_ENV})
+    list(APPEND _arg_test "ENV" ${_ARG_ENV})
   endif()
   if(_ARG_APPEND_ENV)
-    list(APPEND _argn_test "APPEND_ENV" ${_ARG_APPEND_ENV})
+    list(APPEND _arg_test "APPEND_ENV" ${_ARG_APPEND_ENV})
   endif()
   if(_ARG_APPEND_LIBRARY_DIRS)
-    list(APPEND _argn_test "APPEND_LIBRARY_DIRS" ${_ARG_APPEND_LIBRARY_DIRS})
+    list(APPEND _arg_test "APPEND_LIBRARY_DIRS" ${_ARG_APPEND_LIBRARY_DIRS})
   endif()
-  ament_add_gtest_test("${target}" ${_argn_test})
+  ament_add_gtest_test("${target}" ${_arg_test})
 endmacro()
