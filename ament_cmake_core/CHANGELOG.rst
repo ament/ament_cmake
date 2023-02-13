@@ -2,6 +2,25 @@
 Changelog for package ament_cmake_core
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Use file(GENERATE OUTPUT) to create dsv files (`#416 <https://github.com/ament/ament_cmake/issues/416>`_)
+  Using file(WRITE) and file(APPEND) causes the modification stamp of the
+  file to be changed each time CMake configures, resluting in an
+  'Installing' message rather than an 'Up-to-date' message even though the
+  file content is identical.
+  Using file(GENERATE OUTPUT) updates the timestamp of the file only if
+  the content changes.
+* Warn when trying to symlink install an INTERFACE_LIBRARY (`#417 <https://github.com/ament/ament_cmake/issues/417>`_)
+* Workaround to exclude Clion's cmake folders from colcon test (`#410 <https://github.com/ament/ament_cmake/issues/410>`_)
+  - Add AMENT_IGNORE to CMAKE_BINARY_DIR to avoid picking up cmake
+  specific folders created by CLion in `colcon build` and `colcon test`
+  commands
+* if (NOT ${UNDEFINED_VAR}) gets evaluated to false, so change to if (NOT UNDEFINED_VAR) so it evaluates to true. (`#407 <https://github.com/ament/ament_cmake/issues/407>`_)
+* [rolling] Update maintainers - 2022-11-07 (`#411 <https://github.com/ament/ament_cmake/issues/411>`_)
+  * Update maintainers to Michael Jeronimo
+* Contributors: Audrow Nash, Kenji Brameld, Michael Orlov, Scott K Logan, Shane Loretz
+
 1.5.2 (2022-11-02)
 ------------------
 

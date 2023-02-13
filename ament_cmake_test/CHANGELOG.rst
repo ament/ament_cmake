@@ -2,6 +2,12 @@
 Changelog for package ament_cmake_test
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* [rolling] Update maintainers - 2022-11-07 (`#411 <https://github.com/ament/ament_cmake/issues/411>`_)
+  * Update maintainers to Michael Jeronimo
+* Contributors: Audrow Nash
+
 1.5.2 (2022-11-02)
 ------------------
 

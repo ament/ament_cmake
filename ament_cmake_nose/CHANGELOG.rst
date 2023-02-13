@@ -2,6 +2,13 @@
 Changelog for package ament_cmake_nose
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Deprecate ament_cmake_nose (`#415 <https://github.com/ament/ament_cmake/issues/415>`_)
+* [rolling] Update maintainers - 2022-11-07 (`#411 <https://github.com/ament/ament_cmake/issues/411>`_)
+  * Update maintainers to Michael Jeronimo
+* Contributors: Audrow Nash, Scott K Logan
+
 1.5.2 (2022-11-02)
 ------------------
 
