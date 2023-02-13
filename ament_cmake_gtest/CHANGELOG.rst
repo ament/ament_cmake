@@ -2,8 +2,8 @@
 Changelog for package ament_cmake_gtest
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.5.3 (2023-02-13)
+------------------
 * Fix compiler warnings related to gtest/gmock (`#408 <https://github.com/ament/ament_cmake/issues/408>`_)
   * Suppress compiler warnings when building gmock
   definition of implicit copy constructor ... is deprecated because it has a user-declared copy assignment operator [-Wdeprecated-copy]

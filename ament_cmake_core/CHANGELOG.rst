@@ -2,8 +2,8 @@
 Changelog for package ament_cmake_core
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.5.3 (2023-02-13)
+------------------
 * Use file(GENERATE OUTPUT) to create dsv files (`#416 <https://github.com/ament/ament_cmake/issues/416>`_)
   Using file(WRITE) and file(APPEND) causes the modification stamp of the
   file to be changed each time CMake configures, resluting in an
