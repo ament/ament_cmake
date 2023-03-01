@@ -46,7 +46,9 @@ macro(_ament_cmake_python_get_python_install_dir)
     set(_python_code
       "import os"
       "import sysconfig"
-      "print(os.path.relpath(sysconfig.get_path('purelib', vars={'base': '${CMAKE_INSTALL_PREFIX}'}), start='${CMAKE_INSTALL_PREFIX}').replace(os.sep, '/'))"
+      "get_default_scheme = sysconfig.get_default_scheme if hasattr(sysconfig, 'get_default_scheme') else sysconfig._get_default_scheme"
+      "scheme = 'deb_system' if 'deb_system' in sysconfig.get_scheme_names() else get_default_scheme()"
+      "print(os.path.relpath(sysconfig.get_path('purelib', scheme=scheme, vars={'base': '${CMAKE_INSTALL_PREFIX}'}), start='${CMAKE_INSTALL_PREFIX}').replace(os.sep, '/'))"
     )
     get_executable_path(_python_interpreter Python3::Interpreter CONFIGURE)
     execute_process(
