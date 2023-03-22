@@ -15,6 +15,10 @@
 import sys
 
 def test_print_unicode():
+    '''
+    Print a non UTF-8 byte sequence in a test to verify stderr parsing.
+    This value was originally reported in: https://github.com/colcon/colcon-core/issues/468
+   '''
     sys.stderr.buffer.write(b'val: ')
     sys.stderr.buffer.write(b'\xff\x00\xa1')
     sys.stderr.buffer.write(b'\n')
