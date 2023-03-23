@@ -210,7 +210,7 @@ def _run_test(parser, args, failure_result_file, output_handle):
                     decoded_line = line.decode(encoding)
                 except UnicodeDecodeError:
                     if i == len(encodings) - 1:
-                        raise
+                        decoded_line = line.decode(encoding, errors='replace')
                 else:
                     break
             print(decoded_line, end='')
