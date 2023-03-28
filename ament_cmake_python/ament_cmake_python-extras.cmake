@@ -43,10 +43,18 @@ endmacro()
 macro(_ament_cmake_python_get_python_install_dir)
   if(NOT DEFINED PYTHON_INSTALL_DIR)
     # avoid storing backslash in cached variable since CMake will interpret it as escape character
+    # This auto detection code uses the same logic as get_python_install_path() in colcon-core
     set(_python_code
-      "import os"
-      "import sysconfig"
-      "print(os.path.relpath(sysconfig.get_path('purelib', vars={'base': '${CMAKE_INSTALL_PREFIX}'}), start='${CMAKE_INSTALL_PREFIX}').replace(os.sep, '/'))"
+      "\
+import os
+import sysconfig
+schemes = sysconfig.get_scheme_names()
+kwargs = {'vars': {'base': '${CMAKE_INSTALL_PREFIX}'}}
+if 'deb_system' in schemes or 'osx_framework_library' in schemes:
+    kwargs['scheme'] = 'posix_prefix'
+elif 'rpm_prefix' in schemes:
+    kwargs['scheme'] = 'rpm_prefix'
+print(os.path.relpath(sysconfig.get_path('purelib', **kwargs), start='${CMAKE_INSTALL_PREFIX}').replace(os.sep, '/'))"
     )
     get_executable_path(_python_interpreter Python3::Interpreter CONFIGURE)
     execute_process(
