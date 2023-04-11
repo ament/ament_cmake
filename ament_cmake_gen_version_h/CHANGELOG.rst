@@ -2,8 +2,8 @@
 Changelog for package ament_cmake_gen_version_h
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.0.0 (2023-04-11)
+------------------
 * Changed version gte macro to make it MSVC compatible. Fix `#433 <https://github.com/ament/ament_cmake/issues/433>`_ (`#434 <https://github.com/ament/ament_cmake/issues/434>`_)
 * Contributors: iquarobotics
 

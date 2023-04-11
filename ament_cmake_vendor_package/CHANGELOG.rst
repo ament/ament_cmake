@@ -2,8 +2,8 @@
 Changelog for package ament_cmake_vendor_package
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.0.0 (2023-04-11)
+------------------
 * Fix the version number of ament_cmake_vendor_package.
 * Add ament_cmake_vendor_package package (`#429 <https://github.com/ament/ament_cmake/issues/429>`_)
 * Contributors: Chris Lalancette, Scott K Logan
