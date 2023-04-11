@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_python
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.0.1 (2023-04-11)
+------------------
+
 2.0.0 (2023-04-11)
 ------------------
 * Support Debian-specific install dir for ament_cmake_python (`#431 <https://github.com/ament/ament_cmake/issues/431>`_)

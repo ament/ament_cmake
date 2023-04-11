@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_auto
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.0.1 (2023-04-11)
+------------------
+
 2.0.0 (2023-04-11)
 ------------------
 * Support INTERFACE on ament_auto_add_library (`#420 <https://github.com/ament/ament_cmake/issues/420>`_)

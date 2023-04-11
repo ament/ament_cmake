@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_core
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.0.1 (2023-04-11)
+------------------
+
 2.0.0 (2023-04-11)
 ------------------
 * ament_cmake_uninstall_target: Correct location of install_manifest.txt (`#432 <https://github.com/ament/ament_cmake/issues/432>`_)

@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_test
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.0.1 (2023-04-11)
+------------------
+
 2.0.0 (2023-04-11)
 ------------------
 * use the error handler replace to allow non-utf8 to be decoded (`#381 <https://github.com/ament/ament_cmake/issues/381>`_)

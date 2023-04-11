@@ -2,6 +2,11 @@
 Changelog for package ament_cmake_pytest
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.0.1 (2023-04-11)
+------------------
+* ament_cmake_pytest needs a buildtool_depend on ament_cmake_test. (`#439 <https://github.com/ament/ament_cmake/issues/439>`_)
+* Contributors: Chris Lalancette
+
 2.0.0 (2023-04-11)
 ------------------
 * Fix pytest-cov version detection with pytest >=7.0.0 (`#436 <https://github.com/ament/ament_cmake/issues/436>`_)
