@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_gmock
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 1.5.3 (2023-02-13)
 ------------------
 * Fix compiler warnings related to gtest/gmock (`#408 <https://github.com/ament/ament_cmake/issues/408>`_)

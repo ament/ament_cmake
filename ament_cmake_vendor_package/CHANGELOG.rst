@@ -1,17 +1,15 @@
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Changelog for package ament_cmake_gen_version_h
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Changelog for package ament_cmake_vendor_package
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Forthcoming
 -----------
-* Changed version gte macro to make it MSVC compatible. Fix `#433 <https://github.com/ament/ament_cmake/issues/433>`_ (`#434 <https://github.com/ament/ament_cmake/issues/434>`_)
-* Contributors: iquarobotics
+* Fix the version number of ament_cmake_vendor_package.
+* Add ament_cmake_vendor_package package (`#429 <https://github.com/ament/ament_cmake/issues/429>`_)
+* Contributors: Chris Lalancette, Scott K Logan
 
 1.5.3 (2023-02-13)
 ------------------
-* [rolling] Update maintainers - 2022-11-07 (`#411 <https://github.com/ament/ament_cmake/issues/411>`_)
-  * Update maintainers to Michael Jeronimo
-* Contributors: Audrow Nash
 
 1.5.2 (2022-11-02)
 ------------------
@@ -30,19 +28,12 @@ Forthcoming
 
 1.3.0 (2022-02-17)
 ------------------
-* Add ament_generate_version_header and deprecate ament_cmake_gen_version_h (`#377 <https://github.com/ament/ament_cmake/issues/377>`_)
-* Update forthcoming version in changelog
-* Contributors: Audrow Nash, Shane Loretz
 
-1.2.1 (2022-01-14)
+1.2.1 (2022-01-13)
 ------------------
-* Update maintainers to Michael Jeronimo and Michel Hidalgo (`#362 <https://github.com/ament/ament_cmake/issues/362>`_)
-* Contributors: Audrow Nash
 
 1.2.0 (2021-10-29)
 ------------------
-* Add ament_cmake_gen_version_h package (`#198 <https://github.com/ament/ament_cmake/issues/198>`_)
-* Contributors: serge-nikulin
 
 1.1.4 (2021-05-06)
 ------------------

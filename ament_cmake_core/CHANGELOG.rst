@@ -2,6 +2,11 @@
 Changelog for package ament_cmake_core
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* ament_cmake_uninstall_target: Correct location of install_manifest.txt (`#432 <https://github.com/ament/ament_cmake/issues/432>`_)
+* Contributors: Silvio Traversaro
+
 1.5.3 (2023-02-13)
 ------------------
 * Use file(GENERATE OUTPUT) to create dsv files (`#416 <https://github.com/ament/ament_cmake/issues/416>`_)

@@ -2,6 +2,11 @@
 Changelog for package ament_cmake_test
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* use the error handler replace to allow non-utf8 to be decoded (`#381 <https://github.com/ament/ament_cmake/issues/381>`_)
+* Contributors: El Jawad Alaa
+
 1.5.3 (2023-02-13)
 ------------------
 * [rolling] Update maintainers - 2022-11-07 (`#411 <https://github.com/ament/ament_cmake/issues/411>`_)
