@@ -2,8 +2,8 @@
 Changelog for package ament_cmake_pytest
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.0.2 (2023-04-12)
+------------------
 * Fix test skipping logic for missing pytest module (`#441 <https://github.com/ament/ament_cmake/issues/441>`_)
 * Add missing buildtool_depend on python3-pytest (`#440 <https://github.com/ament/ament_cmake/issues/440>`_)
 * Contributors: Scott K Logan
