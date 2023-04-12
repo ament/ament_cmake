@@ -20,6 +20,7 @@ if(BUILD_TESTING)
 
   # Check if pytest is available
   set(check_pytest_cmd "${python_interpreter}" "-m" "pytest" "--version")
+  set(SKIP_TEST_ARG "")
   execute_process(
     COMMAND ${check_pytest_cmd}
     RESULT_VARIABLE res
@@ -30,7 +31,7 @@ if(BUILD_TESTING)
       "The Python module 'pytest' was not found, pytests cannot be run. "
       "On Linux, install the 'python3-pytest' package. "
       "On other platforms, install 'pytest' using pip.")
-    return()
+    set(SKIP_TEST_ARG SKIP_TEST)
   endif()
 
   set(result_file "${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/pytest.xunit.xml")
@@ -51,6 +52,7 @@ if(BUILD_TESTING)
     COMMAND ${cmd}
     OUTPUT_FILE "${CMAKE_BINARY_DIR}/ament_cmake_pytest/pytest.txt"
     RESULT_FILE "${result_file}"
+    ${SKIP_TEST_ARG}
   )
   set_tests_properties(
     pytest
