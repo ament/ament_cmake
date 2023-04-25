@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_export_targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.3.4 (2023-04-25)
+------------------
+
 1.3.3 (2022-11-07)
 ------------------
 * Support new target export template introduced with CMake 3.24 (`#395 <https://github.com/ament/ament_cmake/issues/395>`_) (`#397 <https://github.com/ament/ament_cmake/issues/397>`_)
