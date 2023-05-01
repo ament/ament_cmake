@@ -65,12 +65,17 @@ macro(ament_auto_find_build_dependencies)
       set(_REQUIRED_KEYWORD "REQUIRED")
     endif()
     find_package(${_dep} QUIET ${_REQUIRED_KEYWORD})
+    # TODO: if(${_dep}_FOUND) && ${_dep} not in ${PROJECT_NAME}_FOUND_BUILD_DEPENDS
     if(${_dep}_FOUND)
       list(APPEND ${PROJECT_NAME}_FOUND_BUILD_DEPENDS ${_dep})
 
       list(APPEND ${PROJECT_NAME}_FOUND_DEFINITIONS ${${_dep}_DEFINITIONS})
       list(APPEND ${PROJECT_NAME}_FOUND_INCLUDE_DIRS ${${_dep}_INCLUDE_DIRS})
       list(APPEND ${PROJECT_NAME}_FOUND_LIBRARIES ${${_dep}_LIBRARIES})
+      # remove duplicate elements
+      list(REMOVE_DUPLICATES ${PROJECT_NAME}_FOUND_DEFINITIONS)
+      list(REMOVE_DUPLICATES ${PROJECT_NAME}_FOUND_INCLUDE_DIRS)
+      list(REMOVE_DUPLICATES ${PROJECT_NAME}_FOUND_LIBRARIES)
     endif()
   endforeach()
 
