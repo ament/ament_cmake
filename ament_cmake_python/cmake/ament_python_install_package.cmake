@@ -192,7 +192,7 @@ setup(
       "execute_process(
         COMMAND
         \"${python_interpreter_config}\" \"-m\" \"compileall\"
-        \"${CMAKE_INSTALL_PREFIX}/${ARG_DESTINATION}/${package_name}\"
+        \"\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${ARG_DESTINATION}/${package_name}\"
       )"
     )
   endif()
