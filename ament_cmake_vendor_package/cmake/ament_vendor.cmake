@@ -30,7 +30,9 @@
 #   code at.
 # :type VCS_VERSION: string
 # :param PATCHES: paths to patch files to apply to downloaded source code,
-#   either absolute or relative to the current calling directory.
+#   either absolute or relative to the current calling directory. If given a
+#   directory, all patch files in the directory (non-recursive) will be applied
+#   in alphabetical order.
 # :type PATCHES: list of strings
 # :param CMAKE_ARGS: extra arguments to pass to the CMake invocation of the
 #   external project.
@@ -153,6 +155,10 @@ function(_ament_vendor TARGET_NAME VCS_TYPE VCS_URL VCS_VERSION PATCHES CMAKE_AR
     endif()
     if(NOT EXISTS ${PATCH})
       message(FATAL_ERROR "ament_vendor() could not find patch file: ${PATCH}")
+    endif()
+    if(IS_DIRECTORY ${PATCH})
+      file(GLOB PATCH LIST_DIRECTORIES FALSE "${PATCH}/*.patch" "${PATCH}/*.diff")
+      list(SORT PATCH)
     endif()
     list(APPEND PATCH_FILES ${PATCH})
   endforeach()
