@@ -31,7 +31,7 @@
 # :param ARGN: any other arguments are passed through to ament_package()
 # :type ARGN: list of strings
 #
-# Export all found build dependencies which are also run
+# Export all found build dependencies which are also export
 # dependencies.
 # If the package has an include directory install all recursively
 # found header files (ending in h, hh, hpp, hxx) and export the
@@ -46,15 +46,14 @@ macro(ament_auto_package)
   cmake_parse_arguments(_ARG "INSTALL_TO_PATH" "" "INSTALL_TO_SHARE" ${ARGN})
   # passing all unparsed arguments to ament_package()
 
-  # export all found build dependencies which are also run dependencies
-  set(_run_depends
+  # export all found build dependencies which are also export dependencies
+  set(_export_depends
     ${${PROJECT_NAME}_BUILD_EXPORT_DEPENDS}
     ${${PROJECT_NAME}_BUILDTOOL_EXPORT_DEPENDS}
-    ${${PROJECT_NAME}_EXEC_DEPENDS})
   foreach(_dep
       ${${PROJECT_NAME}_FOUND_BUILD_DEPENDS}
       ${${PROJECT_NAME}_FOUND_BUILDTOOL_DEPENDS})
-    if(_dep IN_LIST _run_depends)
+    if(_dep IN_LIST _export_depends)
       ament_export_dependencies("${_dep}")
     endif()
   endforeach()
