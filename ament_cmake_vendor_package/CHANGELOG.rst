@@ -2,6 +2,11 @@
 Changelog for package ament_cmake_vendor_package
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add support for specifying a patch directory in ament_vendor (`#449 <https://github.com/ament/ament_cmake/issues/449>`_)
+* Contributors: Scott K Logan
+
 2.1.0 (2023-04-26)
 ------------------
 

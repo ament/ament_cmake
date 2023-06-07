@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_core
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 2.1.0 (2023-04-26)
 ------------------
 

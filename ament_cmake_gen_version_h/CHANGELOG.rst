@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_gen_version_h
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 2.1.0 (2023-04-26)
 ------------------
 
