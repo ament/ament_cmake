@@ -13,10 +13,21 @@
   <author>Dirk Thomas</author>
 
   <buildtool_depend>ament_cmake_core</buildtool_depend>
+<<<<<<< HEAD:ament_cmake_nose/package.xml
+=======
+  <buildtool_depend>ament_cmake_export_dependencies</buildtool_depend>
+>>>>>>> 448647d (ament_cmake_vendor_package: Replace 'git' dep with 'vcstool' (#462)):ament_cmake_vendor_package/package.xml
 
+  <buildtool_export_depend>ament_cmake_export_dependencies</buildtool_export_depend>
   <buildtool_export_depend>ament_cmake_core</buildtool_export_depend>
+<<<<<<< HEAD:ament_cmake_nose/package.xml
   <buildtool_export_depend>ament_cmake_test</buildtool_export_depend>
   <buildtool_export_depend>python3-nose</buildtool_export_depend>
+=======
+  <buildtool_export_depend>python3-vcstool</buildtool_export_depend>
+
+  <test_depend>ament_cmake_test</test_depend>
+>>>>>>> 448647d (ament_cmake_vendor_package: Replace 'git' dep with 'vcstool' (#462)):ament_cmake_vendor_package/package.xml
 
   <export>
     <build_type>ament_cmake</build_type>
