@@ -322,9 +322,24 @@ def _check_for_failure(tree):
 
 def _check_for_failure_recursive(node):
     # Recursively check node and subnodes for test error or failure
+
+    # First check if this node has nonzero error or failure attributes
+    # Return True (signifying a failure) if that is the case
     if (int(node.attrib.get('errors', 0))) or (int(node.attrib.get('failures', 0))):
         return True
     
+    # Next check if the node is a "testsuite" tag.
+    if node.tag == 'testsuite':
+        # Check if the tag has error and/or failure attributes
+        if ((node.attrib.get('errors') is not None)
+                or (node.attrib.get('failures') is not None)):
+            # If so, we already know from above check that these attributes
+            # must have a zero value. Don't descend further into a testsuite
+            # tag that has error and/or failure attributes with a zero value.
+            # Return False indicating no failure in this branch.
+            return False
+
+    # Otherwise, recursively check for failures inside this node
     for child in node:
         if _check_for_failure_recursive(child):
             return True
