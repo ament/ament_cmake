@@ -2,6 +2,12 @@
 Changelog for package ament_cmake_vendor_package
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.2.1 (2023-06-21)
+------------------
+* Switch to CMake 'braket arguments' (`#461 <https://github.com/ament/ament_cmake/issues/461>`_)
+* Replace 'git' dep with 'vcstool' (`#462 <https://github.com/ament/ament_cmake/issues/462>`_)
+* Contributors: Scott K Logan
+
 2.2.0 (2023-06-07)
 ------------------
 * Add support for specifying a patch directory in ament_vendor (`#449 <https://github.com/ament/ament_cmake/issues/449>`_)
