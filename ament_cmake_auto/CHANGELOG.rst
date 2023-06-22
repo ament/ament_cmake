@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_auto
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.3.5 (2023-06-22)
+------------------
+
 1.3.4 (2023-04-25)
 ------------------
 * Fix ament_auto_add_gtest's parameter passing (backport `#421 <https://github.com/ament/ament_cmake/issues/421>`_) (`#424 <https://github.com/ament/ament_cmake/issues/424>`_)

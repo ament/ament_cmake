@@ -2,6 +2,11 @@
 Changelog for package ament_cmake_pytest
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.3.5 (2023-06-22)
+------------------
+* Fix pytest-cov version detection with pytest >=7.0.0 (`#459 <https://github.com/ament/ament_cmake/issues/459>`_)
+* Contributors: Christophe Bedard
+
 1.3.4 (2023-04-25)
 ------------------
 
