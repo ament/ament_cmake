@@ -74,7 +74,7 @@ macro(ament_vendor TARGET_NAME)
   if(NOT _ARG_VCS_URL)
     message(FATAL_ERROR "ament_vendor() must be called with the VCS_URL argument")
   else()
-    message(STATUS "VCS_URL: ${_ARG_VCS_URL}")
+    message(STATUS "${TARGET_NAME} VCS_URL: ${_ARG_VCS_URL}")
   endif()
 
   if(_ARG_VCS_TYPE STREQUAL "path")
