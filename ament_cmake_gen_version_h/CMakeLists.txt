@@ -56,7 +56,7 @@ if(BUILD_TESTING)
   ament_add_gtest(test_ament_generate_version_header
     test/test_version_hpp.cpp
   )
-  target_link_libraries(test_ament_generate_version_header some_lib)
+  target_link_libraries(test_ament_generate_version_header PRIVATE some_lib)
 endif()
 
 ament_package(CONFIG_EXTRAS "ament_cmake_gen_version_h-extras.cmake")
