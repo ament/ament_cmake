@@ -2,8 +2,8 @@
 Changelog for package ament_cmake_vendor_package
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.2.2 (2023-08-21)
+------------------
 * Always set CMAKE_C[XX]_COMPILER for vendor packages if needed (`#476 <https://github.com/ament/ament_cmake/issues/476>`_)
 * Contributors: Christophe Bedard
 
