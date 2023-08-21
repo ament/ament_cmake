@@ -2,6 +2,11 @@
 Changelog for package ament_cmake_vendor_package
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Always set CMAKE_C[XX]_COMPILER for vendor packages if needed (`#476 <https://github.com/ament/ament_cmake/issues/476>`_)
+* Contributors: Christophe Bedard
+
 2.2.1 (2023-06-21)
 ------------------
 * Switch to CMake 'braket arguments' (`#461 <https://github.com/ament/ament_cmake/issues/461>`_)
