@@ -2,8 +2,8 @@
 Changelog for package ament_cmake_test
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.3.0 (2023-09-07)
+------------------
 * Recursively check for errors/failures in produced JUnit result XMLs (`#446 <https://github.com/ament/ament_cmake/issues/446>`_)
 * Contributors: Nick Morales
 
