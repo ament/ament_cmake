@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_export_libraries
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 2.2.2 (2023-08-21)
 ------------------
 
