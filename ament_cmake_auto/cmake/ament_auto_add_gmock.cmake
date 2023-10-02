@@ -39,6 +39,8 @@ macro(ament_auto_add_gmock target)
       "ament_auto_add_gmock() must be invoked with at least one source file")
   endif()
 
+  find_package(ament_cmake_gmock QUIET REQUIRED)
+
   # add gmock
   ament_add_gmock("${target}" ${ARGN})
 
