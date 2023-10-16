@@ -1,4 +1,4 @@
-# Copyright 2021 Whitley Software Services, LLC
+# Copyright 2023 PAL Robotics S.L.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
