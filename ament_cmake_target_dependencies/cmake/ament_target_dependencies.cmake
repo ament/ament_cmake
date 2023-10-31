@@ -142,6 +142,9 @@ function(ament_target_dependencies target)
       target_include_directories(${target} ${system_keyword}
         PRIVATE ${ordered_interface_include_dirs})
     endif()
+    if(NOT "${system_keyword}" STREQUAL "SYSTEM")
+      set_target_properties(${target} PROPERTIES NO_SYSTEM_FROM_IMPORTED true)
+    endif()
     ament_include_directories_order(ordered_include_dirs ${include_dirs})
     target_link_libraries(${target}
       ${optional_keyword} ${interfaces})
