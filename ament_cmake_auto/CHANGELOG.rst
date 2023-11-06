@@ -2,8 +2,8 @@
 Changelog for package ament_cmake_auto
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.3.1 (2023-11-06)
+------------------
 * Add ament_auto_add_gmock to ament_cmake_auto (`#482 <https://github.com/ament/ament_cmake/issues/482>`_)
 * Contributors: Jordan Palacios
 
