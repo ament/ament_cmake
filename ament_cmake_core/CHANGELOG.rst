@@ -2,6 +2,12 @@
 Changelog for package ament_cmake_core
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Use CMAKE_CURRENT_BINARY_DIR instead of CMAKE_BINARY_DIR  in ament_generate_environment (`#485 <https://github.com/ament/ament_cmake/issues/485>`_)
+* Fix CMake error when entire ament projects are added via add_subdirectory (`#484 <https://github.com/ament/ament_cmake/issues/484>`_)
+* Contributors: Silvio Traversaro
+
 2.3.0 (2023-09-07)
 ------------------
 
