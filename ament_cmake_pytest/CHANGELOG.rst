@@ -2,6 +2,11 @@
 Changelog for package ament_cmake_pytest
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.3.6 (2023-11-13)
+------------------
+* backport merge `#381 <https://github.com/ament/ament_cmake/issues/381>`_ to humble (`#490 <https://github.com/ament/ament_cmake/issues/490>`_)
+* Contributors: El Jawad Alaa
+
 1.3.5 (2023-06-22)
 ------------------
 * Fix pytest-cov version detection with pytest >=7.0.0 (`#459 <https://github.com/ament/ament_cmake/issues/459>`_)
