@@ -61,6 +61,8 @@ macro(ament_auto_add_gtest target)
       "ament_auto_add_gtest() must be invoked with at least one source file")
   endif()
 
+  find_package(ament_cmake_gtest QUIET REQUIRED)
+
   # add executable
   set(_arg_executable ${_ARG_UNPARSED_ARGUMENTS})
   if(_ARG_SKIP_LINKING_MAIN_LIBRARIES)
