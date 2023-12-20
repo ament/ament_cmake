@@ -117,4 +117,6 @@ macro(_ament_cmake_gmock_find_gmock)
 endmacro()
 
 include("${ament_cmake_gmock_DIR}/ament_add_gmock.cmake")
+include("${ament_cmake_gmock_DIR}/ament_add_gmock_executable.cmake")
+include("${ament_cmake_gmock_DIR}/ament_add_gmock_test.cmake")
 include("${ament_cmake_gmock_DIR}/ament_find_gmock.cmake")
