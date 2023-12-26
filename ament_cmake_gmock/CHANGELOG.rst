@@ -2,6 +2,11 @@
 Changelog for package ament_cmake_gmock
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Split ament_add_gmock into _executable and _test. (`#497 <https://github.com/ament/ament_cmake/issues/497>`_)
+* Contributors: Chris Lalancette
+
 2.3.1 (2023-11-06)
 ------------------
 

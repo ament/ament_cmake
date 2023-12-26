@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_gen_version_h
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 2.3.1 (2023-11-06)
 ------------------
 * Update to C++17 (`#488 <https://github.com/ament/ament_cmake/issues/488>`_)

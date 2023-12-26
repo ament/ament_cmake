@@ -2,6 +2,12 @@
 Changelog for package ament_cmake_gtest
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Split ament_add_gmock into _executable and _test. (`#497 <https://github.com/ament/ament_cmake/issues/497>`_)
+* ament_add_gtest_test: add TEST_NAME parameter (`#492 <https://github.com/ament/ament_cmake/issues/492>`_)
+* Contributors: Chris Lalancette, Christopher Wecht
+
 2.3.1 (2023-11-06)
 ------------------
 
