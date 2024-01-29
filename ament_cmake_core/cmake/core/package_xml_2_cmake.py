@@ -33,9 +33,17 @@ def main(argv=sys.argv[1:]):
         description='Parse package.xml file and print CMake code defining '
                     'several variables',
     )
-    parser.add_argument(
+    try:
+        parser.add_argument(
         'package_xml',
         type=argparse.FileType('r', encoding='utf-8'),
+        help='The path to a package.xml file',
+    )
+
+    except:
+        parser.add_argument(
+        'package_xml',
+        type=argparse.FileType('r'),
         help='The path to a package.xml file',
     )
     parser.add_argument(
