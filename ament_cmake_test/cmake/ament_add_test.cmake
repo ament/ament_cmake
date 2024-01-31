@@ -54,9 +54,9 @@
 #
 function(ament_add_test testname)
   cmake_parse_arguments(ARG
-    "GENERATE_RESULT_FOR_RETURN_CODE_ZERO;SKIP_TEST"
+    "GENERATE_RESULT_FOR_RETURN_CODE_ZERO;SKIP_TEST;ISOLATE_TEST"
     "OUTPUT_FILE;RESULT_FILE;RUNNER;SKIP_RETURN_CODE;TIMEOUT;WORKING_DIRECTORY"
-    "APPEND_ENV;APPEND_LIBRARY_DIRS;COMMAND;ENV;ISOLATE_TEST"
+    "APPEND_ENV;APPEND_LIBRARY_DIRS;COMMAND;ENV"
     ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "ament_add_test() called with unused arguments: "
@@ -84,15 +84,13 @@ function(ament_add_test testname)
   endif()
 
   get_executable_path(python_interpreter Python3::Interpreter BUILD)
-  if(ISOLATE_TEST AND UNIX)
-    set(isolate_test_prefix "{python_interpreter}" "-m" "linux_isolate_process")
-  else()
-    set(isolate_test_prefix "")
-  endif()
   # wrap command with run_test script to ensure test result generation
-  set(cmd_wrapper "${isolate_test_prefix}" "${python_interpreter}" "-u" "${ARG_RUNNER}"
+  set(cmd_wrapper "${python_interpreter}" "-u" "${ARG_RUNNER}"
     "${ARG_RESULT_FILE}"
     "--package-name" "${PROJECT_NAME}")
+  if(ISOLATE_TEST AND UNIX)
+    list(PREPEND cmd_wrapper "{python_interpreter}" "-m" "linux_isolate_process")
+  endif()
   if(ARG_SKIP_TEST)
     list(APPEND cmd_wrapper "--skip-test")
     set(ARG_SKIP_RETURN_CODE 0)
