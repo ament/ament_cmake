@@ -22,10 +22,11 @@
 # :param HAS_LIBRARY_TARGET: if set, an environment variable will be defined
 #   so that the library can be found at runtime
 # :type HAS_LIBRARY_TARGET: option
-# :param NAMESPACE: the exported namespace for the target if set. 
+# :keyword NAMESPACE: the exported namespace for the target if set. 
 #    The default is the value of ``${PROJECT_NAME}::``.
-# TODO not sure what to set for type and whatnot
-# :type NAMESPACE: option
+#    This is an advanced option. It should be used carefully and clearly documented
+#    in a usage guide for any package that makes use of this option.
+# :type NAMESPACE: string
 # :param ARGN: a list of export names
 # :type ARGN: list of strings
 #
