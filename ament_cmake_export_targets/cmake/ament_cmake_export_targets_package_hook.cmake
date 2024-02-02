@@ -25,7 +25,6 @@ list(APPEND ${PROJECT_NAME}_CONFIG_EXTRAS "${_generated_extra_file}")
 # install export files for targets
 if(NOT _AMENT_CMAKE_EXPORT_TARGETS STREQUAL "")
   foreach(_target ${_AMENT_CMAKE_EXPORT_TARGETS})
-
     install(
       EXPORT "${_target}"
       DESTINATION share/${PROJECT_NAME}/cmake
