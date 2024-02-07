@@ -4,8 +4,6 @@
   <version>2.3.2</version>
   <description>The ability to export link flags to downstream packages in the ament buildsystem.</description>
 
-  <maintainer email="michael.jeronimo@openrobotics.org">Michael Jeronimo</maintainer>
-
   <license>Apache License 2.0</license>
 
   <author>Dirk Thomas</author>

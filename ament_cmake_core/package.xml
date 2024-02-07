@@ -14,8 +14,6 @@
     * symlink_install: use symlinks for CMake install commands
   </description>
 
-  <maintainer email="michael.jeronimo@openrobotics.org">Michael Jeronimo</maintainer>
-
   <license>Apache License 2.0</license>
 
   <author>Dirk Thomas</author>
