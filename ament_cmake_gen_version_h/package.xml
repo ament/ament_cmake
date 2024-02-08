@@ -5,6 +5,8 @@
   <version>2.3.2</version>
   <description>Generate a C header containing the version number of the package</description>
 
+  <maintainer email="clalancette@gmail.com">Chris Lalancette</maintainer>
+
   <license>Apache License 2.0</license>
 
   <author email="michel@ekumenlabs.com">Michel Hidalgo</author>
