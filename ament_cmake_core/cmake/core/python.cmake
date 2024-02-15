@@ -21,7 +21,7 @@ if(NOT TARGET Python3::Interpreter)
   # We expect that Python dependencies are met for whatever Python interpreter
   # is invoked by the "python3" executable, however this may not be the latest
   # Python version installed on the system. The default behavior of
-  # find_package(Python3) would be to use the latest version, so we
+  # find_package(Python3) is to use the latest version (i.e. python3.12), so we
   # specifically look for a "python3" executable and if found, instruct
   # find_package(Python3) to use that.
   # On Windows, the find_package(Python3) logic is different and doesn't
