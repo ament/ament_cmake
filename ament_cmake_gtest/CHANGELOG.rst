@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_gtest
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.3.8 (2024-02-16)
+------------------
+
 1.3.7 (2024-01-24)
 ------------------
 * Fix compiler warnings related to gtest/gmock (`#408 <https://github.com/ament/ament_cmake/issues/408>`_) (`#495 <https://github.com/ament/ament_cmake/issues/495>`_)
