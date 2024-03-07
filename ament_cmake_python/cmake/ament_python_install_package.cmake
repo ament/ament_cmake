@@ -41,7 +41,7 @@ endmacro()
 
 function(_ament_cmake_python_install_package package_name)
   cmake_parse_arguments(
-    ARG "SKIP_COMPILE" "PACKAGE_DIR;VERSION;SETUP_CFG;DESTINATION;SCRIPTS_DESTINATION" "" ${ARGN})
+    ARG "SKIP_COMPILE;EXTEND_EXISTING" "PACKAGE_DIR;VERSION;SETUP_CFG;DESTINATION;SCRIPTS_DESTINATION" "" ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "ament_python_install_package() called with unused "
       "arguments: ${ARG_UNPARSED_ARGUMENTS}")
@@ -97,10 +97,12 @@ setup(
 )
 " setup_py_content)
 
-  file(GENERATE
-    OUTPUT "${build_dir}/setup.py"
-    CONTENT "${setup_py_content}"
-  )
+  if(NOT ARG_EXTEND_EXISTING)
+    file(GENERATE
+      OUTPUT "${build_dir}/setup.py"
+      CONTENT "${setup_py_content}"
+    )
+  endif()
 
   if(AMENT_CMAKE_SYMLINK_INSTALL)
     add_custom_target(
@@ -119,20 +121,29 @@ setup(
       list(APPEND egg_dependencies ament_cmake_python_symlink_${package_name}_setup)
     endif()
   else()
-    add_custom_target(
-      ament_cmake_python_copy_${package_name}
-      COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${ARG_PACKAGE_DIR}" "${build_dir}/${package_name}"
-    )
-    set(egg_dependencies ament_cmake_python_copy_${package_name})
-
-    if(ARG_SETUP_CFG)
+    if(ARG_EXTEND_EXISTING)
       add_custom_target(
-        ament_cmake_python_copy_${package_name}_setup
-        COMMAND ${CMAKE_COMMAND} -E copy
-          "${ARG_SETUP_CFG}" "${build_dir}/setup.cfg"
+        ament_cmake_python_extend_${package_name}
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+          "${ARG_PACKAGE_DIR}" "${build_dir}/${package_name}"
       )
-      list(APPEND egg_dependencies ament_cmake_python_copy_${package_name}_setup)
+      set(egg_dependencies ament_cmake_python_extend_${package_name})
+    else()
+      add_custom_target(
+        ament_cmake_python_copy_${package_name}
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+          "${ARG_PACKAGE_DIR}" "${build_dir}/${package_name}"
+      )
+      set(egg_dependencies ament_cmake_python_copy_${package_name})
+
+      if(ARG_SETUP_CFG)
+        add_custom_target(
+          ament_cmake_python_copy_${package_name}_setup
+          COMMAND ${CMAKE_COMMAND} -E copy
+            "${ARG_SETUP_CFG}" "${build_dir}/setup.cfg"
+        )
+        list(APPEND egg_dependencies ament_cmake_python_copy_${package_name}_setup)
+      endif()
     endif()
   endif()
 
@@ -141,12 +152,14 @@ setup(
   # calls find_package(Python3) for us.
   get_executable_path(python_interpreter Python3::Interpreter BUILD)
 
-  add_custom_target(
-    ament_cmake_python_build_${package_name}_egg ALL
-    COMMAND ${python_interpreter} setup.py egg_info
-    WORKING_DIRECTORY "${build_dir}"
-    DEPENDS ${egg_dependencies}
-  )
+  if(NOT ARG_EXTEND_EXISTING)
+    add_custom_target(
+      ament_cmake_python_build_${package_name}_egg ALL
+      COMMAND ${python_interpreter} setup.py egg_info
+      WORKING_DIRECTORY "${build_dir}"
+      DEPENDS ${egg_dependencies}
+    )
+  endif()
 
   set(python_version "py${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}")
 
@@ -200,12 +213,14 @@ setup(
     )
   endif()
 
-  if(package_name IN_LIST AMENT_CMAKE_PYTHON_INSTALL_INSTALLED_NAMES)
-    message(FATAL_ERROR
-      "ament_python_install_package() a Python module file or package with "
-      "the same name '${package_name}' has been installed before")
+  if(NOT ARG_EXTEND_EXISTING)
+    if(package_name IN_LIST AMENT_CMAKE_PYTHON_INSTALL_INSTALLED_NAMES)
+      message(FATAL_ERROR
+        "ament_python_install_package() a Python module file or package with "
+        "the same name '${package_name}' has been installed before")
+    endif()
+    list(APPEND AMENT_CMAKE_PYTHON_INSTALL_INSTALLED_NAMES "${package_name}")
+    set(AMENT_CMAKE_PYTHON_INSTALL_INSTALLED_NAMES
+      "${AMENT_CMAKE_PYTHON_INSTALL_INSTALLED_NAMES}" PARENT_SCOPE)
   endif()
-  list(APPEND AMENT_CMAKE_PYTHON_INSTALL_INSTALLED_NAMES "${package_name}")
-  set(AMENT_CMAKE_PYTHON_INSTALL_INSTALLED_NAMES
-    "${AMENT_CMAKE_PYTHON_INSTALL_INSTALLED_NAMES}" PARENT_SCOPE)
 endfunction()
