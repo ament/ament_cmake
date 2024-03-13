@@ -269,6 +269,8 @@ function(_ament_vendor TARGET_NAME VCS_TYPE VCS_URL VCS_VERSION PATCHES CMAKE_AR
     find_program(vcs_EXECUTABLE vcs REQUIRED)
     list(
       APPEND EXTERNALPROJECT_ARGS
+      DOWNLOAD_COMMAND "${CMAKE_COMMAND}" -E rm -rf <SOURCE_DIR> &&
+      DOWNLOAD_COMMAND "${CMAKE_COMMAND}" -E make_directory <SOURCE_DIR> &&
       DOWNLOAD_COMMAND "${vcs_EXECUTABLE}" import . --input "${REPOS_FILE}" --shallow --recursive --force
       SOURCE_SUBDIR ${SOURCE_SUBDIR}
     )
@@ -288,7 +290,7 @@ function(_ament_vendor TARGET_NAME VCS_TYPE VCS_URL VCS_VERSION PATCHES CMAKE_AR
 
   externalproject_add_stepdependencies(${TARGET_NAME} download ${REPOS_FILE})
   if(PATCH_FILES)
-    externalproject_add_stepdependencies(${TARGET_NAME} patch ${PATCH_FILES})
+    externalproject_add_stepdependencies(${TARGET_NAME} download ${PATCH_FILES})
   endif()
   if(VCS_TYPE STREQUAL "path")
     file(GLOB_RECURSE SOURCE_FILES
