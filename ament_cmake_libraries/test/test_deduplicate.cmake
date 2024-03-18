@@ -26,6 +26,6 @@ ament_libraries_deduplicate(ACTUAL ${TEST_IN})
 assert_equal("debug;foo;debug;bar;debug;baz;bar" "${ACTUAL}")
 
 # With mismatched build configs
-set(TEST_IN "debug;foo;debug;bar;debug;baz;release;bar")
+set(TEST_IN "optimized;foo;optimized;bar;general;baz;general;bar")
 ament_libraries_deduplicate(ACTUAL ${TEST_IN})
-assert_equal("debug;foo;debug;bar;debug;baz;release;bar" "${ACTUAL}")
+assert_equal("optimized;foo;optimized;bar;general;baz;general;bar" "${ACTUAL}")

@@ -233,8 +233,16 @@ function(_ament_vendor TARGET_NAME VCS_TYPE VCS_URL VCS_VERSION PATCHES CMAKE_AR
     set(CMAKE_ARGS_CONTENT "${CMAKE_ARGS_CONTENT}\nset(CMAKE_VERBOSE_MAKEFILE [=[${CMAKE_VERBOSE_MAKEFILE}]=] CACHE INTERNAL \"\")")
   endif()
 
+  if(DEFINED CMAKE_FIND_DEBUG_MODE)
+    set(CMAKE_ARGS_CONTENT "${CMAKE_ARGS_CONTENT}\nset(CMAKE_FIND_DEBUG_MODE [=[${CMAKE_FIND_DEBUG_MODE}]=] CACHE INTERNAL \"\")")
+  endif()
+
   if(DEFINED CMAKE_BUILD_TYPE)
     set(CMAKE_ARGS_CONTENT "${CMAKE_ARGS_CONTENT}\nset(CMAKE_BUILD_TYPE [=[${CMAKE_BUILD_TYPE}]=] CACHE INTERNAL \"\")")
+  endif()
+
+  if(DEFINED CMAKE_MODULE_PATH)
+    set(CMAKE_ARGS_CONTENT "${CMAKE_ARGS_CONTENT}\nset(CMAKE_MODULE_PATH [=[${CMAKE_MODULE_PATH}]=] CACHE INTERNAL \"\")")
   endif()
 
   list(PREPEND CMAKE_PREFIX_PATH ${_AMENT_CMAKE_VENDOR_PACKAGE_PREFIX_PATH})
@@ -269,6 +277,8 @@ function(_ament_vendor TARGET_NAME VCS_TYPE VCS_URL VCS_VERSION PATCHES CMAKE_AR
     find_program(vcs_EXECUTABLE vcs REQUIRED)
     list(
       APPEND EXTERNALPROJECT_ARGS
+      DOWNLOAD_COMMAND "${CMAKE_COMMAND}" -E rm -rf <SOURCE_DIR> &&
+      DOWNLOAD_COMMAND "${CMAKE_COMMAND}" -E make_directory <SOURCE_DIR> &&
       DOWNLOAD_COMMAND "${vcs_EXECUTABLE}" import . --input "${REPOS_FILE}" --shallow --recursive --force
       SOURCE_SUBDIR ${SOURCE_SUBDIR}
     )
@@ -288,7 +298,7 @@ function(_ament_vendor TARGET_NAME VCS_TYPE VCS_URL VCS_VERSION PATCHES CMAKE_AR
 
   externalproject_add_stepdependencies(${TARGET_NAME} download ${REPOS_FILE})
   if(PATCH_FILES)
-    externalproject_add_stepdependencies(${TARGET_NAME} patch ${PATCH_FILES})
+    externalproject_add_stepdependencies(${TARGET_NAME} download ${PATCH_FILES})
   endif()
   if(VCS_TYPE STREQUAL "path")
     file(GLOB_RECURSE SOURCE_FILES
