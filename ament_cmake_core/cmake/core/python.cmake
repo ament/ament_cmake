@@ -30,5 +30,9 @@ if(NOT TARGET Python3::Interpreter)
   if(NOT WIN32 AND NOT Python3_EXECUTABLE)
     find_program(Python3_EXECUTABLE python3)
   endif()
+  
+  # FindPython3 is only available in CMake 3.12 or higher,
+  # so we need at least that version.
+  cmake_minimum_required(VERSION 3.12)
   find_package(Python3 REQUIRED COMPONENTS Interpreter)
 endif()
