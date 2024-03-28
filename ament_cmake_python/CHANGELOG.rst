@@ -2,8 +2,8 @@
 Changelog for package ament_cmake_python
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.4.0 (2024-03-28)
+------------------
 * Add in a comment explaining where Python3::Interpreter comes from. (`#510 <https://github.com/ament/ament_cmake/issues/510>`_)
 * Update maintainer list in package.xml files (`#503 <https://github.com/ament/ament_cmake/issues/503>`_)
 * Contributors: Chris Lalancette, Michael Jeronimo

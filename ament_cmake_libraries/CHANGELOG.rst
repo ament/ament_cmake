@@ -2,8 +2,8 @@
 Changelog for package ament_cmake_libraries
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.4.0 (2024-03-28)
+------------------
 * Subtle fix for ament_libraries_deduplicate tests (`#516 <https://github.com/ament/ament_cmake/issues/516>`_)
 * Add some basic tests to ament_cmake_libraries (`#512 <https://github.com/ament/ament_cmake/issues/512>`_)
 * Update maintainer list in package.xml files (`#503 <https://github.com/ament/ament_cmake/issues/503>`_)

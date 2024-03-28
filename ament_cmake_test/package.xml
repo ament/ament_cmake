@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="2">
   <name>ament_cmake_test</name>
-  <version>2.3.2</version>
+  <version>2.4.0</version>
   <description>The ability to add tests in the ament buildsystem in CMake.</description>
 
   <maintainer email="clalancette@gmail.com">Chris Lalancette</maintainer>
