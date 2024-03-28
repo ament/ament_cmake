@@ -2,6 +2,11 @@
 Changelog for package ament_cmake_gtest
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Update maintainer list in package.xml files (`#503 <https://github.com/ament/ament_cmake/issues/503>`_)
+* Contributors: Michael Jeronimo
+
 2.3.2 (2023-12-26)
 ------------------
 * Split ament_add_gmock into _executable and _test. (`#497 <https://github.com/ament/ament_cmake/issues/497>`_)

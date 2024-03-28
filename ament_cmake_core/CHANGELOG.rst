@@ -2,6 +2,12 @@
 Changelog for package ament_cmake_core
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Set hints to find the python version we actually want. (`#508 <https://github.com/ament/ament_cmake/issues/508>`_)
+* Update maintainer list in package.xml files (`#503 <https://github.com/ament/ament_cmake/issues/503>`_)
+* Contributors: Chris Lalancette, Michael Jeronimo
+
 2.3.2 (2023-12-26)
 ------------------
 

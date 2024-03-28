@@ -2,6 +2,13 @@
 Changelog for package ament_cmake_vendor_package
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add more CMake variables to pass to vendor projects (`#519 <https://github.com/ament/ament_cmake/issues/519>`_)
+* Fix patch file dependencies in ament_cmake_vendor_package (`#520 <https://github.com/ament/ament_cmake/issues/520>`_)
+* Update maintainer list in package.xml files (`#503 <https://github.com/ament/ament_cmake/issues/503>`_)
+* Contributors: Michael Jeronimo, Scott K Logan
+
 2.3.2 (2023-12-26)
 ------------------
 

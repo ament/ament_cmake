@@ -2,6 +2,12 @@
 Changelog for package ament_cmake_export_targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Update maintainer list in package.xml files (`#503 <https://github.com/ament/ament_cmake/issues/503>`_)
+* Add NAMESPACE support to ament_export_targets (`#498 <https://github.com/ament/ament_cmake/issues/498>`_)
+* Contributors: Michael Jeronimo, Ryan
+
 2.3.2 (2023-12-26)
 ------------------
 

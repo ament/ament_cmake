@@ -2,6 +2,13 @@
 Changelog for package ament_cmake_libraries
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Subtle fix for ament_libraries_deduplicate tests (`#516 <https://github.com/ament/ament_cmake/issues/516>`_)
+* Add some basic tests to ament_cmake_libraries (`#512 <https://github.com/ament/ament_cmake/issues/512>`_)
+* Update maintainer list in package.xml files (`#503 <https://github.com/ament/ament_cmake/issues/503>`_)
+* Contributors: Michael Jeronimo, Scott K Logan
+
 2.3.2 (2023-12-26)
 ------------------
 
