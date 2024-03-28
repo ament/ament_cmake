@@ -43,7 +43,7 @@
 #
 
 macro(ament_auto_package)
-  cmake_parse_arguments(_ARG "INSTALL_TO_PATH" "" "INSTALL_TO_SHARE" ${ARGN})
+  cmake_parse_arguments(_ARG "INSTALL_TO_PATH;EXPORT_LIBRARY_TARGETS" "" "INSTALL_TO_SHARE" ${ARGN})
   # passing all unparsed arguments to ament_package()
 
   # export all found build dependencies which are also run dependencies
@@ -66,22 +66,40 @@ macro(ament_auto_package)
   endif()
 
   # export and install all libraries
-  if(NOT ${PROJECT_NAME}_LIBRARIES STREQUAL "")
-    set(without_interfaces "")
-    foreach(library_name ${${PROJECT_NAME}_LIBRARIES})
-      get_target_property(library_type ${library_name} TYPE)
-      if(NOT "${library_type}" STREQUAL "INTERFACE_LIBRARY")
-        list(APPEND without_interfaces ${library_name})
-      endif()
-    endforeach()
+  if (_ARG_EXPORT_LIBRARY_TARGETS)
+    # will export all libraries using modern cmake targets
+    list(APPEND ${PROJECT_NAME}_TARGETS "${${PROJECT_NAME}_LIBRARIES}")
+  else()
+    # old style library export
+    if(NOT ${PROJECT_NAME}_LIBRARIES STREQUAL "")
+      set(without_interfaces "")
+      foreach(library_name ${${PROJECT_NAME}_LIBRARIES})
+        get_target_property(library_type ${library_name} TYPE)
+        if(NOT "${library_type}" STREQUAL "INTERFACE_LIBRARY")
+          list(APPEND without_interfaces ${library_name})
+        endif()
+      endforeach()
 
-    ament_export_libraries(${without_interfaces})
+      ament_export_libraries(${without_interfaces})
+      install(
+        TARGETS ${without_interfaces}
+        ARCHIVE DESTINATION lib
+        LIBRARY DESTINATION lib
+        RUNTIME DESTINATION bin
+      )
+    endif()
+  endif()
+
+  # export all targets for downstream packages
+  if(NOT "${${PROJECT_NAME}_TARGETS}" STREQUAL "")
     install(
-      TARGETS ${without_interfaces}
+      TARGETS ${${PROJECT_NAME}_TARGETS}
+      EXPORT ${PROJECT_NAME}Targets
       ARCHIVE DESTINATION lib
       LIBRARY DESTINATION lib
       RUNTIME DESTINATION bin
     )
+    ament_export_targets(${PROJECT_NAME}Targets)
   endif()
 
   # install all executables
