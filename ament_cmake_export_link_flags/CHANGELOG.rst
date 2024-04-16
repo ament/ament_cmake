@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_export_link_flags
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 2.4.0 (2024-03-28)
 ------------------
 * Update maintainer list in package.xml files (`#503 <https://github.com/ament/ament_cmake/issues/503>`_)

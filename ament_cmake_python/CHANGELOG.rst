@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_python
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 2.4.0 (2024-03-28)
 ------------------
 * Add in a comment explaining where Python3::Interpreter comes from. (`#510 <https://github.com/ament/ament_cmake/issues/510>`_)

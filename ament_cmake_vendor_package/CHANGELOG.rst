@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_vendor_package
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 2.4.0 (2024-03-28)
 ------------------
 * Add more CMake variables to pass to vendor projects (`#519 <https://github.com/ament/ament_cmake/issues/519>`_)

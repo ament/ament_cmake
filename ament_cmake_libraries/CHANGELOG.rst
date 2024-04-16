@@ -2,6 +2,12 @@
 Changelog for package ament_cmake_libraries
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* perf: faster ament_libraries_deduplicate implementation (`#448 <https://github.com/ament/ament_cmake/issues/448>`_)
+  Co-authored-by: Scott K Logan <logans@cottsay.net>
+* Contributors: Vincent Richard
+
 2.4.0 (2024-03-28)
 ------------------
 * Subtle fix for ament_libraries_deduplicate tests (`#516 <https://github.com/ament/ament_cmake/issues/516>`_)
