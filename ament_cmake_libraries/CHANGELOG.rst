@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_libraries
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 2.5.0 (2024-04-16)
 ------------------
 * perf: faster ament_libraries_deduplicate implementation (`#448 <https://github.com/ament/ament_cmake/issues/448>`_)
