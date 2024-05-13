@@ -147,7 +147,7 @@ function(ament_generate_version_header target)
       "${SCRIPT_TEMPLATE_FILE}"
     COMMENT "Generating ${ARG_HEADER_PATH}")
 
-  add_custom_target("ament_generate_version_header__${target}"
+  add_custom_target("ament_generate_version_header__${target}" ALL
     DEPENDS "${GENERATED_HEADER_FILE}")
   add_dependencies("${target}" "ament_generate_version_header__${target}")
 
