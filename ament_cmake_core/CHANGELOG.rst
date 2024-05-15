@@ -2,6 +2,11 @@
 Changelog for package ament_cmake_core
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.3.9 (2024-05-15)
+------------------
+* Add minimum required CMake for FindPython3 (`#518 <https://github.com/ament/ament_cmake/issues/518>`_)
+* Contributors: Ryan
+
 1.3.8 (2024-02-16)
 ------------------
 * When finding Python3, use python3 executable as a hint (`#507 <https://github.com/ament/ament_cmake/issues/507>`_)

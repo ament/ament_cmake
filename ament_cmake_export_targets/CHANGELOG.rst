@@ -2,6 +2,11 @@
 Changelog for package ament_cmake_export_targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.3.9 (2024-05-15)
+------------------
+* Add NAMESPACE support to ament_export_targets (`#498 <https://github.com/ament/ament_cmake/issues/498>`_) (`#505 <https://github.com/ament/ament_cmake/issues/505>`_)
+* Contributors: mergify[bot]
+
 1.3.8 (2024-02-16)
 ------------------
 
