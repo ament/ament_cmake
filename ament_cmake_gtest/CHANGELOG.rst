@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_gtest
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 2.6.0 (2024-04-26)
 ------------------
 
