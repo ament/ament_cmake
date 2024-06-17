@@ -2,8 +2,8 @@
 Changelog for package ament_cmake_gen_version_h
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.6.1 (2024-06-17)
+------------------
 * Add ALL target for ament_generate_version_header target. (`#526 <https://github.com/ament/ament_cmake/issues/526>`_)
 * Contributors: Chris Lalancette
 
