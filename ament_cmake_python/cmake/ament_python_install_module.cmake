@@ -65,7 +65,7 @@ function(_ament_cmake_python_install_module module_file)
       "execute_process(
         COMMAND
         \"${python_interpreter}\" \"-m\" \"compileall\"
-        \"${CMAKE_INSTALL_PREFIX}/${destination}/${module_file}\"
+        \"${destination}/${module_file}\"
       )"
     )
   endif()
