@@ -29,7 +29,7 @@
 #   directory (default: PYTHON_INSTALL_DIR)
 # :type DESTINATION: string
 # :param SCRIPTS_DESTINATION: the path to the Python package scripts'
-#   installation directory, scripts (if any) will be ignored if not set
+#   installation directory (default: lib/${PROJECT_NAME})
 # :type SCRIPTS_DESTINATION: string
 # :param SKIP_COMPILE: if set do not byte-compile the installed package
 # :type SKIP_COMPILE: option
@@ -41,7 +41,7 @@ endmacro()
 
 function(_ament_cmake_python_install_package package_name)
   cmake_parse_arguments(
-    ARG "SKIP_COMPILE" "PACKAGE_DIR;VERSION;SETUP_CFG;DESTINATION;SCRIPTS_DESTINATION" "" ${ARGN})
+    ARG "SKIP_COMPILE" "PACKAGE_DIR;VERSION;SETUP_CFG;DESTINATION" "SCRIPTS_DESTINATION" ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "ament_python_install_package() called with unused "
       "arguments: ${ARG_UNPARSED_ARGUMENTS}")
@@ -81,6 +81,10 @@ function(_ament_cmake_python_install_package package_name)
         "'PYTHON_INSTALL_DIR' must not be empty")
     endif()
     set(ARG_DESTINATION ${PYTHON_INSTALL_DIR})
+  endif()
+
+  if(NOT ARG_SCRIPTS_DESTINATION)
+    set(ARG_SCRIPTS_DESTINATION "lib/${PROJECT_NAME}")
   endif()
 
   set(build_dir "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_python/${package_name}")
@@ -159,27 +163,13 @@ setup(
     DESTINATION "${ARG_DESTINATION}/${egg_install_name}.egg-info"
   )
 
-  if(ARG_SCRIPTS_DESTINATION)
-    file(MAKE_DIRECTORY "${build_dir}/scripts")  # setup.py may or may not create it
-
-    add_custom_target(
-      ament_cmake_python_build_${package_name}_scripts ALL
-      COMMAND ${python_interpreter} setup.py install_scripts -d scripts
-      WORKING_DIRECTORY "${build_dir}"
-      DEPENDS ${egg_dependencies}
-    )
-
-    if(NOT AMENT_CMAKE_SYMLINK_INSTALL)
-      # Not needed for nor supported by symlink installs
-      set(_extra_install_args USE_SOURCE_PERMISSIONS)
-    endif()
-
-    install(
-      DIRECTORY "${build_dir}/scripts/"
-      DESTINATION "${ARG_SCRIPTS_DESTINATION}/"
-      ${_extra_install_args}
-    )
-  endif()
+  # generate/install entry-point console scripts
+  get_executable_path(python_interpreter_config Python3::Interpreter CONFIGURE)
+  foreach(_dest ${ARG_SCRIPTS_DESTINATION})
+    get_filename_component(ABS_SCRIPTS_DESTINATION "${_dest}" ABSOLUTE BASE_DIR "${CMAKE_INSTALL_PREFIX}")
+    install(CODE "execute_process(COMMAND \"${python_interpreter_config}\" setup.py install_scripts --install-dir \"${ABS_SCRIPTS_DESTINATION}\"
+                                  WORKING_DIRECTORY \"${build_dir}\")")
+  endforeach()
 
   install(
     DIRECTORY "${ARG_PACKAGE_DIR}/"
@@ -189,7 +179,6 @@ setup(
   )
 
   if(NOT ARG_SKIP_COMPILE)
-    get_executable_path(python_interpreter_config Python3::Interpreter CONFIGURE)
     # compile Python files
     install(CODE
       "execute_process(
