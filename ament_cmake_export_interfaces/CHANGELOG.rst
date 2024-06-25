@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_export_interfaces
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 2.6.1 (2024-06-17)
 ------------------
 
