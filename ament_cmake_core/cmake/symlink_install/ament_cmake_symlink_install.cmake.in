@@ -257,10 +257,17 @@ function(ament_cmake_symlink_install_targets)
       file(MAKE_DIRECTORY "${destination}")
     endif()
 
+    string(LENGTH "${destination}" length)
+    math(EXPR offset "${length} - 1")
+    string(SUBSTRING "${destination}" ${offset} 1 destination_last_char)
+    if(NOT "${destination_last_char}" STREQUAL "/")
+      string(APPEND destination "/")
+    endif()
+
     if(EXISTS "${file}")
       # determine link name for file including destination path
       get_filename_component(filename "${file}" NAME)
-      set(symlink "${destination}/${filename}")
+      set(symlink "${destination}${filename}")
       _ament_cmake_symlink_install_create_symlink("${file}" "${symlink}")
     else()
       if(NOT ARG_OPTIONAL)
