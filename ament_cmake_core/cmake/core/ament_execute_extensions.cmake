@@ -23,10 +23,10 @@
 # @public
 #
 macro(ament_execute_extensions extension_point)
-  cmake_parse_arguments(_ARG "" "" "EXCLUDE" ${ARGN})
-  if(_ARG_UNPARSED_ARGUMENTS)
+  cmake_parse_arguments(_ARG_AMENT_EXECUTE_EXTENSIONS "" "" "EXCLUDE" ${ARGN})
+  if(_ARG_AMENT_EXECUTE_EXTENSIONS_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "ament_execute_extensions() called with "
-      "unused arguments: ${_ARG_UNPARSED_ARGUMENTS}")
+      "unused arguments: ${_ARG_AMENT_EXECUTE_EXTENSIONS_UNPARSED_ARGUMENTS}")
   endif()
   if(AMENT_EXTENSIONS_${extension_point})
     foreach(_extension ${AMENT_EXTENSIONS_${extension_point}})
@@ -38,7 +38,7 @@ macro(ament_execute_extensions extension_point)
           "name and cmake filename")
       endif()
       list(GET _extension_list 0 _pkg_name)
-      if("${_pkg_name}" IN_LIST _ARG_EXCLUDE)
+      if("${_pkg_name}" IN_LIST _ARG_AMENT_EXECUTE_EXTENSIONS_EXCLUDE)
         continue()
       endif()
       list(GET _extension_list 1 _cmake_filename)

@@ -43,7 +43,7 @@
 #
 
 macro(ament_auto_package)
-  cmake_parse_arguments(_ARG "INSTALL_TO_PATH" "" "INSTALL_TO_SHARE" ${ARGN})
+  cmake_parse_arguments(_ARG_AMENT_AUTO_PACKAGE "INSTALL_TO_PATH" "" "INSTALL_TO_SHARE" ${ARGN})
   # passing all unparsed arguments to ament_package()
 
   # export all found build dependencies which are also run dependencies
@@ -78,7 +78,7 @@ macro(ament_auto_package)
 
   # install all executables
   if(NOT ${PROJECT_NAME}_EXECUTABLES STREQUAL "")
-    if(_ARG_INSTALL_TO_PATH)
+    if(_ARG_AMENT_AUTO_PACKAGE_INSTALL_TO_PATH)
       set(_destination "bin")
     else()
       set(_destination "lib/${PROJECT_NAME}")
@@ -90,7 +90,7 @@ macro(ament_auto_package)
   endif()
 
   # install directories to share
-  foreach(_dir ${_ARG_INSTALL_TO_SHARE})
+  foreach(_dir ${_ARG_AMENT_AUTO_PACKAGE_INSTALL_TO_SHARE})
     install(
       DIRECTORY "${_dir}"
       DESTINATION "share/${PROJECT_NAME}"
@@ -99,5 +99,5 @@ macro(ament_auto_package)
 
   ament_execute_extensions(ament_auto_package)
 
-  ament_package(${_ARG_UNPARSED_ARGUMENTS})
+  ament_package(${_ARG_AMENT_AUTO_PACKAGE_UNPARSED_ARGUMENTS})
 endmacro()
