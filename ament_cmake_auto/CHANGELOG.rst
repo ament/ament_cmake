@@ -2,8 +2,8 @@
 Changelog for package ament_cmake_auto
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.5.2 (2024-07-02)
+------------------
 * More specific prefix in some cmake_parse_argument calls (`#523 <https://github.com/ament/ament_cmake/issues/523>`_) (`#539 <https://github.com/ament/ament_cmake/issues/539>`_)
   (cherry picked from commit fdbf4574d7ccc67c29d63f906ddbd88017eb9ecc)
   Co-authored-by: Kevin Egger <eggerk@users.noreply.github.com>
