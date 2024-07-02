@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_include_directories
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 2.5.1 (2024-06-27)
 ------------------
 
