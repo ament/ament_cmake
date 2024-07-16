@@ -26,13 +26,9 @@
 # @public
 #
 macro(ament_libraries_deduplicate VAR)
-  ament_libraries_pack_build_configuration(_packed ${ARGN})
-  set(_unique "")
-  foreach(_lib ${_packed})
-    # remove existing value if it exists
-    list(REMOVE_ITEM _unique ${_lib})
-    # append value to the end
-    list(APPEND _unique ${_lib})
-  endforeach()
-  ament_libraries_unpack_build_configuration(${VAR} ${_unique})
+  string(REGEX REPLACE "(^|;)(debug|optimized|general);([^;]+)" "\\1\\2${AMENT_BUILD_CONFIGURATION_KEYWORD_SEPARATOR}\\3" _packed "${ARGN}")
+  list(REVERSE _packed)
+  list(REMOVE_DUPLICATES _packed)
+  list(REVERSE _packed)
+  string(REGEX REPLACE "(^|;)(debug|optimized|general)${AMENT_BUILD_CONFIGURATION_KEYWORD_SEPARATOR}([^;]+)" "\\1\\2;\\3" ${VAR} "${_packed}")
 endmacro()
