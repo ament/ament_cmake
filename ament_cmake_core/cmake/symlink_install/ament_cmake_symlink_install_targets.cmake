@@ -74,8 +74,10 @@ function(ament_cmake_symlink_install_targets)
       endif()
       list(APPEND target_files "$<TARGET_FILE:${target}>")
       get_target_property(target_type "${target}" TYPE)
-      if(WIN32 AND "${target_type}" STREQUAL "SHARED_LIBRARY")
-        list(APPEND target_files "$<TARGET_LINKER_FILE:${target}>")
+      if("${target_type}" STREQUAL "SHARED_LIBRARY")
+        list(APPEND target_files
+          "$<TARGET_SONAME_FILE:${target}>"
+          "$<TARGET_LINKER_FILE:${target}>")
       endif()
       if("${target_type}" STREQUAL "INTERFACE_LIBRARY")
         message(FATAL_ERROR
