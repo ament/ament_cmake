@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_export_link_flags
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 2.7.0 (2024-06-25)
 ------------------
 
