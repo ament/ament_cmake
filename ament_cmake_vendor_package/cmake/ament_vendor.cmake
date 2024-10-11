@@ -110,11 +110,11 @@ macro(ament_vendor TARGET_NAME)
     OFF)
 
   if(FORCE_BUILD_VENDOR_PKG AND AMENT_VENDOR_NEVER_VENDOR)
-      message(FATAL_ERROR "ament_vendor() cannot have both FORCE_BUILD_VENDOR_PKG and AMENT_VENDOR_NEVER_VENDOR options enabled")
+    message(FATAL_ERROR "ament_vendor() cannot have both FORCE_BUILD_VENDOR_PKG and AMENT_VENDOR_NEVER_VENDOR options enabled")
   endif()
 
   if(NOT _ARG_SATISFIED AND AMENT_VENDOR_NEVER_VENDOR)
-      message(FATAL_ERROR "ament_vendor() SATISFIED option is OFF and AMENT_VENDOR_NEVER_VENDOR is ON")
+    message(FATAL_ERROR "ament_vendor() SATISFIED option is OFF and AMENT_VENDOR_NEVER_VENDOR is ON")
   endif()
 
   if(NOT _ARG_SATISFIED OR FORCE_BUILD_VENDOR_PKG)
