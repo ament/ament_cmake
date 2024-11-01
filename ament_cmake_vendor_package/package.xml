@@ -16,6 +16,7 @@
 
   <buildtool_export_depend>ament_cmake_export_dependencies</buildtool_export_depend>
   <buildtool_export_depend>ament_cmake_core</buildtool_export_depend>
+  <buildtool_export_depend>git</buildtool_export_depend>
   <buildtool_export_depend>python3-vcstool</buildtool_export_depend>
 
   <test_depend>ament_cmake_test</test_depend>
