@@ -2,8 +2,8 @@
 Changelog for package ament_cmake_vendor_package
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.0.7 (2024-11-09)
+------------------
 * Add explicit git dependency from ament_cmake_vendor_package (`#556 <https://github.com/ament/ament_cmake/issues/556>`_)
 * Fix patch file dependencies in ament_cmake_vendor_package (`#549 <https://github.com/ament/ament_cmake/issues/549>`_)
 * Contributors: roscan-tech, Scott K Logan
