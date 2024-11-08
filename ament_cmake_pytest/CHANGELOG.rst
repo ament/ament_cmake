@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_pytest
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 2.0.6 (2024-07-11)
 ------------------
 

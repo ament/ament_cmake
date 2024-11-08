@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_auto
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 2.0.6 (2024-07-11)
 ------------------
 * More specific prefix in some cmake_parse_argument calls (`#537 <https://github.com/ament/ament_cmake/issues/537>`_)
