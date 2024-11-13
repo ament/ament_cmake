@@ -2,6 +2,11 @@
 Changelog for package ament_cmake_gtest
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.7.1 (2024-10-03)
+------------------
+* set search path args and then append (`#543 <https://github.com/ament/ament_cmake/issues/543>`_)
+* Contributors: Will
+
 2.7.0 (2024-06-25)
 ------------------
 
