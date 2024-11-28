@@ -20,7 +20,6 @@ macro(_ament_cmake_gmock_find_gmock)
     set(_AMENT_CMAKE_GMOCK_FIND_GMOCK TRUE)
 
     find_package(ament_cmake_test QUIET REQUIRED)
-    find_package(gmock_vendor QUIET)
 
     # if gmock sources were not found in a previous run
     if(NOT GMOCK_FROM_SOURCE_FOUND)
@@ -36,6 +35,7 @@ macro(_ament_cmake_gmock_find_gmock)
       endif()
 
       # check gmock_vendor path, prefer this version over a system installed
+      find_package(gmock_vendor QUIET)
       if(gmock_vendor_FOUND AND gmock_vendor_BASE_DIR)
         list(INSERT _search_path_include 0 "${gmock_vendor_BASE_DIR}/include/gmock")
         list(INSERT _search_path_src 0 "${gmock_vendor_BASE_DIR}/src")
@@ -68,6 +68,14 @@ macro(_ament_cmake_gmock_find_gmock)
 
         set(GMOCK_FROM_SOURCE_LIBRARIES "gmock" CACHE INTERNAL "")
         set(GMOCK_FROM_SOURCE_MAIN_LIBRARIES "gmock_main" CACHE INTERNAL "")
+      else()
+        # try to find and use gmock from GTest
+        find_package(GTest QUIET)
+        if(GTest_FOUND)
+          set(GMOCK_FOUND TRUE)
+          set(GMOCK_LIBRARIES GTest::gmock)
+          set(GMOCK_MAIN_LIBRARIES GTest::gmock_main)
+        endif()
       endif()
     endif()
 
