@@ -39,6 +39,7 @@ endif()
 
 # various functions / macros
 foreach(filename
+  "ament_add_default_options"
   "ament_execute_extensions"
   "ament_package"
   "ament_package_xml"
