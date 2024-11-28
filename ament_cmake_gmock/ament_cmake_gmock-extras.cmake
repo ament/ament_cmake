@@ -25,18 +25,15 @@ macro(_ament_cmake_gmock_find_gmock)
     # if gmock sources were not found in a previous run
     if(NOT GMOCK_FROM_SOURCE_FOUND)
       # search path for gmock includes and sources
-      set(_search_path_include "")
-      set(_search_path_src "")
+      # check the system installed path (i.e. on Ubuntu)
+      set(_search_path_include "/usr/include/gmock")
+      set(_search_path_src "/usr/src/gmock/src")
 
       # option() consider environment variable to find gmock
       if(NOT $ENV{GMOCK_DIR} STREQUAL "")
         list(APPEND _search_path_include "$ENV{GMOCK_DIR}/include/gmock")
         list(APPEND _search_path_src "$ENV{GMOCK_DIR}/src")
       endif()
-
-      # check to system installed path (i.e. on Ubuntu)
-      set(_search_path_include "/usr/include/gmock")
-      set(_search_path_src "/usr/src/gmock/src")
 
       # check gmock_vendor path, prefer this version over a system installed
       if(gmock_vendor_FOUND AND gmock_vendor_BASE_DIR)
