@@ -49,6 +49,14 @@
 #   projects.
 # :type GLOBAL_HOOK: option
 #
+# Beside CMake macro options, the macro is also influenced by the following two
+# CMake options, that can be set at the CMake invocation for the project that
+# uses ament_vendor() macro:
+# * `FORCE_BUILD_VENDOR_PKG`: If ON build vendor packages from source, even if 
+#                             system-installed packages are available
+# * `AMENT_VENDOR_NEVER_VENDOR`: If ON, raise an error if SATISFIED argument is 
+#                                not true instead of building the vendored package
+#
 # @public
 #
 macro(ament_vendor TARGET_NAME)
@@ -96,6 +104,18 @@ macro(ament_vendor TARGET_NAME)
   option(FORCE_BUILD_VENDOR_PKG
     "Build vendor packages from source, even if system-installed packages are available"
     OFF)
+
+  option(AMENT_VENDOR_NEVER_VENDOR
+    "If ON, raise an error if SATISFIED argument is not true instead of building the vendored package"
+    OFF)
+
+  if(FORCE_BUILD_VENDOR_PKG AND AMENT_VENDOR_NEVER_VENDOR)
+    message(FATAL_ERROR "ament_vendor() cannot have both FORCE_BUILD_VENDOR_PKG and AMENT_VENDOR_NEVER_VENDOR options enabled")
+  endif()
+
+  if(NOT _ARG_SATISFIED AND AMENT_VENDOR_NEVER_VENDOR)
+    message(FATAL_ERROR "ament_vendor() SATISFIED option is OFF and AMENT_VENDOR_NEVER_VENDOR is ON")
+  endif()
 
   if(NOT _ARG_SATISFIED OR FORCE_BUILD_VENDOR_PKG)
     if(_ARG_SATISFIED)
