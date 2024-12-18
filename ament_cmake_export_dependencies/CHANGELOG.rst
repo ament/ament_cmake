@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_export_dependencies
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 2.5.2 (2024-07-02)
 ------------------
 
