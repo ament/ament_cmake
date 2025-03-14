@@ -19,7 +19,7 @@
 #
 # :param target: the name of the target
 # :type target: string
-# :param SCOPE: Eitehr the empty string or one of PUBLIC, PRIVATE, or INTERFACE.
+# :param SCOPE: Optional. If given it must be one of PUBLIC, PRIVATE, or INTERFACE.
 #   See target_link_libraries() documentation for more info about SCOPE.
 # :type SCOPE: string
 # :param PACKAGES: a list of package names
