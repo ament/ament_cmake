@@ -67,6 +67,32 @@ function(ament_target_dependencies target)
       endif()
       set(optional_keyword PUBLIC)
     endif()
+
+    # Collect targets to use in deprecation warning
+    set(upstream_targets_for_deprecation_warning "")
+    foreach(package_name ${ARG_UNPARSED_ARGUMENTS})
+      foreach(_target IN LISTS ${package_name}_TARGETS)
+        if(TARGET ${_target})
+          if(_target MATCHES "(.+)::.+__rosidl_.+")
+            message(STATUS "Matches: ${_target}")
+            # suggest ${package_name_TARGETS} for message packages
+            list_append_unique(upstream_targets_for_deprecation_warning "\${${CMAKE_MATCH_1}_TARGETS}")
+          else()
+            message(STATUS "Does not match: ${_target}")
+            list_append_unique(upstream_targets_for_deprecation_warning ${_target})
+          endif()
+        endif()
+      endforeach()
+    endforeach()
+    list(SORT upstream_targets_for_deprecation_warning)
+    list(JOIN upstream_targets_for_deprecation_warning "\n    " upstream_targets_for_deprecation_warning)
+    message(DEPRECATION "ament_target_dependencies() is deprecated. "
+    "Use target_link_libraries() with modern CMake targets instead. "
+    "Try replacing this call with:\n"
+    "  target_link_libraries(${target} ${required_keyword}\n"
+    "    ${upstream_targets_for_deprecation_warning}\n"
+    "  )\n")
+
     set(definitions "")
     set(include_dirs "")
     set(interfaces "")
