@@ -81,8 +81,9 @@ macro(ament_auto_add_gtest target)
     target_link_libraries("${target}" ${${PROJECT_NAME}_LIBRARIES})
   endif()
 
-  # add exported information from found dependencies
-  ament_target_dependencies(${target}
+  # Depend on found build and test dependencies
+  ament_auto_depend_on_packages(${target}
+    PACKAGES
     ${${PROJECT_NAME}_FOUND_BUILD_DEPENDS}
     ${${PROJECT_NAME}_FOUND_TEST_DEPENDS}
   )

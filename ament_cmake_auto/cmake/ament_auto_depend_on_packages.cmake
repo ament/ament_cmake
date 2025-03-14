@@ -1,0 +1,70 @@
+# Copyright 2025 Open Source Robotics Foundation, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#
+# Make a target depend on everything provided by another CMake package.
+#
+# This function is intended to be used internally by ament_cmake_auto.
+#
+# :param target: the name of the target
+# :type target: string
+# :param SCOPE: Eitehr the empty string or one of PUBLIC, PRIVATE, or INTERFACE.
+#   See target_link_libraries() documentation for more info about SCOPE.
+# :type SCOPE: string
+# :param PACKAGES: a list of package names
+# :type PACKAGES: list of strings
+#
+# @private
+#
+function(ament_auto_depend_on_packages target)
+  if(NOT TARGET ${target})
+    message(FATAL_ERROR "ament_auto_depend_on_packages() the first argument must be a valid target name")
+  endif()
+  cmake_parse_arguments(ARG
+    ""
+    "SCOPE"
+    "PACKAGES"
+    ${ARGN})
+  if(ARG_UNPARSED_ARGUMENTS)
+    message(FATAL_ERROR "ament_auto_depend_on_packages() called with "
+      "unused arguments: ${ARG_UNPARSED_ARGUMENTS}")
+  endif()
+
+  if(NOT ARG_SCOPE STREQUAL "" AND NOT ARG_SCOPE STREQUAL "PUBLIC" AND NOT ARG_SCOPE STREQUAL "PRIVATE" AND NOT ARG_SCOPE STREQUAL "INTERFACE")
+    message(FATAL_ERROR "If SCOPE is specified, it must be one of: PUBLIC, PRIVATE, INTERFACE. Got: ${ARG_SCOPE}")
+  endif()
+
+  foreach(package_name ${ARG_PACKAGES})
+    if(NOT "${${package_name}_FOUND}")
+      message(FATAL_ERROR "'${package_name}' must be found with find_package() prior to passing it to ament_auto_depend_on_packages()")
+    endif()
+
+    if("${${package_name}_TARGETS}")
+      # Use modern CMake targets
+      target_link_libraries(${target} ${ARG_SCOPE} ${${package_name}_TARGETS})
+    else()
+      # Use standard CMake variables
+      # https://cmake.org/cmake/help/latest/manual/cmake-developer.7.html#standard-variable-names
+      if("${${package_name}_INCLUDE_DIRS}")
+        target_include_directories(${target} ${ARG_SCOPE} ${${package_name}_INCLUDE_DIRS})
+      endif()
+      if("${${package_name}_LIBRARIES}")
+        target_link_libraries(${target} ${ARG_SCOPE} ${${package_name}_LIBRARIES})
+      endif()
+      if("${${package_name}_DEFINITIONS}")
+        target_compile_definitions(${target} ${ARG_SCOPE} ${${package_name}_DEFINITIONS})
+      endif()
+    endif()
+  endforeach()
+endfunction()
