@@ -19,6 +19,13 @@
 #
 # :param target: the name of the target
 # :type target: string
+# :param SYSTEM: Optional. If given, and if a package provides old
+#   style standard CMake variables instead of modern CMake targets, then
+#   the include directories from this dependency will be treated as system
+#   includes.
+#   This property has no effect if the package being depended upon provides
+#   modern CMake targets.
+# :type SYSTEM: None
 # :param SCOPE: Optional. If given it must be one of PUBLIC, PRIVATE, or INTERFACE.
 #   See target_link_libraries() documentation for more info about SCOPE.
 # :type SCOPE: string
@@ -32,7 +39,7 @@ function(ament_auto_depend_on_packages target)
     message(FATAL_ERROR "ament_auto_depend_on_packages() the first argument must be a valid target name")
   endif()
   cmake_parse_arguments(ARG
-    ""
+    "SYSTEM"
     "SCOPE"
     "PACKAGES"
     ${ARGN})
@@ -57,7 +64,7 @@ function(ament_auto_depend_on_packages target)
       # Use standard CMake variables
       # https://cmake.org/cmake/help/latest/manual/cmake-developer.7.html#standard-variable-names
       if("${${package_name}_INCLUDE_DIRS}")
-        target_include_directories(${target} ${ARG_SCOPE} ${${package_name}_INCLUDE_DIRS})
+        target_include_directories(${target} ${ARG_SYSTEM} ${ARG_SCOPE} ${${package_name}_INCLUDE_DIRS})
       endif()
       if("${${package_name}_LIBRARIES}")
         target_link_libraries(${target} ${ARG_SCOPE} ${${package_name}_LIBRARIES})
