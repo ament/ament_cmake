@@ -48,8 +48,9 @@ function(ament_auto_depend_on_packages target)
       "unused arguments: ${ARG_UNPARSED_ARGUMENTS}")
   endif()
 
-  if(NOT ARG_SCOPE STREQUAL "" AND NOT ARG_SCOPE STREQUAL "PUBLIC" AND NOT ARG_SCOPE STREQUAL "PRIVATE" AND NOT ARG_SCOPE STREQUAL "INTERFACE")
-    message(FATAL_ERROR "If SCOPE is specified, it must be one of: PUBLIC, PRIVATE, INTERFACE. Got: ${ARG_SCOPE}")
+  set(allowed_scopes PUBLIC PRIVATE INTERFACE)
+  if(ARG_SCOPE AND NOT ARG_SCOPE IN_LIST allowed_scopes)
+    message(FATAL_ERROR "If SCOPE is specified, it must be one of: ${allowed_scopes}. Got: '${ARG_SCOPE}'")
   endif()
 
   foreach(package_name ${ARG_PACKAGES})
