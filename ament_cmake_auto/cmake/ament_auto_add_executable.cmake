@@ -78,7 +78,7 @@ macro(ament_auto_add_executable target)
 
   # Depend on found build dependencies
   ament_auto_depend_on_packages(${target}
-    SCOPE SYSTEM
+    SYSTEM
     PACKAGES
     ${${PROJECT_NAME}_FOUND_BUILD_DEPENDS})
 
