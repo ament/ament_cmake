@@ -93,10 +93,12 @@ function(ament_auto_depend_on_packages target)
         target_link_libraries(${target} ${ARG_SCOPE} ${unique_libraries})
       endif()
       if(${package_name}_LIBRARY_DIRS)
+        # Remove duplicates might not be necessary here, but doesn't hurt
         list(REMOVE_DUPLICATES ${${package_name}_LIBRARY_DIRS})
         target_link_directories(${target} ${_implied_scope} ${${package_name}_LIBRARY_DIRS})
       endif()
       if(${package_name}_DEFINITIONS)
+        # Remove duplicates might not be necessary here, but doesn't hurt
         list(REMOVE_DUPLICATES ${{package_name}_DEFINITIONS})
         target_compile_definitions(${target} ${_implied_scope} ${${package_name}_DEFINITIONS})
       endif()
