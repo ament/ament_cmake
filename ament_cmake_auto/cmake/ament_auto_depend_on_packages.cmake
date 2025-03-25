@@ -84,7 +84,7 @@ function(ament_auto_depend_on_packages target)
       if(${package_name}_INCLUDE_DIRS)
         # Order include directories to mitigate issues that come from
         # overriding packages without having a package-specifc include directory
-        ament_include_directories_order(ordered_include_dirs {${package_name}_INCLUDE_DIRS})
+        ament_include_directories_order(ordered_include_dirs ${${package_name}_INCLUDE_DIRS})
         target_include_directories(${target} ${_system} ${_implied_scope} ${ordered_include_dirs})
       endif()
       if(${package_name}_LIBRARIES)
