@@ -57,7 +57,9 @@ function(ament_auto_depend_on_packages target)
 
   if(ARG_SYSTEM)
     # convert bool -> string that is passed to target_include_directories
-    set(ARG_SYSTEM "SYSTEM")
+    set(_system "SYSTEM")
+  else()
+    set(_system "")
   endif()
 
   # Most target_*() macros require a keyword, but
@@ -80,7 +82,7 @@ function(ament_auto_depend_on_packages target)
       # Use standard CMake variables
       # https://cmake.org/cmake/help/latest/manual/cmake-developer.7.html#standard-variable-names
       if(${package_name}_INCLUDE_DIRS)
-        target_include_directories(${target} ${ARG_SYSTEM} ${_implied_scope} ${${package_name}_INCLUDE_DIRS})
+        target_include_directories(${target} ${_system} ${_implied_scope} ${${package_name}_INCLUDE_DIRS})
       endif()
       if(${package_name}_LIBRARIES)
         target_link_libraries(${target} ${ARG_SCOPE} ${${package_name}_LIBRARIES})
