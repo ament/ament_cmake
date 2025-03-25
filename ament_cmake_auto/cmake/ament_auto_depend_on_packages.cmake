@@ -99,7 +99,7 @@ function(ament_auto_depend_on_packages target)
       endif()
       if(${package_name}_DEFINITIONS)
         # Remove duplicates might not be necessary here, but doesn't hurt
-        list(REMOVE_DUPLICATES ${{package_name}_DEFINITIONS})
+        list(REMOVE_DUPLICATES ${${package_name}_DEFINITIONS})
         target_compile_definitions(${target} ${_implied_scope} ${${package_name}_DEFINITIONS})
       endif()
     endif()
