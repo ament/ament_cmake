@@ -82,15 +82,22 @@ function(ament_auto_depend_on_packages target)
       # Use standard CMake variables
       # https://cmake.org/cmake/help/latest/manual/cmake-developer.7.html#standard-variable-names
       if(${package_name}_INCLUDE_DIRS)
-        target_include_directories(${target} ${_system} ${_implied_scope} ${${package_name}_INCLUDE_DIRS})
+        # Order include directories to mitigate issues that come from
+        # overriding packages without having a package-specifc include directory
+        ament_include_directories_order(ordered_include_dirs {${package_name}_INCLUDE_DIRS})
+        target_include_directories(${target} ${_system} ${_implied_scope} ${ordered_include_dirs})
       endif()
       if(${package_name}_LIBRARIES)
-        target_link_libraries(${target} ${ARG_SCOPE} ${${package_name}_LIBRARIES})
+        # Deduplicate libraries to speed up linking in leaf packages.
+        ament_libraries_deduplicate(unique_libraries ${${package_name}_LIBRARIES})
+        target_link_libraries(${target} ${ARG_SCOPE} ${unique_libraries})
       endif()
       if(${package_name}_LIBRARY_DIRS)
+        list(REMOVE_DUPLICATES ${${package_name}_LIBRARY_DIRS})
         target_link_directories(${target} ${_implied_scope} ${${package_name}_LIBRARY_DIRS})
       endif()
       if(${package_name}_DEFINITIONS)
+        list(REMOVE_DUPLICATES ${{package_name}_DEFINITIONS})
         target_compile_definitions(${target} ${_implied_scope} ${${package_name}_DEFINITIONS})
       endif()
     endif()
