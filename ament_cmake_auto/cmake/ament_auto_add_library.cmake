@@ -85,11 +85,11 @@ macro(ament_auto_add_library target)
     endif()
   endif()
 
-  # add exported information from found build dependencies
+  # Depend on found build dependencies
   if(ARG_INTERFACE)
-    ament_target_dependencies(${target} INTERFACE ${${PROJECT_NAME}_FOUND_BUILD_DEPENDS})
+    ament_auto_depend_on_packages(${target} SCOPE INTERFACE PACKAGES ${${PROJECT_NAME}_FOUND_BUILD_DEPENDS})
   else()
-    ament_target_dependencies(${target} SYSTEM ${${PROJECT_NAME}_FOUND_BUILD_DEPENDS})
+    ament_auto_depend_on_packages(${target} SYSTEM PACKAGES ${${PROJECT_NAME}_FOUND_BUILD_DEPENDS})
   endif()
 
   list(APPEND ${PROJECT_NAME}_LIBRARIES "${target}")
