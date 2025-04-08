@@ -77,6 +77,13 @@ macro(ament_auto_package)
     else()
       ament_export_include_directories("include")
       install(DIRECTORY include/ DESTINATION include)
+      message(WARNING
+        "In this package, headers install destination is set to `include` "
+        "by ament_auto_package. It is recommended to install "
+        "`include/${PROJECT_NAME}` instead and will be the default behavior "
+        "of ament_auto_package from ROS 2 Kilted Kaiju. On distributions before "
+        "Kilted, ament_auto_package behaves the same way when you use "
+        "USE_SCOPED_HEADER_INSTALL_DIR option.")
   endif()
 
   # export and install all libraries
