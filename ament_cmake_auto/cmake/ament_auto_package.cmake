@@ -84,6 +84,7 @@ macro(ament_auto_package)
         "of ament_auto_package from ROS 2 Kilted Kaiju. On distributions before "
         "Kilted, ament_auto_package behaves the same way when you use "
         "USE_SCOPED_HEADER_INSTALL_DIR option.")
+    endif()
   endif()
 
   # export and install all libraries
