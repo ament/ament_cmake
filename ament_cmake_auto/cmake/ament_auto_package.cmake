@@ -77,7 +77,7 @@ macro(ament_auto_package)
     else()
       ament_export_include_directories("include")
       install(DIRECTORY include/ DESTINATION include)
-      message(WARNING
+      message(
         "In this package, headers install destination is set to `include` "
         "by ament_auto_package. It is recommended to install "
         "`include/${PROJECT_NAME}` instead and will be the default behavior "
