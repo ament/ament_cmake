@@ -2,6 +2,12 @@
 Changelog for package ament_cmake_auto
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.7.3 (2025-04-17)
+------------------
+* Fix headers destination installed by ament_auto_package (`#540 <https://github.com/ament/ament_cmake/issues/540>`_)
+* Add ament_auto_depend_on_packages to replace ament_target_dependencies (`#571 <https://github.com/ament/ament_cmake/issues/571>`_)
+* Contributors: Kotaro Yoshimoto, Shane Loretz
+
 2.7.2 (2024-11-19)
 ------------------
 

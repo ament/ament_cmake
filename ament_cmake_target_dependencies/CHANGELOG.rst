@@ -2,6 +2,11 @@
 Changelog for package ament_cmake_target_dependencies
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.7.3 (2025-04-17)
+------------------
+* Deprecate ament_target_dependencies() (`#572 <https://github.com/ament/ament_cmake/issues/572>`_)
+* Contributors: Shane Loretz
+
 2.7.2 (2024-11-19)
 ------------------
 
