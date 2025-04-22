@@ -28,6 +28,12 @@
 # :param INSTALL_TO_SHARE: a list of directories to be installed to the
 #   package's share directory
 # :type INSTALL_TO_SHARE: list of strings
+# :param USE_SCOPED_HEADER_INSTALL_DIR: if set, install headers to
+#   `include/${PROJECT_NAME}` instead of `include` directory.
+#   This helps prevent include path pollution when user package is
+#   merge-installed underlay package.
+#   For detail, see https://github.com/ros2/ros2/issues/1150.
+# :type USE_SCOPED_HEADER_INSTALL_DIR: option
 # :param ARGN: any other arguments are passed through to ament_package()
 # :type ARGN: list of strings
 #
@@ -43,7 +49,11 @@
 #
 
 macro(ament_auto_package)
-  cmake_parse_arguments(_ARG_AMENT_AUTO_PACKAGE "INSTALL_TO_PATH" "" "INSTALL_TO_SHARE" ${ARGN})
+  cmake_parse_arguments(_ARG_AMENT_AUTO_PACKAGE
+    "INSTALL_TO_PATH;USE_SCOPED_HEADER_INSTALL_DIR"
+    ""
+    "INSTALL_TO_SHARE"
+    ${ARGN})
   # passing all unparsed arguments to ament_package()
 
   # export all found build dependencies which are also run dependencies
@@ -61,8 +71,20 @@ macro(ament_auto_package)
 
   # export and install include directory of this package if it has one
   if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/include")
-    ament_export_include_directories("include")
-    install(DIRECTORY include/ DESTINATION include)
+    if(_ARG_AMENT_AUTO_PACKAGE_USE_SCOPED_HEADER_INSTALL_DIR)
+      ament_export_include_directories("include/${PROJECT_NAME}")
+      install(DIRECTORY include/ DESTINATION include/${PROJECT_NAME})
+    else()
+      ament_export_include_directories("include")
+      install(DIRECTORY include/ DESTINATION include)
+      message(
+        "In this package, headers install destination is set to `include` "
+        "by ament_auto_package. It is recommended to install "
+        "`include/${PROJECT_NAME}` instead and will be the default behavior "
+        "of ament_auto_package from ROS 2 Kilted Kaiju. On distributions before "
+        "Kilted, ament_auto_package behaves the same way when you use "
+        "USE_SCOPED_HEADER_INSTALL_DIR option.")
+    endif()
   endif()
 
   # export and install all libraries
