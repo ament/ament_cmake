@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_vendor_package
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 2.5.3 (2024-12-18)
 ------------------
 * Add explicit git dependency from ament_cmake_vendor_package (`#555 <https://github.com/ament/ament_cmake/issues/555>`_)

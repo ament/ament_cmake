@@ -2,6 +2,16 @@
 Changelog for package ament_cmake_auto
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add USE_SCOPED_HEADER_INSTALL_DIR option to ament_auto_package (backport `#540 <https://github.com/ament/ament_cmake/issues/540>`_) (`#578 <https://github.com/ament/ament_cmake/issues/578>`_)
+  * Add USE_SCOPED_HEADER_INSTALL_DIR option to ament_auto_package
+  * Add warning message to ament_auto_package related to USE_SCOPED_HEADER_INSTALL_DIR option
+  * Add missing endif to ament_auto_package
+  * Use no mode instead of WARNING in message in ament_auto_package.cmake
+  ---------
+* Contributors: Kotaro Yoshimoto
+
 2.5.3 (2024-12-18)
 ------------------
 
