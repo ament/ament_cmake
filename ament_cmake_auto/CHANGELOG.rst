@@ -2,8 +2,8 @@
 Changelog for package ament_cmake_auto
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.5.4 (2025-04-24)
+------------------
 * Add USE_SCOPED_HEADER_INSTALL_DIR option to ament_auto_package (backport `#540 <https://github.com/ament/ament_cmake/issues/540>`_) (`#578 <https://github.com/ament/ament_cmake/issues/578>`_)
   * Add USE_SCOPED_HEADER_INSTALL_DIR option to ament_auto_package
   * Add warning message to ament_auto_package related to USE_SCOPED_HEADER_INSTALL_DIR option
