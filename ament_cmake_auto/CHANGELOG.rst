@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_auto
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.8.0 (2025-04-24)
+------------------
+
 2.7.3 (2025-04-17)
 ------------------
 * Fix headers destination installed by ament_auto_package (`#540 <https://github.com/ament/ament_cmake/issues/540>`_)
