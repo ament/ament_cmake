@@ -16,39 +16,8 @@ include(CTest)
 if(BUILD_TESTING)
   # Simulate pre-installed package
   set(ament_cmake_gen_version_h_DIR ${CMAKE_SOURCE_DIR}/cmake)
-  include(cmake/ament_cmake_gen_version_h.cmake)
   include(cmake/ament_generate_version_header.cmake)
   find_package(ament_cmake_gtest REQUIRED)
-
-  if(DEFINED CMAKE_WARN_DEPRECATED)
-    set(old_deprecation_value ${CMAKE_WARN_DEPRECATED})
-  endif()
-  set(CMAKE_WARN_DEPRECATED OFF CACHE BOOL "" FORCE)
-
-  # Generate version headers using different scenarios
-  ament_cmake_gen_version_h(NO_INSTALL)
-  ament_cmake_gen_version_h(NO_INSTALL VERSION_FILE_NAME "version1.h")
-  ament_cmake_gen_version_h(NO_INSTALL INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/include VERSION_FILE_NAME "version2.h")
-  ament_cmake_gen_version_h(
-    NO_INSTALL TRUE
-    INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/include
-    VERSION_FILE_NAME "version_custom.h"
-    VERSION_MAJOR 1
-    VERSION_MINOR 2
-    VERSION_PATCH 3
-  )
-  if(old_deprecation_value)
-    set(CMAKE_WARN_DEPRECATED ${old_deprecation_value} CACHE BOOL "" FORCE)
-  else()
-    unset(CMAKE_WARN_DEPRECATED CACHE)
-  endif()
-
-  ament_add_gtest(test_${PROJECT_NAME}
-    test/test_version_custom.cpp
-    test/test_version_h.cpp
-    test/test_version1_h.cpp
-    test/test_version2_h.cpp
-  )
 
   # Generate version headers that don't conflict with existing tests
   add_library(some_lib INTERFACE)
