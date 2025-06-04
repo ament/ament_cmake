@@ -2,6 +2,9 @@
 Changelog for package ament_cmake
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 2.8.1 (2025-05-20)
 ------------------
 * Removed deprecated ament_cmake_export_interfaces package (`#581 <https://github.com/ament/ament_cmake/issues/581>`_)

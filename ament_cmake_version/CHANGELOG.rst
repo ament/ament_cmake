@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_version
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 2.8.1 (2025-05-20)
 ------------------
 
