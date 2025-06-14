@@ -57,29 +57,42 @@ endmacro()
 
 macro(_ament_cmake_python_copy_or_symlink package_name)
   set(_sync_target "ament_cmake_python_sync_${package_name}")
-  add_custom_target(${_sync_target})
 
+  set(_dsts  "")
+  set(_srcs  "")
   foreach(_dir IN LISTS _PACKAGE_DIRS)
     file(GLOB_RECURSE _dir_files RELATIVE "${_dir}" "${_dir}/*")
     foreach(_rel IN LISTS _dir_files)
       set(_src "${_dir}/${_rel}")
       set(_dst "${_build_dir}/${package_name}/${_rel}")
 
+      list(FIND _dsts "${_dst}" _idx)
+      if(NOT _idx EQUAL -1)
+        list(REMOVE_AT _dsts  ${_idx})
+        list(REMOVE_AT _srcs  ${_idx})
+      endif()
+      list(APPEND _dsts "${_dst}")
+      list(APPEND _srcs "${_src}")
+    endforeach()
+  endforeach()
+
+  set(_sync_deps "")
+  list(LENGTH _dsts _len)
+  if(_len GREATER 0)
+    math(EXPR _last "${_len} - 1")
+    foreach(_file_idx RANGE 0 ${_last})
+      list(GET _dsts ${_file_idx} _dst)
+      list(GET _srcs ${_file_idx} _src)
+
       get_filename_component(_dst_parent "${_dst}" DIRECTORY)
       file(MAKE_DIRECTORY "${_dst_parent}")
-
-      list(FIND _already_processed "${_dst}" _idx)
-      if(NOT _idx EQUAL -1)
-        continue()
-      endif()
-      list(APPEND _already_processed "${_dst}")
 
       if(AMENT_CMAKE_SYMLINK_INSTALL)
         add_custom_command(
           OUTPUT  "${_dst}"
           COMMAND ${CMAKE_COMMAND} -E create_symlink "${_src}" "${_dst}"
           DEPENDS "${_src}"
-          COMMENT "Symlinking ${_rel}"
+          COMMENT "Symlinking ${_dst}"
           VERBATIM
         )
       else()
@@ -87,12 +100,13 @@ macro(_ament_cmake_python_copy_or_symlink package_name)
           OUTPUT  "${_dst}"
           COMMAND ${CMAKE_COMMAND} -E copy_if_different "${_src}" "${_dst}"
           DEPENDS "${_src}"
-          COMMENT "Copying    ${_rel}"
+          COMMENT "Copying    ${_dst}"
           VERBATIM
         )
       endif()
+      list(APPEND _sync_deps "${_dst}")
     endforeach()
-  endforeach()
+  endif()
 
   if(_SETUP_CFG)
     set(_cfg_dst "${_build_dir}/setup.cfg")
@@ -109,9 +123,11 @@ macro(_ament_cmake_python_copy_or_symlink package_name)
       COMMENT "Synchronising setup.cfg"
       VERBATIM
     )
-    add_custom_target(phony_${package_name}_cfg DEPENDS "${_cfg_dst}")
-    add_dependencies(${_sync_target} phony_${package_name}_cfg)
+    list(APPEND _sync_deps "${_cfg_dst}")
   endif()
+
+  add_custom_target(${_sync_target} DEPENDS ${_sync_deps})
+
 endmacro()
 
 macro(_ament_cmake_python_generate_egg package_name)
