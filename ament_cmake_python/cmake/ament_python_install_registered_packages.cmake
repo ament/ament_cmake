@@ -1,3 +1,16 @@
+# Copyright 2025 Open Source Robotics Foundation, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 function(ament_cmake_python_install_registered_packages)
   get_property(_pkgs GLOBAL PROPERTY AMENT_CMAKE_PYTHON_PKGS)
@@ -12,7 +25,7 @@ function(_ament_cmake_python_install_package_impl package_name)
   endforeach()
 
   _ament_cmake_python_prepare_build(${package_name})
-  _ament_cmake_python_copy_or_symlink(${package_name})
+  _ament_cmake_python_copy_build_files(${package_name})
 
   # Technically, we should call find_package(Python3) first to ensure that Python3::Interpreter
   # is available.  But we skip this here because this macro requires ament_cmake, and ament_cmake
@@ -55,79 +68,44 @@ setup(
 
 endmacro()
 
-macro(_ament_cmake_python_copy_or_symlink package_name)
+macro(_ament_cmake_python_copy_build_files package_name)
   set(_sync_target "ament_cmake_python_sync_${package_name}")
+  set(_stage_dir   "${_build_dir}/${package_name}")
+  set(_stamp       "${_stage_dir}/.sync_stamp")
 
-  set(_dsts  "")
-  set(_srcs  "")
+  set(_cmds "")
+
+  list(APPEND _cmds
+    COMMAND ${CMAKE_COMMAND} -E remove_directory "${_stage_dir}")
+
   foreach(_dir IN LISTS _PACKAGE_DIRS)
-    file(GLOB_RECURSE _dir_files CONFIGURE_DEPENDS RELATIVE "${_dir}" "${_dir}/*")
-    foreach(_rel IN LISTS _dir_files)
-      set(_src "${_dir}/${_rel}")
-      set(_dst "${_build_dir}/${package_name}/${_rel}")
-
-      list(FIND _dsts "${_dst}" _idx)
-      if(NOT _idx EQUAL -1)
-        list(REMOVE_AT _dsts  ${_idx})
-        list(REMOVE_AT _srcs  ${_idx})
-      endif()
-      list(APPEND _dsts "${_dst}")
-      list(APPEND _srcs "${_src}")
-    endforeach()
+    list(APPEND _cmds
+      COMMAND ${CMAKE_COMMAND} -E copy_directory
+              "${_dir}" "${_stage_dir}")
   endforeach()
 
-  set(_sync_deps "")
-  list(LENGTH _dsts _len)
-  if(_len GREATER 0)
-    math(EXPR _last "${_len} - 1")
-    foreach(_file_idx RANGE 0 ${_last})
-      list(GET _dsts ${_file_idx} _dst)
-      list(GET _srcs ${_file_idx} _src)
-
-      get_filename_component(_dst_parent "${_dst}" DIRECTORY)
-      file(MAKE_DIRECTORY "${_dst_parent}")
-
-      if(AMENT_CMAKE_SYMLINK_INSTALL)
-        add_custom_command(
-          OUTPUT  "${_dst}"
-          COMMAND ${CMAKE_COMMAND} -E create_symlink "${_src}" "${_dst}"
-          DEPENDS "${_src}"
-          COMMENT "Symlinking ${_dst}"
-          VERBATIM
-        )
-      else()
-        add_custom_command(
-          OUTPUT  "${_dst}"
-          COMMAND ${CMAKE_COMMAND} -E copy_if_different "${_src}" "${_dst}"
-          DEPENDS "${_src}"
-          COMMENT "Copying    ${_dst}"
-          VERBATIM
-        )
-      endif()
-      list(APPEND _sync_deps "${_dst}")
-    endforeach()
-  endif()
-
   if(_SETUP_CFG)
-    set(_cfg_dst "${_build_dir}/setup.cfg")
-    if(AMENT_CMAKE_SYMLINK_INSTALL)
-      set(_copy_cmd ${CMAKE_COMMAND} -E create_symlink "${_SETUP_CFG}" "${_cfg_dst}")
-    else()
-      set(_copy_cmd ${CMAKE_COMMAND} -E copy_if_different "${_SETUP_CFG}" "${_cfg_dst}")
-    endif()
-
-    add_custom_command(
-      OUTPUT  "${_cfg_dst}"
-      COMMAND ${_copy_cmd}
-      DEPENDS "${_SETUP_CFG}"
-      COMMENT "Synchronising setup.cfg"
-      VERBATIM
-    )
-    list(APPEND _sync_deps "${_cfg_dst}")
+    list(APPEND _cmds
+      COMMAND ${CMAKE_COMMAND} -E copy_if_different
+              "${_SETUP_CFG}" "${_build_dir}/setup.cfg")
   endif()
 
-  add_custom_target(${_sync_target} DEPENDS ${_sync_deps})
+  foreach(_dir IN LISTS _PACKAGE_DIRS)
+    list(APPEND _cmds
+      COMMAND ${CMAKE_COMMAND} -E touch "${_dir}")
+  endforeach()
 
+  list(APPEND _cmds
+    COMMAND ${CMAKE_COMMAND} -E touch "${_stamp}")
+
+  add_custom_command(
+    OUTPUT  "${_stamp}"
+    ${_cmds}
+    DEPENDS ${_PACKAGE_DIRS} ${_SETUP_CFG}
+    COMMENT "Synchronising sources for ${package_name} (copy_directory)"
+    VERBATIM)
+
+  add_custom_target(${_sync_target} DEPENDS "${_stamp}")
 endmacro()
 
 macro(_ament_cmake_python_generate_egg package_name)
