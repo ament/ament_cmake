@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.20)
 project(ament_cmake_gen_version_h)
 find_package(ament_cmake_core REQUIRED)
 
