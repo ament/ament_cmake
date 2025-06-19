@@ -2,6 +2,11 @@
 Changelog for package ament_cmake_core
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.8.3 (2025-06-19)
+------------------
+* perf: faster normalize_path implementation using cmake_path (`#586 <https://github.com/ament/ament_cmake/issues/586>`_)
+* Contributors: Nathan Boisard
+
 2.8.2 (2025-06-04)
 ------------------
 

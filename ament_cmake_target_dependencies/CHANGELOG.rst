@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_target_dependencies
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.8.3 (2025-06-19)
+------------------
+
 2.8.2 (2025-06-04)
 ------------------
 * Revert "Removed deprecated function ament_cmake_target_dependencies" (`#585 <https://github.com/ament/ament_cmake/issues/585>`_)
