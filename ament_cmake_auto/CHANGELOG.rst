@@ -2,6 +2,11 @@
 Changelog for package ament_cmake_auto
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add `USE_SCOPED_HEADER_INSTALL_DIR` option to ament_auto_package (`#577 <https://github.com/ament/ament_cmake/issues/577>`_)
+* Contributors: Kotaro Yoshimoto
+
 1.3.11 (2024-11-25)
 -------------------
 
