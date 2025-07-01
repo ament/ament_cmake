@@ -2,6 +2,11 @@
 Changelog for package ament_cmake_gen_version_h
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Update CMake requirement (`#589 <https://github.com/ament/ament_cmake/issues/589>`_)
+* Contributors: mosfet80
+
 2.8.3 (2025-06-19)
 ------------------
 

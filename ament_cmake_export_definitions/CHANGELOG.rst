@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_export_definitions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 2.8.3 (2025-06-19)
 ------------------
 
