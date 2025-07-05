@@ -70,42 +70,23 @@ endmacro()
 
 macro(_ament_cmake_python_copy_build_files package_name)
   set(_sync_target "ament_cmake_python_sync_${package_name}")
-  set(_stage_dir   "${_build_dir}/${package_name}")
-  set(_stamp       "${_stage_dir}/.sync_stamp")
 
-  set(_cmds "")
-
-  list(APPEND _cmds
-    COMMAND ${CMAKE_COMMAND} -E remove_directory "${_stage_dir}")
-
+  add_custom_target(${_sync_target} DEPENDS ${_PACKAGE_DIRS} ${_SETUP_CFG})
+  
   foreach(_dir IN LISTS _PACKAGE_DIRS)
-    list(APPEND _cmds
+    add_custom_command(TARGET ${_sync_target}
       COMMAND ${CMAKE_COMMAND} -E copy_directory
-              "${_dir}" "${_stage_dir}")
+      "${_dir}" "${_build_dir}/${package_name}"
+    )
   endforeach()
 
   if(_SETUP_CFG)
-    list(APPEND _cmds
+    add_custom_command(TARGET ${_sync_target}
       COMMAND ${CMAKE_COMMAND} -E copy_if_different
-              "${_SETUP_CFG}" "${_build_dir}/setup.cfg")
+      "${_SETUP_CFG}" "${_build_dir}/setup.cfg"
+    )
   endif()
-
-  foreach(_dir IN LISTS _PACKAGE_DIRS)
-    list(APPEND _cmds
-      COMMAND ${CMAKE_COMMAND} -E touch "${_dir}")
-  endforeach()
-
-  list(APPEND _cmds
-    COMMAND ${CMAKE_COMMAND} -E touch "${_stamp}")
-
-  add_custom_command(
-    OUTPUT  "${_stamp}"
-    ${_cmds}
-    DEPENDS ${_PACKAGE_DIRS} ${_SETUP_CFG}
-    COMMENT "Synchronising sources for ${package_name} (copy_directory)"
-    VERBATIM)
-
-  add_custom_target(${_sync_target} DEPENDS "${_stamp}")
+  
 endmacro()
 
 macro(_ament_cmake_python_generate_egg package_name)
