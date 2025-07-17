@@ -53,9 +53,13 @@
 #   otherwise.
 # :type IS_VENDORED_OUTPUT_VARIABLE_NAME: string
 #
-# Beside proper CMake macro arguments, the macro also is influenced by the
-# following CMake advanced options, that can be set from the CMake command
-# line when the project that contains the 'ament_vendor' call is configured.
+# The AMENT_VENDOR_POLICY cache entry and the SATISFIED argument
+# control whether or not this function builds the vendor package.
+# If you want something other than the default, set AMENT_VENDOR_POLICY via the
+# command line:
+#
+#    * If you are using cmake directly: cmake -DAMENT_VENDOR_POLICY:STRING=DEFAULT ...
+#    * If you are using colcon: colcon --cmake-args -DAMENT_VENDOR_POLICY:STRING=DEFAULT ...
 #
 #   AMENT_VENDOR_POLICY: String option that specifies how ament_vendor behaves,
 #                        the allowed values are listed in the following.
@@ -70,9 +74,9 @@
 #                   or false. This option is in unsupported by most packages,
 #                   so use at your own risk, as it could break the buid.
 #
-# To check if a package has been actually vendored, downstream users of
-# ``ament_vendor` can pass a variable name to IS_VENDORED_OUTPUT_VARIABLE_NAME
-# argument, and check its value.
+# To check if a package has been actually vendored, pass a variable name
+# into the argument IS_VENDORED_OUTPUT_VARIABLE_NAME, and check
+# if the variable is TRUE after you call `ament_vendor`.
 #
 # @public
 #
