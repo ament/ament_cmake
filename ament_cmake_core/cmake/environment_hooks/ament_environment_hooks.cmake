@@ -82,7 +82,7 @@ function(ament_environment_hooks)
     get_filename_component(hook_basename "${hook}" NAME_WE)
     if(DEFINED AMENT_CMAKE_ENVIRONMENT_HOOKS_DESC_${hook_basename})
       # write .dsv file containing the descriptor of the environment hook
-      set(dsv_file "${CMAKE_BINARY_DIR}/ament_cmake_environment_hooks/${hook_basename}.dsv")
+      set(dsv_file "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_environment_hooks/${hook_basename}.dsv")
       file(GENERATE OUTPUT "${dsv_file}" CONTENT "${AMENT_CMAKE_ENVIRONMENT_HOOKS_DESC_${hook_basename}}\n")
       install(
         FILES "${dsv_file}"

@@ -2,6 +2,75 @@
 Changelog for package ament_cmake_auto
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.8.4 (2025-07-01)
+------------------
+
+2.8.3 (2025-06-19)
+------------------
+
+2.8.2 (2025-06-04)
+------------------
+
+2.8.1 (2025-05-20)
+------------------
+
+2.8.0 (2025-04-24)
+------------------
+
+2.7.3 (2025-04-17)
+------------------
+* Fix headers destination installed by ament_auto_package (`#540 <https://github.com/ament/ament_cmake/issues/540>`_)
+* Add ament_auto_depend_on_packages to replace ament_target_dependencies (`#571 <https://github.com/ament/ament_cmake/issues/571>`_)
+* Contributors: Kotaro Yoshimoto, Shane Loretz
+
+2.7.2 (2024-11-19)
+------------------
+
+2.7.1 (2024-10-03)
+------------------
+
+2.7.0 (2024-06-25)
+------------------
+
+2.6.1 (2024-06-17)
+------------------
+* More specific prefix in some cmake_parse_argument calls (`#523 <https://github.com/ament/ament_cmake/issues/523>`_)
+* Contributors: Kevin Egger
+
+2.6.0 (2024-04-26)
+------------------
+
+2.5.0 (2024-04-16)
+------------------
+
+2.4.0 (2024-03-28)
+------------------
+* Update maintainer list in package.xml files (`#503 <https://github.com/ament/ament_cmake/issues/503>`_)
+* Contributors: Michael Jeronimo
+
+2.3.2 (2023-12-26)
+------------------
+
+2.3.1 (2023-11-06)
+------------------
+* Add ament_auto_add_gmock to ament_cmake_auto (`#482 <https://github.com/ament/ament_cmake/issues/482>`_)
+* Contributors: Jordan Palacios
+
+2.3.0 (2023-09-07)
+------------------
+
+2.2.2 (2023-08-21)
+------------------
+
+2.2.1 (2023-06-21)
+------------------
+
+2.2.0 (2023-06-07)
+------------------
+
+2.1.0 (2023-04-26)
+------------------
+
 2.0.2 (2023-04-12)
 ------------------
 

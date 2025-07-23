@@ -136,6 +136,9 @@ setup(
     endif()
   endif()
 
+  # Technically, we should call find_package(Python3) first to ensure that Python3::Interpreter
+  # is available.  But we skip this here because this macro requires ament_cmake, and ament_cmake
+  # calls find_package(Python3) for us.
   get_executable_path(python_interpreter Python3::Interpreter BUILD)
 
   add_custom_target(

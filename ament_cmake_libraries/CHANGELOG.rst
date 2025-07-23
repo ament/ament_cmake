@@ -2,6 +2,73 @@
 Changelog for package ament_cmake_libraries
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.8.4 (2025-07-01)
+------------------
+
+2.8.3 (2025-06-19)
+------------------
+
+2.8.2 (2025-06-04)
+------------------
+
+2.8.1 (2025-05-20)
+------------------
+
+2.8.0 (2025-04-24)
+------------------
+
+2.7.3 (2025-04-17)
+------------------
+
+2.7.2 (2024-11-19)
+------------------
+
+2.7.1 (2024-10-03)
+------------------
+
+2.7.0 (2024-06-25)
+------------------
+
+2.6.1 (2024-06-17)
+------------------
+
+2.6.0 (2024-04-26)
+------------------
+
+2.5.0 (2024-04-16)
+------------------
+* perf: faster ament_libraries_deduplicate implementation (`#448 <https://github.com/ament/ament_cmake/issues/448>`_)
+  Co-authored-by: Scott K Logan <logans@cottsay.net>
+* Contributors: Vincent Richard
+
+2.4.0 (2024-03-28)
+------------------
+* Subtle fix for ament_libraries_deduplicate tests (`#516 <https://github.com/ament/ament_cmake/issues/516>`_)
+* Add some basic tests to ament_cmake_libraries (`#512 <https://github.com/ament/ament_cmake/issues/512>`_)
+* Update maintainer list in package.xml files (`#503 <https://github.com/ament/ament_cmake/issues/503>`_)
+* Contributors: Michael Jeronimo, Scott K Logan
+
+2.3.2 (2023-12-26)
+------------------
+
+2.3.1 (2023-11-06)
+------------------
+
+2.3.0 (2023-09-07)
+------------------
+
+2.2.2 (2023-08-21)
+------------------
+
+2.2.1 (2023-06-21)
+------------------
+
+2.2.0 (2023-06-07)
+------------------
+
+2.1.0 (2023-04-26)
+------------------
+
 2.0.2 (2023-04-12)
 ------------------
 

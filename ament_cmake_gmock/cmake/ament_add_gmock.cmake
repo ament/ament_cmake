@@ -47,79 +47,45 @@
 # @public
 #
 macro(ament_add_gmock target)
-  _ament_cmake_gmock_find_gmock()
-  if(GMOCK_FOUND)
-    _ament_add_gmock("${target}" ${ARGN})
-  endif()
-endmacro()
-
-function(_ament_add_gmock target)
-  cmake_parse_arguments(ARG
+  cmake_parse_arguments(_ARG
     "SKIP_LINKING_MAIN_LIBRARIES;SKIP_TEST"
     "RUNNER;TIMEOUT;WORKING_DIRECTORY"
     "APPEND_ENV;APPEND_LIBRARY_DIRS;ENV"
     ${ARGN})
-  if(NOT ARG_UNPARSED_ARGUMENTS)
+  if(NOT _ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR
       "ament_add_gmock() must be invoked with at least one source file")
   endif()
 
-  # should be EXCLUDE_FROM_ALL if it would be possible
-  # to add this target as a dependency to the "test" target
-  add_executable("${target}" ${ARG_UNPARSED_ARGUMENTS})
-  target_include_directories("${target}" SYSTEM PRIVATE "${GMOCK_INCLUDE_DIRS}")
-  if(NOT ARG_SKIP_LINKING_MAIN_LIBRARIES)
-    target_link_libraries("${target}" ${GMOCK_MAIN_LIBRARIES})
+  # add executable
+  set(_argn_executable ${_ARG_UNPARSED_ARGUMENTS})
+  if(_ARG_SKIP_LINKING_MAIN_LIBRARIES)
+    list(APPEND _argn_executable "SKIP_LINKING_MAIN_LIBRARIES")
   endif()
-  target_link_libraries("${target}" ${GMOCK_LIBRARIES})
+  ament_add_gmock_executable("${target}" ${_argn_executable})
 
-  set(executable "$<TARGET_FILE:${target}>")
-  set(result_file "${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/${target}.gtest.xml")
-  set(cmd
-    "${executable}"
-    "--gtest_output=xml:${result_file}")
-  if(ARG_ENV)
-    set(ARG_ENV "ENV" ${ARG_ENV})
+  # add test
+  set(_argn_test "")
+  if(_ARG_RUNNER)
+    list(APPEND _argn_test "RUNNER" "${_ARG_RUNNER}")
   endif()
-  if(ARG_APPEND_ENV)
-    set(ARG_APPEND_ENV "APPEND_ENV" ${ARG_APPEND_ENV})
+  if(_ARG_TIMEOUT)
+    list(APPEND _argn_test "TIMEOUT" "${_ARG_TIMEOUT}")
   endif()
-  if(ARG_APPEND_LIBRARY_DIRS)
-    set(ARG_APPEND_LIBRARY_DIRS "APPEND_LIBRARY_DIRS" ${ARG_APPEND_LIBRARY_DIRS})
+  if(_ARG_WORKING_DIRECTORY)
+    list(APPEND _argn_test "WORKING_DIRECTORY" "${_ARG_WORKING_DIRECTORY}")
   endif()
-  # Options come out TRUE or FALSE but need to be passed as value or empty
-  if(ARG_SKIP_TEST)
-    set(ARG_SKIP_TEST "SKIP_TEST")
-  else()
-    set(ARG_SKIP_TEST "")
+  if(_ARG_SKIP_TEST)
+    list(APPEND _argn_test "SKIP_TEST")
   endif()
-  if(ARG_RUNNER)
-    set(ARG_RUNNER "RUNNER" ${ARG_RUNNER})
+  if(_ARG_ENV)
+    list(APPEND _argn_test "ENV" ${_ARG_ENV})
   endif()
-  if(ARG_TIMEOUT)
-    set(ARG_TIMEOUT "TIMEOUT" ${ARG_TIMEOUT})
+  if(_ARG_APPEND_ENV)
+    list(APPEND _argn_test "APPEND_ENV" ${_ARG_APPEND_ENV})
   endif()
-  if(ARG_WORKING_DIRECTORY)
-    set(ARG_WORKING_DIRECTORY "WORKING_DIRECTORY" "${ARG_WORKING_DIRECTORY}")
+  if(_ARG_APPEND_LIBRARY_DIRS)
+    list(APPEND _argn_test "APPEND_LIBRARY_DIRS" ${_ARG_APPEND_LIBRARY_DIRS})
   endif()
-
-  ament_add_test(
-    "${target}"
-    COMMAND ${cmd}
-    OUTPUT_FILE "${CMAKE_BINARY_DIR}/ament_cmake_gmock/${target}.txt"
-    RESULT_FILE "${result_file}"
-    ${ARG_RUNNER}
-    ${ARG_ENV}
-    ${ARG_APPEND_ENV}
-    ${ARG_APPEND_LIBRARY_DIRS}
-    ${ARG_SKIP_TEST}
-    ${ARG_TIMEOUT}
-    ${ARG_WORKING_DIRECTORY}
-  )
-  set_tests_properties(
-    "${target}"
-    PROPERTIES
-    REQUIRED_FILES "${executable}"
-    LABELS "gmock"
-  )
-endfunction()
+  ament_add_gmock_test("${target}" ${_argn_test})
+endmacro()

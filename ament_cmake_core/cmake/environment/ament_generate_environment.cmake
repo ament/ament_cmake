@@ -44,10 +44,10 @@ function(ament_generate_environment)
       get_filename_component(name "${name}" NAME)
       configure_file(
         "${file}"
-        "${CMAKE_BINARY_DIR}/ament_cmake_environment/${name}"
+        "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_environment/${name}"
         @ONLY
       )
-      set(file "${CMAKE_BINARY_DIR}/ament_cmake_environment/${name}")
+      set(file "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_environment/${name}")
     endif()
 
     install(

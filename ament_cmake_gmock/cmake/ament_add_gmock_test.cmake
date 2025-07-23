@@ -1,4 +1,4 @@
-# Copyright 2014-2016 Open Source Robotics Foundation, Inc.
+# Copyright 2014-2015 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,9 +13,9 @@
 # limitations under the License.
 
 #
-# Add an existing executable using gtest as a test.
+# Add an existing executable using gmock as a test.
 #
-# Register an executable created with ament_add_gtest_executable() as a test.
+# Register an executable created with ament_add_gmock_executable() as a test.
 # If the specified target does not exist the registration is skipped.
 #
 # :param target: the target name which will also be used as the test name
@@ -44,7 +44,7 @@
 #
 # @public
 #
-function(ament_add_gtest_test target)
+function(ament_add_gmock_test target)
   if(NOT TARGET ${target})
     return()
   endif()
@@ -56,7 +56,7 @@ function(ament_add_gtest_test target)
     ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR
-      "ament_add_gtest_test() called with unused arguments: ${ARGN}")
+      "ament_add_gmock_test() called with unused arguments: ${ARGN}")
   endif()
 
   if(ARG_TEST_NAME)
@@ -66,7 +66,7 @@ function(ament_add_gtest_test target)
   endif()
 
   set(executable "$<TARGET_FILE:${target}>")
-  set(result_file "${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/${TEST_NAME}.gtest.xml")
+  set(result_file "${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/${target}.gtest.xml")
   set(cmd
     "${executable}"
     "--gtest_output=xml:${result_file}")
@@ -88,14 +88,17 @@ function(ament_add_gtest_test target)
   if(ARG_WORKING_DIRECTORY)
     set(ARG_WORKING_DIRECTORY "WORKING_DIRECTORY" "${ARG_WORKING_DIRECTORY}")
   endif()
+  # Options come out TRUE or FALSE but need to be passed as value or empty
   if(ARG_SKIP_TEST)
     set(ARG_SKIP_TEST "SKIP_TEST")
+  else()
+    set(ARG_SKIP_TEST "")
   endif()
 
   ament_add_test(
     "${TEST_NAME}"
     COMMAND ${cmd}
-    OUTPUT_FILE "${CMAKE_BINARY_DIR}/ament_cmake_gtest/${TEST_NAME}.txt"
+    OUTPUT_FILE "${CMAKE_BINARY_DIR}/ament_cmake_gmock/${TEST_NAME}.txt"
     RESULT_FILE "${result_file}"
     ${ARG_RUNNER}
     ${ARG_SKIP_TEST}
@@ -109,6 +112,6 @@ function(ament_add_gtest_test target)
     "${TEST_NAME}"
     PROPERTIES
     REQUIRED_FILES "${executable}"
-    LABELS "gtest"
+    LABELS "gmock"
   )
 endfunction()

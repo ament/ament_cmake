@@ -99,6 +99,8 @@ function(ament_add_pytest_test testname path)
     "--junit-prefix=${PROJECT_NAME}"
   )
 
+  set(ARG_ENV PYTHONDONTWRITEBYTECODE=1 ${ARG_ENV})
+
   if(ARG_NOCAPTURE)
     # disable output capturing
     list(APPEND cmd "-s")

@@ -2,6 +2,82 @@
 Changelog for package ament_cmake_core
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.8.4 (2025-07-01)
+------------------
+
+2.8.3 (2025-06-19)
+------------------
+* perf: faster normalize_path implementation using cmake_path (`#586 <https://github.com/ament/ament_cmake/issues/586>`_)
+* Contributors: Nathan Boisard
+
+2.8.2 (2025-06-04)
+------------------
+
+2.8.1 (2025-05-20)
+------------------
+
+2.8.0 (2025-04-24)
+------------------
+
+2.7.3 (2025-04-17)
+------------------
+* Create destination directory during symlink install (`#569 <https://github.com/ament/ament_cmake/issues/569>`_)
+* Contributors: Ezra Brooks
+
+2.7.2 (2024-11-19)
+------------------
+* Support generator expressions when symlinking install(FILES) (`#560 <https://github.com/ament/ament_cmake/issues/560>`_)
+* Always symlink TARGET\_{LINKER,SONAME}_FILE on libraries (`#535 <https://github.com/ament/ament_cmake/issues/535>`_)
+* Fix symlink install of versioned libs on macOS (`#558 <https://github.com/ament/ament_cmake/issues/558>`_)
+* Contributors: Scott K Logan
+
+2.7.1 (2024-10-03)
+------------------
+
+2.7.0 (2024-06-25)
+------------------
+
+2.6.1 (2024-06-17)
+------------------
+* More specific prefix in some cmake_parse_argument calls (`#523 <https://github.com/ament/ament_cmake/issues/523>`_)
+* Contributors: Kevin Egger
+
+2.6.0 (2024-04-26)
+------------------
+
+2.5.0 (2024-04-16)
+------------------
+
+2.4.0 (2024-03-28)
+------------------
+* Set hints to find the python version we actually want. (`#508 <https://github.com/ament/ament_cmake/issues/508>`_)
+* Update maintainer list in package.xml files (`#503 <https://github.com/ament/ament_cmake/issues/503>`_)
+* Contributors: Chris Lalancette, Michael Jeronimo
+
+2.3.2 (2023-12-26)
+------------------
+
+2.3.1 (2023-11-06)
+------------------
+* Use CMAKE_CURRENT_BINARY_DIR instead of CMAKE_BINARY_DIR  in ament_generate_environment (`#485 <https://github.com/ament/ament_cmake/issues/485>`_)
+* Fix CMake error when entire ament projects are added via add_subdirectory (`#484 <https://github.com/ament/ament_cmake/issues/484>`_)
+* Contributors: Silvio Traversaro
+
+2.3.0 (2023-09-07)
+------------------
+
+2.2.2 (2023-08-21)
+------------------
+
+2.2.1 (2023-06-21)
+------------------
+
+2.2.0 (2023-06-07)
+------------------
+
+2.1.0 (2023-04-26)
+------------------
+
 2.0.2 (2023-04-12)
 ------------------
 

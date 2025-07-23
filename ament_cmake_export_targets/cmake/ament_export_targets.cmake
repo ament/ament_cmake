@@ -16,12 +16,17 @@
 # Export targets to downstream packages.
 #
 # Each export name must have been used to install targets using
-# ``install(TARGETS ... EXPORT name ...)``.
+# ``install(TARGETS ... EXPORT name NAMESPACE my_namespace ...)``.
 # The ``install(EXPORT ...)`` invocation is handled by this macros.
 #
 # :param HAS_LIBRARY_TARGET: if set, an environment variable will be defined
 #   so that the library can be found at runtime
 # :type HAS_LIBRARY_TARGET: option
+# :keyword NAMESPACE: the exported namespace for the target if set. 
+#    The default is the value of ``${PROJECT_NAME}::``.
+#    This is an advanced option. It should be used carefully and clearly documented
+#    in a usage guide for any package that makes use of this option.
+# :type NAMESPACE: string
 # :param ARGN: a list of export names
 # :type ARGN: list of strings
 #
@@ -32,13 +37,20 @@ macro(ament_export_targets)
     message(FATAL_ERROR
       "ament_export_targets() must be called before ament_package()")
   endif()
-  cmake_parse_arguments(_ARG "HAS_LIBRARY_TARGET" "" "" ${ARGN})
+  cmake_parse_arguments(_ARG "HAS_LIBRARY_TARGET" "NAMESPACE" "" ${ARGN})
 
   if(${ARGC} GREATER 0)
     _ament_cmake_export_targets_register_package_hook()
     foreach(_arg ${_ARG_UNPARSED_ARGUMENTS})
       list(APPEND _AMENT_CMAKE_EXPORT_TARGETS "${_arg}")
     endforeach()
+
+    set(_AMENT_CMAKE_EXPORT_TARGETS_NAMESPACE ${_ARG_NAMESPACE})
+
+    # Allow optionally overriding default namespace
+    if(NOT DEFINED _AMENT_CMAKE_EXPORT_TARGETS_NAMESPACE)
+      set(_AMENT_CMAKE_EXPORT_TARGETS_NAMESPACE "${PROJECT_NAME}::")
+    endif()
 
     # if the export name contains is a library target
     # make sure to register an environment hook
