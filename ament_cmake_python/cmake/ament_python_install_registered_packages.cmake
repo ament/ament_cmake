@@ -72,7 +72,7 @@ macro(_ament_cmake_python_copy_build_files package_name)
   set(_sync_target "ament_cmake_python_sync_${package_name}")
 
   add_custom_target(${_sync_target} DEPENDS ${_PACKAGE_DIRS} ${_SETUP_CFG})
-  
+
   foreach(_dir IN LISTS _PACKAGE_DIRS)
     add_custom_command(TARGET ${_sync_target}
       COMMAND ${CMAKE_COMMAND} -E copy_directory
@@ -132,14 +132,24 @@ macro(_ament_cmake_python_install_scripts package_name)
 endmacro()
 
 macro(_ament_cmake_python_install_sources package_name)
-  foreach(_dir IN LISTS _PACKAGE_DIRS)
+  set(_DIRS_TO_INSTALL "${_PACKAGE_DIRS}")
+  list(TRANSFORM _DIRS_TO_INSTALL APPEND "/")  
+  if(AMENT_CMAKE_SYMLINK_INSTALL)
     install(
-      DIRECTORY "${_dir}/"
+      DIRECTORY ${_DIRS_TO_INSTALL}
       DESTINATION "${_DESTINATION}/${package_name}"
       PATTERN "*.pyc"     EXCLUDE
       PATTERN "__pycache__" EXCLUDE
     )
-  endforeach()
+  else()
+    # we merge during build as cmake doesn't guarantee install sequence
+    install(
+      DIRECTORY "${_build_dir}/${package_name}/"
+      DESTINATION "${_DESTINATION}/${package_name}"
+      PATTERN "*.pyc"     EXCLUDE
+      PATTERN "__pycache__" EXCLUDE
+    )
+  endif()
 endmacro()
 
 macro(_ament_cmake_python_byte_compile package_name)
