@@ -142,12 +142,24 @@ macro(_ament_cmake_python_install_sources package_name)
       PATTERN "__pycache__" EXCLUDE
     )
   else()
-    # we merge during build as cmake doesn't guarantee install sequence
-    install(
-      DIRECTORY "${_build_dir}/${package_name}/"
-      DESTINATION "${_DESTINATION}/${package_name}"
-      PATTERN "*.pyc"     EXCLUDE
-      PATTERN "__pycache__" EXCLUDE
+    # cmake does not support overwriting a more recently modified file
+    # we must remove any existing files before installing the new package
+    install(CODE
+      "set(_dest \"\${CMAKE_INSTALL_PREFIX}/${_DESTINATION}/${package_name}\")
+      set(_dirs ${_DIRS_TO_INSTALL})
+      foreach(_dir IN LISTS _dirs)
+        file(GLOB_RECURSE _rel_files RELATIVE \"\${_dir}\" \"\${_dir}/*\")
+        foreach(_file IN LISTS _rel_files)
+          file(REMOVE \"\${_dest}/\${_file}\")
+        endforeach()
+        file(INSTALL
+          DESTINATION \"\${_dest}\"
+          TYPE DIRECTORY
+          FILES \"\${_dir}\"
+          PATTERN \"*.pyc\"       EXCLUDE
+          PATTERN \"__pycache__\" EXCLUDE
+        )
+      endforeach()"
     )
   endif()
 endmacro()
