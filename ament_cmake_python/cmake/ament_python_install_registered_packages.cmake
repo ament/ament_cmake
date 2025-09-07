@@ -73,6 +73,16 @@ macro(_ament_cmake_python_copy_build_files package_name)
 
   add_custom_target(${_sync_target} DEPENDS ${_PACKAGE_DIRS} ${_SETUP_CFG})
 
+  # Force any interface packages to be at the front of the list to prevent overwrite of
+  # python package __init__.py files
+  foreach(_dir IN LISTS _PACKAGE_DIRS)
+    string(FIND "${_dir}" "rosidl_generator_py" SUBSTRING_INDEX)
+    if(NOT SUBSTRING_INDEX EQUAL -1)
+      list(REMOVE_ITEM _PACKAGE_DIRS ${_dir})
+      list(PREPEND _PACKAGE_DIRS ${_dir})
+    endif()
+  endforeach()
+
   foreach(_dir IN LISTS _PACKAGE_DIRS)
     add_custom_command(TARGET ${_sync_target}
       COMMAND ${CMAKE_COMMAND} -E copy_directory

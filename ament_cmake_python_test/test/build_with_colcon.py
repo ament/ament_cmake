@@ -35,6 +35,12 @@ TESTS_OPTIONS = [
     'description': 'Package with python code',
   },
   {
+    'name': 'msg_package',
+    'description': 'Package with only msg files',
+    'has_msg': True,
+    'has_python': False,
+  },
+  {
     'name': 'python_package_symlink',
     'description': 'Package with python code, installed with symlink in build',
     'symlink_install': True,
@@ -64,12 +70,6 @@ TESTS_OPTIONS = [
     'description': 'Package with python code',
     'scripts_destination': 'lib/python_package_with_scripts',
   },
-  {
-    'name': 'msg_package',
-    'description': 'Package with only msg files',
-    'has_msg': True,
-    'has_python': False,
-  },
 ]
 
 
@@ -80,9 +80,25 @@ def test_from_template():
   packages_dir = PWD / 'packages'
   shutil.rmtree(packages_dir, ignore_errors=True)
 
-  # Create test packages from template
-  template_dir = SOURCE_DIR / 'test' / 'pkg_template'
+  # extend the tests to include combinations of msg and python
+  additional_options = TESTS_OPTIONS.copy()
   for options in TESTS_OPTIONS:
+    if options['name'].startswith('python_package'):
+      msg_options = options.copy()
+      msg_options['name'] += '_with_msg'
+      msg_options['description'] += 'and msg files'
+      msg_options['has_msg'] = True
+      additional_options.append(msg_options)
+    elif options['name'].startswith('msg_package'):
+      py_options = options.copy()
+      py_options['name'] += '_with_python_before'
+      py_options['description'] += ' and python code before msg'
+      py_options['has_python_before'] = True
+      additional_options.append(py_options)
+
+  template_dir = SOURCE_DIR / 'test' / 'pkg_template'
+  # Create test packages from template
+  for options in additional_options:
     options = DEFAULT_OPTIONS | options
     print(f"Generating package {options['name']}")
     print(f"  options: {options}")
@@ -96,7 +112,7 @@ def test_from_template():
     if options['has_msg']:
       shutil.copytree(template_dir / 'msg', package_dir / 'msg')
 
-    if options['has_python']:
+    if options['has_python'] or options['has_python_before']:
       ignore_patterns = shutil.ignore_patterns('*.jinja')
       shutil.copytree(template_dir / 'package_directory', package_dir / package_subdir, ignore=ignore_patterns)
       template = Template(Path.read_text(template_dir / 'package_directory' / '__init__.py.jinja'))
@@ -161,7 +177,7 @@ def do_test_package(package_name, options):
   assert install_path.exists(), f"install path does not exist for {package_name}: {install_path}"
   assert (install_path / '__init__.py').exists(), f"missing __init__.py in {install_path}"
 
-  if options['has_python']:
+  if options['has_python'] or options['has_python_before']:
     assert Path.read_text (install_path / '__init__.py').startswith(f"# This is {package_name}"), \
           f"__init__.py should be from {package_name} python package"
 
