@@ -2,6 +2,7 @@
 Test building python packages with colcon
 """
 
+import filecmp
 import os
 from pathlib import Path
 import shutil
@@ -14,6 +15,11 @@ PWD = Path(os.environ.get('PWD'))
 SOURCE_DIR = Path(os.environ.get('SOURCE_DIR'))
 PYTHON_INSTALL_DIR = Path(os.environ.get('PYTHON_INSTALL_DIR'))
 PYEGG_VERSION = os.environ.get('PYEGG_VERSION')
+
+INSTALL_BASE = 'install_test'
+BUILD_BASE = 'build_test'
+AMENT_PYTHON_TEST_PACKAGE = "ament_python_test_package"
+AMENT_PYTHON_TEST_PACKAGE_OVERLAY = AMENT_PYTHON_TEST_PACKAGE + "_overlay"
 
 DEFAULT_OPTIONS = {
   'name': 'SET_ME',
@@ -145,21 +151,47 @@ def test_from_template():
     template = Template(Path.read_text(template_dir / 'CMakeLists.txt.jinja'))
     Path.write_text(package_dir / 'CMakeLists.txt', template.render(options))
 
-    do_build_package(options['name'], options, base_prefix=PWD)
+    do_build_package(options['name'], options, source_prefix=PWD / 'packages')
     do_test_package(options['name'], options)
 
 
-def do_build_package(package_name, options=None, base_prefix=SOURCE_DIR / 'test'):
+def test_ament_python_test_package() -> None:
+    do_build_package(AMENT_PYTHON_TEST_PACKAGE, source_prefix=SOURCE_DIR / 'test')
+    assert not filecmp.dircmp(
+        SOURCE_DIR / 'test' / AMENT_PYTHON_TEST_PACKAGE,
+        PWD / INSTALL_BASE / AMENT_PYTHON_TEST_PACKAGE
+    ).diff_files, "All files in ament_python_test_package should match after install"
+
+
+def test_ament_python_test_package_with_overlay(tmpdir) -> None:
+    do_build_package(AMENT_PYTHON_TEST_PACKAGE_OVERLAY, source_prefix=SOURCE_DIR / 'test')
+
+    INSTALL_DIR = PWD / INSTALL_BASE / AMENT_PYTHON_TEST_PACKAGE_OVERLAY / PYTHON_INSTALL_DIR
+    shutil.copytree(SOURCE_DIR / 'test' / AMENT_PYTHON_TEST_PACKAGE / AMENT_PYTHON_TEST_PACKAGE, tmpdir, dirs_exist_ok=True)
+    shutil.copytree(SOURCE_DIR / 'test' / AMENT_PYTHON_TEST_PACKAGE_OVERLAY / AMENT_PYTHON_TEST_PACKAGE_OVERLAY, tmpdir, dirs_exist_ok=True)
+    assert not filecmp.dircmp(tmpdir, INSTALL_DIR / AMENT_PYTHON_TEST_PACKAGE_OVERLAY).diff_files, \
+        "Two overlaid python packages should match after install"
+    assert not filecmp.dircmp(
+        tmpdir / "subdir",
+        INSTALL_DIR / AMENT_PYTHON_TEST_PACKAGE_OVERLAY / "subdir"
+    ).diff_files, "Two overlaid python packages should match after install, including subdirectories"
+
+
+def do_build_package(
+    package_name, options=None,
+    source_prefix=None):
   if options and 'build' in options:
     build_options = options['build']
   elif options and 'symlink_install' in options and options['symlink_install']:
     build_options = '--symlink-install'
   else:
     build_options = None
-  
+
   print(f"Building package {package_name} with colcon options: {build_options}")
   build_command = ['colcon', 'build',
-    '--base-paths', base_prefix / 'packages' / package_name]
+    '--base-paths', source_prefix / package_name,
+    '--build-base', BUILD_BASE,
+    '--install-base', INSTALL_BASE]
   if build_options:
     build_command.append(build_options)
   result = subprocess.run(build_command, capture_output=True, text=True)
@@ -170,9 +202,9 @@ def do_build_package(package_name, options=None, base_prefix=SOURCE_DIR / 'test'
 
 def do_test_package(package_name, options):
   if options['destination']:
-    install_path = PWD / 'install' / package_name / options['destination'] / package_name
+    install_path = PWD / INSTALL_BASE / package_name / options['destination'] / package_name
   else:
-    install_path = PWD / 'install' / package_name / PYTHON_INSTALL_DIR / package_name
+    install_path = PWD / INSTALL_BASE / package_name / PYTHON_INSTALL_DIR / package_name
   print(f"install_path for package {package_name}: {install_path}")
   assert install_path.exists(), f"install path does not exist for {package_name}: {install_path}"
   assert (install_path / '__init__.py').exists(), f"missing __init__.py in {install_path}"
@@ -191,7 +223,7 @@ def do_test_package(package_name, options):
   if options['version']:
       print(f"Testing version: {options['version']} IN EGG-INFO in package {package_name}")
       version = options['version']
-      egg_info_dir = PWD / 'install' / package_name / PYTHON_INSTALL_DIR / f'{package_name}-{version}-{PYEGG_VERSION}.egg-info'
+      egg_info_dir = PWD / INSTALL_BASE / package_name / PYTHON_INSTALL_DIR / f'{package_name}-{version}-{PYEGG_VERSION}.egg-info'
       assert egg_info_dir.exists(), f"egg-info dir does not exist for {package_name}: {egg_info_dir}"
       egg_info_file = egg_info_dir / 'PKG-INFO'
       assert Path.read_text(egg_info_file).find(f"Version: {version}") != -1, \
@@ -201,7 +233,7 @@ def do_test_package(package_name, options):
       print(f"Testing setup.cfg metadata in package {package_name}")
       print(f"  options: {options}")
       version = options['version'] or "0.0.0"
-      egg_info_dir = PWD / 'install' / package_name / PYTHON_INSTALL_DIR / f'{package_name}-{version}-{PYEGG_VERSION}.egg-info'
+      egg_info_dir = PWD / INSTALL_BASE / package_name / PYTHON_INSTALL_DIR / f'{package_name}-{version}-{PYEGG_VERSION}.egg-info'
       assert egg_info_dir.exists(), f"egg-info dir does not exist for {package_name}: {egg_info_dir}"
       egg_info_file = egg_info_dir / 'PKG-INFO'
       assert Path.read_text(egg_info_file).find(f"Keywords: test_of_ament_cmake_python") != -1, \
@@ -209,5 +241,5 @@ def do_test_package(package_name, options):
 
   if options['scripts_destination']:
       print(f"Testing script installed in package {package_name}")
-      script_path = PWD / 'install' / package_name / options['scripts_destination'] / 'do_something'
+      script_path = PWD / INSTALL_BASE / package_name / options['scripts_destination'] / 'do_something'
       assert script_path.exists(), f"script do_something does not exist for {package_name}: {script_path}"

@@ -5,7 +5,7 @@ project(ament_cmake_python_test)
 find_package(ament_cmake_core REQUIRED)
 
 # Uncomment to debug CMake variables
-# 
+#
 #get_cmake_property(_variableNames VARIABLES)
 #list (SORT _variableNames)
 #foreach (_variableName ${_variableNames})
@@ -16,7 +16,7 @@ if(BUILD_TESTING)
   find_package(ament_cmake_pytest REQUIRED)
   find_package(ament_cmake_python REQUIRED)
   ament_get_python_install_dir(PYTHON_INSTALL_DIR)
-  
+
   set(_pytest_tests
     test/build_with_colcon.py
     # Add other test files here
