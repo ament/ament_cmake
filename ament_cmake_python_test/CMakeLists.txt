@@ -15,6 +15,7 @@ find_package(ament_cmake_core REQUIRED)
 if(BUILD_TESTING)
   find_package(ament_cmake_pytest REQUIRED)
   find_package(ament_cmake_python REQUIRED)
+  find_package(ament_cmake REQUIRED)
   ament_get_python_install_dir(PYTHON_INSTALL_DIR)
 
   set(_pytest_tests
