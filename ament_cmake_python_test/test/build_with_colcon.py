@@ -177,6 +177,26 @@ def test_ament_python_test_package_with_overlay(tmpdir) -> None:
     ).diff_files, "Two overlaid python packages should match after install, including subdirectories"
 
 
+def test_python_double_version() -> None:
+  package_name = 'python_package_double_version'
+  do_build_package(package_name, source_prefix=SOURCE_DIR / 'test')
+
+  # This package installs two versions of the same package with different names and version numbers.
+  install_base = PWD / INSTALL_BASE / package_name / PYTHON_INSTALL_DIR
+  for additional_name in [package_name, 'some_other_name']: 
+    install_path = install_base / additional_name
+    print(f"install_path for package {additional_name}: {install_path}")
+    assert install_path.exists(), f"install path should exist for {package_name}: {install_path}"
+    assert (install_path / '__init__.py').exists(), f"missing __init__.py in {install_path}"
+    print(f"Testing version IN EGG-INFO in package {package_name}")
+    version = "1.2.34" if additional_name == package_name else "5.6.78"
+    egg_info_dir = PWD / INSTALL_BASE / package_name / PYTHON_INSTALL_DIR / f'{additional_name}-{version}-{PYEGG_VERSION}.egg-info'
+    assert egg_info_dir.exists(), f"egg-info dir should exist for {package_name}: {egg_info_dir}"
+    egg_info_file = egg_info_dir / 'PKG-INFO'
+    assert Path.read_text(egg_info_file).find(f"Version: {version}") != -1, \
+      f"egg-info file should contain 'Version: {version}'"
+
+
 def do_build_package(
     package_name, options=None,
     source_prefix=None):
