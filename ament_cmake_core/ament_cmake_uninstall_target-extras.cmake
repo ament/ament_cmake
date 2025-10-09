@@ -21,24 +21,27 @@ if(AMENT_CMAKE_UNINSTALL_TARGET)
   include(
     "${ament_cmake_core_DIR}/uninstall_target/ament_cmake_uninstall_target_append_uninstall_code.cmake")
 
-  # create the install script from the template
-  # ament_cmake_core/uninstall_target/ament_cmake_uninstall_target.cmake.in
-  set(AMENT_CMAKE_UNINSTALL_TARGET_UNINSTALL_SCRIPT
-    "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_uninstall_target/ament_cmake_uninstall_target.cmake")
-  configure_file(
-    "${ament_cmake_core_DIR}/uninstall_target/ament_cmake_uninstall_target.cmake.in"
-    "${AMENT_CMAKE_UNINSTALL_TARGET_UNINSTALL_SCRIPT}"
-    @ONLY
-  )
+  get_property(_cmake_role GLOBAL PROPERTY CMAKE_ROLE)
+  if("${_cmake_role}" STREQUAL "PROJECT")
+    # create the install script from the template
+    # ament_cmake_core/uninstall_target/ament_cmake_uninstall_target.cmake.in
+    set(AMENT_CMAKE_UNINSTALL_TARGET_UNINSTALL_SCRIPT
+      "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_uninstall_target/ament_cmake_uninstall_target.cmake")
+    configure_file(
+      "${ament_cmake_core_DIR}/uninstall_target/ament_cmake_uninstall_target.cmake.in"
+      "${AMENT_CMAKE_UNINSTALL_TARGET_UNINSTALL_SCRIPT}"
+      @ONLY
+    )
 
-  if(NOT TARGET uninstall)
-    add_custom_target(uninstall)
-  endif()
+    if(NOT TARGET uninstall)
+      add_custom_target(uninstall)
+    endif()
 
-  if(NOT TARGET ${PROJECT_NAME}_uninstall)
-    # register uninstall target to run generated CMake script
-    add_custom_target(${PROJECT_NAME}_uninstall
-      COMMAND ${CMAKE_COMMAND} -P "${AMENT_CMAKE_UNINSTALL_TARGET_UNINSTALL_SCRIPT}")
-    add_dependencies(uninstall ${PROJECT_NAME}_uninstall)
+    if(NOT TARGET ${PROJECT_NAME}_uninstall)
+      # register uninstall target to run generated CMake script
+      add_custom_target(${PROJECT_NAME}_uninstall
+        COMMAND ${CMAKE_COMMAND} -P "${AMENT_CMAKE_UNINSTALL_TARGET_UNINSTALL_SCRIPT}")
+      add_dependencies(uninstall ${PROJECT_NAME}_uninstall)
+    endif()
   endif()
 endif()

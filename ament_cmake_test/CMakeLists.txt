@@ -11,6 +11,11 @@ ament_package(
   CONFIG_EXTRAS "ament_cmake_test-extras.cmake"
 )
 
+include(CTest)
+if(BUILD_TESTING)
+  add_subdirectory(test)
+endif()
+
 install(
   DIRECTORY cmake
   DESTINATION share/${PROJECT_NAME}
