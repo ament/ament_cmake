@@ -20,7 +20,7 @@
 # :param DESTINATION_SUFFIX: the base package to install the module to
 #   (default: empty, install as a top level module)
 # :type DESTINATION_SUFFIX: string
-# :param SKIP_COMPILE: if set do not compile the installed module
+# :param SKIP_COMPILE: if set do not byte-compile the installed module
 # :type SKIP_COMPILE: option
 #
 macro(ament_python_install_module)
@@ -60,12 +60,14 @@ function(_ament_cmake_python_install_module module_file)
   get_filename_component(module_file "${module_file}" NAME)
   if(NOT ARG_SKIP_COMPILE)
     get_executable_path(python_interpreter Python3::Interpreter CONFIGURE)
+    set(_bytecompile_target "\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${ARG_DESTINATION}/${module_file}")
     # compile Python files
     install(CODE
-      "execute_process(
+      "message(STATUS \"Byte-compiling: ${_bytecompile_target}\")
+      execute_process(
         COMMAND
-        \"${python_interpreter}\" \"-m\" \"compileall\"
-        \"${CMAKE_INSTALL_PREFIX}/${destination}/${module_file}\"
+        \"${python_interpreter}\" \"-m\" \"compileall\" \"-q\"
+        \"${_bytecompile_target}\"
       )"
     )
   endif()
