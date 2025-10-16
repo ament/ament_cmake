@@ -34,5 +34,10 @@ if(NOT TARGET Python3::Interpreter)
   cmake_policy(SET CMP0094 NEW)
   set(Python3_FIND_UNVERSIONED_NAMES FIRST)
 
-  find_package(Python3 REQUIRED COMPONENTS Interpreter)
+  set(_ARG_QUIET)
+  if(ament_cmake_core_FIND_QUIETLY)
+    set(_ARG_QUIET QUIET)
+  endif()
+
+  find_package(Python3 REQUIRED COMPONENTS Interpreter ${_ARG_QUIET})
 endif()
