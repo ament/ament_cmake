@@ -47,7 +47,7 @@ macro(ament_auto_generate_code)
   endif()
 
   # Validate required <buildtool_depend> tags
-  if(rosidl_default_generators IN_LIST ${PROJECT_NAME}_BUILDTOOL_DEPENDS)
+  if(NOT rosidl_default_generators IN_LIST ${PROJECT_NAME}_BUILDTOOL_DEPENDS)
     message(FATAL_ERROR
       "ament_auto_generate_code: '${PROJECT_NAME}' must declare a buildtool dependency on 'rosidl_default_generators' to generate interfaces.\n"
       "Hint:\n"
