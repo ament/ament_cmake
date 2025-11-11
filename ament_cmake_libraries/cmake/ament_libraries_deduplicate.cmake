@@ -26,9 +26,17 @@
 # @public
 #
 macro(ament_libraries_deduplicate VAR)
-  string(REGEX REPLACE "(^|;)(debug|optimized|general);([^;]+)" "\\1\\2${AMENT_BUILD_CONFIGURATION_KEYWORD_SEPARATOR}\\3" _packed "${ARGN}")
+  string(REGEX REPLACE
+    "(^|;)(debug|optimized|general);([^;]+)"
+    "\\1\\2${AMENT_BUILD_CONFIGURATION_KEYWORD_SEPARATOR}\\3"
+    _packed
+    "${ARGN}")
   list(REVERSE _packed)
   list(REMOVE_DUPLICATES _packed)
   list(REVERSE _packed)
-  string(REGEX REPLACE "(^|;)(debug|optimized|general)${AMENT_BUILD_CONFIGURATION_KEYWORD_SEPARATOR}([^;]+)" "\\1\\2;\\3" ${VAR} "${_packed}")
+  string(REGEX REPLACE
+    "(^|;)(debug|optimized|general)${AMENT_BUILD_CONFIGURATION_KEYWORD_SEPARATOR}([^;]+)"
+    "\\1\\2;\\3"
+    ${VAR}
+    "${_packed}")
 endmacro()
