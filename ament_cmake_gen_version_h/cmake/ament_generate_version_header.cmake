@@ -73,7 +73,7 @@
 # :type target: string
 # :param HEADER_PATH: Path of the generated header including the file name
 #   that describes how it should be included by downstream targets.
-#   The default is `${PROJECT_NAME}/version.h` 
+#   The default is `${PROJECT_NAME}/version.h`
 # :type HEADER_PATH: string
 # :param INSTALL_PATH: Path that the header should be installed at.
 #   The default value is "include/${PROJECT_NAME}" to avoid include directory
@@ -153,7 +153,7 @@ function(ament_generate_version_header target)
 
   # Make generated header includable to this and downstream targets
   get_target_property(type "${target}" TYPE)
-  if (${type} STREQUAL "INTERFACE_LIBRARY")
+  if(${type} STREQUAL "INTERFACE_LIBRARY")
     set(keyword "INTERFACE")
   else()
     set(keyword "PUBLIC")
