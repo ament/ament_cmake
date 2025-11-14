@@ -60,7 +60,7 @@ function(_ament_cmake_python_install_module module_file)
   get_filename_component(module_file "${module_file}" NAME)
   if(NOT ARG_SKIP_COMPILE)
     get_executable_path(python_interpreter Python3::Interpreter CONFIGURE)
-    set(_bytecompile_target "\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${ARG_DESTINATION}/${module_file}")
+    set(_bytecompile_target "\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${destination}/${module_file}")
     # compile Python files
     install(CODE
       "message(STATUS \"Byte-compiling: ${_bytecompile_target}\")
