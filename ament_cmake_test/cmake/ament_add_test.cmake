@@ -83,8 +83,9 @@ function(ament_add_test testname)
     set(ARG_WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
   endif()
 
+  get_executable_path(python_interpreter Python3::Interpreter BUILD)
   # wrap command with run_test script to ensure test result generation
-  set(cmd_wrapper "${PYTHON_EXECUTABLE}" "-u" "${ARG_RUNNER}"
+  set(cmd_wrapper "${python_interpreter}" "-u" "${ARG_RUNNER}"
     "${ARG_RESULT_FILE}"
     "--package-name" "${PROJECT_NAME}")
   if(ARG_SKIP_TEST)

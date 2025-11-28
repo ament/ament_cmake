@@ -9,7 +9,7 @@ if(NOT _exported_targets STREQUAL "")
     include("${_export_file}")
 
     # extract the target names associated with the export
-    set(_regex "foreach\\(_expectedTarget (.+)\\)")
+    set(_regex "foreach\\((_cmake)?_expected_?[Tt]arget (IN ITEMS )?(.+)\\)")
     file(
       STRINGS "${_export_file}" _foreach_targets
       REGEX "${_regex}")
@@ -18,7 +18,7 @@ if(NOT _exported_targets STREQUAL "")
       message(FATAL_ERROR
         "Failed to find exported target names in '${_export_file}'")
     endif()
-    string(REGEX REPLACE "${_regex}" "\\1" _targets "${_foreach_targets}")
+    string(REGEX REPLACE "${_regex}" "\\3" _targets "${_foreach_targets}")
     string(REPLACE " " ";" _targets "${_targets}")
     list(LENGTH _targets _length)
 

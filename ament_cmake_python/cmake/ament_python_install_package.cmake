@@ -86,7 +86,6 @@ function(_ament_cmake_python_install_package package_name)
   set(build_dir "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_python/${package_name}")
 
   string(CONFIGURE "\
-import os
 from setuptools import find_packages
 from setuptools import setup
 
@@ -103,31 +102,53 @@ setup(
     CONTENT "${setup_py_content}"
   )
 
-  set(egg_dependencies ament_cmake_python_symlink_${package_name})
-
-  add_custom_target(
-    ament_cmake_python_symlink_${package_name}
-    COMMAND ${CMAKE_COMMAND} -E create_symlink
-    "${ARG_PACKAGE_DIR}" "${build_dir}/${package_name}"
-  )
-
-  if(ARG_SETUP_CFG)
+  if(AMENT_CMAKE_SYMLINK_INSTALL)
     add_custom_target(
-      ament_cmake_python_symlink_${package_name}_setup
+      ament_cmake_python_symlink_${package_name}
       COMMAND ${CMAKE_COMMAND} -E create_symlink
-        "${ARG_SETUP_CFG}" "${build_dir}/setup.cfg"
+        "${ARG_PACKAGE_DIR}" "${build_dir}/${package_name}"
     )
-    list(APPEND egg_dependencies ament_cmake_python_symlink_${package_name}_setup)
+    set(egg_dependencies ament_cmake_python_symlink_${package_name})
+
+    if(ARG_SETUP_CFG)
+      add_custom_target(
+        ament_cmake_python_symlink_${package_name}_setup
+        COMMAND ${CMAKE_COMMAND} -E create_symlink
+          "${ARG_SETUP_CFG}" "${build_dir}/setup.cfg"
+      )
+      list(APPEND egg_dependencies ament_cmake_python_symlink_${package_name}_setup)
+    endif()
+  else()
+    add_custom_target(
+      ament_cmake_python_copy_${package_name}
+      COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${ARG_PACKAGE_DIR}" "${build_dir}/${package_name}"
+    )
+    set(egg_dependencies ament_cmake_python_copy_${package_name})
+
+    if(ARG_SETUP_CFG)
+      add_custom_target(
+        ament_cmake_python_copy_${package_name}_setup
+        COMMAND ${CMAKE_COMMAND} -E copy
+          "${ARG_SETUP_CFG}" "${build_dir}/setup.cfg"
+      )
+      list(APPEND egg_dependencies ament_cmake_python_copy_${package_name}_setup)
+    endif()
   endif()
+
+  # Technically, we should call find_package(Python3) first to ensure that Python3::Interpreter
+  # is available.  But we skip this here because this macro requires ament_cmake, and ament_cmake
+  # calls find_package(Python3) for us.
+  get_executable_path(python_interpreter Python3::Interpreter BUILD)
 
   add_custom_target(
     ament_cmake_python_build_${package_name}_egg ALL
-    COMMAND ${PYTHON_EXECUTABLE} setup.py egg_info
+    COMMAND ${python_interpreter} setup.py egg_info
     WORKING_DIRECTORY "${build_dir}"
     DEPENDS ${egg_dependencies}
   )
 
-  set(python_version "py${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
+  set(python_version "py${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}")
 
   set(egg_name "${package_name}")
   set(egg_install_name "${egg_name}-${ARG_VERSION}")
@@ -143,7 +164,7 @@ setup(
 
     add_custom_target(
       ament_cmake_python_build_${package_name}_scripts ALL
-      COMMAND ${PYTHON_EXECUTABLE} setup.py install_scripts -d scripts
+      COMMAND ${python_interpreter} setup.py install_scripts -d scripts
       WORKING_DIRECTORY "${build_dir}"
       DEPENDS ${egg_dependencies}
     )
@@ -168,11 +189,12 @@ setup(
   )
 
   if(NOT ARG_SKIP_COMPILE)
+    get_executable_path(python_interpreter_config Python3::Interpreter CONFIGURE)
     # compile Python files
     install(CODE
       "execute_process(
         COMMAND
-        \"${PYTHON_EXECUTABLE}\" \"-m\" \"compileall\"
+        \"${python_interpreter_config}\" \"-m\" \"compileall\"
         \"${CMAKE_INSTALL_PREFIX}/${ARG_DESTINATION}/${package_name}\"
       )"
     )

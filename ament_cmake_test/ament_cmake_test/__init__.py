@@ -194,7 +194,7 @@ def _run_test(parser, args, failure_result_file, output_handle):
     encodings = ['utf-8']
     if locale.getpreferredencoding(False) not in encodings:
         encodings.append(locale.getpreferredencoding(False))
-    
+
     start_time = time.monotonic()
 
     try:
@@ -210,7 +210,7 @@ def _run_test(parser, args, failure_result_file, output_handle):
                     decoded_line = line.decode(encoding)
                 except UnicodeDecodeError:
                     if i == len(encodings) - 1:
-                        raise
+                        decoded_line = line.decode(encoding, errors='replace')
                 else:
                     break
             print(decoded_line, end='')
@@ -250,12 +250,15 @@ def _run_test(parser, args, failure_result_file, output_handle):
 
         if content == failure_result_file:
             if args.skip_return_code is not None and args.skip_return_code == rc:
-                log("-- run_test.py: generate result file '%s' with skipped test" % args.result_file)
+                log(
+                    '-- run_test.py: generate result file '
+                    "'%s' with skipped test" % args.result_file)
                 # regenerate result file to indicate that the test was skipped
                 result_file = _generate_result(args.result_file, skip=True, test_time=test_time)
             else:
-                log("-- run_test.py: generate result file '%s' with failed test" % args.result_file,
-                    file=sys.stderr)
+                log(
+                    '-- run_test.py: generate result file '
+                    "'%s' with failed test" % args.result_file, file=sys.stderr)
                 # regenerate result file to include output / exception of the invoked command
                 result_file = _generate_result(
                     args.result_file,
@@ -301,10 +304,7 @@ def _run_test(parser, args, failure_result_file, output_handle):
             rc = 1
         else:
             # set error code when result file contains errors or failures
-            root = tree.getroot()
-            num_errors = int(root.attrib.get('errors', 0))
-            num_failures = int(root.attrib.get('failures', 0))
-            if num_errors or num_failures:
+            if _check_for_failure(tree):
                 rc = 1
 
     # ensure that a result file exists at the end
@@ -315,8 +315,39 @@ def _run_test(parser, args, failure_result_file, output_handle):
 
     return rc
 
+def _check_for_failure(tree):
+    # Check tree for failures in nodes
+    root = tree.getroot()
+    return _check_for_failure_recursive(root)
 
-def _generate_result(result_file, *, failure_message=None, skip=False, error_message=None, test_time=0):
+def _check_for_failure_recursive(node):
+    # Recursively check node and subnodes for test error or failure
+
+    # First check if this node has nonzero error or failure attributes
+    # Return True (signifying a failure) if that is the case
+    if (int(node.attrib.get('errors', 0))) or (int(node.attrib.get('failures', 0))):
+        return True
+    
+    # Next check if the node is a "testsuite" tag.
+    if node.tag == 'testsuite':
+        # Check if the tag has error and/or failure attributes
+        if ((node.attrib.get('errors') is not None)
+                or (node.attrib.get('failures') is not None)):
+            # If so, we already know from above check that these attributes
+            # must have a zero value. Don't descend further into a testsuite
+            # tag that has error and/or failure attributes with a zero value.
+            # Return False indicating no failure in this branch.
+            return False
+
+    # Otherwise, recursively check for failures inside this node
+    for child in node:
+        if _check_for_failure_recursive(child):
+            return True
+    
+    return False
+
+def _generate_result(result_file, *, failure_message=None, skip=False,
+                     error_message=None, test_time=0):
     # the generated result file must be readable
     # by any of the Jenkins test result report publishers
     pkgname = os.path.basename(os.path.dirname(result_file))

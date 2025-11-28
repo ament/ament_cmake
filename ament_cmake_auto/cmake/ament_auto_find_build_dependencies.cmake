@@ -54,8 +54,8 @@ macro(ament_auto_find_build_dependencies)
   if(_unknown_packages)
     string(REPLACE ";" ", " _unknown_packages_str "${_unknown_packages}")
     message(FATAL_ERROR "ament_auto_find_build_dependencies() called with "
-      "required packages that are not listed as a build/buildtool dependency in "
-      "the package.xml: ${_unknown_packages_str}")
+      "required packages that are not listed as a build/buildtool dependency "
+      "in the package.xml: ${_unknown_packages_str}")
   endif()
 
   # try to find_package() all build dependencies

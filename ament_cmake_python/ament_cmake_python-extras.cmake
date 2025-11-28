@@ -43,14 +43,23 @@ endmacro()
 macro(_ament_cmake_python_get_python_install_dir)
   if(NOT DEFINED PYTHON_INSTALL_DIR)
     # avoid storing backslash in cached variable since CMake will interpret it as escape character
+    # This auto detection code uses the same logic as get_python_install_path() in colcon-core
     set(_python_code
-      "from distutils.sysconfig import get_python_lib"
-      "import os"
-      "print(os.path.relpath(get_python_lib(prefix='${CMAKE_INSTALL_PREFIX}'), start='${CMAKE_INSTALL_PREFIX}').replace(os.sep, '/'))"
+      "\
+import os
+import sysconfig
+schemes = sysconfig.get_scheme_names()
+kwargs = {'vars': {'base': '${CMAKE_INSTALL_PREFIX}'}}
+if 'deb_system' in schemes or 'osx_framework_library' in schemes:
+    kwargs['scheme'] = 'posix_prefix'
+elif 'rpm_prefix' in schemes:
+    kwargs['scheme'] = 'rpm_prefix'
+print(os.path.relpath(sysconfig.get_path('purelib', **kwargs), start='${CMAKE_INSTALL_PREFIX}').replace(os.sep, '/'))"
     )
+    get_executable_path(_python_interpreter Python3::Interpreter CONFIGURE)
     execute_process(
       COMMAND
-      "${PYTHON_EXECUTABLE}"
+      "${_python_interpreter}"
       "-c"
       "${_python_code}"
       OUTPUT_VARIABLE _output
@@ -59,7 +68,7 @@ macro(_ament_cmake_python_get_python_install_dir)
     )
     if(NOT _result EQUAL 0)
       message(FATAL_ERROR
-        "execute_process(${PYTHON_EXECUTABLE} -c '${_python_code}') returned "
+        "execute_process(${_python_interpreter} -c '${_python_code}') returned "
         "error code ${_result}")
     endif()
 

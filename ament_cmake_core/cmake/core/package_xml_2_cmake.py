@@ -19,7 +19,6 @@ from collections import OrderedDict
 import os
 import sys
 
-from catkin_pkg.package import evaluate_condition
 from catkin_pkg.package import parse_package_string
 
 

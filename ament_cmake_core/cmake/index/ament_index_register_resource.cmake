@@ -101,7 +101,7 @@ function(ament_index_register_resource resource_type)
     file(GENERATE OUTPUT "${marker_file}" INPUT "${marker_file}.genexp")
   endif()
 
-  if (NOT ARG_SKIP_INSTALL)
+  if(NOT ARG_SKIP_INSTALL)
     install(
       FILES "${marker_file}"
       DESTINATION "${destination}"

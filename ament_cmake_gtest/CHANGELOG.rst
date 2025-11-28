@@ -2,6 +2,123 @@
 Changelog for package ament_cmake_gtest
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.8.4 (2025-07-01)
+------------------
+
+2.8.3 (2025-06-19)
+------------------
+
+2.8.2 (2025-06-04)
+------------------
+
+2.8.1 (2025-05-20)
+------------------
+
+2.8.0 (2025-04-24)
+------------------
+
+2.7.3 (2025-04-17)
+------------------
+
+2.7.2 (2024-11-19)
+------------------
+
+2.7.1 (2024-10-03)
+------------------
+* set search path args and then append (`#543 <https://github.com/ament/ament_cmake/issues/543>`_)
+* Contributors: Will
+
+2.7.0 (2024-06-25)
+------------------
+
+2.6.1 (2024-06-17)
+------------------
+
+2.6.0 (2024-04-26)
+------------------
+
+2.5.0 (2024-04-16)
+------------------
+
+2.4.0 (2024-03-28)
+------------------
+* Update maintainer list in package.xml files (`#503 <https://github.com/ament/ament_cmake/issues/503>`_)
+* Contributors: Michael Jeronimo
+
+2.3.2 (2023-12-26)
+------------------
+* Split ament_add_gmock into _executable and _test. (`#497 <https://github.com/ament/ament_cmake/issues/497>`_)
+* ament_add_gtest_test: add TEST_NAME parameter (`#492 <https://github.com/ament/ament_cmake/issues/492>`_)
+* Contributors: Chris Lalancette, Christopher Wecht
+
+2.3.1 (2023-11-06)
+------------------
+
+2.3.0 (2023-09-07)
+------------------
+
+2.2.2 (2023-08-21)
+------------------
+
+2.2.1 (2023-06-21)
+------------------
+
+2.2.0 (2023-06-07)
+------------------
+
+2.1.0 (2023-04-26)
+------------------
+
+2.0.2 (2023-04-12)
+------------------
+
+2.0.1 (2023-04-11)
+------------------
+
+2.0.0 (2023-04-11)
+------------------
+
+1.5.3 (2023-02-13)
+------------------
+* Fix compiler warnings related to gtest/gmock (`#408 <https://github.com/ament/ament_cmake/issues/408>`_)
+  * Suppress compiler warnings when building gmock
+  definition of implicit copy constructor ... is deprecated because it has a user-declared copy assignment operator [-Wdeprecated-copy]
+  * Declare gtest/gmock include dirs as SYSTEM PRIVATE for test targets
+* [rolling] Update maintainers - 2022-11-07 (`#411 <https://github.com/ament/ament_cmake/issues/411>`_)
+  * Update maintainers to Michael Jeronimo
+* Contributors: Audrow Nash, Robert Haschke
+
+1.5.2 (2022-11-02)
+------------------
+
+1.5.1 (2022-09-13)
+------------------
+
+1.5.0 (2022-07-11)
+------------------
+
+1.4.0 (2022-04-29)
+------------------
+
+1.3.1 (2022-03-28)
+------------------
+
+1.3.0 (2022-02-17)
+------------------
+* Update forthcoming version in changelog
+* Contributors: Audrow Nash
+
+1.2.1 (2022-01-14)
+------------------
+* Update maintainers to Michael Jeronimo and Michel Hidalgo (`#362 <https://github.com/ament/ament_cmake/issues/362>`_)
+* Contributors: Audrow Nash
+
+1.2.0 (2021-10-29)
+------------------
+* Use FindPython3 instead of FindPythonInterp (`#355 <https://github.com/ament/ament_cmake/issues/355>`_)
+* Update maintainers (`#336 <https://github.com/ament/ament_cmake/issues/336>`_)
+* Contributors: Chris Lalancette, Shane Loretz
+
 1.1.4 (2021-05-06)
 ------------------
 

@@ -20,10 +20,13 @@
 # :param path: the path to a file or folder where ``pytest`` should be invoked
 #   on
 # :type path: string
+# :param NOCAPTURE: disable pytest output capturing.
+#   Sets the pytest option '-s'.
+# :type NOCAPTURE: option
 # :param SKIP_TEST: if set mark the test as being skipped
 # :type SKIP_TEST: option
-# :param PYTHON_EXECUTABLE: absolute path to the executable used to run the test,
-#   default to the CMake variable with the same name returned by FindPythonInterp
+# :param PYTHON_EXECUTABLE: Python executable used to run the test.
+#   It defaults to the CMake executable target Python3::Interpreter.
 # :type PYTHON_EXECUTABLE: string
 # :param RUNNER: the path to the test runner script (default: see ament_add_test).
 # :type RUNNER: string
@@ -48,7 +51,7 @@
 #
 function(ament_add_pytest_test testname path)
   cmake_parse_arguments(ARG
-    "SKIP_TEST"
+    "NOCAPTURE;SKIP_TEST"
     "PYTHON_EXECUTABLE;RUNNER;TIMEOUT;WERROR;WORKING_DIRECTORY"
     "APPEND_ENV;APPEND_LIBRARY_DIRS;ENV"
     ${ARGN})
@@ -68,7 +71,7 @@ function(ament_add_pytest_test testname path)
       "ament_add_pytest_test() the path '${path}' does not exist")
   endif()
   if(NOT ARG_PYTHON_EXECUTABLE)
-    set(ARG_PYTHON_EXECUTABLE "${PYTHON_EXECUTABLE}")
+    set(ARG_PYTHON_EXECUTABLE Python3::Interpreter)
   endif()
 
   get_executable_path(python_interpreter "${ARG_PYTHON_EXECUTABLE}" BUILD)
@@ -96,12 +99,19 @@ function(ament_add_pytest_test testname path)
     "--junit-prefix=${PROJECT_NAME}"
   )
 
+  set(ARG_ENV PYTHONDONTWRITEBYTECODE=1 ${ARG_ENV})
+
+  if(ARG_NOCAPTURE)
+    # disable output capturing
+    list(APPEND cmd "-s")
+  endif()
+
   if(ARG_WERROR)
     # treat warnings as errors
     list(APPEND cmd "-We")
   endif()
 
-  # enable pytest coverage by default if the package test_depends on pytest_cov
+  # enable pytest coverage by default if the package test_depends on python3-pytest-cov
   if("python3-pytest-cov" IN_LIST ${PROJECT_NAME}_TEST_DEPENDS)
     set(coverage_default ON)
   else()

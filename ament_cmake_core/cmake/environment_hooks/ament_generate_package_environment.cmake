@@ -102,8 +102,8 @@ function(ament_generate_package_environment)
     endforeach()
   endif()
   list(APPEND all_package_level_extensions "dsv")
-  set(dsv_file "${CMAKE_BINARY_DIR}/ament_cmake_environment_hooks/local_setup.dsv")
-  file(WRITE "${dsv_file}" "${all_hooks}")
+  set(dsv_file "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_environment_hooks/local_setup.dsv")
+  file(GENERATE OUTPUT "${dsv_file}" CONTENT "${all_hooks}")
   install(
     FILES "${dsv_file}"
     DESTINATION "share/${PROJECT_NAME}"
@@ -111,11 +111,12 @@ function(ament_generate_package_environment)
 
   # generate package.dsv file
   list(SORT all_package_level_extensions)
-  set(dsv_file "${CMAKE_BINARY_DIR}/ament_cmake_environment_hooks/package.dsv")
-  file(WRITE "${dsv_file}" "")
+  set(dsv_file "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_environment_hooks/package.dsv")
+  set(dsv_content "")
   foreach(ext ${all_package_level_extensions})
-    file(APPEND "${dsv_file}" "source;share/${PROJECT_NAME}/local_setup.${ext}\n")
+    set(dsv_content "${dsv_content}source;share/${PROJECT_NAME}/local_setup.${ext}\n")
   endforeach()
+  file(GENERATE OUTPUT "${dsv_file}" CONTENT "${dsv_content}")
   install(
     FILES "${dsv_file}"
     DESTINATION "share/${PROJECT_NAME}"

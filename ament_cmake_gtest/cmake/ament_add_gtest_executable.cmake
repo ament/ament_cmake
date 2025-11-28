@@ -18,7 +18,7 @@
 # Call add_executable(target ARGN) and link it against the gtest libraries.
 # It does not register the executable as a test.
 #
-# If gtest is not available the specified target is not being created and
+# If gtest is not available the specified target will not being created and
 # therefore the target existence should be checked before being used.
 #
 # :param target: the target name which will also be used as the test name
@@ -48,7 +48,7 @@ function(_ament_add_gtest_executable target)
   # should be EXCLUDE_FROM_ALL if it would be possible
   # to add this target as a dependency to the "test" target
   add_executable("${target}" ${ARG_UNPARSED_ARGUMENTS})
-  target_include_directories("${target}" BEFORE PUBLIC "${GTEST_INCLUDE_DIRS}")
+  target_include_directories("${target}" SYSTEM PRIVATE "${GTEST_INCLUDE_DIRS}")
   if(NOT ARG_SKIP_LINKING_MAIN_LIBRARIES)
     target_link_libraries("${target}" ${GTEST_MAIN_LIBRARIES})
   endif()

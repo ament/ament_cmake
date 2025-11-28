@@ -105,7 +105,7 @@ def generate_cmake_code():
             lines.append('set(ament_cmake_package_templates_%s %s)' % (k, v))
     # Ensure backslashes are replaced with forward slashes because CMake cannot
     # parse files with backslashes in it.
-    return [l.replace('\\', '/') for l in lines]
+    return [line.replace('\\', '/') for line in lines]
 
 
 if __name__ == '__main__':

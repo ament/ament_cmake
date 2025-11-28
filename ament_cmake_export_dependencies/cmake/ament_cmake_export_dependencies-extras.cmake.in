@@ -56,7 +56,7 @@ if(NOT _exported_dependencies STREQUAL "")
                   list(APPEND _libraries "${_imported_location}")
                 endif()
               endif()
-            endforeach() 
+            endforeach()
           endif()
 
           get_target_property(_link_libraries ${_target} INTERFACE_LINK_LIBRARIES)

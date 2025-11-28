@@ -17,9 +17,8 @@
 #
 # :param var: the output variable name
 # :type var: string
-# :param PYTHON_EXECUTABLE: absolute path to the Python interpreter to be used,
-#   default to the CMake variable with the same name returned by
-#   FindPythonInterp
+# :param PYTHON_EXECUTABLE: Python executable used to check the version
+#   It defaults to the CMake executable target Python3::Interpreter.
 # :type PYTHON_EXECUTABLE: string
 #
 # @public
@@ -32,7 +31,7 @@ function(ament_get_pytest_cov_version var)
   endif()
 
   if(NOT ARG_PYTHON_EXECUTABLE)
-    set(ARG_PYTHON_EXECUTABLE "${PYTHON_EXECUTABLE}")
+    set(ARG_PYTHON_EXECUTABLE Python3::Interpreter)
   endif()
 
   get_executable_path(python_interpreter "${ARG_PYTHON_EXECUTABLE}" CONFIGURE)
@@ -46,8 +45,8 @@ function(ament_get_pytest_cov_version var)
     ERROR_VARIABLE error)
   if(res EQUAL 0)
     # check if pytest-cov is in the list of plugins
-    # (actual output of the command is in ${error} and not ${output})
-    string(REGEX MATCH "pytest-cov-([0-9]+\.[0-9]+\.[0-9]+)" pytest_cov_full_version "${error}")
+    # (actual output of the command is in ${error} in pytest <7.0.0 and in ${output} in >=7.0.0)
+    string(REGEX MATCH "pytest-cov-([0-9]+\.[0-9]+\.[0-9]+)" pytest_cov_full_version "${output}${error}")
     if(pytest_cov_full_version)
       set(${var} ${CMAKE_MATCH_1} PARENT_SCOPE)
     else()

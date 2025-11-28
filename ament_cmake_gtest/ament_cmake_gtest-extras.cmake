@@ -24,18 +24,15 @@ macro(_ament_cmake_gtest_find_gtest)
     # if gtest sources were not found in a previous run
     if(NOT GTEST_FROM_SOURCE_FOUND)
       # search path for gtest includes and sources
-      set(_search_path_include "")
-      set(_search_path_src "")
+      # check the system installed path (i.e. on Ubuntu)
+      set(_search_path_include "/usr/include/gtest")
+      set(_search_path_src "/usr/src/gtest/src")
 
       # option() consider environment variable to find gtest
       if(NOT $ENV{GTEST_DIR} STREQUAL "")
         list(APPEND _search_path_include "$ENV{GTEST_DIR}/include/gtest")
         list(APPEND _search_path_src "$ENV{GTEST_DIR}/src")
       endif()
-
-      # check to system installed path (i.e. on Ubuntu)
-      set(_search_path_include "/usr/include/gtest")
-      set(_search_path_src "/usr/src/gtest/src")
 
       # check gtest_vendor path, prefer this version over a system installed
       find_package(gtest_vendor QUIET)
@@ -90,8 +87,8 @@ macro(_ament_cmake_gtest_find_gtest)
         if(NOT WIN32)
           target_compile_options(gtest PRIVATE -Wno-null-dereference)
         endif()
-        target_include_directories(gtest BEFORE PUBLIC "${GTEST_FROM_SOURCE_INCLUDE_DIRS}")
-        target_include_directories(gtest_main BEFORE PUBLIC "${GTEST_FROM_SOURCE_INCLUDE_DIRS}")
+        target_include_directories(gtest SYSTEM BEFORE PUBLIC "${GTEST_FROM_SOURCE_INCLUDE_DIRS}")
+        target_include_directories(gtest_main SYSTEM BEFORE PUBLIC "${GTEST_FROM_SOURCE_INCLUDE_DIRS}")
       endif()
 
       # set the same variables as find_package()
