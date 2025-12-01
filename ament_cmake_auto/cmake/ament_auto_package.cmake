@@ -28,6 +28,8 @@
 # :param INSTALL_TO_SHARE: a list of directories to be installed to the
 #   package's share directory
 # :type INSTALL_TO_SHARE: list of strings
+# :param USE_SCOPED_HEADER_INSTALL_DIR: deprecated after Jazzy
+# :type USE_SCOPED_HEADER_INSTALL_DIR: option
 # :param ARGN: any other arguments are passed through to ament_package()
 # :type ARGN: list of strings
 #
@@ -43,7 +45,11 @@
 #
 
 macro(ament_auto_package)
-  cmake_parse_arguments(_ARG_AMENT_AUTO_PACKAGE "INSTALL_TO_PATH" "" "INSTALL_TO_SHARE" ${ARGN})
+  cmake_parse_arguments(_ARG_AMENT_AUTO_PACKAGE
+    "INSTALL_TO_PATH;USE_SCOPED_HEADER_INSTALL_DIR"
+    ""
+    "INSTALL_TO_SHARE"
+    ${ARGN})
   # passing all unparsed arguments to ament_package()
 
   # export all found build dependencies which are also run dependencies
