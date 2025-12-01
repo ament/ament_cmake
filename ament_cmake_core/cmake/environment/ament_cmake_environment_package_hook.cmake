@@ -12,10 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-if(AMENT_CMAKE_ENVIRONMENT_GENERATION)
-  ament_generate_environment()
-endif()
-
 function(ament_cmake_environment_generate_package_run_dependencies_marker)
   # use all run dependencies from the package.xml
   set(run_depends "")
