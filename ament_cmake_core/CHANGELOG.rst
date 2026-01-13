@@ -2,6 +2,11 @@
 Changelog for package ament_cmake_core
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.5.5 (2026-01-13)
+------------------
+* Create destination directory during symlink install (`#569 <https://github.com/ament/ament_cmake/issues/569>`_) (`#613 <https://github.com/ament/ament_cmake/issues/613>`_)
+* Contributors: Joshua Whitley
+
 2.5.4 (2025-04-24)
 ------------------
 
