@@ -2,6 +2,11 @@
 Changelog for package ament_cmake_auto
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.8.5 (2026-01-13)
+------------------
+* Do not error on USE_SCOPED_HEADER_INSTALL_DIR (`#596 <https://github.com/ament/ament_cmake/issues/596>`_)
+* Contributors: Tim Clephas
+
 2.8.4 (2025-07-01)
 ------------------
 

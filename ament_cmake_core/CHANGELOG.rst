@@ -2,6 +2,13 @@
 Changelog for package ament_cmake_core
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.8.5 (2026-01-13)
+------------------
+* Remove unused AMENT_CMAKE_ENVIRONMENT_GENERATION option (`#354 <https://github.com/ament/ament_cmake/issues/354>`_)
+* Address ament_lint_cmake regressions (`#604 <https://github.com/ament/ament_cmake/issues/604>`_)
+* Respect find_package(QUIET) in chains from ament_cmake_core (`#603 <https://github.com/ament/ament_cmake/issues/603>`_)
+* Contributors: Scott K Logan, Shane Loretz
+
 2.8.4 (2025-07-01)
 ------------------
 

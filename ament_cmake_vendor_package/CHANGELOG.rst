@@ -2,6 +2,11 @@
 Changelog for package ament_cmake_vendor_package
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.8.5 (2026-01-13)
+------------------
+* ament_vendor: Propagate additional variables to ExternalProject (`#593 <https://github.com/ament/ament_cmake/issues/593>`_)
+* Contributors: Silvio Traversaro
+
 2.8.4 (2025-07-01)
 ------------------
 
