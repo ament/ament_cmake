@@ -2,6 +2,11 @@
 Changelog for package ament_cmake_gen_version_h
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.3.13 (2026-01-13)
+-------------------
+* Address ament_lint_cmake regressions (backport `#604 <https://github.com/ament/ament_cmake/issues/604>`_) (`#608 <https://github.com/ament/ament_cmake/issues/608>`_)
+* Contributors: mergify[bot]
+
 1.3.12 (2025-06-27)
 -------------------
 
