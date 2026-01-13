@@ -2,6 +2,11 @@
 Changelog for package ament_cmake_core
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.7.4 (2026-01-13)
+------------------
+* Address ament_lint_cmake regressions (`#604 <https://github.com/ament/ament_cmake/issues/604>`_) (`#606 <https://github.com/ament/ament_cmake/issues/606>`_)
+* Contributors: mergify[bot]
+
 2.7.3 (2025-04-17)
 ------------------
 * Create destination directory during symlink install (`#569 <https://github.com/ament/ament_cmake/issues/569>`_)
