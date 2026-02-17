@@ -56,6 +56,7 @@ elif 'rpm_prefix' in schemes:
     kwargs['scheme'] = 'rpm_prefix'
 print(os.path.relpath(sysconfig.get_path('purelib', **kwargs), start='${CMAKE_INSTALL_PREFIX}').replace(os.sep, '/'))"
     )
+    find_package(ament_cmake_core QUIET REQUIRED)
     get_executable_path(_python_interpreter Python3::Interpreter CONFIGURE)
     execute_process(
       COMMAND
