@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_export_targets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.5.6 (2026-02-23)
+------------------
+
 2.5.5 (2026-01-13)
 ------------------
 * Address ament_lint_cmake regressions (backport `#604 <https://github.com/ament/ament_cmake/issues/604>`_) (`#607 <https://github.com/ament/ament_cmake/issues/607>`_)

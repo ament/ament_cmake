@@ -2,6 +2,11 @@
 Changelog for package ament_cmake_python
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.5.6 (2026-02-23)
+------------------
+* Add missing dependency (`#617 <https://github.com/ament/ament_cmake/issues/617>`_) (`#619 <https://github.com/ament/ament_cmake/issues/619>`_)
+* Contributors: mergify[bot]
+
 2.5.5 (2026-01-13)
 ------------------
 
