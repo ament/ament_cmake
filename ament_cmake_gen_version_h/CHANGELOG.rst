@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_gen_version_h
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.8.6 (2026-02-23)
+------------------
+
 2.8.5 (2026-01-13)
 ------------------
 * Address ament_lint_cmake regressions (`#604 <https://github.com/ament/ament_cmake/issues/604>`_)

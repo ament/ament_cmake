@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_core
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.8.6 (2026-02-23)
+------------------
+
 2.8.5 (2026-01-13)
 ------------------
 * Remove unused AMENT_CMAKE_ENVIRONMENT_GENERATION option (`#354 <https://github.com/ament/ament_cmake/issues/354>`_)
