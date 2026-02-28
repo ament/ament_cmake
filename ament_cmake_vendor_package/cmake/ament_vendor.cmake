@@ -48,10 +48,6 @@
 #   project, expose the external project globally to any downstream CMake
 #   projects.
 # :type GLOBAL_HOOK: option
-# :param IS_VENDORED_OUTPUT_VARIABLE_NAME: the name of the variable that
-#   will be set to ``TRUE`` if the package has been vendored, or ``FALSE``
-#   otherwise.
-# :type IS_VENDORED_OUTPUT_VARIABLE_NAME: string
 #
 # The AMENT_VENDOR_POLICY cache entry and the SATISFIED argument
 # control whether or not this function builds the vendor package.
@@ -74,9 +70,8 @@
 #                   or false. This option is in unsupported by most packages,
 #                   so use at your own risk, as it could break the buid.
 #
-# To check if a package has been actually vendored, pass a variable name
-# into the argument IS_VENDORED_OUTPUT_VARIABLE_NAME, and check
-# if the variable is TRUE after you call `ament_vendor`.
+# To check if a package has been actually vendored, check if the target name
+# passed as TARGET_NAME exists with if(TARGET <target_name>).
 #
 # @public
 #
@@ -89,7 +84,7 @@ macro(ament_vendor TARGET_NAME)
     message(FATAL_ERROR "ament_vendor() must be called before ament_package()")
   endif()
 
-  cmake_parse_arguments(_ARG "GLOBAL_HOOK;SKIP_INSTALL" "SOURCE_SUBDIR;VCS_TYPE;VCS_URL;VCS_VERSION;SATISFIED;IS_VENDORED_OUTPUT_VARIABLE_NAME" "CMAKE_ARGS;PATCHES" ${ARGN})
+  cmake_parse_arguments(_ARG "GLOBAL_HOOK;SKIP_INSTALL" "SOURCE_SUBDIR;VCS_TYPE;VCS_URL;VCS_VERSION;SATISFIED" "CMAKE_ARGS;PATCHES" ${ARGN})
   if(_ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "ament_vendor() called with unused arguments: "
       "${_ARG_UNPARSED_ARGUMENTS}")
@@ -120,14 +115,6 @@ macro(ament_vendor TARGET_NAME)
 
   if(NOT _ARG_SATISFIED)
     set(_ARG_SATISFIED FALSE)
-  endif()
-
-  # If defined, let's set ${_ARG_IS_VENDORED_OUTPUT_VARIABLE_NAME} to FALSE, it will be set
-  # to TRUE if the package is actually vendored
-  if(DEFINED _ARG_IS_VENDORED_OUTPUT_VARIABLE_NAME)
-    # There is no PARENT_SCOPE as this is a cmake macro,
-    # if it is converted to a function PARENT_SCOPE will need to be added
-    set(${_ARG_IS_VENDORED_OUTPUT_VARIABLE_NAME} FALSE)
   endif()
 
   option(FORCE_BUILD_VENDOR_PKG
@@ -185,12 +172,6 @@ macro(ament_vendor TARGET_NAME)
       "${_ARG_SOURCE_SUBDIR}"
       "${_ARG_SKIP_INSTALL}"
     )
-
-    if(DEFINED _ARG_IS_VENDORED_OUTPUT_VARIABLE_NAME)
-      # There is no PARENT_SCOPE as this is a cmake macro,
-      # if it is converted to a function PARENT_SCOPE will need to be added
-      set(${_ARG_IS_VENDORED_OUTPUT_VARIABLE_NAME} TRUE)
-    endif()
 
     if(NOT _ament_vendor_called AND NOT _ARG_SKIP_INSTALL)
       # Hooks for CMAKE_PREFIX_PATH
