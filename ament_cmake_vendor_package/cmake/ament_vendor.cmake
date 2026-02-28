@@ -67,7 +67,7 @@
 #                   is not supplied or false.
 #     NEVER_VENDOR_IGNORE_SATISFIED_CHECK: Never vendor, and do not raise
 #                   an error even if ``SATISFIED`` argument is not supplied
-#                   or false. This option is in unsupported by most packages,
+#                   or false. This option is unsupported by most packages,
 #                   so use at your own risk, as it could break the buid.
 #
 # To check if a package has been actually vendored, check if the target name
