@@ -1,0 +1,28 @@
+cmake_minimum_required(VERSION 3.12)
+project({{name}})
+
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
+
+# find dependencies
+find_package(ament_cmake REQUIRED)
+
+{% if has_python_before %}
+find_package(ament_cmake_python REQUIRED)
+ament_python_install_package(${PROJECT_NAME})
+{% endif -%}
+
+{% if has_msg %}
+find_package(rosidl_default_generators REQUIRED)
+rosidl_generate_interfaces(${PROJECT_NAME}
+"msg/Dummy.msg"
+)
+{% endif -%}
+
+{% if has_python %}
+find_package(ament_cmake_python REQUIRED)
+ament_python_install_package(${PROJECT_NAME} {{install_options}})
+{%- endif %}
+
+ament_package()
