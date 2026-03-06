@@ -190,12 +190,14 @@ setup(
 
   if(NOT ARG_SKIP_COMPILE)
     get_executable_path(python_interpreter_config Python3::Interpreter CONFIGURE)
+    set(_bytecompile_target "\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${ARG_DESTINATION}/${package_name}")
     # compile Python files
     install(CODE
-      "execute_process(
+      "message(STATUS \"Byte-compiling: ${_bytecompile_target}\")
+      execute_process(
         COMMAND
-        \"${python_interpreter_config}\" \"-m\" \"compileall\"
-        \"${CMAKE_INSTALL_PREFIX}/${ARG_DESTINATION}/${package_name}\"
+        \"${python_interpreter_config}\" \"-m\" \"compileall\" \"-q\"
+        \"${_bytecompile_target}\"
       )"
     )
   endif()
