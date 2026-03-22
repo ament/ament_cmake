@@ -2,15 +2,7 @@ cmake_minimum_required(VERSION 3.20)
 project(ament_cmake_gen_version_h)
 find_package(ament_cmake_core REQUIRED)
 
-# GTest needs it, Default to C11
-if(NOT CMAKE_C_STANDARD)
-  set(CMAKE_C_STANDARD 11)
-endif()
-# GTest needs it, Default to C++17
-if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 17)
-  set(CMAKE_CXX_STANDARD_REQUIRED ON)
-endif()
+ament_set_default_language_standards()
 
 include(CTest)
 if(BUILD_TESTING)
