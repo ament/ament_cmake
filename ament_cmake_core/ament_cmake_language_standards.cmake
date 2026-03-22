@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-macro(ament_set_default_language_standards)
+macro(  )
   # C++
   if(NOT DEFINED CMAKE_CXX_STANDARD)
-    set(CMAKE_CXX_STANDARD 17)
+    set(CMAKE_CXX_STANDARD 20)
   endif()
 
   if(NOT DEFINED CMAKE_CXX_STANDARD_REQUIRED)
