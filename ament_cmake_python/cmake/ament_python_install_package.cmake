@@ -13,7 +13,14 @@
 # limitations under the License.
 
 #
-# Install a Python package (and its recursive subpackages)
+# Install a Python package (and its recursive subpackages).
+#
+# Can be called multiple times with the same package name to merge
+# multiple source directories into a single installed package.
+# When called more than once, source directories are merged at build time
+# and the last call's parameters take precedence. Callers providing
+# build-time-generated files should pass DEPENDS to ensure generation
+# completes before the merge.
 #
 # :param package_name: the Python package name
 # :type package_name: string

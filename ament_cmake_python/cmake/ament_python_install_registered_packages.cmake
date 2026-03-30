@@ -136,8 +136,16 @@ macro(_ament_cmake_python_install_scripts package_name)
 endmacro()
 
 macro(_ament_cmake_python_install_sources package_name)
-  if(AMENT_CMAKE_SYMLINK_INSTALL)
-    # Symlink mode: install from each source dir so symlinks point to originals
+  list(LENGTH _PACKAGE_DIRS _num_dirs)
+  if(_num_dirs EQUAL 1)
+    # For single dir we install from source to maintain the original behavior
+    install(
+      DIRECTORY "${_PACKAGE_DIRS}/"
+      DESTINATION "${_DESTINATION}/${package_name}"
+      PATTERN "*.pyc"       EXCLUDE
+      PATTERN "__pycache__" EXCLUDE
+    )
+  elseif(AMENT_CMAKE_SYMLINK_INSTALL)
     set(_DIRS_TO_INSTALL "${_PACKAGE_DIRS}")
     list(TRANSFORM _DIRS_TO_INSTALL APPEND "/")
     foreach(_dir IN LISTS _DIRS_TO_INSTALL)
@@ -149,7 +157,6 @@ macro(_ament_cmake_python_install_sources package_name)
       )
     endforeach()
   else()
-    # Copy mode: install from the already-merged build directory
     install(
       DIRECTORY "${_build_dir}/${package_name}/"
       DESTINATION "${_DESTINATION}/${package_name}"
