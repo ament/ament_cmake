@@ -71,24 +71,23 @@ endmacro()
 macro(_ament_cmake_python_copy_build_files package_name)
   set(_sync_target "ament_cmake_python_sync_${package_name}")
 
-  add_custom_target(${_sync_target})
-
-  if(_DEPENDS)
-    add_dependencies(${_sync_target} ${_DEPENDS})
-  endif()
-
+  set(_sync_commands)
   foreach(_dir IN LISTS _PACKAGE_DIRS)
-    add_custom_command(TARGET ${_sync_target}
+    list(APPEND _sync_commands
       COMMAND ${CMAKE_COMMAND} -E copy_directory
-      "${_dir}" "${_build_dir}/${package_name}"
-    )
+      "${_dir}" "${_build_dir}/${package_name}")
   endforeach()
 
   if(_SETUP_CFG)
-    add_custom_command(TARGET ${_sync_target}
+    list(APPEND _sync_commands
       COMMAND ${CMAKE_COMMAND} -E copy_if_different
-      "${_SETUP_CFG}" "${_build_dir}/setup.cfg"
-    )
+      "${_SETUP_CFG}" "${_build_dir}/setup.cfg")
+  endif()
+
+  add_custom_target(${_sync_target} ${_sync_commands})
+
+  if(_DEPENDS)
+    add_dependencies(${_sync_target} ${_DEPENDS})
   endif()
 
 endmacro()
