@@ -33,6 +33,9 @@
 # :type SCRIPTS_DESTINATION: string
 # :param SKIP_COMPILE: if set do not byte-compile the installed package
 # :type SKIP_COMPILE: option
+# :param DEPENDS: build targets that must complete before
+#   the package files are synced to the build directory
+# :type DEPENDS: list of strings
 #
 macro(ament_python_install_package)
   _ament_cmake_python_register_extension_hook()
@@ -42,7 +45,7 @@ endmacro()
 
 function(_ament_cmake_python_install_package package_name)
   cmake_parse_arguments(
-    ARG "SKIP_COMPILE" "PACKAGE_DIR;VERSION;SETUP_CFG;DESTINATION;SCRIPTS_DESTINATION" "" ${ARGN})
+    ARG "SKIP_COMPILE" "PACKAGE_DIR;VERSION;SETUP_CFG;DESTINATION;SCRIPTS_DESTINATION" "DEPENDS" ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "ament_python_install_package() called with unused "
       "arguments: ${ARG_UNPARSED_ARGUMENTS}")
@@ -92,27 +95,11 @@ function(_ament_cmake_python_install_package package_name)
     message(STATUS "ament_python_install_package: extending '${package_name}'")
   endif()
 
-  get_property(_dirs GLOBAL PROPERTY AMENT_CMAKE_PYTHON_${package_name}_PACKAGE_DIRS)
-  list(FIND _dirs "${ARG_PACKAGE_DIR}" _didx)
-  if(_didx EQUAL -1)
-    set_property(GLOBAL APPEND PROPERTY AMENT_CMAKE_PYTHON_${package_name}_PACKAGE_DIRS "${ARG_PACKAGE_DIR}")
-  else()
-    message(WARNING "duplicate PACKAGE_DIR for '${package_name}', skipping")
-  endif()
-
-  _ament_cmake_python_override(SKIP_COMPILE)
-  _ament_cmake_python_override(VERSION)
-  _ament_cmake_python_override(SETUP_CFG)
-  _ament_cmake_python_override(DESTINATION)
-  _ament_cmake_python_override(SCRIPTS_DESTINATION)
+  set_property(GLOBAL PROPERTY AMENT_CMAKE_PYTHON_${package_name}_SKIP_COMPILE "${ARG_SKIP_COMPILE}")
+  set_property(GLOBAL PROPERTY AMENT_CMAKE_PYTHON_${package_name}_VERSION "${ARG_VERSION}")
+  set_property(GLOBAL PROPERTY AMENT_CMAKE_PYTHON_${package_name}_SETUP_CFG "${ARG_SETUP_CFG}")
+  set_property(GLOBAL PROPERTY AMENT_CMAKE_PYTHON_${package_name}_DESTINATION "${ARG_DESTINATION}")
+  set_property(GLOBAL PROPERTY AMENT_CMAKE_PYTHON_${package_name}_SCRIPTS_DESTINATION "${ARG_SCRIPTS_DESTINATION}")
+  set_property(GLOBAL APPEND PROPERTY AMENT_CMAKE_PYTHON_${package_name}_DEPENDS ${ARG_DEPENDS})
+  set_property(GLOBAL APPEND PROPERTY AMENT_CMAKE_PYTHON_${package_name}_PACKAGE_DIRS "${ARG_PACKAGE_DIR}")
 endfunction()
-
-macro(_ament_cmake_python_override param)
-  set(_prop "AMENT_CMAKE_PYTHON_${package_name}_${param}")
-  set(_val  "${ARG_${param}}")
-  get_property(_old_val GLOBAL PROPERTY ${_prop})
-  if(_old_val AND NOT _old_val STREQUAL "${_val}")
-    message(WARNING "${param} for '${package_name}' changed from '${_old_val}' to '${_val}'")
-  endif()
-  set_property(GLOBAL PROPERTY ${_prop} "${_val}")
-endmacro()

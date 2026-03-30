@@ -1,1 +1,1 @@
-from subdir.utils import foo
+from .subdir.utils import foo

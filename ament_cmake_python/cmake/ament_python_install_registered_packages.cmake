@@ -20,7 +20,7 @@ function(ament_cmake_python_install_registered_packages)
 endfunction()
 
 function(_ament_cmake_python_install_package_impl package_name)
-  foreach(_prop IN ITEMS SKIP_COMPILE VERSION SETUP_CFG DESTINATION SCRIPTS_DESTINATION PACKAGE_DIRS)
+  foreach(_prop IN ITEMS SKIP_COMPILE VERSION SETUP_CFG DESTINATION SCRIPTS_DESTINATION PACKAGE_DIRS DEPENDS)
     get_property(_${_prop} GLOBAL PROPERTY AMENT_CMAKE_PYTHON_${package_name}_${_prop})
   endforeach()
 
@@ -71,7 +71,11 @@ endmacro()
 macro(_ament_cmake_python_copy_build_files package_name)
   set(_sync_target "ament_cmake_python_sync_${package_name}")
 
-  add_custom_target(${_sync_target} DEPENDS ${_PACKAGE_DIRS} ${_SETUP_CFG})
+  add_custom_target(${_sync_target})
+
+  if(_DEPENDS)
+    add_dependencies(${_sync_target} ${_DEPENDS})
+  endif()
 
   foreach(_dir IN LISTS _PACKAGE_DIRS)
     add_custom_command(TARGET ${_sync_target}
@@ -86,7 +90,7 @@ macro(_ament_cmake_python_copy_build_files package_name)
       "${_SETUP_CFG}" "${_build_dir}/setup.cfg"
     )
   endif()
-  
+
 endmacro()
 
 macro(_ament_cmake_python_generate_egg package_name)
@@ -132,34 +136,25 @@ macro(_ament_cmake_python_install_scripts package_name)
 endmacro()
 
 macro(_ament_cmake_python_install_sources package_name)
-  set(_DIRS_TO_INSTALL "${_PACKAGE_DIRS}")
-  list(TRANSFORM _DIRS_TO_INSTALL APPEND "/")  
   if(AMENT_CMAKE_SYMLINK_INSTALL)
-    install(
-      DIRECTORY ${_DIRS_TO_INSTALL}
-      DESTINATION "${_DESTINATION}/${package_name}"
-      PATTERN "*.pyc"     EXCLUDE
-      PATTERN "__pycache__" EXCLUDE
-    )
+    # Symlink mode: install from each source dir so symlinks point to originals
+    set(_DIRS_TO_INSTALL "${_PACKAGE_DIRS}")
+    list(TRANSFORM _DIRS_TO_INSTALL APPEND "/")
+    foreach(_dir IN LISTS _DIRS_TO_INSTALL)
+      install(
+        DIRECTORY "${_dir}"
+        DESTINATION "${_DESTINATION}/${package_name}"
+        PATTERN "*.pyc"       EXCLUDE
+        PATTERN "__pycache__" EXCLUDE
+      )
+    endforeach()
   else()
-    # cmake does not support overwriting a more recently modified file
-    # we must remove any existing files before installing the new package
-    install(CODE
-      "set(_dest \"\${CMAKE_INSTALL_PREFIX}/${_DESTINATION}/${package_name}\")
-      set(_dirs ${_DIRS_TO_INSTALL})
-      foreach(_dir IN LISTS _dirs)
-        file(GLOB_RECURSE _rel_files RELATIVE \"\${_dir}\" \"\${_dir}/*\")
-        foreach(_file IN LISTS _rel_files)
-          file(REMOVE \"\${_dest}/\${_file}\")
-        endforeach()
-        file(INSTALL
-          DESTINATION \"\${_dest}\"
-          TYPE DIRECTORY
-          FILES \"\${_dir}\"
-          PATTERN \"*.pyc\"       EXCLUDE
-          PATTERN \"__pycache__\" EXCLUDE
-        )
-      endforeach()"
+    # Copy mode: install from the already-merged build directory
+    install(
+      DIRECTORY "${_build_dir}/${package_name}/"
+      DESTINATION "${_DESTINATION}/${package_name}"
+      PATTERN "*.pyc"       EXCLUDE
+      PATTERN "__pycache__" EXCLUDE
     )
   endif()
 endmacro()
