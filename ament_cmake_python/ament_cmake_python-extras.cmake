@@ -80,6 +80,17 @@ print(os.path.relpath(sysconfig.get_path('purelib', **kwargs), start='${CMAKE_IN
   endif()
 endmacro()
 
+macro(_ament_cmake_python_register_extension_hook)
+  if(NOT DEFINED AMENT_CMAKE_PYTHON_EXTENSION_REGISTERED)
+    set(AMENT_CMAKE_PYTHON_EXTENSION_REGISTERED TRUE)
+
+    ament_register_extension(
+      "ament_package"
+      "ament_cmake_python"
+      "ament_python_install_registered_packages.cmake")
+  endif()
+endmacro()
+
 include("${ament_cmake_python_DIR}/ament_python_install_module.cmake")
 include("${ament_cmake_python_DIR}/ament_python_install_package.cmake")
 include("${ament_cmake_python_DIR}/ament_get_python_install_dir.cmake")
