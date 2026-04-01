@@ -68,6 +68,15 @@ macro(_ament_cmake_gtest_find_gtest)
 
         set(GTEST_FROM_SOURCE_LIBRARIES "gtest" CACHE INTERNAL "")
         set(GTEST_FROM_SOURCE_MAIN_LIBRARIES "gtest_main" CACHE INTERNAL "")
+      else()
+        # try to find and use gtest from GTest
+        find_package(GTest QUIET)
+        if(GTest_FOUND)
+          set(GTEST_FOUND TRUE)
+          set(GTEST_LIBRARIES GTest::gtest)
+          set(GTEST_MAIN_LIBRARIES GTest::gtest_main)
+          set(GTEST_BOTH_LIBRARIES ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES})
+        endif()
       endif()
     endif()
 
