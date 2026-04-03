@@ -31,6 +31,7 @@ macro(ament_find_gmock)
       "ament_find_gmock() called with unused arguments: ${_ARGN}")
   endif()
   # Not a typo. GMock is provided by GTest package
+  find_package(GTest REQUIRED)
   set(GMOCK_FOUND ${GTest_FOUND})
   set(GMOCK_LIBRARIES GTest::gmock GTest::gtest)
   set(GMOCK_MAIN_LIBRARIES GTest::gmock_main)

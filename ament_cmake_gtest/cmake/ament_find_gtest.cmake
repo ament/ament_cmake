@@ -31,5 +31,6 @@ macro(ament_find_gtest)
     message(FATAL_ERROR
       "ament_find_gtest() called with unused arguments: ${_ARGN}")
   endif()
+  find_package(GTest REQUIRED)
   set(GTEST_FOUND ${GTest_FOUND})
 endmacro()
