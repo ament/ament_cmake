@@ -33,7 +33,8 @@
 #
 macro(ament_add_gmock_executable target)
   _ament_cmake_gmock_find_gmock()
-  if(GMOCK_FOUND)
+  # Not a typo. GTest provides GMock
+  if(GTest_FOUND)
     _ament_add_gmock_executable("${target}" ${ARGN})
   endif()
 endmacro()
