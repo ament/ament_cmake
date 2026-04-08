@@ -33,7 +33,7 @@
 #
 macro(ament_add_gtest_executable target)
   _ament_cmake_gtest_find_gtest()
-  if(GTEST_FOUND)
+  if(GTest_FOUND)
     _ament_add_gtest_executable("${target}" ${ARGN})
   endif()
 endmacro()

@@ -23,6 +23,7 @@
 # additionally against ``GTEST_MAIN_LIBRARIES``.
 #
 # @public
+# @deprecated
 #
 macro(ament_find_gtest)
   set(_ARGN "${ARGN}")
@@ -30,5 +31,6 @@ macro(ament_find_gtest)
     message(FATAL_ERROR
       "ament_find_gtest() called with unused arguments: ${_ARGN}")
   endif()
-  _ament_cmake_gtest_find_gtest()
+  find_package(GTest REQUIRED)
+  set(GTEST_FOUND ${GTest_FOUND})
 endmacro()
