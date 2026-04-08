@@ -2,6 +2,11 @@
 Changelog for package ament_cmake_python
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.8.7 (2026-04-08)
+------------------
+* feature: allow extending a python package in `ament_python_install_package` (`#587 <https://github.com/ament/ament_cmake//issues/587>`_)
+* Contributors: Nadav Elkabets
+
 2.8.6 (2026-02-23)
 ------------------
 * Add missing dependency (`#617 <https://github.com/ament/ament_cmake/issues/617>`_)
