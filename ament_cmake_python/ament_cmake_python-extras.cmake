@@ -29,12 +29,13 @@ macro(_ament_cmake_python_register_environment_hook)
     file(TO_NATIVE_PATH "${PYTHON_INSTALL_DIR}" PYTHON_INSTALL_DIR)
 
     # register information for .dsv generation
-    set(
-      AMENT_CMAKE_ENVIRONMENT_HOOKS_DESC_pythonpath
-      "prepend-non-duplicate;PYTHONPATH;${PYTHON_INSTALL_DIR}")
+    # set(
+    #   AMENT_CMAKE_ENVIRONMENT_HOOKS_DESC_pythonpath
+    #  "prepend-non-duplicate;PYTHONPATH;${PYTHON_INSTALL_DIR}")
 
-    ament_environment_hooks(
-      "${ament_cmake_package_templates_ENVIRONMENT_HOOK_PYTHONPATH}")
+    # ament_environment_hooks(
+    #   "${ament_cmake_package_templates_ENVIRONMENT_HOOK_PYTHONPATH}")
+    ament_environment_prepend_non_duplicate(PYTHONPATH "${PYTHON_INSTALL_DIR}")
     # restore variable
     set(PYTHON_INSTALL_DIR "${_PYTHON_INSTALL_DIR}")
   endif()

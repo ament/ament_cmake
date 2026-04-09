@@ -22,8 +22,13 @@ macro(_ament_cmake_export_libraries_register_environment_hook)
 
     if(NOT WIN32)
       find_package(ament_cmake_core QUIET REQUIRED)
-      ament_environment_hooks(
-        "${ament_cmake_package_templates_ENVIRONMENT_HOOK_LIBRARY_PATH}")
+      # ament_environment_hooks(
+      #   "${ament_cmake_package_templates_ENVIRONMENT_HOOK_LIBRARY_PATH}")
+      if(APPLE)
+        ament_environment_prepend_non_duplicate(DYLD_LIBRARY_PATH lib)
+      else()
+        ament_environment_prepend_non_duplicate(LD_LIBRARY_PATH lib)
+      endif()
     endif()
   endif()
 endmacro()

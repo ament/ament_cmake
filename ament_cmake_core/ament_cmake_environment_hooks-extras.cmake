@@ -60,6 +60,8 @@ set(
 include(
   "${ament_cmake_core_DIR}/environment_hooks/ament_environment_hooks.cmake")
 include(
+  "${ament_cmake_core_DIR}/environment_hooks/ament_environment_prepend_non_duplicate.cmake")
+include(
   "${ament_cmake_core_DIR}/environment_hooks/ament_generate_package_environment.cmake")
 
 ament_register_extension("ament_package" "ament_cmake_core"
