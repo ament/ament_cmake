@@ -68,7 +68,8 @@ macro(ament_auto_add_executable target)
   # add include directory of this package if it exists
   if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/include")
     target_include_directories("${target}" PUBLIC
-      "${CMAKE_CURRENT_SOURCE_DIR}/include")
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+        "$<INSTALL_INTERFACE:include/${PROJECT_NAME}>")
   endif()
   # link against other libraries of this package
   if(NOT ${PROJECT_NAME}_LIBRARIES STREQUAL "" AND
