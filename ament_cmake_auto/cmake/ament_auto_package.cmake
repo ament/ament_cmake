@@ -78,6 +78,8 @@ macro(ament_auto_package)
   if(NOT ${PROJECT_NAME}_LIBRARIES STREQUAL "")
     set(_has_targets TRUE)
     set(_has_library_targets TRUE)
+    set(without_interfaces "")
+
     foreach(library_name ${${PROJECT_NAME}_LIBRARIES})
       get_target_property(library_type ${library_name} TYPE)
       if(NOT "${library_type}" STREQUAL "INTERFACE_LIBRARY")
@@ -85,7 +87,9 @@ macro(ament_auto_package)
       endif()
     endforeach()
 
-    ament_export_libraries(${without_interfaces})
+    if(NOT ${without_interfaces} STREQUAL "")
+      ament_export_libraries(${without_interfaces})
+    endif()
     install(
       TARGETS ${${PROJECT_NAME}_LIBRARIES}
       EXPORT export_${PROJECT_NAME}
