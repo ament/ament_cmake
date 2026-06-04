@@ -26,6 +26,12 @@ ament_vendor(depender
   SKIP_INSTALL
 )
 
+ament_vendor(exlib_install
+  VCS_URL exlib_good
+  VCS_TYPE path
+  GLOBAL_HOOK
+)
+
 externalproject_add_stepdependencies(depender configure exlib_bad exlib_good)
 
 if(WIN32)
@@ -50,3 +56,19 @@ ament_add_test(layering_bad
   COMMAND "${depender_BINDIR}/depender" "should-fail"
   GENERATE_RESULT_FOR_RETURN_CODE_ZERO
   APPEND_LIBRARY_DIRS "${exlib_bad_LIBDIR}" "${exlib_good_LIBDIR}")
+
+if(WIN32)
+  configure_file(
+    test_powershell_setup.ps1
+    ${CMAKE_CURRENT_BINARY_DIR}/test_powershell_setup.ps1
+    COPYONLY
+  )
+
+  ament_add_test(test_powershell_setup
+    COMMAND powershell.exe -NonInteractive -ExecutionPolicy Bypass -File
+      "${CMAKE_CURRENT_BINARY_DIR}/test_powershell_setup.ps1"
+      "${CMAKE_INSTALL_PREFIX}"
+    GENERATE_RESULT_FOR_RETURN_CODE_ZERO
+  )
+endif()
+
