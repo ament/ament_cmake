@@ -37,7 +37,7 @@ macro(ament_export_include_directories)
       if(NOT IS_ABSOLUTE "${_arg}")
         # prefix relative paths with CMAKE_INSTALL_PREFIX
         # while avoiding to embed any absolute path
-        set(_arg "\${${PROJECT_NAME}_DIR}/../../../${_arg}")
+        set(_arg "\${${PROJECT_NAME}_IMPORT_PREFIX}/${_arg}")
         list_append_unique(_AMENT_EXPORT_RELATIVE_INCLUDE_DIRECTORIES "${_arg}")
       else()
         if(NOT IS_DIRECTORY "${_arg}")
