@@ -84,6 +84,12 @@ function(ament_environment_hooks)
       # write .dsv file containing the descriptor of the environment hook
       set(dsv_file "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_environment_hooks/${hook_basename}.dsv")
       file(GENERATE OUTPUT "${dsv_file}" CONTENT "${AMENT_CMAKE_ENVIRONMENT_HOOKS_DESC_${hook_basename}}\n")
+      # add dsv to environment hooks so they are added to local_setup files
+      list(APPEND _AMENT_CMAKE_ENVIRONMENT_HOOKS_dsv
+        "share/${PROJECT_NAME}/environment/${hook_basename}.dsv")
+      set(_AMENT_CMAKE_ENVIRONMENT_HOOKS_dsv
+        "${_AMENT_CMAKE_ENVIRONMENT_HOOKS_dsv}" PARENT_SCOPE)
+
       install(
         FILES "${dsv_file}"
         DESTINATION "share/${PROJECT_NAME}/environment"
