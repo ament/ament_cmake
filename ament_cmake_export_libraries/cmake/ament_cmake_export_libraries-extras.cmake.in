@@ -37,9 +37,13 @@ if(NOT _exported_libraries STREQUAL "")
     if(NOT IS_ABSOLUTE "${_library}")
       # search for library target relative to this CMake file
       set(_lib "NOTFOUND")
+      set(_install_libdir "@CMAKE_INSTALL_LIBDIR@")
+      if(_install_libdir STREQUAL "")
+        set(_install_libdir "lib")
+      endif()
       find_library(
         _lib NAMES "${_library}"
-        PATHS "${@PROJECT_NAME@_DIR}/../../../lib"
+        PATHS "${@PROJECT_NAME@_DIR}/../../../${_install_libdir}"
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH
       )
 
