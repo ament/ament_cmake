@@ -2,6 +2,11 @@
 Changelog for package ament_cmake_export_libraries
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Make ament_export_libraries respect CMAKE_INSTALL_LIBDIR (`#631 <https://github.com/ament/ament_cmake/issues/631>`_) (`#632 <https://github.com/ament/ament_cmake/issues/632>`_)
+* Contributors: mergify[bot]
+
 2.8.7 (2026-04-08)
 ------------------
 
