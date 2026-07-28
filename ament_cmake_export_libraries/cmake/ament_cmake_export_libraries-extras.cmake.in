@@ -39,7 +39,11 @@ if(NOT _exported_libraries STREQUAL "")
       set(_lib "NOTFOUND")
       find_library(
         _lib NAMES "${_library}"
-        PATHS "${@PROJECT_NAME@_DIR}/../../../lib"
+        PATHS
+        # This is for packages that install libraries to destinations using GNUInstallDirs variables.
+        "${@PROJECT_NAME@_DIR}/../../../@CMAKE_INSTALL_LIBDIR@"
+        # Historically ROS packages have installed libraries to this hardcoded lib directory.
+        "${@PROJECT_NAME@_DIR}/../../../lib"
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH
       )
 
