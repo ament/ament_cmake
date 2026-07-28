@@ -16,6 +16,7 @@
   <buildtool_depend>ament_cmake_python</buildtool_depend>
 
   <buildtool_export_depend>ament_cmake_core</buildtool_export_depend>
+  <buildtool_export_depend>linux_isolate_process</buildtool_export_depend>
 
   <export>
     <build_type>ament_cmake</build_type>

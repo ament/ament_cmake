@@ -54,7 +54,7 @@
 #
 function(ament_add_test testname)
   cmake_parse_arguments(ARG
-    "GENERATE_RESULT_FOR_RETURN_CODE_ZERO;SKIP_TEST"
+    "GENERATE_RESULT_FOR_RETURN_CODE_ZERO;SKIP_TEST;ISOLATE_TEST"
     "OUTPUT_FILE;RESULT_FILE;RUNNER;SKIP_RETURN_CODE;TIMEOUT;WORKING_DIRECTORY"
     "APPEND_ENV;APPEND_LIBRARY_DIRS;COMMAND;ENV"
     ${ARGN})
@@ -88,6 +88,9 @@ function(ament_add_test testname)
   set(cmd_wrapper "${python_interpreter}" "-u" "${ARG_RUNNER}"
     "${ARG_RESULT_FILE}"
     "--package-name" "${PROJECT_NAME}")
+  if(ISOLATE_TEST AND UNIX)
+    list(PREPEND cmd_wrapper "{python_interpreter}" "-m" "linux_isolate_process")
+  endif()
   if(ARG_SKIP_TEST)
     list(APPEND cmd_wrapper "--skip-test")
     set(ARG_SKIP_RETURN_CODE 0)
