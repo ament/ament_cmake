@@ -18,6 +18,7 @@
 # as well as linker flags
 
 # generate and register extra file for libraries
+include(GNUInstallDirs)
 set(_generated_extra_file
   "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_export_libraries/ament_cmake_export_libraries-extras.cmake")
 configure_file(
