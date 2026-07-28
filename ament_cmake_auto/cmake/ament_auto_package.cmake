@@ -71,8 +71,13 @@ macro(ament_auto_package)
     install(DIRECTORY include/ DESTINATION include/${PROJECT_NAME})
   endif()
 
+  set(_has_targets FALSE)
+  set(_has_library_targets FALSE)
+  
   # export and install all libraries
-  if(NOT ${PROJECT_NAME}_LIBRARIES STREQUAL "")
+  if(NOT "${${PROJECT_NAME}_LIBRARIES}" STREQUAL "")
+    set(_has_targets TRUE)
+    set(_has_library_targets TRUE)
     set(without_interfaces "")
     foreach(library_name ${${PROJECT_NAME}_LIBRARIES})
       get_target_property(library_type ${library_name} TYPE)
@@ -80,10 +85,10 @@ macro(ament_auto_package)
         list(APPEND without_interfaces ${library_name})
       endif()
     endforeach()
-
     ament_export_libraries(${without_interfaces})
     install(
-      TARGETS ${without_interfaces}
+      TARGETS ${${PROJECT_NAME}_LIBRARIES}
+      EXPORT export_${PROJECT_NAME}
       ARCHIVE DESTINATION lib
       LIBRARY DESTINATION lib
       RUNTIME DESTINATION bin
@@ -91,7 +96,8 @@ macro(ament_auto_package)
   endif()
 
   # install all executables
-  if(NOT ${PROJECT_NAME}_EXECUTABLES STREQUAL "")
+  if(NOT "${${PROJECT_NAME}_EXECUTABLES}" STREQUAL "")
+    set(_has_targets TRUE)
     if(_ARG_AMENT_AUTO_PACKAGE_INSTALL_TO_PATH)
       set(_destination "bin")
     else()
@@ -99,8 +105,18 @@ macro(ament_auto_package)
     endif()
     install(
       TARGETS ${${PROJECT_NAME}_EXECUTABLES}
+      EXPORT export_${PROJECT_NAME}
       DESTINATION ${_destination}
     )
+  endif()
+
+  # export all targets
+  if(_has_targets)
+    if(_has_library_targets)
+      ament_export_targets(export_${PROJECT_NAME} HAS_LIBRARY_TARGET)
+    else()
+      ament_export_targets(export_${PROJECT_NAME})
+    endif()
   endif()
 
   # install directories to share
