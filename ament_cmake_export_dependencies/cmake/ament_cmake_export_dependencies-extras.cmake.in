@@ -17,8 +17,17 @@ if(NOT _exported_dependencies STREQUAL "")
   set(@PROJECT_NAME@_RECURSIVE_DEPENDENCIES ${_exported_dependencies})
   set(_libraries)
   foreach(_dep ${_exported_dependencies})
-    if(NOT ${_dep}_FOUND)
-      find_package("${_dep}" QUIET REQUIRED)
+    # unpack components (if any)
+    string(REGEX REPLACE ":" ";" _unpacked "${_dep}")
+    list(POP_FRONT _unpacked _dep)
+    if(NOT "${_unpacked}" STREQUAL "")
+      # has components
+      find_package("${_dep}" QUIET REQUIRED COMPONENTS "${_unpacked}")
+    else()
+      # no components
+      if(NOT ${_dep}_FOUND)
+        find_package("${_dep}" QUIET REQUIRED)
+      endif()
     endif()
     # if a package provides modern CMake interface targets use them
     # exclusively assuming the classic CMake variables only exist for
