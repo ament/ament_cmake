@@ -121,6 +121,7 @@ macro(ament_vendor TARGET_NAME)
         ament_environment_hooks(${ament_cmake_vendor_package_DIR}/templates/vendor_package_cmake_prefix.bat.in)
         ament_environment_hooks(${ament_cmake_vendor_package_DIR}/templates/vendor_package_cmake_prefix.dsv.in)
         ament_environment_hooks(${ament_cmake_vendor_package_DIR}/templates/vendor_package_cmake_prefix.sh.in)
+        ament_environment_hooks(${ament_cmake_vendor_package_DIR}/templates/vendor_package_cmake_prefix.ps1.in)
       else()
         list(APPEND ${PROJECT_NAME}_CONFIG_EXTRAS ${ament_cmake_vendor_package_DIR}/templates/vendor_package_cmake_prefix.cmake.in)
       endif()
@@ -136,6 +137,18 @@ macro(ament_vendor TARGET_NAME)
       ament_environment_hooks(${ament_cmake_vendor_package_DIR}/templates/vendor_package.bat.in)
       ament_environment_hooks(${ament_cmake_vendor_package_DIR}/templates/vendor_package.dsv.in)
       ament_environment_hooks(${ament_cmake_vendor_package_DIR}/templates/vendor_package.sh.in)
+      ament_environment_hooks(${ament_cmake_vendor_package_DIR}/templates/vendor_package.ps1.in)
+
+      # Generate and install local_setup.ps1 for PowerShell support on Windows
+      configure_file(
+        "${ament_cmake_vendor_package_DIR}/templates/local_setup.ps1.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_vendor_package/local_setup.ps1"
+        @ONLY
+      )
+      install(
+        FILES "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_vendor_package/local_setup.ps1"
+        DESTINATION "share/${PROJECT_NAME}"
+      )
 
       # Resource index marker
       ament_index_register_resource("vendor_packages" CONTENT "opt/${PROJECT_NAME}")
