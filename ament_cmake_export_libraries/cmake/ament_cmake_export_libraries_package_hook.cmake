@@ -19,6 +19,15 @@
 
 # generate and register extra file for libraries
 include(GNUInstallDirs)
+# An absolute CMAKE_INSTALL_LIBDIR can be outside the install prefix, for
+# instance when libraries and CMake files are installed to separate
+# locations, so it is used as is. A relative one is resolved from this
+# package's CMake directory so that the install stays relocatable.
+if(IS_ABSOLUTE "${CMAKE_INSTALL_LIBDIR}")
+  set(_AMENT_EXPORT_LIBRARIES_LIBDIR "${CMAKE_INSTALL_LIBDIR}")
+else()
+  set(_AMENT_EXPORT_LIBRARIES_LIBDIR "\${${PROJECT_NAME}_DIR}/../../../${CMAKE_INSTALL_LIBDIR}")
+endif()
 set(_generated_extra_file
   "${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_export_libraries/ament_cmake_export_libraries-extras.cmake")
 configure_file(
