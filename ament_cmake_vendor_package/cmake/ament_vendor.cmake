@@ -180,6 +180,7 @@ macro(ament_vendor TARGET_NAME)
         ament_environment_hooks(${ament_cmake_vendor_package_DIR}/templates/vendor_package_cmake_prefix.dsv.in)
         ament_environment_hooks(${ament_cmake_vendor_package_DIR}/templates/vendor_package_cmake_prefix.sh.in)
       else()
+        ament_package_install_prefix(_AMENT_VENDOR_INSTALL_PREFIX "\${CMAKE_CURRENT_LIST_DIR}/../../..")
         list(APPEND ${PROJECT_NAME}_CONFIG_EXTRAS ${ament_cmake_vendor_package_DIR}/templates/vendor_package_cmake_prefix.cmake.in)
       endif()
 
