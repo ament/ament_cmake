@@ -36,6 +36,9 @@
 # :param SKIP_LINKING_MAIN_LIBRARIES: if set skip linking against the gtest
 #   main libraries
 # :type SKIP_LINKING_MAIN_LIBRARIES: option
+# :param LINKING_MODE: either SCOPED or UNSCOPED to use scope keywords
+#   (PRIVATE/PUBLIC/INTERFACE) in target_link_libraries() or not, respectively
+# :type LINKING_MODE: string
 # :param SKIP_TEST: if set mark the test as being skipped
 # :type SKIP_TEST: option
 # :param ENV: list of env vars to set; listed as ``VAR=value``
@@ -52,7 +55,7 @@
 macro(ament_add_gtest target)
   cmake_parse_arguments(_ARG
     "SKIP_LINKING_MAIN_LIBRARIES;SKIP_TEST"
-    "RUNNER;TIMEOUT;WORKING_DIRECTORY"
+    "LINKING_MODE;RUNNER;TIMEOUT;WORKING_DIRECTORY"
     "APPEND_ENV;APPEND_LIBRARY_DIRS;ENV"
     ${ARGN})
   if(NOT _ARG_UNPARSED_ARGUMENTS)
@@ -64,6 +67,9 @@ macro(ament_add_gtest target)
   set(_argn_executable ${_ARG_UNPARSED_ARGUMENTS})
   if(_ARG_SKIP_LINKING_MAIN_LIBRARIES)
     list(APPEND _argn_executable "SKIP_LINKING_MAIN_LIBRARIES")
+  endif()
+  if(DEFINED _ARG_LINKING_MODE)
+    list(APPEND _argn_executable "LINKING_MODE" "${_ARG_LINKING_MODE}")
   endif()
   ament_add_gtest_executable("${target}" ${_argn_executable})
 

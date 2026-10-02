@@ -28,6 +28,9 @@
 # :param SKIP_LINKING_MAIN_LIBRARIES: if set skip linking against the gtest
 #   main libraries
 # :type SKIP_LINKING_MAIN_LIBRARIES: option
+# :param LINKING_MODE: either SCOPED or UNSCOPED to use scope keywords
+#   (PRIVATE/PUBLIC/INTERFACE) in target_link_libraries() or not, respectively
+# :type LINKING_MODE: string
 #
 # @public
 #
@@ -39,7 +42,7 @@ macro(ament_add_gtest_executable target)
 endmacro()
 
 function(_ament_add_gtest_executable target)
-  cmake_parse_arguments(ARG "SKIP_LINKING_MAIN_LIBRARIES" "" "" ${ARGN})
+  cmake_parse_arguments(ARG "SKIP_LINKING_MAIN_LIBRARIES" "LINKING_MODE" "" ${ARGN})
   if(NOT ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR
       "ament_add_gtest_executable() must be invoked with at least one source file")
@@ -49,13 +52,35 @@ function(_ament_add_gtest_executable target)
   # to add this target as a dependency to the "test" target
   add_executable("${target}" ${ARG_UNPARSED_ARGUMENTS})
   target_include_directories("${target}" SYSTEM PRIVATE "${GTEST_INCLUDE_DIRS}")
-  if(NOT ARG_SKIP_LINKING_MAIN_LIBRARIES)
-    target_link_libraries("${target}" ${GTEST_MAIN_LIBRARIES})
+
+  if(NOT DEFINED ARG_LINKING_MODE)
+    # Default to the old behaviour for now
+    set(ARG_LINKING_MODE "UNSCOPED")
   endif()
-  target_link_libraries("${target}" ${GTEST_LIBRARIES})
+  if(ARG_LINKING_MODE STREQUAL "SCOPED")
+    set(scope_keyword "PRIVATE")
+  elseif(ARG_LINKING_MODE STREQUAL "UNSCOPED")
+    set(scope_keyword "")
+    message(DEPRECATION
+      "The unscoped signature for ament_add_gtest_executable() is deprecated. "
+      "Instead, pass 'LINKING_MODE SCOPED' to ament_add_gtest_executable() and "
+      "update any related target_link_libraries() calls to use scope keywords "
+      "(PRIVATE/PUBLIC/INTERFACE). This will eventually become the default."
+    )
+  else()
+    message(FATAL_ERROR
+      "Invalid LINKING_MODE '${ARG_LINKING_MODE}' for target '${target}'. "
+      "Valid options are 'SCOPED' or 'UNSCOPED'."
+    )
+  endif()
+
+  if(NOT ARG_SKIP_LINKING_MAIN_LIBRARIES)
+    target_link_libraries("${target}" ${scope_keyword} ${GTEST_MAIN_LIBRARIES})
+  endif()
+  target_link_libraries("${target}" ${scope_keyword} ${GTEST_LIBRARIES})
   if(NOT WIN32)
     set(THREADS_PREFER_PTHREAD_FLAG ON)
     find_package(Threads REQUIRED)
-    target_link_libraries("${target}" Threads::Threads)
+    target_link_libraries("${target}" ${scope_keyword} Threads::Threads)
   endif()
 endfunction()
