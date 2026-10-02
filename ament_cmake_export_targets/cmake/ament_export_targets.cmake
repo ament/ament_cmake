@@ -22,6 +22,10 @@
 # :param HAS_LIBRARY_TARGET: if set, an environment variable will be defined
 #   so that the library can be found at runtime
 # :type HAS_LIBRARY_TARGET: option
+# :param EXCLUDE_FROM_PACKAGE_TARGETS: if set, the exported targets are
+#   installed and imported by downstream ``find_package()`` calls as usual,
+#   but not added to ``<pkg>_TARGETS``
+# :type EXCLUDE_FROM_PACKAGE_TARGETS: option
 # :keyword NAMESPACE: the exported namespace for the target if set.
 #    The default is the value of ``${PROJECT_NAME}::``.
 #    This is an advanced option. It should be used carefully and clearly documented
@@ -37,12 +41,16 @@ macro(ament_export_targets)
     message(FATAL_ERROR
       "ament_export_targets() must be called before ament_package()")
   endif()
-  cmake_parse_arguments(_ARG "HAS_LIBRARY_TARGET" "NAMESPACE" "" ${ARGN})
+  cmake_parse_arguments(_ARG
+    "HAS_LIBRARY_TARGET;EXCLUDE_FROM_PACKAGE_TARGETS" "NAMESPACE" "" ${ARGN})
 
   if(${ARGC} GREATER 0)
     _ament_cmake_export_targets_register_package_hook()
     foreach(_arg ${_ARG_UNPARSED_ARGUMENTS})
       list(APPEND _AMENT_CMAKE_EXPORT_TARGETS "${_arg}")
+      if(_ARG_EXCLUDE_FROM_PACKAGE_TARGETS)
+        list(APPEND _AMENT_CMAKE_EXPORT_TARGETS_EXCLUDED "${_arg}")
+      endif()
     endforeach()
 
     set(_AMENT_CMAKE_EXPORT_TARGETS_NAMESPACE ${_ARG_NAMESPACE})
