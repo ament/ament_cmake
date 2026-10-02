@@ -36,9 +36,10 @@ if(NOT _exported_libraries STREQUAL "")
 
     if(NOT IS_ABSOLUTE "${_library}")
       # search for library target relative to this CMake file
-      set(_lib "NOTFOUND")
+      unset(_@PROJECT_NAME@_exported_library)
+      unset(_@PROJECT_NAME@_exported_library CACHE)
       find_library(
-        _lib NAMES "${_library}"
+        _@PROJECT_NAME@_exported_library NAMES "${_library}"
         PATHS
         # This is for packages that install libraries to destinations using GNUInstallDirs variables.
         "${@PROJECT_NAME@_DIR}/../../../@CMAKE_INSTALL_LIBDIR@"
@@ -47,17 +48,34 @@ if(NOT _exported_libraries STREQUAL "")
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH
       )
 
-      if(NOT _lib)
+      if(NOT _@PROJECT_NAME@_exported_library)
+        unset(_@PROJECT_NAME@_exported_library)
+        unset(_@PROJECT_NAME@_exported_library CACHE)
+        set(_@PROJECT_NAME@_exported_library_filenames
+          "${_library}"
+          "${CMAKE_SHARED_LIBRARY_PREFIX}${_library}${CMAKE_SHARED_LIBRARY_SUFFIX}"
+          "${CMAKE_STATIC_LIBRARY_PREFIX}${_library}${CMAKE_STATIC_LIBRARY_SUFFIX}"
+        )
+        find_file(
+          _@PROJECT_NAME@_exported_library
+          NAMES ${_@PROJECT_NAME@_exported_library_filenames}
+          PATHS "${@PROJECT_NAME@_DIR}/../../../lib"
+          NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH
+        )
+        unset(_@PROJECT_NAME@_exported_library_filenames)
+      endif()
+
+      if(NOT _@PROJECT_NAME@_exported_library)
         # warn about not existing library and ignore it
         message(FATAL_ERROR "Package '@PROJECT_NAME@' exports the library '${_library}' which couldn't be found")
-      elseif(NOT IS_ABSOLUTE "${_lib}")
+      elseif(NOT IS_ABSOLUTE "${_@PROJECT_NAME@_exported_library}")
         # the found library must be an absolute path
-        message(FATAL_ERROR "Package '@PROJECT_NAME@' found the library '${_library}' at '${_lib}' which is not an absolute path")
-      elseif(NOT EXISTS "${_lib}")
+        message(FATAL_ERROR "Package '@PROJECT_NAME@' found the library '${_library}' at '${_@PROJECT_NAME@_exported_library}' which is not an absolute path")
+      elseif(NOT EXISTS "${_@PROJECT_NAME@_exported_library}")
         # the found library must exist
-        message(FATAL_ERROR "Package '@PROJECT_NAME@' found the library '${_lib}' which doesn't exist")
+        message(FATAL_ERROR "Package '@PROJECT_NAME@' found the library '${_@PROJECT_NAME@_exported_library}' which doesn't exist")
       else()
-        list(APPEND @PROJECT_NAME@_LIBRARIES ${_cfg} "${_lib}")
+        list(APPEND @PROJECT_NAME@_LIBRARIES ${_cfg} "${_@PROJECT_NAME@_exported_library}")
       endif()
 
     else()
@@ -108,33 +126,66 @@ if(NOT _exported_library_names STREQUAL "")
     list(GET _library_dirs 0 _library_name)
     list(REMOVE_AT _library_dirs 0)
 
-    set(_lib "NOTFOUND")
+    unset(_@PROJECT_NAME@_exported_library)
+    unset(_@PROJECT_NAME@_exported_library CACHE)
     if(NOT _library_dirs)
       # search for library in the common locations
       find_library(
-        _lib
+        _@PROJECT_NAME@_exported_library
         NAMES "${_library_name}"
       )
-      if(NOT _lib)
+      if(NOT _@PROJECT_NAME@_exported_library)
+        unset(_@PROJECT_NAME@_exported_library)
+        unset(_@PROJECT_NAME@_exported_library CACHE)
+        set(_@PROJECT_NAME@_exported_library_filenames
+          "${_library_name}"
+          "${CMAKE_SHARED_LIBRARY_PREFIX}${_library_name}${CMAKE_SHARED_LIBRARY_SUFFIX}"
+          "${CMAKE_STATIC_LIBRARY_PREFIX}${_library_name}${CMAKE_STATIC_LIBRARY_SUFFIX}"
+        )
+        find_file(
+          _@PROJECT_NAME@_exported_library
+          NAMES ${_@PROJECT_NAME@_exported_library_filenames}
+          PATHS "${@PROJECT_NAME@_DIR}/../../../lib"
+          NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH
+        )
+        unset(_@PROJECT_NAME@_exported_library_filenames)
+      endif()
+      if(NOT _@PROJECT_NAME@_exported_library)
         # warn about not existing library and later ignore it
         message(WARNING "Package '@PROJECT_NAME@' exports library '${_library_name}' which couldn't be found")
       endif()
     else()
       # search for library in the specified directories
       find_library(
-        _lib
+        _@PROJECT_NAME@_exported_library
         NAMES "${_library_name}"
         PATHS ${_library_dirs}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH
       )
-      if(NOT _lib)
+      if(NOT _@PROJECT_NAME@_exported_library)
+        unset(_@PROJECT_NAME@_exported_library)
+        unset(_@PROJECT_NAME@_exported_library CACHE)
+        set(_@PROJECT_NAME@_exported_library_filenames
+          "${_library_name}"
+          "${CMAKE_SHARED_LIBRARY_PREFIX}${_library_name}${CMAKE_SHARED_LIBRARY_SUFFIX}"
+          "${CMAKE_STATIC_LIBRARY_PREFIX}${_library_name}${CMAKE_STATIC_LIBRARY_SUFFIX}"
+        )
+        find_file(
+          _@PROJECT_NAME@_exported_library
+          NAMES ${_@PROJECT_NAME@_exported_library_filenames}
+          PATHS "${@PROJECT_NAME@_DIR}/../../../lib"
+          NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH
+        )
+        unset(_@PROJECT_NAME@_exported_library_filenames)
+      endif()
+      if(NOT _@PROJECT_NAME@_exported_library)
         # warn about not existing library and later ignore it
         message(WARNING
           "Package '@PROJECT_NAME@' exports library '${_library_name}' with LIBRARY_DIRS '${_library_dirs}' which couldn't be found")
       endif()
     endif()
-    if(_lib)
-      list(APPEND @PROJECT_NAME@_LIBRARIES ${_cfg} "${_lib}")
+    if(_@PROJECT_NAME@_exported_library)
+      list(APPEND @PROJECT_NAME@_LIBRARIES ${_cfg} "${_@PROJECT_NAME@_exported_library}")
     endif()
   endwhile()
 endif()
