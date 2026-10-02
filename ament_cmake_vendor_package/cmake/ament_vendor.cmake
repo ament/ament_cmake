@@ -49,6 +49,30 @@
 #   projects.
 # :type GLOBAL_HOOK: option
 #
+# The AMENT_VENDOR_POLICY cache entry and the SATISFIED argument
+# control whether or not this function builds the vendor package.
+# If you want something other than the default, set AMENT_VENDOR_POLICY via the
+# command line:
+#
+#    * If you are using cmake directly: cmake -DAMENT_VENDOR_POLICY:STRING=DEFAULT ...
+#    * If you are using colcon: colcon --cmake-args -DAMENT_VENDOR_POLICY:STRING=DEFAULT ...
+#
+#   AMENT_VENDOR_POLICY: String option that specifies how ament_vendor behaves,
+#                        the allowed values are listed in the following.
+#     DEFAULT: Vendor if ``SATISFIED`` argument is not supplied or false,
+#              do not vendor otherwise.
+#     FORCE_BUILD_VENDOR: Always vendor, independently of the value of the
+#                   ``SATISFIED`` argument.
+#     NEVER_VENDOR: Never vendor, and raise an error if ``SATISFIED`` argument
+#                   is not supplied or false.
+#     NEVER_VENDOR_IGNORE_SATISFIED_CHECK: Never vendor, and do not raise
+#                   an error even if ``SATISFIED`` argument is not supplied
+#                   or false. This option is unsupported by most packages,
+#                   so use at your own risk, as it could break the buid.
+#
+# To check if a package has been actually vendored, check if the target name
+# passed as TARGET_NAME exists with if(TARGET <target_name>).
+#
 # @public
 #
 macro(ament_vendor TARGET_NAME)
@@ -96,12 +120,46 @@ macro(ament_vendor TARGET_NAME)
   option(FORCE_BUILD_VENDOR_PKG
     "Build vendor packages from source, even if system-installed packages are available"
     OFF)
+  mark_as_advanced(FORCE_BUILD_VENDOR_PKG)
 
-  if(NOT _ARG_SATISFIED OR FORCE_BUILD_VENDOR_PKG)
+  set(_AMENT_VENDOR_POLICY_DOCS "Specify how ament_vendor behaves, allowed values are DEFAULT, FORCE_BUILD_VENDOR, NEVER_VENDOR and NEVER_VENDOR_IGNORE_SATISFIED_CHECK.")
+  set(AMENT_VENDOR_POLICY "DEFAULT" CACHE STRING ${_AMENT_VENDOR_POLICY_DOCS})
+  set_property(CACHE AMENT_VENDOR_POLICY PROPERTY STRINGS "DEFAULT" "FORCE_BUILD_VENDOR" "NEVER_VENDOR" "NEVER_VENDOR_IGNORE_SATISFIED_CHECK")
+
+  if(FORCE_BUILD_VENDOR_PKG AND NOT AMENT_VENDOR_POLICY STREQUAL "FORCE_BUILD_VENDOR")
+    message(DEPRECATION "FORCE_BUILD_VENDOR_PKG set to ON detected, FORCE_BUILD_VENDOR_PKG variable is deprecated, please set AMENT_VENDOR_POLICY to FORCE_BUILD_VENDOR instead.")
+    set(AMENT_VENDOR_POLICY "FORCE_BUILD_VENDOR" CACHE STRING ${_AMENT_VENDOR_POLICY_DOCS} FORCE)
+  endif()
+  unset(_AMENT_VENDOR_POLICY_DOCS)
+
+  # AMENT_VENDOR_POLICY
+
+  if(AMENT_VENDOR_POLICY STREQUAL "FORCE_BUILD_VENDOR")
+    set(_call_ament_vendor TRUE)
     if(_ARG_SATISFIED)
-      message(STATUS "Forcing vendor package build for '${TARGET_NAME}', which is already satisfied")
+      message(STATUS "Forcing vendor package build for '${TARGET_NAME}', which is already satisfied as AMENT_VENDOR_POLICY is set to FORCE_BUILD_VENDOR")
     endif()
+  elseif(AMENT_VENDOR_POLICY STREQUAL "NEVER_VENDOR")
+    if(NOT _ARG_SATISFIED)
+      message(FATAL_ERROR "Error as SATISFIED argument is not TRUE, but AMENT_VENDOR_POLICY is set to NEVER_VENDOR")
+    endif()
+    set(_call_ament_vendor FALSE)
+  elseif(AMENT_VENDOR_POLICY STREQUAL "NEVER_VENDOR_IGNORE_SATISFIED_CHECK")
+    if(NOT _ARG_SATISFIED)
+      message(STATUS "Not vendoring even if SATISFIED is not TRUE as AMENT_VENDOR_POLICY is set to NEVER_VENDOR_IGNORE_SATISFIED_CHECK")
+    endif()
+    set(_call_ament_vendor FALSE)
+  else()
+    # This is the default case
+    if(_ARG_SATISFIED)
+      message(STATUS "Skipping vendor package build for '${TARGET_NAME}', as SATISFIED is TRUE and AMENT_VENDOR_POLICY is set to DEFAULT")
+      set(_call_ament_vendor FALSE)
+    else()
+      set(_call_ament_vendor TRUE)
+    endif()
+  endif()
 
+  if(_call_ament_vendor)
     list_append_unique(_AMENT_CMAKE_VENDOR_PACKAGE_PREFIX_PATH "${CMAKE_CURRENT_BINARY_DIR}/${TARGET_NAME}-prefix/install")
 
     _ament_vendor(
@@ -142,8 +200,6 @@ macro(ament_vendor TARGET_NAME)
 
       set(_ament_vendor_called TRUE)
     endif()
-  else()
-    message(STATUS "Skipping vendor package build for '${TARGET_NAME}', which is already satisfied")
   endif()
 endmacro()
 
