@@ -14,7 +14,10 @@
 
 # copied from ament_cmake_test/ament_cmake_test-extras.cmake
 
-enable_testing()
+get_property(_cmake_role GLOBAL PROPERTY CMAKE_ROLE)
+if("${_cmake_role}" STREQUAL "PROJECT")
+  enable_testing()
+endif()
 # same option as in the CTest module
 option(BUILD_TESTING "Build the testing tree." ON)
 
@@ -24,7 +27,7 @@ set(
   CACHE PATH "The path where test results are generated"
 )
 
-if(BUILD_TESTING)
+if(BUILD_TESTING AND "${_cmake_role}" STREQUAL "PROJECT")
   # configure ctest not to truncate the dashboard summary
   file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/CTestCustom.cmake"
     "set(CTEST_CUSTOM_MAXIMUM_PASSED_TEST_OUTPUT_SIZE 0)\n"
