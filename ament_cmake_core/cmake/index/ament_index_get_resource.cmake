@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Get the content of a specific resource from the index.
 #
 # :param var: the output variable name for the content of the requested
@@ -26,8 +26,8 @@
 #   ``ament_index_get_prefix_path()``).
 # :type PREFIX_PATH: list of strings
 #
+#]]
 # @public
-#
 function(ament_index_get_resource var resource_type resource_name)
   if(resource_type STREQUAL "")
     message(FATAL_ERROR

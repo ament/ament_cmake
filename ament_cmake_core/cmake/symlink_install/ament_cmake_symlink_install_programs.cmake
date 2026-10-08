@@ -12,13 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Reimplement CMake install(PROGRAMS) command to use symlinks instead of copying
 # resources.
 #
 # :param ARGN: the same arguments as the CMake install command.
 # :type ARGN: various
-#
+#]]
 function(ament_cmake_symlink_install_programs programs_keyword)
   if(NOT programs_keyword STREQUAL "PROGRAMS")
     message(FATAL_ERROR "ament_cmake_symlink_install_programs() first argument "

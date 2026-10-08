@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Export targets to downstream packages.
 #
 # Each export name must have been used to install targets using
@@ -30,8 +30,8 @@
 # :param ARGN: a list of export names
 # :type ARGN: list of strings
 #
+#]]
 # @public
-#
 macro(ament_export_targets)
   if(_${PROJECT_NAME}_AMENT_PACKAGE)
     message(FATAL_ERROR

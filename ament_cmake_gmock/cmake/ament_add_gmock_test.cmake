@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Add an existing executable using gmock as a test.
 #
 # Register an executable created with ament_add_gmock_executable() as a test.
@@ -42,8 +42,8 @@
 #   OS specific env var, a la LD_LIBRARY_PATH
 # :type APPEND_LIBRARY_DIRS: list of strings
 #
+#]]
 # @public
-#
 function(ament_add_gmock_test target)
   if(NOT TARGET ${target})
     return()

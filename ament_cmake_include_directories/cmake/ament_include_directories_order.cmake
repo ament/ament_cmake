@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Order include directories according to chain of prefixes.
 #
 # :param var: the output variable name
@@ -20,8 +20,8 @@
 # :param ARGN: a list of include directories.
 # :type ARGN: list of strings
 #
+#]]
 # @public
-#
 function(ament_include_directories_order var)
   set(prefixes "$ENV{AMENT_PREFIX_PATH}")
   if(NOT WIN32)

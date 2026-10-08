@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Get the prefix path including the folder from the binary dir.
 #
 # :param var: the output variable name for the prefix path
@@ -23,8 +23,8 @@
 # :param SKIP_BINARY_DIR: if set skip adding the folder within the binary dir
 # :type SKIP_BINARY_DIR: option
 #
+#]]
 # @public
-#
 function(ament_index_get_prefix_path var)
   cmake_parse_arguments(ARG
     "SKIP_AMENT_PREFIX_PATH;SKIP_BINARY_DIR" "" "" ${ARGN})

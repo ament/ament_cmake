@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Overwrite CMake install command to use symlinks instead of copying resources.
 #
 # :param signature: one of the CMake keywords used to choose between the
@@ -20,7 +20,7 @@
 # :type signature: string
 # :param ARGN: the same arguments as the CMake install command.
 # :type ARGN: various
-#
+#]]
 function(install signature)
   string(TOUPPER "${signature}" signature)
 
