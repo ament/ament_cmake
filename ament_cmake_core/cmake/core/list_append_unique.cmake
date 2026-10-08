@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Append elements to a list if they are not already in the list.
 #
 # :param list: the list
@@ -24,7 +24,7 @@
 #   ``list(REMOVE_DUPLICATES ..)`` is not sufficient since its
 #   implementation uses a set internally which makes the operation
 #   unstable.
-#
+#]]
 function(list_append_unique list)
   foreach(element ${ARGN})
     if(NOT element IN_LIST ${list})

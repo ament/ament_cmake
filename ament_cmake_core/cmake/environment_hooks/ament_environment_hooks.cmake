@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Register environment hooks.
 #
 # Each file can either be a plain file (ending with a supported extensions)
@@ -22,8 +22,8 @@
 # :param ARGN: a list of environment hook files
 # :type ARGN: list of strings
 #
+#]]
 # @public
-#
 function(ament_environment_hooks)
   if(_${PROJECT_NAME}_AMENT_GENERATE_PACKAGE_ENVIRONMENT)
     message(FATAL_ERROR "ament_environment_hooks() must be called before "

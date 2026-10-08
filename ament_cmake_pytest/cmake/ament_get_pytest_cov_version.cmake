@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Check if the Python module `pytest-cov` was found and get its version if it is.
 #
 # :param var: the output variable name
@@ -21,8 +21,8 @@
 #   It defaults to the CMake executable target Python3::Interpreter.
 # :type PYTHON_EXECUTABLE: string
 #
+#]]
 # @public
-#
 function(ament_get_pytest_cov_version var)
   cmake_parse_arguments(ARG "" "PYTHON_EXECUTABLE" "" ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)

@@ -1,0 +1,22 @@
+## Configuration for rosdoc2, which generates the documentation for this package.
+
+## This 'attic section' self-documents this file's type and version.
+type: 'rosdoc2 config'
+version: 1
+
+---
+
+settings: {
+    ## Generate documentation for the CMake functions and macros in the cmake/
+    ## directory from their CMinx doc comments (#[[[ ... #]]).
+    use_cminx: true,
+}
+builders:
+    - doxygen: {
+      }
+    - cminx: {
+        ## Exclude undocumented functions and macros.
+        cminx_settings_file: 'cminx.yaml',
+      }
+    - sphinx: {
+      }

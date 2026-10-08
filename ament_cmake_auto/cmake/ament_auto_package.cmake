@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Export information, install files and targets, execute the
 # extension point ``ament_auto_package`` and invoke
 # ``ament_package()``.
@@ -41,8 +41,8 @@
 # Export and install all library targets and install all executable
 # targets.
 #
+#]]
 # @public
-#
 
 macro(ament_auto_package)
   cmake_parse_arguments(_ARG_AMENT_AUTO_PACKAGE

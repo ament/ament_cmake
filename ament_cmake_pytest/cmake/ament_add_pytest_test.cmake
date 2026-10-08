@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Add a pytest test.
 #
 # :param testname: the name of the test
@@ -47,8 +47,8 @@
 #   OS specific env var, a la LD_LIBRARY_PATH
 # :type APPEND_LIBRARY_DIRS: list of strings
 #
+#]]
 # @public
-#
 function(ament_add_pytest_test testname path)
   cmake_parse_arguments(ARG
     "NOCAPTURE;SKIP_TEST"

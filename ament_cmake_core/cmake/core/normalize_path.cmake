@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Normalize a path by collapsing redundant parts and up-level references.
 #
 # This may change the meaning of a path that contains symbolic links.
@@ -21,7 +21,7 @@
 # :type var: string
 # :param path: the path
 # :type path: string
-#
+#]]
 function(normalize_path var path)
   cmake_path(SET normalized NORMALIZE "${path}")
   set(${var} "${normalized}" PARENT_SCOPE)

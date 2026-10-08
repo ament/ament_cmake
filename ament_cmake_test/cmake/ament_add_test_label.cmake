@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Add text labels to the LABELS property of a test.
 #
 # :param testname: the name of the test
@@ -20,8 +20,8 @@
 # :param ARGN: a list of labels
 # :type ARGN: list of strings
 #
+#]]
 # @public
-#
 function(ament_add_test_label testname)
   get_test_property(${testname} LABELS labels)
   list(APPEND labels ${ARGN})

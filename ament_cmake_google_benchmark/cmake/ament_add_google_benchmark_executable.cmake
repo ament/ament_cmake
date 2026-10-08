@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Add an executable using google benchmark.
 #
 # Call add_executable(target ARGN) and link it against the google benchmark
@@ -30,8 +30,8 @@
 #   benchmark main libraries
 # :type SKIP_LINKING_MAIN_LIBRARIES: option
 #
+#]]
 # @public
-#
 macro(ament_add_google_benchmark_executable target)
   _ament_cmake_google_benchmark_find_benchmark()
   if(benchmark_FOUND)
