@@ -28,7 +28,6 @@ function(ament_cmake_symlink_install_directory directory_keyword)
   set(unsupported_keywords
     "FILE_PERMISSIONS"
     "DIRECTORY_PERMISSIONS"
-    "USE_SOURCE_PERMISSIONS"
     "CONFIGURATIONS"
     "COMPONENT"
     "FILES_MATCHING"
@@ -69,6 +68,10 @@ function(ament_cmake_symlink_install_directory directory_keyword)
       endif()
       math(EXPR i "${i} + 1")
     endwhile()
+
+    # symlinks always have the permissions of the source files,
+    # which is what USE_SOURCE_PERMISSIONS requests
+    list(REMOVE_ITEM argn "USE_SOURCE_PERMISSIONS")
 
     string(REPLACE ";" "\" \"" argn_quoted "\"${argn}\"")
     ament_cmake_symlink_install_append_install_code(
