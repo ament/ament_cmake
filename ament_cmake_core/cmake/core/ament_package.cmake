@@ -12,6 +12,53 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Packagers who keep development files apart from runtime ones (headers and
+# CMake files in one package, libraries and data in another) set this to
+# where the development files go. CMake config files are then installed to
+# <prefix>/share/<package>/cmake, and the files generated into them name the
+# install prefix by absolute path, since it is no longer relative to them.
+# Empty, the default, keeps them under CMAKE_INSTALL_PREFIX and relocatable.
+set(AMENT_CMAKE_CONFIG_INSTALL_PREFIX "" CACHE PATH
+  "Absolute prefix to install CMake config files under, if not CMAKE_INSTALL_PREFIX")
+if(AMENT_CMAKE_CONFIG_INSTALL_PREFIX AND NOT IS_ABSOLUTE "${AMENT_CMAKE_CONFIG_INSTALL_PREFIX}")
+  message(FATAL_ERROR "AMENT_CMAKE_CONFIG_INSTALL_PREFIX must be an absolute "
+    "path, got '${AMENT_CMAKE_CONFIG_INSTALL_PREFIX}'")
+endif()
+
+#
+# Get the install destination of the current package's CMake config files.
+#
+# :param var: the output variable name
+# :type var: string
+#
+function(ament_package_config_install_dir var)
+  if(AMENT_CMAKE_CONFIG_INSTALL_PREFIX)
+    set(${var} "${AMENT_CMAKE_CONFIG_INSTALL_PREFIX}/share/${PROJECT_NAME}/cmake" PARENT_SCOPE)
+  else()
+    set(${var} "share/${PROJECT_NAME}/cmake" PARENT_SCOPE)
+  endif()
+endfunction()
+
+#
+# Get how a generated CMake config file should refer to the install prefix:
+# by the given path relative to the config file's own location, or by
+# absolute path when AMENT_CMAKE_CONFIG_INSTALL_PREFIX puts the config
+# files elsewhere.
+#
+# :param var: the output variable name
+# :type var: string
+# :param relative: the install prefix relative to the installed config file,
+#   such as "\${${PROJECT_NAME}_DIR}/../../.."
+# :type relative: string
+#
+function(ament_package_install_prefix var relative)
+  if(AMENT_CMAKE_CONFIG_INSTALL_PREFIX)
+    set(${var} "${CMAKE_INSTALL_PREFIX}" PARENT_SCOPE)
+  else()
+    set(${var} "${relative}" PARENT_SCOPE)
+  endif()
+endfunction()
+
 #
 # Install the package.xml file, and generate code for
 # ``find_package`` so that other packages can get information about
@@ -79,6 +126,8 @@ function(_ament_package)
   set(PACKAGE_VERSION "${${PROJECT_NAME}_VERSION}")
   set(PACKAGE_DEPRECATED "${${PROJECT_NAME}_DEPRECATED}")
 
+  ament_package_config_install_dir(config_install_dir)
+
   # expand and install config extras
   set(PACKAGE_CONFIG_EXTRA_FILES "")
   set(extras)
@@ -121,7 +170,7 @@ function(_ament_package)
     if(is_cmake)
       install(FILES
         ${extra}
-        DESTINATION share/${PROJECT_NAME}/cmake
+        DESTINATION ${config_install_dir}
       )
       get_filename_component(extra_filename "${extra}" NAME)
       list(APPEND PACKAGE_CONFIG_EXTRA_FILES "${extra_filename}")
@@ -150,7 +199,7 @@ function(_ament_package)
   install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_core/${PROJECT_NAME}Config.cmake
     ${CMAKE_CURRENT_BINARY_DIR}/ament_cmake_core/${PROJECT_NAME}Config-version.cmake
-    DESTINATION share/${PROJECT_NAME}/cmake
+    DESTINATION ${config_install_dir}
   )
 
   # install package.xml
