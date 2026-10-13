@@ -14,14 +14,14 @@
 
 # copied from ament_cmake_python/ament_cmake_python-extras.cmake
 
+find_package(ament_cmake_core QUIET REQUIRED)
+
 # register environment hook for PYTHONPATH once
 macro(_ament_cmake_python_register_environment_hook)
   if(NOT DEFINED _AMENT_CMAKE_PYTHON_ENVIRONMENT_HOOK_REGISTERED)
     set(_AMENT_CMAKE_PYTHON_ENVIRONMENT_HOOK_REGISTERED TRUE)
 
     _ament_cmake_python_get_python_install_dir()
-
-    find_package(ament_cmake_core QUIET REQUIRED)
 
     # backup variable
     set(_PYTHON_INSTALL_DIR "${PYTHON_INSTALL_DIR}")
@@ -48,7 +48,6 @@ macro(_ament_cmake_python_get_python_install_dir)
       "import sysconfig"
       "print(os.path.relpath(sysconfig.get_path('purelib', vars={'base': '${CMAKE_INSTALL_PREFIX}'}), start='${CMAKE_INSTALL_PREFIX}').replace(os.sep, '/'))"
     )
-    find_package(ament_cmake_core QUIET REQUIRED)
     get_executable_path(_python_interpreter Python3::Interpreter CONFIGURE)
     execute_process(
       COMMAND
