@@ -30,7 +30,10 @@ endif()
 
 # the following operations must be performed inside a project context
 if(NOT PROJECT_NAME)
-  project(ament_cmake_internal NONE)
+  get_property(_cmake_role GLOBAL PROPERTY CMAKE_ROLE)
+  if("${_cmake_role}" STREQUAL "PROJECT")
+    project(ament_cmake_internal NONE)
+  endif()
 endif()
 
 # use BUILD_TESTING to avoid warnings about not using it
