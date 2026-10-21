@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Check if a string ends with a specific suffix.
 #
 # :param str: the string
@@ -21,7 +21,7 @@
 # :type suffix: string
 # :param var: the output variable name
 # :type var: bool
-#
+#]]
 function(string_ends_with str suffix var)
   string(LENGTH "${str}" str_length)
   string(LENGTH "${suffix}" suffix_length)

@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Register a CMake filename to be included as part of an extension
 # point.
 #
@@ -25,8 +25,8 @@
 #   ${package_name}_DIR folder
 # :type cmake_filename: string
 #
+#]]
 # @public
-#
 macro(ament_register_extension extension_point package_name cmake_filename)
   list(APPEND AMENT_EXTENSIONS_${extension_point}
     "${package_name}:${cmake_filename}")

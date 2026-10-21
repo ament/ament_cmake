@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Build and install an external project as a vendor package.
 #
 # :param TARGET_NAME: the name to give this vendor package target.
@@ -73,8 +73,8 @@
 # To check if a package has been actually vendored, check if the target name
 # passed as TARGET_NAME exists with if(TARGET <target_name>).
 #
+#]]
 # @public
-#
 macro(ament_vendor TARGET_NAME)
   if(NOT PROJECT_NAME)
     message(FATAL_ERROR "ament_vendor() must be called after project()")

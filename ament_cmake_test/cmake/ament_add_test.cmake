@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Add a test.
 #
 # A test is expected to generate a JUnit result file
@@ -50,8 +50,8 @@
 #   skipped and did not fail OR succeed
 # :type SKIP_RETURN_CODE: integer
 #
+#]]
 # @public
-#
 function(ament_add_test testname)
   cmake_parse_arguments(ARG
     "GENERATE_RESULT_FOR_RETURN_CODE_ZERO;SKIP_TEST"

@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Include all registered extensions.
 #
 # :param extension_point: the name of the extension point
@@ -20,8 +20,8 @@
 # :param EXCLUDE: List of packages that should be skipped
 # :type EXCLUDE: list of strings
 #
+#]]
 # @public
-#
 macro(ament_execute_extensions extension_point)
   cmake_parse_arguments(_ARG_AMENT_EXECUTE_EXTENSIONS "" "" "EXCLUDE" ${ARGN})
   if(_ARG_AMENT_EXECUTE_EXTENSIONS_UNPARSED_ARGUMENTS)

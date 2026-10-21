@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Install a Python module.
 #
 # :param module_file: the Python module file
@@ -22,7 +22,7 @@
 # :type DESTINATION_SUFFIX: string
 # :param SKIP_COMPILE: if set do not compile the installed module
 # :type SKIP_COMPILE: option
-#
+#]]
 macro(ament_python_install_module)
   _ament_cmake_python_register_environment_hook()
   _ament_cmake_python_install_module(${ARGN})

@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Add a google benchmark test.
 #
 # Call add_executable(target ARGN), link it against the google benchmark
@@ -51,8 +51,8 @@
 #   OS specific env var, a la LD_LIBRARY_PATH
 # :type APPEND_LIBRARY_DIRS: list of strings
 #
+#]]
 # @public
-#
 macro(ament_add_google_benchmark target)
   cmake_parse_arguments(_ARG
     "RUN_PARALLEL;SKIP_LINKING_MAIN_LIBRARIES;SKIP_TEST"

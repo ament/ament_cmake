@@ -1,0 +1,13 @@
+## CMinx settings used by rosdoc2 (see the cminx builder in rosdoc2.yaml).
+
+input:
+  ## Only document functions and macros that have a CMinx doc comment (#[[[ ... #]]).
+  include_undocumented_function: false
+  include_undocumented_macro: false
+
+  ## These files contain no CMinx doc comments, so would generate empty pages.
+  ## Patterns are gitignore-style and are matched against absolute paths.
+  exclude_filters:
+    - "ament_auto_depend_on_packages.cmake"
+    - "ament_auto_find_test_dependencies.cmake"
+    - "ament_auto_generate_code.cmake"

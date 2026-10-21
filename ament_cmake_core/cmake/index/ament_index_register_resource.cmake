@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Register a package resource of a specific type with the index.
 #
 # For both CONTENT as well as CONTENT_FILE CMake generator expressions are
@@ -37,8 +37,8 @@
 # :param SKIP_INSTALL: if set skip installing the marker file
 # :type SKIP_INSTALL: option
 #
+#]]
 # @public
-#
 function(ament_index_register_resource resource_type)
   if(resource_type STREQUAL "")
     message(FATAL_ERROR

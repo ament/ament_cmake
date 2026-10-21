@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Install a Python package (and its recursive subpackages).
 #
 # Can be called multiple times with the same package name to merge
@@ -43,7 +43,7 @@
 # :param DEPENDS: build targets that must complete before
 #   the package files are synced to the build directory
 # :type DEPENDS: list of strings
-#
+#]]
 macro(ament_python_install_package)
   _ament_cmake_python_register_extension_hook()
   _ament_cmake_python_register_environment_hook()

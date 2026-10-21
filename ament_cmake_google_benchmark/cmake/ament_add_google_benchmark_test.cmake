@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Add an existing executable using google benchmark as a test.
 #
 # Register an executable created with ament_add_google_benchmark_executable() as
@@ -44,8 +44,8 @@
 #   OS specific env var, a la LD_LIBRARY_PATH
 # :type APPEND_LIBRARY_DIRS: list of strings
 #
+#]]
 # @public
-#
 function(ament_add_google_benchmark_test target)
   if(NOT TARGET ${target})
     return()

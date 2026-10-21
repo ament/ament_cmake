@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Add a gmock.
 #
 # Call add_executable(target ARGN), link it against the gmock library
@@ -44,8 +44,8 @@
 #   OS specific env var, a la LD_LIBRARY_PATH
 # :type APPEND_LIBRARY_DIRS: list of strings
 #
+#]]
 # @public
-#
 macro(ament_add_gmock target)
   cmake_parse_arguments(_ARG
     "SKIP_LINKING_MAIN_LIBRARIES;SKIP_TEST"

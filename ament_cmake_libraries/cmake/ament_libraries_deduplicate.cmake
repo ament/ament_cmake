@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Deduplicate libraries.
 #
 # If the list contains duplicates only the last value is kept.
@@ -23,8 +23,8 @@
 #   Each element might either a build configuration keyword or a library.
 # :type ARGN: list of strings
 #
+#]]
 # @public
-#
 macro(ament_libraries_deduplicate VAR)
   string(REGEX REPLACE
     "(^|;)(debug|optimized|general);([^;]+)"

@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Check if the Python module `pytest` was found.
 #
 # :param var: the output variable name
@@ -24,8 +24,8 @@
 #   It defaults to the CMake executable target Python3::Interpreter.
 # :type PYTHON_EXECUTABLE: string
 #
+#]]
 # @public
-#
 function(ament_has_pytest var)
   cmake_parse_arguments(ARG "QUIET" "PYTHON_EXECUTABLE" "" ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)
