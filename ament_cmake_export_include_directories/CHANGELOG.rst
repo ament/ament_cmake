@@ -2,6 +2,11 @@
 Changelog for package ament_cmake_export_include_directories
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.9.3 (2026-10-22)
+------------------
+* Use the SPDX identifier Apache-2.0 in package.xml license tags (`#634 <https://github.com/ament/ament_cmake//issues/634>`_)
+* Contributors: Michael Carroll
+
 2.9.2 (2026-09-03)
 ------------------
 
