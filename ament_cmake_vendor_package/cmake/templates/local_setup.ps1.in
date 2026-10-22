@@ -1,0 +1,14 @@
+# generated from ament_cmake_vendor_package/cmake/templates/local_setup.ps1.in
+
+# the current prefix is two levels up from the package specific share folder
+$env:AMENT_CURRENT_PREFIX=(Get-Item $PSCommandPath).Directory.Parent.Parent.FullName
+
+# source all environment hooks of this package
+if (Test-Path "$env:AMENT_CURRENT_PREFIX/share/@PROJECT_NAME@/environment/vendor_package.ps1") {
+  . "$env:AMENT_CURRENT_PREFIX/share/@PROJECT_NAME@/environment/vendor_package.ps1"
+}
+if (Test-Path "$env:AMENT_CURRENT_PREFIX/share/@PROJECT_NAME@/environment/vendor_package_cmake_prefix.ps1") {
+  . "$env:AMENT_CURRENT_PREFIX/share/@PROJECT_NAME@/environment/vendor_package_cmake_prefix.ps1"
+}
+
+Remove-Item Env:\AMENT_CURRENT_PREFIX
