@@ -13,7 +13,8 @@ if(BUILD_TESTING)
   add_subdirectory(test)
 endif()
 
+ament_package_config_install_dir(_config_install_dir)
 install(
-  DIRECTORY cmake
-  DESTINATION share/${PROJECT_NAME}
+  DIRECTORY cmake/
+  DESTINATION ${_config_install_dir}
 )
