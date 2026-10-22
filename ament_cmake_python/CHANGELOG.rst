@@ -2,6 +2,11 @@
 Changelog for package ament_cmake_python
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.3.15 (2026-10-22)
+-------------------
+* fix<ament_cmake_package>: Fixed finding ament_cmake_core (`#645 <https://github.com/ament/ament_cmake//issues/645>`_) (`#648 <https://github.com/ament/ament_cmake//issues/648>`_)
+* Contributors: mergify[bot]
+
 1.3.14 (2026-02-23)
 -------------------
 * Add missing dependency (`#617 <https://github.com/ament/ament_cmake/issues/617>`_) (`#620 <https://github.com/ament/ament_cmake/issues/620>`_)
