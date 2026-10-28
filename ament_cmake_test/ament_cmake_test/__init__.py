@@ -21,6 +21,7 @@ import re
 import subprocess
 import sys
 import time
+import shlex
 from xml.etree.ElementTree import ElementTree
 from xml.etree.ElementTree import ParseError
 from xml.sax.saxutils import quoteattr
@@ -197,9 +198,14 @@ def _run_test(parser, args, failure_result_file, output_handle):
 
     start_time = time.monotonic()
 
+    cmd = args.command
+    if 'TEST_PREFIX' in os.environ:
+        os_posix = os.name == "posix"
+        cmd = shlex.split(os.environ['TEST_PREFIX'], os_posix) + cmd
+
     try:
         proc = subprocess.Popen(
-            args.command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+          cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
             env=env)
         while True:
             line = proc.stdout.readline()
