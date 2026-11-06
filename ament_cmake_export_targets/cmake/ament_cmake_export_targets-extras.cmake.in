@@ -1,6 +1,7 @@
 # generated from ament_cmake_export_targets/cmake/ament_cmake_export_targets-extras.cmake.in
 
 set(_exported_targets "@_AMENT_CMAKE_EXPORT_TARGETS@")
+set(_excluded_targets "@_AMENT_CMAKE_EXPORT_TARGETS_EXCLUDED@")
 
 # include all exported targets
 if(NOT _exported_targets STREQUAL "")
@@ -22,6 +23,8 @@ if(NOT _exported_targets STREQUAL "")
     string(REPLACE " " ";" _targets "${_targets}")
     list(LENGTH _targets _length)
 
-    list(APPEND @PROJECT_NAME@_TARGETS ${_targets})
+    if(NOT _target IN_LIST _excluded_targets)
+      list(APPEND @PROJECT_NAME@_TARGETS ${_targets})
+    endif()
   endforeach()
 endif()
