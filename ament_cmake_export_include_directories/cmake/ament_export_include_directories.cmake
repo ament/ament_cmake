@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Export include directories to downstream packages.
 #
 # Relative paths will be exported before absolute paths.
@@ -23,8 +23,8 @@
 #   CMAKE_INSTALL_PREFIX.
 # :type ARGN: list of strings
 #
+#]]
 # @public
-#
 macro(ament_export_include_directories)
   if(_${PROJECT_NAME}_AMENT_PACKAGE)
     message(FATAL_ERROR "ament_export_include_directories() must be called "

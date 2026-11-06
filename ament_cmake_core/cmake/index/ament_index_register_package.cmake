@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Register a package name with the resource index.
 #
 # :param PACKAGE_NAME: the package name (default: ${PROJECT_NAME})
 # :type PACKAGE_NAME: string
-#
+#]]
 function(ament_index_register_package)
   cmake_parse_arguments(ARG "" "PACKAGE_NAME" "" ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)

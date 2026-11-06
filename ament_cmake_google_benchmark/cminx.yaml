@@ -1,0 +1,6 @@
+## CMinx settings used by rosdoc2 (see the cminx builder in rosdoc2.yaml).
+
+input:
+  ## Only document functions and macros that have a CMinx doc comment (#[[[ ... #]]).
+  include_undocumented_function: false
+  include_undocumented_macro: false

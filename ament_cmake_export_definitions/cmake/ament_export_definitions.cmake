@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Export definitions to downstream packages.
 #
 # Each package name must be find_package()-able with the exact same case.
@@ -22,8 +22,8 @@
 # :param ARGN: a list of definitions
 # :type ARGN: list of strings
 #
+#]]
 # @public
-#
 macro(ament_export_definitions)
   if(_${PROJECT_NAME}_AMENT_PACKAGE)
     message(FATAL_ERROR

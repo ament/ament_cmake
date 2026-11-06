@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Explicit call to add default CMake options (e.g. BUILD_SHARED_LIBS)
 #
 # .. note:: It can be called multiple times, but should be called
@@ -20,8 +20,8 @@
 #
 # :param EXCLUDE_BUILD_SHARED_LIBS: Exclude the BUILD_SHARED_LIBS option
 #
+#]]
 # @public
-#
 macro(ament_add_default_options)
   # TODO(methylDragon): Would be good to parse args to skip options next time.
   set(aado_options EXCLUDE_BUILD_SHARED_LIBS)

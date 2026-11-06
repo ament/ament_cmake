@@ -12,13 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Get the Python installation directory.
 #
 # :param python_install_dir_out: this var will be populated with the path to the
 #   Python installation directory.
 # :type package_name: string
-#
+#]]
 function(ament_get_python_install_dir python_install_dir_out)
   _ament_cmake_python_get_python_install_dir()
   if(NOT PYTHON_INSTALL_DIR)

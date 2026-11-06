@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Export library names to downstream packages.
 # The libraries are either searched in the paths passed in as
 # LIBRARY_DIRS or if none are specified in the default locations.
@@ -22,8 +22,8 @@
 # :param LIBRARY_DIRS: an optional list of search paths.
 # :type LIBRARY_DIRS: list of paths
 #
+#]]
 # @public
-#
 macro(ament_export_library_names)
   if(_${PROJECT_NAME}_AMENT_PACKAGE)
     message(FATAL_ERROR

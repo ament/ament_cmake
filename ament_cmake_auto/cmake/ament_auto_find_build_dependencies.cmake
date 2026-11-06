@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Invoke find_package() for all build and buildtool dependencies.
 #
 # :param REQUIRED: an optional list of package names that are known
@@ -29,8 +29,8 @@
 # are appended to the same variables starting with
 # ``${PROJECT_NAME}_FOUND_``.
 #
+#]]
 # @public
-#
 macro(ament_auto_find_build_dependencies)
   cmake_parse_arguments(_ARG "" "" "REQUIRED" ${ARGN})
   if(_ARG_UNPARSED_ARGUMENTS)

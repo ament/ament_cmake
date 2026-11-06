@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#[[[
 # This functions creates and installs a version header file.
 #
 # It uses a provided "version.h.in" template file to generate
@@ -84,8 +85,8 @@
 #   The default value is FALSE.
 # :type SKIP_INSTALL: BOOL
 #
+#]]
 # @public
-#
 function(ament_generate_version_header target)
   # Validate arguments
   cmake_parse_arguments(

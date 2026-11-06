@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Get the path to an executable at build or configure time.
 #
 # The argument target_or_path may either be a path to an executable (such as
@@ -33,8 +33,8 @@
 # :param target_or_path: imported executable target or a path to an executable
 # :param target_or_path: string
 #
+#]]
 # @public
-#
 function(get_executable_path var target_or_path)
   cmake_parse_arguments(ARG "BUILD;CONFIGURE" "" "" ${ARGN})
   if(ARG_UNPARSED_ARGUMENTS)

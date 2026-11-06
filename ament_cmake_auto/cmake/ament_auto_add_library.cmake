@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
+#[[[
 # Add a library target.
 #
 # All arguments of the CMake function ``add_library()`` can be used
@@ -30,8 +30,8 @@
 #
 # Append the target to the ``${PROJECT_NAME}_LIBRARIES`` variable.
 #
+#]]
 # @public
-#
 macro(ament_auto_add_library target)
   cmake_parse_arguments(ARG
     "STATIC;SHARED;MODULE;INTERFACE;EXCLUDE_FROM_ALL;NO_TARGET_LINK_LIBRARIES"
