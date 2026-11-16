@@ -1,0 +1,36 @@
+# generated from ament_cmake_vendor_package/cmake/templates/vendor_package.ps1.in
+
+function ament_vendor_prepend_unique_value {
+  param (
+    $_listname,
+    $_value
+  )
+  if (Test-Path Env:$_listname) {
+    $_values=(Get-Item env:$_listname).Value
+  } else {
+    $_values=""
+  }
+  $_all_values="$_value"
+  if ($_values) {
+    $_values.Split(";") | ForEach-Object {
+      if ($_) {
+        if ($_ -ne $_value) {
+          $_all_values="${_all_values};$_"
+        }
+      }
+    }
+  }
+  Set-Item env:\$_listname -Value "$_all_values"
+}
+
+if (Test-Path "$env:AMENT_CURRENT_PREFIX/opt/@PROJECT_NAME@/bin") {
+  ament_vendor_prepend_unique_value PATH "$env:AMENT_CURRENT_PREFIX/opt/@PROJECT_NAME@/bin"
+}
+
+if (Test-Path "$env:AMENT_CURRENT_PREFIX/opt/@PROJECT_NAME@/lib") {
+  ament_vendor_prepend_unique_value @_LIBDIR_VAR_NAME@ "$env:AMENT_CURRENT_PREFIX/opt/@PROJECT_NAME@/lib"
+}
+
+if (Test-Path "$env:AMENT_CURRENT_PREFIX/opt/@PROJECT_NAME@/lib64") {
+  ament_vendor_prepend_unique_value @_LIBDIR_VAR_NAME@ "$env:AMENT_CURRENT_PREFIX/opt/@PROJECT_NAME@/lib64"
+}
