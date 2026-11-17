@@ -29,6 +29,11 @@ ament_package(
   "ament_cmake_symlink_install-extras.cmake"  # must be after uninstall_target
 )
 
+include(CTest)
+if(BUILD_TESTING)
+  add_subdirectory(test)
+endif()
+
 install(
   DIRECTORY cmake
   DESTINATION share/${PROJECT_NAME}
