@@ -15,3 +15,8 @@
 # copied from ament_cmake_core/ament_cmake_core-extras.cmake
 
 include("${ament_cmake_core_DIR}/core/all.cmake" NO_POLICY_SCOPE)
+
+# Add AMENT_IGNORE to CMAKE_BINARY_DIR to avoid picking up cmake specific folders created by
+# CLion in `colcon build` and `colcon test` commands
+file(WRITE ${CMAKE_BINARY_DIR}/AMENT_IGNORE "")
+
